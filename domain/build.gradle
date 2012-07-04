@@ -1,0 +1,160 @@
+import org.hibernate.tool.hbm2ddl.SchemaExport
+
+import javax.persistence.Entity
+import org.hibernate.cfg.Environment
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url 'https://repository.jboss.org/nexus/content/groups/public'
+            url 'http://repo.springsource.org/libs-milestone'
+        }
+    }
+    dependencies {
+        classpath group: 'org.hibernate', name: 'hibernate-core', version: ext.hibernateVersion, "org.hibernate:hibernate-entitymanager:${ext.hibernateVersion}", 'com.h2database:h2:1.3.166'
+        classpath('org.springframework.data:spring-data-jpa:1.1.0.RC1') {
+            exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
+        }
+    }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ['src/main/generated', 'src/main/resources']
+        }
+    }
+}
+
+task cleanGenerated(type: Delete) {
+
+    def target = new File(project.projectDir, 'src/main/generated')
+    if (target.exists()) {delete = target.listFiles()}
+}
+
+task ddl(type: HibernateJpaSchemaGenerationTask, dependsOn: [compileJava])
+jar.dependsOn << ddl
+processResources.dependsOn << ddl
+clean.dependsOn << cleanGenerated
+
+class HibernateJpaSchemaGenerationTask extends DefaultTask {
+
+    private Map<String, String> dialects = [
+            'ORACLE': "org.hibernate.dialect.Oracle10gDialect",
+            'MYSQL': "org.hibernate.dialect.MySQLDialect",
+            'MYSQL5': "org.hibernate.dialect.MySQL5Dialect",
+            'MYSQL5INNODB': "org.hibernate.dialect.MySQL5InnoDBDialect",
+            'HSQL': "org.hibernate.dialect.HSQLDialect",
+            'H2': "org.hibernate.dialect.H2Dialect",
+            'PostgreSQL': 'org.hibernate.dialect.PostgreSQLDialect'
+    ]
+
+    private URLClassLoader loader
+
+    def source = project.sourceSets.main.output.classesDir
+    def target = new File(project.projectDir, 'src/main/generated')
+
+    /*@InputFiles
+    def getInputFiles() {
+        this.loader = new URLClassLoader(source.toURI().toURL() as URL[], getClass().getClassLoader())
+
+        jpaEntities = findJpaEntities(this.loader)
+        if (jpaEntities && !jpaEntities.isEmpty()) {
+            def inputFiles = jpaEntities.collect { c -> project.sourceSets.main.java.getFiles().find { f -> if (f.name.endsWith(c.simpleName + '.java')) {f}}}
+            logger.debug("Input files for this task are ${inputFiles.dump()}")
+            return inputFiles
+        }
+        logger.debug('No input files should be considered')
+        false
+    }
+
+    @OutputFiles
+    def getDdlFiles() {
+        def outputFiles = dialects.collect { new File(target, "ddl_${it.key.toLowerCase()}_create.sql") }
+        outputFiles.addAll dialects.collect { new File(target, "ddl_${it.key.toLowerCase()}_drop.sql") }
+        logger.debug("Expected output files for this task are ${inputFiles.dump()}")
+        return outputFiles
+    } */
+
+    @TaskAction
+    def performSchemaGeneration() {
+
+        if(!target.exists()){
+            assert target.mkdir()
+        }
+
+        def jpaEntities = findJpaEntities(new URLClassLoader(source.toURI().toURL() as URL[], getClass().getClassLoader()))
+
+        ClassLoader prev = Thread.currentThread().getContextClassLoader()
+
+        try {
+            // Need to set our class loader to the current thread
+            Thread.currentThread().setContextClassLoader(this.loader = new URLClassLoader(source.toURI().toURL() as URL[], getClass().getClassLoader()))
+            dialects.each { key, value ->
+                final fileCreate = new File(target, "ddl_${key.toLowerCase()}_create.sql")
+                final fileDrop = new File(target, "ddl_${key.toLowerCase()}_drop.sql")
+
+                logger.debug('Writing to dir {}', target.absolutePath)
+
+                org.hibernate.cfg.Configuration cfg = new org.hibernate.cfg.Configuration()
+                jpaEntities.each { jpaEntity ->
+                    cfg.addAnnotatedClass jpaEntity
+                }
+                cfg.setProperty(Environment.DIALECT, value)
+
+                SchemaExport export = new org.hibernate.tool.hbm2ddl.SchemaExport(cfg)
+                export.delimiter = ';'
+                export.outputFile = fileCreate.absolutePath
+                export.execute true, false, false, true
+                export.outputFile = fileDrop.absolutePath
+                export.execute true, false, true, false
+
+                export = null
+                cfg = null
+            }
+        }
+        catch (Exception e) {
+            logger.error('Error while schema generation', e)
+        }
+        finally {
+            Thread.currentThread().setContextClassLoader(prev)
+        }
+    }
+
+    private List findJpaEntities(loader) {
+
+        if (!source.exists()) return []
+
+        def clazzez = []
+
+        source.eachFileRecurse { file ->
+            if (file.name.endsWith('.class')) {
+                def classRelPath = file.absolutePath - source.absolutePath
+                clazzez << classRelPath[1..-7].replace(System.properties['file.separator'], '.')
+            }
+        }
+
+        def jpaEntities = []
+
+        clazzez.each { clazz ->
+
+            try {
+                logger.debug("Trying to load class ${clazz}")
+                Class possibleJpaEntity = Class.forName(clazz, true, loader)
+                logger.debug("Class ${clazz} sucessfully loaded")
+
+                if (possibleJpaEntity.isAnnotationPresent(Entity.class)) {
+                    logger.info("JPA entity detected: ${possibleJpaEntity}")
+                    jpaEntities << possibleJpaEntity
+                } else {
+                    logger.debug("Ignoring class ${possibleJpaEntity.canonicalName} since it has no javax.persistence.Entity annotation present")
+                }
+
+            } catch (Exception e) {
+                logger.error('Error while trying to detect JPA annotated entities', e)
+            }
+        }
+        return jpaEntities
+    }
+}

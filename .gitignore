@@ -1,0 +1,20 @@
+*.class
+target
+build
+out
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+.gradle
+.idea
+*.ipr
+*.iws
+*.iml
+*.log
+
+domain/src/main/generated
+
+gradle.properties
