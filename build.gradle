@@ -49,7 +49,7 @@ project(':core') {
         compile project(':api'), project(':domain'),
                 "org.springframework:spring-orm:${ext.springVersion}",
                 'commons-codec:commons-codec:1.6'
-        runtime "org.slf4j:jcl-over-slf4j:${ext.slf4jVersion}"
+        runtime "org.slf4j:jcl-over-slf4j:${ext.slf4jVersion}", "ch.qos.logback:logback-classic:${ext.logbackVersion}"
         testCompile 'commons-io:commons-io:2.3'
     }
 }
