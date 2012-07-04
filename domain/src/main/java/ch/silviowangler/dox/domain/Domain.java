@@ -1,25 +1,29 @@
 package ch.silviowangler.dox.domain;
 
+import org.hibernate.annotations.Sort;
+import org.hibernate.annotations.SortType;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author Silvio Wangler
  * @version 0.1
  */
 @Entity
-@Table(name = "DOX_DOC_CLASS")
-public class DocumentClass extends AbstractPersistable<Long> {
+@Table(name = "DOX_DOMAIN")
+public class Domain extends AbstractPersistable<Long> {
 
     @Column(unique = true, length = 15, nullable = false)
     private String shortName;
-    @OneToMany
-    private Set<Attribute> attributes;
+
+    @ElementCollection
+    @Sort(type = SortType.NATURAL)
+    private List<String> values;
 
     public String getShortName() {
         return shortName;
@@ -29,11 +33,11 @@ public class DocumentClass extends AbstractPersistable<Long> {
         this.shortName = shortName;
     }
 
-    public Set<Attribute> getAttributes() {
-        return attributes;
+    public List<String> getValues() {
+        return values;
     }
 
-    public void setAttributes(Set<Attribute> attributes) {
-        this.attributes = attributes;
+    public void setValues(List<String> values) {
+        this.values = values;
     }
 }

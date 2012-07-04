@@ -1,8 +1,11 @@
 package ch.silviowangler.dox.domain;
 
+import java.io.Serializable;
+
 /**
  * @author Silvio Wangler
- * @version <version>
+ * @version 0.1
  */
-public enum AttributeDataType {
+public enum AttributeDataType implements Serializable {
+    STRING, LONG, DOUBLE, INTEGER, SHORT, BOOLEAN, DATE;
 }

@@ -1,0 +1,5 @@
+Hello World
+This is a test.
+Build some nice hashes from this file.
+
+Cheers. Yours, a developer

@@ -1,0 +1,1 @@
+insert into DOX_DOC_CLASS(shortName) values('INVOICE');

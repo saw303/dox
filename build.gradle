@@ -48,8 +48,9 @@ project(':core') {
     dependencies {
         compile project(':api'), project(':domain'),
                 "org.springframework:spring-orm:${ext.springVersion}",
-                'joda-time:joda-time:2.1', 'org.hibernate:hibernate-validator:4.3.0.Final'
+                'commons-codec:commons-codec:1.6'
         runtime "org.slf4j:jcl-over-slf4j:${ext.slf4jVersion}"
+        testCompile 'commons-io:commons-io:2.3'
     }
 }
 
