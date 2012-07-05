@@ -1,5 +1,6 @@
 package ch.silviowangler.dox;
 
+import ch.silviowangler.dox.domain.AttributeDataType;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 

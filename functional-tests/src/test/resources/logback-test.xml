@@ -15,9 +15,6 @@
     <logger name="org.springframework.data" level="ERROR"/>
     <logger name="org.hibernate" level="ERROR"/>
     <logger name="ch.silviowangler.dox" level="DEBUG"/>
-    <logger name="org.jboss" level="ERROR"/>
-    <logger name="org.jboss.logging" level="DEBUG"/>
-
     <root level="debug">
         <appender-ref ref="STDOUT"/>
     </root>

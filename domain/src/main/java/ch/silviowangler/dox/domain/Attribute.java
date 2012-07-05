@@ -17,11 +17,11 @@ public class Attribute extends AbstractPersistable<Long> {
     private String shortName;
     @Column(nullable = false)
     private Boolean optional = false;
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private AttributeDataType dataType;
     @OneToOne
     private Domain domain;
-    @OneToMany
+    @ManyToMany(mappedBy = "attributes")
     private Set<DocumentClass> documentClasses;
 
     public String getShortName() {

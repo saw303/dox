@@ -11,6 +11,7 @@ allprojects {
     project.ext.logbackVersion = '1.0.3'
     project.ext.junitVersion = '4.10'
     project.ext.tilesVersion = '2.2.2'
+    project.ext.commonsIOVersion = '2.3'
 }
 
 subprojects {
@@ -48,9 +49,9 @@ project(':core') {
     dependencies {
         compile project(':api'), project(':domain'),
                 "org.springframework:spring-orm:${ext.springVersion}",
-                'commons-codec:commons-codec:1.6'
+                'commons-codec:commons-codec:1.6', 'com.itextpdf:itextpdf:5.3.0'
         runtime "org.slf4j:jcl-over-slf4j:${ext.slf4jVersion}", "ch.qos.logback:logback-classic:${ext.logbackVersion}"
-        testCompile 'commons-io:commons-io:2.3'
+        testCompile "commons-io:commons-io:${ext.commonsIOVersion}"
     }
 }
 
@@ -65,7 +66,7 @@ project(':domain') {
 
 project(':functional-tests') {
     dependencies {
-        testCompile project(':core'), "org.springframework:spring-test:${ext.springVersion}"
+        testCompile project(':core'), "org.springframework:spring-test:${ext.springVersion}", "commons-io:commons-io:${ext.commonsIOVersion}"
         runtime "ch.qos.logback:logback-classic:${ext.logbackVersion}", 'com.h2database:h2:1.3.166'
     }
 }
