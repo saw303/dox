@@ -1,9 +1,6 @@
 package ch.silviowangler.dox;
 
-import ch.silviowangler.dox.api.DocumentClass;
-import ch.silviowangler.dox.api.DocumentImportService;
-import ch.silviowangler.dox.api.DocumentReference;
-import ch.silviowangler.dox.api.PhysicalDocument;
+import ch.silviowangler.dox.api.*;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +24,24 @@ public class DocumentImportTest extends AbstractTest {
     @Autowired
     private DocumentImportService documentImportService;
 
+
+    @Test(expected = ValdiationException.class)
+    public void importSinglePagePdfUsingAnUnknownDocumentClass() throws IOException, ValdiationException {
+
+        File singlePagePdf = loadFile("document-1p.pdf");
+
+        DocumentClass documentClass = new DocumentClass("WHATEVAMAN");
+        Map<String, Object> indexes = new HashMap<String, Object>(2);
+
+        indexes.put("company", "Sunrise");
+        indexes.put("invoiceDate", new Date());
+
+        PhysicalDocument doc = new PhysicalDocument(documentClass, FileUtils.readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
+        DocumentReference documentReference = documentImportService.importDocument(doc);
+    }
+
     @Test
-    public void importSinglePagePdf() throws IOException {
+    public void importSinglePagePdf() throws IOException, ValdiationException {
 
         File singlePagePdf = loadFile("document-1p.pdf");
 
@@ -56,7 +69,7 @@ public class DocumentImportTest extends AbstractTest {
     }
 
     @Test
-    public void importFivePagesPdf() throws IOException {
+    public void importFivePagesPdf() throws IOException, ValdiationException {
 
         File fivePagesPdfFile = loadFile("document-5p.pdf");
 

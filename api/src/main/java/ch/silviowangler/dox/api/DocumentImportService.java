@@ -5,5 +5,5 @@ package ch.silviowangler.dox.api;
  * @version 0.1
  */
 public interface DocumentImportService {
-    DocumentReference importDocument(PhysicalDocument physicalDocument);
+    DocumentReference importDocument(PhysicalDocument physicalDocument) throws ValdiationException;
 }

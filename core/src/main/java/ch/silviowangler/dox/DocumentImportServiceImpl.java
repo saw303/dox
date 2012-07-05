@@ -3,6 +3,8 @@ package ch.silviowangler.dox;
 import ch.silviowangler.dox.api.DocumentImportService;
 import ch.silviowangler.dox.api.DocumentReference;
 import ch.silviowangler.dox.api.PhysicalDocument;
+import ch.silviowangler.dox.api.ValdiationException;
+import ch.silviowangler.dox.domain.DocumentClass;
 import ch.silviowangler.dox.domain.DocumentClassRepository;
 import ch.silviowangler.dox.domain.DocumentRepository;
 import com.itextpdf.text.pdf.PdfReader;
@@ -29,7 +31,15 @@ public class DocumentImportServiceImpl implements DocumentImportService {
     private DocumentRepository documentRepository;
 
     @Override
-    public DocumentReference importDocument(PhysicalDocument physicalDocument) {
+    public DocumentReference importDocument(PhysicalDocument physicalDocument) throws ValdiationException {
+
+        final String documentClassShortName = physicalDocument.getDocumentClass().getShortName();
+        DocumentClass documentClassEntity = documentClassRepository.findByShortName(documentClassShortName);
+
+        if (documentClassEntity == null) {
+            logger.error("No such document class with name '{}' found", documentClassShortName);
+            throw new ValdiationException("No such document class with name '"+ documentClassShortName + "' available");
+        }
 
         DocumentReference docRef = new DocumentReference(physicalDocument.getFileName());
         docRef.setMimeType("application/pdf");
@@ -37,7 +47,7 @@ public class DocumentImportServiceImpl implements DocumentImportService {
         docRef.setHash(hash);
         docRef.setPageCount(getNumberOfPages(physicalDocument));
         docRef.setId(1L);
-        docRef.setDocumentClass(physicalDocument.getDocumentClass());
+        docRef.setDocumentClass(new ch.silviowangler.dox.api.DocumentClass(documentClassEntity.getShortName()));
         docRef.setIndexes(physicalDocument.getIndexes());
         return docRef;
     }

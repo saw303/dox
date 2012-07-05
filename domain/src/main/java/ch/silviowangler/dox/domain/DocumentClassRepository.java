@@ -7,4 +7,6 @@ import org.springframework.data.repository.CrudRepository;
  * @version 0.1
  */
 public interface DocumentClassRepository extends CrudRepository<DocumentClass, Long> {
+
+    DocumentClass findByShortName(String shortName);
 }
