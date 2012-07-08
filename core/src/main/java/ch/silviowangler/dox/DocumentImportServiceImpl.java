@@ -4,9 +4,7 @@ import ch.silviowangler.dox.api.DocumentImportService;
 import ch.silviowangler.dox.api.DocumentReference;
 import ch.silviowangler.dox.api.PhysicalDocument;
 import ch.silviowangler.dox.api.ValdiationException;
-import ch.silviowangler.dox.domain.DocumentClass;
-import ch.silviowangler.dox.domain.DocumentClassRepository;
-import ch.silviowangler.dox.domain.DocumentRepository;
+import ch.silviowangler.dox.domain.*;
 import com.itextpdf.text.pdf.PdfReader;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
@@ -15,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Silvio Wangler
@@ -29,6 +28,8 @@ public class DocumentImportServiceImpl implements DocumentImportService {
     private DocumentClassRepository documentClassRepository;
     @Autowired
     private DocumentRepository documentRepository;
+    @Autowired
+    private AttributeRepository attributeRepository;
 
     @Override
     public DocumentReference importDocument(PhysicalDocument physicalDocument) throws ValdiationException {
@@ -41,6 +42,23 @@ public class DocumentImportServiceImpl implements DocumentImportService {
             throw new ValdiationException("No such document class with name '"+ documentClassShortName + "' available");
         }
 
+        List<Attribute> attributes = attributeRepository.findAttributesForDocumentClass(documentClassEntity);
+
+        verifyMandatoryAttributes(physicalDocument, attributes);
+
+        for(String key : physicalDocument.getIndexes().keySet()) {
+            boolean exists = false;
+            for (Attribute attribute : attributes ) {
+                if (attribute.getShortName().equals(key)) {
+                    exists = true;
+                    continue;
+                }
+            }
+            if (!exists) {
+                throw new ValdiationException("Key " + key + " does not belong to the document class " + documentClassShortName);
+            }
+        }
+
         DocumentReference docRef = new DocumentReference(physicalDocument.getFileName());
         docRef.setMimeType("application/pdf");
         final String hash = DigestUtils.sha256Hex(physicalDocument.getContent());
@@ -50,6 +68,16 @@ public class DocumentImportServiceImpl implements DocumentImportService {
         docRef.setDocumentClass(new ch.silviowangler.dox.api.DocumentClass(documentClassEntity.getShortName()));
         docRef.setIndexes(physicalDocument.getIndexes());
         return docRef;
+    }
+
+    private void verifyMandatoryAttributes(PhysicalDocument physicalDocument, List<Attribute> attributes) throws ValdiationException {
+        for (Attribute attribute : attributes) {
+            if (!attribute.isOptional()) {
+                if (!physicalDocument.getIndexes().containsKey(attribute.getShortName())) {
+                     throw new ValdiationException("Attribute " + attribute.getShortName() + " is mandatory");
+                }
+            }
+        }
     }
 
     private int getNumberOfPages(PhysicalDocument physicalDocument) {

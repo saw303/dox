@@ -16,7 +16,7 @@ public class Attribute extends AbstractPersistable<Long> {
     @Column(unique = true, length = 15, nullable = false)
     private String shortName;
     @Column(nullable = false)
-    private Boolean optional = false;
+    private boolean optional = false;
     @Enumerated(EnumType.STRING)
     private AttributeDataType dataType;
     @OneToOne
@@ -24,20 +24,20 @@ public class Attribute extends AbstractPersistable<Long> {
     @ManyToMany(mappedBy = "attributes")
     private Set<DocumentClass> documentClasses;
 
+    public boolean isOptional() {
+        return optional;
+    }
+
+    public void setOptional(boolean optional) {
+        this.optional = optional;
+    }
+
     public String getShortName() {
         return shortName;
     }
 
     public void setShortName(String shortName) {
         this.shortName = shortName;
-    }
-
-    public Boolean getOptional() {
-        return optional;
-    }
-
-    public void setOptional(Boolean optional) {
-        this.optional = optional;
     }
 
     public AttributeDataType getDataType() {

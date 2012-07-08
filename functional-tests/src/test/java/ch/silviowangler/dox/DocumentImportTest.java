@@ -2,6 +2,7 @@ package ch.silviowangler.dox;
 
 import ch.silviowangler.dox.api.*;
 import org.apache.commons.io.FileUtils;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,9 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 
 /**
  * @author Silvio Wangler
@@ -23,21 +22,11 @@ public class DocumentImportTest extends AbstractTest {
 
     @Autowired
     private DocumentImportService documentImportService;
+    private DocumentClass documentClass;
 
-
-    @Test(expected = ValdiationException.class)
-    public void importSinglePagePdfUsingAnUnknownDocumentClass() throws IOException, ValdiationException {
-
-        File singlePagePdf = loadFile("document-1p.pdf");
-
-        DocumentClass documentClass = new DocumentClass("WHATEVAMAN");
-        Map<String, Object> indexes = new HashMap<String, Object>(2);
-
-        indexes.put("company", "Sunrise");
-        indexes.put("invoiceDate", new Date());
-
-        PhysicalDocument doc = new PhysicalDocument(documentClass, FileUtils.readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
-        DocumentReference documentReference = documentImportService.importDocument(doc);
+    @Before
+    public void init() {
+         this.documentClass= new DocumentClass("INVOICE");
     }
 
     @Test
@@ -45,7 +34,6 @@ public class DocumentImportTest extends AbstractTest {
 
         File singlePagePdf = loadFile("document-1p.pdf");
 
-        DocumentClass documentClass = new DocumentClass("INVOICE");
         Map<String, Object> indexes = new HashMap<String, Object>(2);
 
         indexes.put("company", "Sunrise");
@@ -73,7 +61,6 @@ public class DocumentImportTest extends AbstractTest {
 
         File fivePagesPdfFile = loadFile("document-5p.pdf");
 
-        DocumentClass documentClass = new DocumentClass("INVOICE");
         Map<String, Object> indexes = new HashMap<String, Object>(2);
 
         indexes.put("company", "Swisscom");
@@ -94,5 +81,48 @@ public class DocumentImportTest extends AbstractTest {
         assertEquals("Swisscom", documentReference.getIndexes().get("company"));
         assertTrue(documentReference.getIndexes().containsKey("invoiceDate"));
         assertTrue(documentReference.getIndexes().get("invoiceDate") instanceof Date);
+    }
+
+    @Test(expected = ValdiationException.class)
+    public void importSinglePagePdfUsingAnUnknownDocumentClass() throws IOException, ValdiationException {
+
+        File singlePagePdf = loadFile("document-1p.pdf");
+
+        documentClass = new DocumentClass("WHATEVAMAN");
+        Map<String, Object> indexes = new HashMap<String, Object>(2);
+
+        indexes.put("company", "Sunrise");
+        indexes.put("invoiceDate", new Date());
+
+        PhysicalDocument doc = new PhysicalDocument(documentClass, FileUtils.readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
+        documentImportService.importDocument(doc);
+    }
+
+    @Test(expected = ValdiationException.class)
+    public void importSinglePagePdfMissingAnIndexKeyThatIsMandatory() throws IOException, ValdiationException {
+
+        File singlePagePdf = loadFile("document-1p.pdf");
+
+        Map<String, Object> indexes = new HashMap<String, Object>(1);
+
+        indexes.put("company", "Sunrise");
+
+        PhysicalDocument doc = new PhysicalDocument(documentClass, FileUtils.readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
+        documentImportService.importDocument(doc);
+    }
+
+    @Test(expected = ValdiationException.class)
+    public void importSinglePagePdfUsingAnIndexKeyThatDoesNotExist() throws IOException, ValdiationException {
+
+        File singlePagePdf = loadFile("document-1p.pdf");
+
+        Map<String, Object> indexes = new HashMap<String, Object>(3);
+
+        indexes.put("company", "Sunrise");
+        indexes.put("invoiceDate", new Date());
+        indexes.put("whatever", 12L);
+
+        PhysicalDocument doc = new PhysicalDocument(documentClass, FileUtils.readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
+        documentImportService.importDocument(doc);
     }
 }

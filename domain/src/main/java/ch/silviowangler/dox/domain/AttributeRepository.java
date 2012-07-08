@@ -21,4 +21,7 @@ public interface AttributeRepository extends CrudRepository<Attribute, Long> {
      */
     @Query("from Attribute a where a.documentClasses IS EMPTY")
     List<Attribute> findGlobalAttributes();
+
+    @Query("from Attribute a where a.documentClasses IS EMPTY OR ? in elements(a.documentClasses)")
+    List<Attribute> findAttributesForDocumentClass(DocumentClass documentClass);
 }
