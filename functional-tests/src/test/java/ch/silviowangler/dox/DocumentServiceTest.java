@@ -62,19 +62,11 @@ public class DocumentServiceTest extends AbstractTest {
 
         DocumentReference documentReferenceFromDatabase = documentService.findDocumentReference(documentReference.getId());
 
-        assertNotNull(documentReferenceFromDatabase);
-        assertEquals(documentReference.getPageCount(), documentReferenceFromDatabase.getPageCount());
-        assertEquals(documentReference.getHash(), documentReferenceFromDatabase.getHash());
-        assertEquals(documentReference.getMimeType(), documentReferenceFromDatabase.getMimeType());
-        assertEquals(documentReference.getId(), documentReferenceFromDatabase.getId());
-        assertEquals(documentReference.getDocumentClass(), documentReferenceFromDatabase.getDocumentClass());
-        assertEquals(documentReference.getFileName(), documentReferenceFromDatabase.getFileName());
-        assertEquals(documentReference.getIndexes().size(), documentReferenceFromDatabase.getIndexes().size());
-        assertEquals(documentReference.getIndexes(), documentReferenceFromDatabase.getIndexes());
+        assertDocumentReference(documentReference, documentReferenceFromDatabase);
     }
 
     @Test
-    public void importFivePagesPdf() throws IOException, ValdiationException {
+    public void importFivePagesPdf() throws IOException, ValdiationException, DocumentNotFoundException, DocumentNotInStoreException {
 
         File fivePagesPdfFile = loadFile("document-5p.pdf");
 
@@ -98,6 +90,10 @@ public class DocumentServiceTest extends AbstractTest {
         assertEquals("Swisscom", documentReference.getIndexes().get("company"));
         assertTrue(documentReference.getIndexes().containsKey("invoiceDate"));
         assertTrue(documentReference.getIndexes().get("invoiceDate") instanceof Date);
+
+        PhysicalDocument docFromDox = documentService.findPhysicalDocument(documentReference.getId());
+
+        assertDocumentReference(documentReference, docFromDox);
     }
 
     @Test(expected = ValdiationException.class)
@@ -141,5 +137,17 @@ public class DocumentServiceTest extends AbstractTest {
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, FileUtils.readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
         documentService.importDocument(doc);
+    }
+
+    private void assertDocumentReference(DocumentReference expectedInstance, DocumentReference actualInstance) {
+        assertNotNull(actualInstance);
+        assertEquals(expectedInstance.getPageCount(), actualInstance.getPageCount());
+        assertEquals(expectedInstance.getHash(), actualInstance.getHash());
+        assertEquals(expectedInstance.getMimeType(), actualInstance.getMimeType());
+        assertEquals(expectedInstance.getId(), actualInstance.getId());
+        assertEquals(expectedInstance.getDocumentClass(), actualInstance.getDocumentClass());
+        assertEquals(expectedInstance.getFileName(), actualInstance.getFileName());
+        assertEquals(expectedInstance.getIndexes().size(), actualInstance.getIndexes().size());
+        assertEquals(expectedInstance.getIndexes(), actualInstance.getIndexes());
     }
 }

@@ -4,13 +4,22 @@ import ch.silviowangler.dox.api.*;
 import ch.silviowangler.dox.domain.*;
 import ch.silviowangler.dox.domain.DocumentClass;
 import com.itextpdf.text.pdf.PdfReader;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -22,7 +31,7 @@ import java.util.Map;
  * @version 0.1
  */
 @Service
-public class DocumentServiceImpl implements DocumentService {
+public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -35,11 +44,46 @@ public class DocumentServiceImpl implements DocumentService {
     @Autowired
     private IndexStoreRepository indexStoreRepository;
 
+    @Value("${archive.home}")
+    private File archiveDirectory;
+
     @Override
+    public void afterPropertiesSet() throws Exception {
+        Assert.isTrue(archiveDirectory.isDirectory());
+        Assert.isTrue(archiveDirectory.canRead());
+        Assert.isTrue(archiveDirectory.canWrite());
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+    public PhysicalDocument findPhysicalDocument(Long id) throws DocumentNotFoundException, DocumentNotInStoreException {
+
+        DocumentReference doc = findDocumentReference(id);
+        PhysicalDocument document = new PhysicalDocument();
+
+        try {
+            BeanUtils.copyProperties(document, doc);
+        } catch (IllegalAccessException e) {
+            logger.error("Unable to copy properties", e);
+        } catch (InvocationTargetException e) {
+            logger.error("Unable to copy properties", e);
+        }
+
+        File file = new File(this.archiveDirectory, doc.getHash());
+
+        if (! file.exists()) {
+            throw new DocumentNotInStoreException(doc.getHash(), doc.getId());
+        }
+
+        return document;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public DocumentReference findDocumentReference(Long id) throws DocumentNotFoundException {
         logger.info("About to find document by using id {}", id);
 
-        if (documentRepository.exists(id)) {
+        if (documentReferenceExists(id)) {
             logger.info("Found document for id {}", id);
             Document document = documentRepository.findOne(id);
 
@@ -52,39 +96,8 @@ public class DocumentServiceImpl implements DocumentService {
         }
     }
 
-    private DocumentReference toDocumentReference(Document document) {
-        return new DocumentReference(document.getHash(),
-                document.getId(),
-                document.getPageCount(),
-                document.getMimeType(),
-                toDocumentClassApi(document.getDocumentClass()),
-                toIndexMap(document.getIndexStore(), attributeRepository.findAttributesForDocumentClass(document.getDocumentClass())),
-                document.getOriginalFilename());
-    }
-
-    private Map<String, Object> toIndexMap(IndexStore indexStore, List<Attribute> attributes) {
-
-        Map<String, Object> indices = new HashMap<String, Object>(attributes.size());
-
-        for (Attribute attribute : attributes) {
-            try {
-                indices.put(attribute.getShortName(), PropertyUtils.getProperty(indexStore, attribute.getMappingColumn().toLowerCase()));
-            } catch (IllegalAccessException e) {
-                logger.error("Error setting property '{}'", attribute.getShortName(), e);
-            } catch (InvocationTargetException e) {
-                logger.error("Error setting property '{}'", attribute.getShortName(), e);
-            } catch (NoSuchMethodException e) {
-                logger.error("Error setting property '{}'", attribute.getShortName(), e);
-            }
-        }
-        return indices;
-    }
-
-    private ch.silviowangler.dox.api.DocumentClass toDocumentClassApi(DocumentClass documentClass) {
-        return new ch.silviowangler.dox.api.DocumentClass(documentClass.getShortName());
-    }
-
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     public DocumentReference importDocument(PhysicalDocument physicalDocument) throws ValdiationException {
 
         final String documentClassShortName = physicalDocument.getDocumentClass().getShortName();
@@ -106,7 +119,23 @@ public class DocumentServiceImpl implements DocumentService {
         final int numberOfPages = getNumberOfPages(physicalDocument);
 
         IndexStore indexStore = new IndexStore();
+        updateIndices(physicalDocument, indexStore);
+        indexStore = indexStoreRepository.save(indexStore);
 
+        Document document = new Document(hash, documentClassEntity, numberOfPages, "application/pdf", physicalDocument.getFileName(), indexStore);
+        document = documentRepository.save(document);
+
+        File target = new File(this.archiveDirectory, hash);
+        try {
+            FileUtils.writeByteArrayToFile(target, physicalDocument.getContent());
+        } catch (IOException e) {
+            logger.error("Unable to write content to store", e);
+        }
+        DocumentReference docRef = toDocumentReference(document);
+        return docRef;
+    }
+
+    private void updateIndices(DocumentReference physicalDocument, IndexStore indexStore) {
         for (String key : physicalDocument.getIndexes().keySet()) {
 
             Attribute attribute = attributeRepository.findByShortName(key);
@@ -125,13 +154,6 @@ public class DocumentServiceImpl implements DocumentService {
                 logger.error("Error setting property '{}' with value '{}'", new Object[]{key, value, e});
             }
         }
-        indexStore = indexStoreRepository.save(indexStore);
-
-        Document document = new Document(hash, documentClassEntity, numberOfPages, "application/pdf", physicalDocument.getFileName(), indexStore);
-        document = documentRepository.save(document);
-
-        DocumentReference docRef = toDocumentReference(document);
-        return docRef;
     }
 
     private void verifyUnknownKeys(PhysicalDocument physicalDocument, String documentClassShortName, List<Attribute> attributes) throws ValdiationException {
@@ -172,5 +194,41 @@ public class DocumentServiceImpl implements DocumentService {
         final int numberOfPages = pdfReader.getNumberOfPages();
         logger.debug("Found {} page(s) for physical document {}", numberOfPages, pdfReader);
         return numberOfPages;
+    }
+
+    private boolean documentReferenceExists(Long id) {
+        return documentRepository.exists(id);
+    }
+
+    private DocumentReference toDocumentReference(Document document) {
+        return new DocumentReference(document.getHash(),
+                document.getId(),
+                document.getPageCount(),
+                document.getMimeType(),
+                toDocumentClassApi(document.getDocumentClass()),
+                toIndexMap(document.getIndexStore(), attributeRepository.findAttributesForDocumentClass(document.getDocumentClass())),
+                document.getOriginalFilename());
+    }
+
+    private Map<String, Object> toIndexMap(IndexStore indexStore, List<Attribute> attributes) {
+
+        Map<String, Object> indices = new HashMap<String, Object>(attributes.size());
+
+        for (Attribute attribute : attributes) {
+            try {
+                indices.put(attribute.getShortName(), PropertyUtils.getProperty(indexStore, attribute.getMappingColumn().toLowerCase()));
+            } catch (IllegalAccessException e) {
+                logger.error("Error setting property '{}'", attribute.getShortName(), e);
+            } catch (InvocationTargetException e) {
+                logger.error("Error setting property '{}'", attribute.getShortName(), e);
+            } catch (NoSuchMethodException e) {
+                logger.error("Error setting property '{}'", attribute.getShortName(), e);
+            }
+        }
+        return indices;
+    }
+
+    private ch.silviowangler.dox.api.DocumentClass toDocumentClassApi(DocumentClass documentClass) {
+        return new ch.silviowangler.dox.api.DocumentClass(documentClass.getShortName());
     }
 }

@@ -10,6 +10,10 @@ public class PhysicalDocument extends DocumentReference {
 
     private byte[] content;
 
+    public PhysicalDocument() {
+        this(null, null, null, null);
+    }
+
     /**
      * Use this constructor in order to import a document
      *
