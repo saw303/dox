@@ -18,19 +18,24 @@ import static junit.framework.Assert.*;
  * @author Silvio Wangler
  * @version 0.1
  */
-public class DocumentImportTest extends AbstractTest {
+public class DocumentServiceTest extends AbstractTest {
 
     @Autowired
-    private DocumentImportService documentImportService;
+    private DocumentService documentService;
     private DocumentClass documentClass;
 
     @Before
     public void init() {
-         this.documentClass= new DocumentClass("INVOICE");
+        this.documentClass = new DocumentClass("INVOICE");
+    }
+
+    @Test(expected = DocumentNotFoundException.class)
+    public void findUnknownDocument() throws DocumentNotFoundException {
+        documentService.findDocumentReference(-9999L);
     }
 
     @Test
-    public void importSinglePagePdf() throws IOException, ValdiationException {
+    public void importSinglePagePdf() throws IOException, ValdiationException, DocumentNotFoundException {
 
         File singlePagePdf = loadFile("document-1p.pdf");
 
@@ -40,7 +45,7 @@ public class DocumentImportTest extends AbstractTest {
         indexes.put("invoiceDate", new Date());
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, FileUtils.readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
-        DocumentReference documentReference = documentImportService.importDocument(doc);
+        DocumentReference documentReference = documentService.importDocument(doc);
 
         assertEquals(1, documentReference.getPageCount());
         assertEquals("f86eb38a1dd386823ac2d7ff83945b4f79ba11c4138ff6657e7827aa9306bd9c", HashGenerator.sha256Hex(singlePagePdf));
@@ -53,7 +58,19 @@ public class DocumentImportTest extends AbstractTest {
         assertTrue(documentReference.getIndexes().containsKey("company"));
         assertEquals("Sunrise", documentReference.getIndexes().get("company"));
         assertTrue(documentReference.getIndexes().containsKey("invoiceDate"));
-        assertTrue(documentReference.getIndexes().get("invoiceDate") instanceof Date);
+        assertTrue("Is not java.util.Date. It's " + documentReference.getIndexes().get("invoiceDate").getClass().getCanonicalName(), documentReference.getIndexes().get("invoiceDate") instanceof Date);
+
+        DocumentReference documentReferenceFromDatabase = documentService.findDocumentReference(documentReference.getId());
+
+        assertNotNull(documentReferenceFromDatabase);
+        assertEquals(documentReference.getPageCount(), documentReferenceFromDatabase.getPageCount());
+        assertEquals(documentReference.getHash(), documentReferenceFromDatabase.getHash());
+        assertEquals(documentReference.getMimeType(), documentReferenceFromDatabase.getMimeType());
+        assertEquals(documentReference.getId(), documentReferenceFromDatabase.getId());
+        assertEquals(documentReference.getDocumentClass(), documentReferenceFromDatabase.getDocumentClass());
+        assertEquals(documentReference.getFileName(), documentReferenceFromDatabase.getFileName());
+        assertEquals(documentReference.getIndexes().size(), documentReferenceFromDatabase.getIndexes().size());
+        assertEquals(documentReference.getIndexes(), documentReferenceFromDatabase.getIndexes());
     }
 
     @Test
@@ -67,7 +84,7 @@ public class DocumentImportTest extends AbstractTest {
         indexes.put("invoiceDate", new Date());
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, FileUtils.readFileToByteArray(fivePagesPdfFile), indexes, fivePagesPdfFile.getName());
-        DocumentReference documentReference = documentImportService.importDocument(doc);
+        DocumentReference documentReference = documentService.importDocument(doc);
 
         assertEquals(5, documentReference.getPageCount());
         assertEquals("6e7c9a9c8708567230c3e97f27420fe48d296ff6b98e4cb34ac9e36d2474feaa", HashGenerator.sha256Hex(fivePagesPdfFile));
@@ -95,7 +112,7 @@ public class DocumentImportTest extends AbstractTest {
         indexes.put("invoiceDate", new Date());
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, FileUtils.readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
-        documentImportService.importDocument(doc);
+        documentService.importDocument(doc);
     }
 
     @Test(expected = ValdiationException.class)
@@ -108,7 +125,7 @@ public class DocumentImportTest extends AbstractTest {
         indexes.put("company", "Sunrise");
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, FileUtils.readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
-        documentImportService.importDocument(doc);
+        documentService.importDocument(doc);
     }
 
     @Test(expected = ValdiationException.class)
@@ -123,6 +140,6 @@ public class DocumentImportTest extends AbstractTest {
         indexes.put("whatever", 12L);
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, FileUtils.readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
-        documentImportService.importDocument(doc);
+        documentService.importDocument(doc);
     }
 }

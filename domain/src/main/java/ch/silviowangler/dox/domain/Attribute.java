@@ -23,6 +23,8 @@ public class Attribute extends AbstractPersistable<Long> {
     private Domain domain;
     @ManyToMany(mappedBy = "attributes")
     private Set<DocumentClass> documentClasses;
+    @Column(nullable = false, length = 4)
+    private String mappingColumn;
 
     public boolean isOptional() {
         return optional;
@@ -62,5 +64,13 @@ public class Attribute extends AbstractPersistable<Long> {
 
     public void setDocumentClasses(Set<DocumentClass> documentClasses) {
         this.documentClasses = documentClasses;
+    }
+
+    public String getMappingColumn() {
+        return mappingColumn;
+    }
+
+    public void setMappingColumn(String mappingColumn) {
+        this.mappingColumn = mappingColumn;
     }
 }

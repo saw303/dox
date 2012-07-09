@@ -25,6 +25,22 @@ public class Document extends AbstractPersistable<Long> {
     private String mimeType;
     @Column(nullable = false, length = 255)
     private String originalFilename;
+    @OneToOne(optional = true)
+    private IndexStore indexStore;
+
+    public Document() {
+        super();
+    }
+
+    public Document(String hash, DocumentClass documentClass, Integer pageCount, String mimeType, String originalFilename, IndexStore indexStore) {
+        super();
+        this.hash = hash;
+        this.documentClass = documentClass;
+        this.pageCount = pageCount;
+        this.mimeType = mimeType;
+        this.originalFilename = originalFilename;
+        this.indexStore = indexStore;
+    }
 
     public String getHash() {
         return hash;
@@ -64,5 +80,13 @@ public class Document extends AbstractPersistable<Long> {
 
     public void setOriginalFilename(String originalFilename) {
         this.originalFilename = originalFilename;
+    }
+
+    public IndexStore getIndexStore() {
+        return indexStore;
+    }
+
+    public void setIndexStore(IndexStore indexStore) {
+        this.indexStore = indexStore;
     }
 }
