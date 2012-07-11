@@ -12,6 +12,7 @@ allprojects {
     project.ext.junitVersion = '4.10'
     project.ext.tilesVersion = '2.2.2'
     project.ext.commonsIOVersion = '2.3'
+    project.ext.jodaTimeVersion = '2.1'
 }
 
 subprojects {
@@ -49,7 +50,9 @@ project(':core') {
     dependencies {
         compile project(':api'), project(':domain'),
                 "org.springframework:spring-orm:${ext.springVersion}",
-                'commons-codec:commons-codec:1.6', 'com.itextpdf:itextpdf:5.3.0', 'commons-beanutils:commons-beanutils:1.8.3', "commons-io:commons-io:${ext.commonsIOVersion}"
+                'commons-codec:commons-codec:1.6', 'com.itextpdf:itextpdf:5.3.0',
+                'commons-beanutils:commons-beanutils:1.8.3', "commons-io:commons-io:${ext.commonsIOVersion}",
+                "joda-time:joda-time:${ext.jodaTimeVersion}"
         runtime "org.slf4j:jcl-over-slf4j:${ext.slf4jVersion}", "ch.qos.logback:logback-classic:${ext.logbackVersion}"
     }
 }
@@ -60,6 +63,7 @@ project(':domain') {
         compile("org.springframework.data:spring-data-jpa:${ext.springDataVersion}") {
             exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
         }
+        compile "joda-time:joda-time:${ext.jodaTimeVersion}"
     }
 }
 

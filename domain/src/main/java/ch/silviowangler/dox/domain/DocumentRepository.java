@@ -7,4 +7,6 @@ import org.springframework.data.repository.CrudRepository;
  * @version 0.1
  */
 public interface DocumentRepository extends CrudRepository<Document, Long> {
+
+    Document findByHash(String hash);
 }

@@ -91,4 +91,17 @@ public class DocumentReference implements Serializable {
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
+
+    @Override
+    public String toString() {
+        return "DocumentReference{" +
+                "hash='" + hash + '\'' +
+                ", id=" + id +
+                ", pageCount=" + pageCount +
+                ", mimeType='" + mimeType + '\'' +
+                ", documentClass=" + documentClass +
+                ", indexes=" + indexes +
+                ", fileName='" + fileName + '\'' +
+                '}';
+    }
 }

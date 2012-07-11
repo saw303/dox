@@ -1,18 +1,19 @@
 package ch.silviowangler.dox.domain;
 
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * @author Silvio Wangler
  * @since 0.1
  *        <div>
- *        Date: 09.07.12 07:54
+ *        DateTime: 09.07.12 07:54
  *        </div>
  */
 
@@ -62,25 +63,35 @@ public class IndexStore extends AbstractPersistable<Long> {
     private String S_20;
 
     @Column
-    private Date D_01;
+    @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
+    private DateTime D_01;
     @Column
-    private Date D_02;
+    @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
+    private DateTime D_02;
     @Column
-    private Date D_03;
+    @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
+    private DateTime D_03;
     @Column
-    private Date D_04;
+    @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
+    private DateTime D_04;
     @Column
-    private Date D_05;
+    @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
+    private DateTime D_05;
     @Column
-    private Date D_06;
+    @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
+    private DateTime D_06;
     @Column
-    private Date D_07;
+    @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
+    private DateTime D_07;
     @Column
-    private Date D_08;
+    @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
+    private DateTime D_08;
     @Column
-    private Date D_09;
+    @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
+    private DateTime D_09;
     @Column
-    private Date D_10;
+    @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
+    private DateTime D_10;
 
     @Column
     private Long L_01;
@@ -284,83 +295,83 @@ public class IndexStore extends AbstractPersistable<Long> {
         S_20 = s_20;
     }
 
-    public Date getD_01() {
+    public DateTime getD_01() {
         return D_01;
     }
 
-    public void setD_01(Date d_01) {
+    public void setD_01(DateTime d_01) {
         D_01 = d_01;
     }
 
-    public Date getD_02() {
+    public DateTime getD_02() {
         return D_02;
     }
 
-    public void setD_02(Date d_02) {
+    public void setD_02(DateTime d_02) {
         D_02 = d_02;
     }
 
-    public Date getD_03() {
+    public DateTime getD_03() {
         return D_03;
     }
 
-    public void setD_03(Date d_03) {
+    public void setD_03(DateTime d_03) {
         D_03 = d_03;
     }
 
-    public Date getD_04() {
+    public DateTime getD_04() {
         return D_04;
     }
 
-    public void setD_04(Date d_04) {
+    public void setD_04(DateTime d_04) {
         D_04 = d_04;
     }
 
-    public Date getD_05() {
+    public DateTime getD_05() {
         return D_05;
     }
 
-    public void setD_05(Date d_05) {
+    public void setD_05(DateTime d_05) {
         D_05 = d_05;
     }
 
-    public Date getD_06() {
+    public DateTime getD_06() {
         return D_06;
     }
 
-    public void setD_06(Date d_06) {
+    public void setD_06(DateTime d_06) {
         D_06 = d_06;
     }
 
-    public Date getD_07() {
+    public DateTime getD_07() {
         return D_07;
     }
 
-    public void setD_07(Date d_07) {
+    public void setD_07(DateTime d_07) {
         D_07 = d_07;
     }
 
-    public Date getD_08() {
+    public DateTime getD_08() {
         return D_08;
     }
 
-    public void setD_08(Date d_08) {
+    public void setD_08(DateTime d_08) {
         D_08 = d_08;
     }
 
-    public Date getD_09() {
+    public DateTime getD_09() {
         return D_09;
     }
 
-    public void setD_09(Date d_09) {
+    public void setD_09(DateTime d_09) {
         D_09 = d_09;
     }
 
-    public Date getD_10() {
+    public DateTime getD_10() {
         return D_10;
     }
 
-    public void setD_10(Date d_10) {
+    public void setD_10(DateTime d_10) {
         D_10 = d_10;
     }
 

@@ -1,5 +1,7 @@
 package ch.silviowangler.dox.domain;
 
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Column;
@@ -27,6 +29,9 @@ public class Document extends AbstractPersistable<Long> {
     private String originalFilename;
     @OneToOne(optional = true)
     private IndexStore indexStore;
+    @Column(nullable = false)
+    @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
+    private DateTime creationDate = DateTime.now();
 
     public Document() {
         super();
@@ -88,5 +93,13 @@ public class Document extends AbstractPersistable<Long> {
 
     public void setIndexStore(IndexStore indexStore) {
         this.indexStore = indexStore;
+    }
+
+    public DateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(DateTime creationDate) {
+        this.creationDate = creationDate;
     }
 }

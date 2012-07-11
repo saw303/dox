@@ -41,4 +41,9 @@ public class PhysicalDocument extends DocumentReference {
     public void setContent(byte[] content) {
         this.content = content;
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

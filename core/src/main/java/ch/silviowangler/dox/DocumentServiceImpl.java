@@ -8,6 +8,8 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -21,9 +23,7 @@ import org.springframework.util.Assert;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Silvio Wangler
@@ -42,9 +42,10 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     private AttributeRepository attributeRepository;
     @Autowired
     private IndexStoreRepository indexStoreRepository;
-
     @Value("#{systemEnvironment['DOX_STORE']}")
     private File archiveDirectory;
+    @Autowired
+    private Properties mimeTypes;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -52,6 +53,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         Assert.isTrue(archiveDirectory.isDirectory(), "Archive store must be a directory ['" + this.archiveDirectory + "']");
         Assert.isTrue(archiveDirectory.canRead(), "Archive store must be readable ['" + this.archiveDirectory + "']");
         Assert.isTrue(archiveDirectory.canWrite(), "Archive store must be writable ['" + this.archiveDirectory + "']");
+        Assert.notEmpty(mimeTypes, "No mime types have been set");
     }
 
     @Override
@@ -98,7 +100,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-    public DocumentReference importDocument(PhysicalDocument physicalDocument) throws ValdiationException {
+    public DocumentReference importDocument(PhysicalDocument physicalDocument) throws ValdiationException, DocumentDuplicationException {
 
         final String documentClassShortName = physicalDocument.getDocumentClass().getShortName();
         DocumentClass documentClassEntity = documentClassRepository.findByShortName(documentClassShortName);
@@ -115,14 +117,24 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         verifyMandatoryAttributes(physicalDocument, attributes);
         verifyUnknownKeys(physicalDocument, documentClassShortName, attributes);
 
+        physicalDocument.setIndexes(fixDataTypesOfIndices(physicalDocument.getIndexes(), attributes));
+
+        final String mimeType = investigateMimeType(physicalDocument.getFileName());
         final String hash = DigestUtils.sha256Hex(physicalDocument.getContent());
-        final int numberOfPages = getNumberOfPages(physicalDocument);
+
+        final Document documentByHash = documentRepository.findByHash(hash);
+        if (documentByHash != null) {
+            throw new DocumentDuplicationException(documentByHash.getId(), hash);
+        }
+
+        final int numberOfPages = getNumberOfPages(physicalDocument, mimeType);
 
         IndexStore indexStore = new IndexStore();
         updateIndices(physicalDocument, indexStore);
         indexStore = indexStoreRepository.save(indexStore);
 
-        Document document = new Document(hash, documentClassEntity, numberOfPages, "application/pdf", physicalDocument.getFileName(), indexStore);
+
+        Document document = new Document(hash, documentClassEntity, numberOfPages, mimeType, physicalDocument.getFileName(), indexStore);
         document = documentRepository.save(document);
 
         File target = new File(this.archiveDirectory, hash);
@@ -133,6 +145,65 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         }
         DocumentReference docRef = toDocumentReference(document);
         return docRef;
+    }
+
+    private String investigateMimeType(final String fileName) {
+
+        logger.debug("Trying to find media type (mime type) for file name '{}'", fileName);
+
+        int i = fileName.lastIndexOf('.');
+        String extension = null;
+
+        if (i > 0 && i < fileName.length() - 1) {
+            extension = fileName.substring(i + 1).toLowerCase();
+        }
+
+        if (this.mimeTypes.containsKey(extension)) {
+            return (String) this.mimeTypes.get(extension);
+        }
+        logger.error("No media type (mime type) registered for file extension '{}' (original file name '{}')", extension, fileName);
+        throw new UnsupportedOperationException("No mime type registered for file extension " + fileName);
+    }
+
+    private Map<String, Object> fixDataTypesOfIndices(final Map<String, Object> indexes, List<Attribute> attributes) {
+
+        Map<String, Object> resultMap = new HashMap<String, Object>(indexes); // copy elements
+
+        for (Attribute attribute : attributes) {
+
+            final String attributeShortName = attribute.getShortName();
+            if (resultMap.containsKey(attributeShortName)) {
+                if (!isAssignableType(attribute.getDataType(), resultMap.get(attributeShortName).getClass())) {
+                    logger.debug("Attribute '{}' is not assignable to '{}'", attributeShortName, attribute.getDataType());
+                    resultMap.put(attributeShortName, makeAssignable(attribute.getDataType(), resultMap.get(attributeShortName)));
+                }
+            } else {
+                logger.debug("Ignoring attribute '{}' since it was not mentioned in the index map", attributeShortName);
+            }
+        }
+        return resultMap;
+    }
+
+    private Object makeAssignable(AttributeDataType desiredDataType, Object valueToConvert) {
+
+        if (AttributeDataType.DATE == desiredDataType && valueToConvert instanceof String) {
+            return DateTimeFormat.forPattern("dd.MM.yyyy").parseDateTime((String) valueToConvert);
+        } else if (AttributeDataType.DATE == desiredDataType && valueToConvert instanceof Date) {
+            return new DateTime(valueToConvert);
+        }
+        return new IllegalArgumentException("Unable to convert data type " + desiredDataType + " and value " + valueToConvert + "(Class: '" + valueToConvert.getClass().getCanonicalName() + "')");
+    }
+
+    private boolean isAssignableType(AttributeDataType desiredDataType, Class currentType) {
+
+        if (desiredDataType == AttributeDataType.DATE) {
+            return currentType.isAssignableFrom(DateTime.class);
+        } else if (desiredDataType == AttributeDataType.STRING) {
+            return currentType.isAssignableFrom(String.class);
+        } else {
+            logger.error("Unknown data type '{}'", desiredDataType);
+            throw new IllegalArgumentException("Unknown data type " + desiredDataType);
+        }
     }
 
     private void updateIndices(DocumentReference physicalDocument, IndexStore indexStore) {
@@ -183,16 +254,26 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         }
     }
 
-    private int getNumberOfPages(final PhysicalDocument physicalDocument) {
-        PdfReader pdfReader;
-        try {
-            pdfReader = new PdfReader(physicalDocument.getContent());
-        } catch (IOException e) {
-            logger.error("Unable to determine the number of pages", e);
-            return -1;
+    private int getNumberOfPages(final PhysicalDocument physicalDocument, final String mimeType) {
+
+        int numberOfPages = -1;
+
+        if ("application/pdf".equals(mimeType)) {
+
+            PdfReader pdfReader;
+            try {
+                pdfReader = new PdfReader(physicalDocument.getContent());
+            } catch (IOException e) {
+                logger.error("Unable to determine the number of pages", e);
+                return numberOfPages;
+            }
+            numberOfPages = pdfReader.getNumberOfPages();
+        } else if ("text/plain".equals(mimeType)) {
+            numberOfPages = -1;
+        } else {
+            throw new UnsupportedOperationException("Cannot determine page count from a document with a mime type '" + mimeType + "'");
         }
-        final int numberOfPages = pdfReader.getNumberOfPages();
-        logger.debug("Found {} page(s) for physical document {}", numberOfPages, pdfReader);
+        logger.debug("Found {} page(s) on physical document {}", numberOfPages, physicalDocument);
         return numberOfPages;
     }
 

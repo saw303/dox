@@ -2,6 +2,7 @@ package ch.silviowangler.dox;
 
 import ch.silviowangler.dox.api.*;
 import org.apache.commons.io.FileUtils;
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class DocumentServiceTest extends AbstractTest {
     }
 
     @Test
-    public void importSinglePagePdf() throws IOException, ValdiationException, DocumentNotFoundException {
+    public void importSinglePagePdf() throws IOException, ValdiationException, DocumentNotFoundException, DocumentDuplicationException {
 
         File singlePagePdf = loadFile("document-1p.pdf");
 
@@ -58,7 +59,7 @@ public class DocumentServiceTest extends AbstractTest {
         assertTrue(documentReference.getIndexes().containsKey("company"));
         assertEquals("Sunrise", documentReference.getIndexes().get("company"));
         assertTrue(documentReference.getIndexes().containsKey("invoiceDate"));
-        assertTrue("Is not java.util.Date. It's " + documentReference.getIndexes().get("invoiceDate").getClass().getCanonicalName(), documentReference.getIndexes().get("invoiceDate") instanceof Date);
+        assertTrue("Is not org.joda.time.DateTime. It's " + documentReference.getIndexes().get("invoiceDate").getClass().getCanonicalName(), documentReference.getIndexes().get("invoiceDate") instanceof DateTime);
 
         DocumentReference documentReferenceFromDatabase = documentService.findDocumentReference(documentReference.getId());
 
@@ -66,7 +67,7 @@ public class DocumentServiceTest extends AbstractTest {
     }
 
     @Test
-    public void importFivePagesPdf() throws IOException, ValdiationException, DocumentNotFoundException, DocumentNotInStoreException {
+    public void importFivePagesPdf() throws IOException, ValdiationException, DocumentNotFoundException, DocumentNotInStoreException, DocumentDuplicationException {
 
         File fivePagesPdfFile = loadFile("document-5p.pdf");
 
@@ -89,7 +90,7 @@ public class DocumentServiceTest extends AbstractTest {
         assertTrue(documentReference.getIndexes().containsKey("company"));
         assertEquals("Swisscom", documentReference.getIndexes().get("company"));
         assertTrue(documentReference.getIndexes().containsKey("invoiceDate"));
-        assertTrue(documentReference.getIndexes().get("invoiceDate") instanceof Date);
+        assertTrue("Is not org.joda.time.DateTime. It's " + documentReference.getIndexes().get("invoiceDate").getClass().getCanonicalName(), documentReference.getIndexes().get("invoiceDate") instanceof DateTime);
 
         PhysicalDocument docFromDox = documentService.findPhysicalDocument(documentReference.getId());
 
@@ -97,7 +98,7 @@ public class DocumentServiceTest extends AbstractTest {
     }
 
     @Test(expected = ValdiationException.class)
-    public void importSinglePagePdfUsingAnUnknownDocumentClass() throws IOException, ValdiationException {
+    public void importSinglePagePdfUsingAnUnknownDocumentClass() throws IOException, ValdiationException, DocumentDuplicationException {
 
         File singlePagePdf = loadFile("document-1p.pdf");
 
@@ -112,7 +113,7 @@ public class DocumentServiceTest extends AbstractTest {
     }
 
     @Test(expected = ValdiationException.class)
-    public void importSinglePagePdfMissingAnIndexKeyThatIsMandatory() throws IOException, ValdiationException {
+    public void importSinglePagePdfMissingAnIndexKeyThatIsMandatory() throws IOException, ValdiationException, DocumentDuplicationException {
 
         File singlePagePdf = loadFile("document-1p.pdf");
 
@@ -125,7 +126,7 @@ public class DocumentServiceTest extends AbstractTest {
     }
 
     @Test(expected = ValdiationException.class)
-    public void importSinglePagePdfUsingAnIndexKeyThatDoesNotExist() throws IOException, ValdiationException {
+    public void importSinglePagePdfUsingAnIndexKeyThatDoesNotExist() throws IOException, ValdiationException, DocumentDuplicationException {
 
         File singlePagePdf = loadFile("document-1p.pdf");
 
@@ -137,6 +138,55 @@ public class DocumentServiceTest extends AbstractTest {
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, FileUtils.readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
         documentService.importDocument(doc);
+    }
+
+    @Test
+    public void importDocumentUsingProperFormattedStringOnDateIndex() throws IOException, ValdiationException, DocumentNotFoundException, DocumentDuplicationException {
+        File singlePagePdf = loadFile("document-16p.pdf");
+
+        Map<String, Object> indexes = new HashMap<String, Object>(2);
+
+        indexes.put("company", "Sunrise");
+        indexes.put("invoiceDate", "01.11.1978");
+
+        PhysicalDocument doc = new PhysicalDocument(documentClass, FileUtils.readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
+        DocumentReference documentReference = documentService.importDocument(doc);
+
+        assertNotNull(documentReference.getId());
+
+        DocumentReference documentReferenceFromStore = documentService.findDocumentReference(documentReference.getId());
+
+        assertTrue(documentReferenceFromStore.getIndexes().containsKey("invoiceDate"));
+        assertTrue(documentReferenceFromStore.getIndexes().get("invoiceDate") instanceof DateTime);
+        assertEquals(new DateTime(1978, 11, 1, 0, 0), documentReferenceFromStore.getIndexes().get("invoiceDate"));
+    }
+
+    @Test
+    public void addingTheSameDocumentTwiceToDoxShouldThrowAnException() throws IOException, ValdiationException, DocumentDuplicationException {
+        File temp = new File("hello.world.txt");
+
+        if (temp.exists()) FileUtils.forceDelete(temp);
+        FileUtils.write(temp, "Lorem ipsum");
+        assertTrue("Should exist", temp.exists());
+
+        Map<String, Object> indexes = new HashMap<String, Object>(2);
+
+        indexes.put("company", "Sunrise");
+        indexes.put("invoiceDate", "01.11.1978");
+
+        PhysicalDocument doc = new PhysicalDocument(documentClass, FileUtils.readFileToByteArray(temp), indexes, temp.getName());
+        DocumentReference documentReference = documentService.importDocument(doc);
+
+        assertEquals("text/plain", documentReference.getMimeType());
+        assertEquals(-1, documentReference.getPageCount());
+
+        try {
+            documentService.importDocument(doc);
+        } catch (DocumentDuplicationException e) {
+            assertEquals(documentReference.getId(), e.getDocumentId());
+            assertEquals(documentReference.getHash(), e.getHash());
+        }
+        temp.deleteOnExit();
     }
 
     private void assertDocumentReference(DocumentReference expectedInstance, DocumentReference actualInstance) {

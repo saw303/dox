@@ -6,7 +6,7 @@ package ch.silviowangler.dox.api;
  */
 public interface DocumentService {
 
-    DocumentReference importDocument(PhysicalDocument physicalDocument) throws ValdiationException;
+    DocumentReference importDocument(PhysicalDocument physicalDocument) throws ValdiationException, DocumentDuplicationException;
 
     DocumentReference findDocumentReference(Long id) throws DocumentNotFoundException;
 
