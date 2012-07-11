@@ -186,6 +186,7 @@ public class DocumentServiceTest extends AbstractTest {
             assertEquals(documentReference.getId(), e.getDocumentId());
             assertEquals(documentReference.getHash(), e.getHash());
         }
+        temp.deleteOnExit();
     }
 
     @Test
