@@ -5,7 +5,6 @@ import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,8 +20,6 @@ import static junit.framework.Assert.*;
  */
 public class DocumentServiceTest extends AbstractTest {
 
-    @Autowired
-    private DocumentService documentService;
     private DocumentClass documentClass;
 
     @Before
@@ -163,11 +160,7 @@ public class DocumentServiceTest extends AbstractTest {
 
     @Test
     public void addingTheSameDocumentTwiceToDoxShouldThrowAnException() throws IOException, ValdiationException, DocumentDuplicationException {
-        File temp = new File("hello.world.txt");
-
-        if (temp.exists()) FileUtils.forceDelete(temp);
-        FileUtils.write(temp, "Lorem ipsum");
-        assertTrue("Should exist", temp.exists());
+        File temp = createTestFile("hello.world.txt", "Lorem ipsum");
 
         Map<String, Object> indexes = new HashMap<String, Object>(2);
 
@@ -186,7 +179,6 @@ public class DocumentServiceTest extends AbstractTest {
             assertEquals(documentReference.getId(), e.getDocumentId());
             assertEquals(documentReference.getHash(), e.getHash());
         }
-        temp.deleteOnExit();
     }
 
     @Test

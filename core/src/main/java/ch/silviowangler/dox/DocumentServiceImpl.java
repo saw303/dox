@@ -60,6 +60,14 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+    public Set<DocumentReference> findDocumentReferences(Map<String, Object> queryParams) {
+
+        List<Document> documents = documentRepository.findDocuments(queryParams);
+        return new HashSet<DocumentReference>();
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public PhysicalDocument findPhysicalDocument(Long id) throws DocumentNotFoundException, DocumentNotInStoreException {
 
         DocumentReference doc = findDocumentReference(id);
