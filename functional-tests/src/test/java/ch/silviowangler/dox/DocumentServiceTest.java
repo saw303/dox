@@ -186,7 +186,38 @@ public class DocumentServiceTest extends AbstractTest {
             assertEquals(documentReference.getId(), e.getDocumentId());
             assertEquals(documentReference.getHash(), e.getHash());
         }
-        temp.deleteOnExit();
+    }
+
+    @Test
+    public void importSinglePageTiff() throws IOException, ValdiationException, DocumentNotFoundException, DocumentDuplicationException {
+        importTiff("document-1p.tif", 1);
+    }
+
+    @Test
+    public void importTwentyPageTiff() throws IOException, ValdiationException, DocumentNotFoundException, DocumentDuplicationException {
+        importTiff("document-20p.tif", 20);
+    }
+
+    private void importTiff(String fileName, int expectedPageCount) throws IOException, ValdiationException, DocumentDuplicationException, DocumentNotFoundException {
+        File singlePagePdf = loadFile(fileName);
+
+        Map<String, Object> indexes = new HashMap<String, Object>(2);
+
+        indexes.put("company", "Sunrise");
+        indexes.put("invoiceDate", "01.11.2012");
+
+        PhysicalDocument doc = new PhysicalDocument(documentClass, FileUtils.readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
+        DocumentReference documentReference = documentService.importDocument(doc);
+
+        assertNotNull(documentReference.getId());
+
+        DocumentReference documentReferenceFromStore = documentService.findDocumentReference(documentReference.getId());
+
+        assertTrue(documentReferenceFromStore.getIndexes().containsKey("invoiceDate"));
+        assertTrue(documentReferenceFromStore.getIndexes().get("invoiceDate") instanceof DateTime);
+        assertEquals(new DateTime(2012, 11, 1, 0, 0), documentReferenceFromStore.getIndexes().get("invoiceDate"));
+        assertEquals("image/tiff", documentReferenceFromStore.getMimeType());
+        assertEquals(expectedPageCount, documentReferenceFromStore.getPageCount());
     }
 
     private void assertDocumentReference(DocumentReference expectedInstance, DocumentReference actualInstance) {

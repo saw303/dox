@@ -4,6 +4,8 @@ import ch.silviowangler.dox.api.*;
 import ch.silviowangler.dox.domain.*;
 import ch.silviowangler.dox.domain.DocumentClass;
 import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.RandomAccessFileOrArray;
+import com.itextpdf.text.pdf.codec.TiffImage;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -270,6 +272,8 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             numberOfPages = pdfReader.getNumberOfPages();
         } else if ("text/plain".equals(mimeType)) {
             numberOfPages = -1;
+        } else if ("image/tiff".equals(mimeType)) {
+            numberOfPages = TiffImage.getNumberOfPages(new RandomAccessFileOrArray(physicalDocument.getContent()));
         } else {
             throw new UnsupportedOperationException("Cannot determine page count from a document with a mime type '" + mimeType + "'");
         }
