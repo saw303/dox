@@ -14,7 +14,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -44,14 +43,15 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     @Autowired
     private IndexStoreRepository indexStoreRepository;
 
-    @Value("${archive.home}")
+    @Value("#{systemEnvironment['DOX_STORE']}")
     private File archiveDirectory;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        Assert.isTrue(archiveDirectory.isDirectory());
-        Assert.isTrue(archiveDirectory.canRead());
-        Assert.isTrue(archiveDirectory.canWrite());
+        Assert.notNull(archiveDirectory, "Archive directory must not be null");
+        Assert.isTrue(archiveDirectory.isDirectory(), "Archive store must be a directory ['" + this.archiveDirectory + "']");
+        Assert.isTrue(archiveDirectory.canRead(), "Archive store must be readable ['" + this.archiveDirectory + "']");
+        Assert.isTrue(archiveDirectory.canWrite(), "Archive store must be writable ['" + this.archiveDirectory + "']");
     }
 
     @Override
@@ -71,7 +71,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
         File file = new File(this.archiveDirectory, doc.getHash());
 
-        if (! file.exists()) {
+        if (!file.exists()) {
             throw new DocumentNotInStoreException(doc.getHash(), doc.getId());
         }
 
