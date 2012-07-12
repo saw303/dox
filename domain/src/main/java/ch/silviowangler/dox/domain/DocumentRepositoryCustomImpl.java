@@ -42,15 +42,14 @@ public class DocumentRepositoryCustomImpl implements DocumentRepositoryCustom {
                 Attribute attribute = attributes.get(key);
 
                 if (AttributeDataType.STRING.equals(attribute.getDataType())) {
-                    String v = (String) value;
+                    String castedStringValue = (String) value;
 
-                    if (containsWildcardCharacters(v)) {
-                        final String wildcardValue = replaceWildcardCharacters(v);
+                    if (containsWildcardCharacters(castedStringValue)) {
+                        final String wildcardValue = replaceWildcardCharacters(castedStringValue);
                         logger.debug("Like on '{}' using value '{}'", attribute.getMappingColumn(), wildcardValue);
                         select.where(criteriaBuilder.like(document.join("indexStore").<String>get(attribute.getMappingColumn()), wildcardValue));
-
                     } else {
-                        select.where(criteriaBuilder.equal(document.join("indexStore").<String>get(attribute.getMappingColumn()), v));
+                        select.where(criteriaBuilder.equal(document.join("indexStore").<String>get(attribute.getMappingColumn()), castedStringValue));
                     }
                 }
             } else {

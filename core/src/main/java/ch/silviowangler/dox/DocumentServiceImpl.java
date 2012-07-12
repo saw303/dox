@@ -25,6 +25,7 @@ import org.springframework.util.Assert;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -204,12 +205,16 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     private Object makeAssignable(AttributeDataType desiredDataType, Object valueToConvert) {
 
-        if (AttributeDataType.DATE == desiredDataType && valueToConvert instanceof String) {
+        if (AttributeDataType.DATE.equals(desiredDataType) && valueToConvert instanceof String) {
             return DateTimeFormat.forPattern("dd.MM.yyyy").parseDateTime((String) valueToConvert);
-        } else if (AttributeDataType.DATE == desiredDataType && valueToConvert instanceof Date) {
+        } else if (AttributeDataType.DATE.equals(desiredDataType) && valueToConvert instanceof Date) {
             return new DateTime(valueToConvert);
+        } else if (AttributeDataType.DOUBLE.equals(desiredDataType) && valueToConvert instanceof Double) {
+            return BigDecimal.valueOf((Double) valueToConvert);
+        } else if (AttributeDataType.DOUBLE.equals(desiredDataType) && valueToConvert instanceof String && ((String) valueToConvert).matches("(\\d.*|\\d.*\\.\\d{1,2})")) {
+            return new BigDecimal((String) valueToConvert);
         }
-        return new IllegalArgumentException("Unable to convert data type " + desiredDataType + " and value " + valueToConvert + "(Class: '" + valueToConvert.getClass().getCanonicalName() + "')");
+        throw new IllegalArgumentException("Unable to convert data type " + desiredDataType + " and value " + valueToConvert + "(Class: '" + valueToConvert.getClass().getCanonicalName() + "')");
     }
 
     private boolean isAssignableType(AttributeDataType desiredDataType, Class currentType) {
@@ -218,6 +223,8 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             return currentType.isAssignableFrom(DateTime.class);
         } else if (desiredDataType == AttributeDataType.STRING) {
             return currentType.isAssignableFrom(String.class);
+        } else if (desiredDataType == AttributeDataType.DOUBLE) {
+            return currentType.isAssignableFrom(BigDecimal.class);
         } else {
             logger.error("Unknown data type '{}'", desiredDataType);
             throw new IllegalArgumentException("Unknown data type " + desiredDataType);

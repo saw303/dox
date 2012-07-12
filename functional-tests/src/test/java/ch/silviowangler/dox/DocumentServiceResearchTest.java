@@ -28,12 +28,14 @@ public class DocumentServiceResearchTest extends AbstractTest {
         Map<String, Object> indexes = new HashMap<String, Object>(2);
         indexes.put("company", "Sunrise");
         indexes.put("invoiceDate", "01.12.2009");
+        indexes.put("invoiceAmount", 100.5);
 
         importFile("file-1.txt", "This is a test content", "INVOICE", indexes);
 
         indexes = new HashMap<String, Object>(2);
         indexes.put("company", "Swisscom");
         indexes.put("invoiceDate", "02.12.2009");
+        indexes.put("invoiceAmount", 1200.99);
 
         importFile("file-2.txt", "This is a test content that contains more text", "INVOICE", indexes);
     }

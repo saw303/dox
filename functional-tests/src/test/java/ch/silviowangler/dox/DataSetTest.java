@@ -25,6 +25,6 @@ public class DataSetTest extends AbstractTest {
 
     @Test
     public void verifyGlobalAttributes() {
-        assertEquals("", 0, attributeRepository.findGlobalAttributes().size());
+        assertEquals("Unexpected amount of global attributes", 0, attributeRepository.findGlobalAttributes().size());
     }
 }
