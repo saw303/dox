@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.*;
 
 /**
  * @author Silvio Wangler
@@ -22,10 +22,8 @@ import static junit.framework.Assert.assertNotNull;
  */
 public class DocumentServiceResearchTest extends AbstractTest {
 
-    private DocumentClass documentClass = new DocumentClass("INVOICE");
-
     @Before
-    public void init() throws ValdiationException, DocumentDuplicationException, IOException {
+    public void init() throws ValdiationException, DocumentDuplicationException, IOException, DocumentNotFoundException {
 
         Map<String, Object> indexes = new HashMap<String, Object>(2);
         indexes.put("company", "Sunrise");
@@ -40,19 +38,70 @@ public class DocumentServiceResearchTest extends AbstractTest {
         importFile("file-2.txt", "This is a test content that contains more text", "INVOICE", indexes);
     }
 
-    private DocumentReference importFile(final String fileName, final String content, final String docClassShortName, final Map<String, Object> indices) throws ValdiationException, DocumentDuplicationException, IOException {
+    private DocumentReference importFile(final String fileName, final String content, final String docClassShortName, final Map<String, Object> indices) throws ValdiationException, DocumentDuplicationException, IOException, DocumentNotFoundException {
         File textFile01 = createTestFile(fileName, content);
         PhysicalDocument doc = new PhysicalDocument(new DocumentClass(docClassShortName), FileUtils.readFileToByteArray(textFile01), indices, fileName);
-        return documentService.importDocument(doc);
+        try {
+            return documentService.importDocument(doc);
+
+        } catch (DocumentDuplicationException e) {
+            return documentService.findDocumentReference(e.getDocumentId());
+        }
     }
 
     @Test
-    public void findSwisscomInvoice() {
+    public void findSwisscomInvoice() throws DocumentClassNotFoundException {
 
         Map<String, Object> queryParams = new HashMap<String, Object>(1);
+        final String companyName = "Swisscom";
+        queryParams.put("company", companyName);
 
-        Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryParams);
+        Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryParams, "INVOICE");
 
         assertNotNull(documentReferences);
+        assertEquals(1, documentReferences.size());
+        assertEquals(companyName, documentReferences.iterator().next().getIndexes().get("company"));
+    }
+
+    @Test
+    public void findSunriseInvoice() throws DocumentClassNotFoundException {
+
+        Map<String, Object> queryParams = new HashMap<String, Object>(1);
+        final String companyName = "Sunrise";
+        queryParams.put("company", companyName);
+
+        Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryParams, "INVOICE");
+
+        assertNotNull(documentReferences);
+        assertEquals(1, documentReferences.size());
+        assertEquals(companyName, documentReferences.iterator().next().getIndexes().get("company"));
+    }
+
+    @Test
+    public void findInvoicesByCompaniesStartingWithS() throws DocumentClassNotFoundException {
+
+        Map<String, Object> queryParams = new HashMap<String, Object>(1);
+        final String companyName = "S*";
+        queryParams.put("company", companyName);
+
+        Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryParams, "INVOICE");
+
+        assertNotNull(documentReferences);
+        assertEquals(2, documentReferences.size());
+        assertTrue(((String) documentReferences.iterator().next().getIndexes().get("company")).matches("(Swisscom|Sunrise)"));
+    }
+
+    @Test
+    public void findInvoicesByCompaniesSunXise() throws DocumentClassNotFoundException {
+
+        Map<String, Object> queryParams = new HashMap<String, Object>(1);
+        final String companyName = "Sun?ise";
+        queryParams.put("company", companyName);
+
+        Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryParams, "INVOICE");
+
+        assertNotNull(documentReferences);
+        assertEquals(1, documentReferences.size());
+        assertEquals("Sunrise", documentReferences.iterator().next().getIndexes().get("company"));
     }
 }

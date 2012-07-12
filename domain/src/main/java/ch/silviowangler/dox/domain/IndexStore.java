@@ -4,9 +4,7 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 /**
@@ -21,6 +19,9 @@ import java.math.BigDecimal;
 @Table(name = "DOX_IDX_STORE")
 public class IndexStore extends AbstractPersistable<Long> {
 
+    @OneToOne(optional = false)
+    @JoinColumn(name = "document_id", referencedColumnName = "id")
+    private Document document;
     @Column(length = 255)
     private String S_01;
     @Column(length = 255)
@@ -533,5 +534,71 @@ public class IndexStore extends AbstractPersistable<Long> {
 
     public void setF_10(BigDecimal f_10) {
         F_10 = f_10;
+    }
+
+    public Document getDocument() {
+        return document;
+    }
+
+    public void setDocument(Document document) {
+        this.document = document;
+    }
+
+    @Override
+    public String toString() {
+        return "IndexStore{" +
+                "id='" + super.getId() + '\'' +
+                "document id='" + getDocument().getId() + '\'' +
+                "S_01='" + S_01 + '\'' +
+                ", S_02='" + S_02 + '\'' +
+                ", S_03='" + S_03 + '\'' +
+                ", S_04='" + S_04 + '\'' +
+                ", S_05='" + S_05 + '\'' +
+                ", S_06='" + S_06 + '\'' +
+                ", S_07='" + S_07 + '\'' +
+                ", S_08='" + S_08 + '\'' +
+                ", S_09='" + S_09 + '\'' +
+                ", S_10='" + S_10 + '\'' +
+                ", S_11='" + S_11 + '\'' +
+                ", S_12='" + S_12 + '\'' +
+                ", S_13='" + S_13 + '\'' +
+                ", S_14='" + S_14 + '\'' +
+                ", S_15='" + S_15 + '\'' +
+                ", S_16='" + S_16 + '\'' +
+                ", S_17='" + S_17 + '\'' +
+                ", S_18='" + S_18 + '\'' +
+                ", S_19='" + S_19 + '\'' +
+                ", S_20='" + S_20 + '\'' +
+                ", D_01=" + D_01 +
+                ", D_02=" + D_02 +
+                ", D_03=" + D_03 +
+                ", D_04=" + D_04 +
+                ", D_05=" + D_05 +
+                ", D_06=" + D_06 +
+                ", D_07=" + D_07 +
+                ", D_08=" + D_08 +
+                ", D_09=" + D_09 +
+                ", D_10=" + D_10 +
+                ", L_01=" + L_01 +
+                ", L_02=" + L_02 +
+                ", L_03=" + L_03 +
+                ", L_04=" + L_04 +
+                ", L_05=" + L_05 +
+                ", L_06=" + L_06 +
+                ", L_07=" + L_07 +
+                ", L_08=" + L_08 +
+                ", L_09=" + L_09 +
+                ", L_10=" + L_10 +
+                ", F_01=" + F_01 +
+                ", F_02=" + F_02 +
+                ", F_03=" + F_03 +
+                ", F_04=" + F_04 +
+                ", F_05=" + F_05 +
+                ", F_06=" + F_06 +
+                ", F_07=" + F_07 +
+                ", F_08=" + F_08 +
+                ", F_09=" + F_09 +
+                ", F_10=" + F_10 +
+                '}';
     }
 }

@@ -12,5 +12,5 @@ import java.util.Map;
  */
 public interface DocumentRepositoryCustom {
 
-    List<Document> findDocuments(Map<String, Object> indices);
+    List<Document> findDocuments(Map<String, Object> indices, Map<String, Attribute> attributes);
 }

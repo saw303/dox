@@ -60,10 +60,19 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-    public Set<DocumentReference> findDocumentReferences(Map<String, Object> queryParams) {
+    public Set<DocumentReference> findDocumentReferences(Map<String, Object> queryParams, String documentClassShortName) throws DocumentClassNotFoundException {
 
-        List<Document> documents = documentRepository.findDocuments(queryParams);
-        return new HashSet<DocumentReference>();
+        DocumentClass documentClass = documentClassRepository.findByShortName(documentClassShortName);
+        List<Attribute> attributes = attributeRepository.findAttributesForDocumentClass(documentClass);
+
+        List<Document> documents = documentRepository.findDocuments(fixDataTypesOfIndices(queryParams, attributes), toAttributeMap(attributes));
+
+        HashSet<DocumentReference> documentReferences = new HashSet<DocumentReference>();
+
+        for (Document document : documents) {
+            documentReferences.add(toDocumentReference(document));
+        }
+        return documentReferences;
     }
 
     @Override
@@ -141,11 +150,10 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
         IndexStore indexStore = new IndexStore();
         updateIndices(physicalDocument, indexStore);
-        indexStore = indexStoreRepository.save(indexStore);
-
-
         Document document = new Document(hash, documentClassEntity, numberOfPages, mimeType, physicalDocument.getFileName(), indexStore);
+        indexStore.setDocument(document);
         document = documentRepository.save(document);
+        indexStoreRepository.save(indexStore);
 
         File target = new File(this.archiveDirectory, hash);
         try {
@@ -323,5 +331,14 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     private ch.silviowangler.dox.api.DocumentClass toDocumentClassApi(DocumentClass documentClass) {
         return new ch.silviowangler.dox.api.DocumentClass(documentClass.getShortName());
+    }
+
+    private Map<String, Attribute> toAttributeMap(List<Attribute> attributes) {
+        Map<String, Attribute> map = new HashMap<String, Attribute>(attributes.size());
+
+        for (Attribute attribute : attributes) {
+            map.put(attribute.getShortName(), attribute);
+        }
+        return map;
     }
 }
