@@ -82,12 +82,4 @@ public class DocumentRepositoryCustomImpl implements DocumentRepositoryCustom {
     private boolean containsWildcardCharacters(final String value) {
         return value.contains("*") || value.contains("?");
     }
-
-    private void logIndexStoresIfDebugIsEnabled(List<IndexStore> resultList) {
-        if (logger.isDebugEnabled()) {
-            for (IndexStore indexStore : resultList) {
-                logger.debug("Found index store '{}'", indexStore);
-            }
-        }
-    }
 }
