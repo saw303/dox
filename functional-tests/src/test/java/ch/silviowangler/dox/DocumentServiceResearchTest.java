@@ -28,14 +28,14 @@ public class DocumentServiceResearchTest extends AbstractTest {
         Map<String, Object> indexes = new HashMap<String, Object>(2);
         indexes.put("company", "Sunrise");
         indexes.put("invoiceDate", "01.12.2009");
-        indexes.put("invoiceAmount", 100.5);
+        indexes.put("invoiceAmount", "100.5");
 
         importFile("file-1.txt", "This is a test content", "INVOICE", indexes);
 
         indexes = new HashMap<String, Object>(2);
         indexes.put("company", "Swisscom");
         indexes.put("invoiceDate", "02.12.2009");
-        indexes.put("invoiceAmount", 1200.99);
+        indexes.put("invoiceAmount", "1200.99");
 
         importFile("file-2.txt", "This is a test content that contains more text", "INVOICE", indexes);
     }
@@ -99,6 +99,19 @@ public class DocumentServiceResearchTest extends AbstractTest {
         Map<String, Object> queryParams = new HashMap<String, Object>(1);
         final String companyName = "Sun?ise";
         queryParams.put("company", companyName);
+
+        Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryParams, "INVOICE");
+
+        assertNotNull(documentReferences);
+        assertEquals(1, documentReferences.size());
+        assertEquals("Sunrise", documentReferences.iterator().next().getIndexes().get("company"));
+    }
+
+    @Test
+    public void findByExactInvoiceAmount() throws DocumentClassNotFoundException {
+
+        Map<String, Object> queryParams = new HashMap<String, Object>(1);
+        queryParams.put("invoiceAmount", "100.50");
 
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryParams, "INVOICE");
 

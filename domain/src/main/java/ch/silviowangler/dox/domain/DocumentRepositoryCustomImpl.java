@@ -51,6 +51,8 @@ public class DocumentRepositoryCustomImpl implements DocumentRepositoryCustom {
                     } else {
                         select.where(criteriaBuilder.equal(document.join("indexStore").<String>get(attribute.getMappingColumn()), castedStringValue));
                     }
+                } else if (AttributeDataType.DOUBLE.equals(attribute.getDataType())) {
+                    select.where(criteriaBuilder.equal(document.join("indexStore").<String>get(attribute.getMappingColumn()), value));
                 }
             } else {
                 logger.warn("Ignoring key '{}' since it is no global attribute", key);
