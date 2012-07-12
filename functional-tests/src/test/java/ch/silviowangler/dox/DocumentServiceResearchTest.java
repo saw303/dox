@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -94,6 +95,20 @@ public class DocumentServiceResearchTest extends AbstractTest {
     }
 
     @Test
+    public void findInvoicesByCompaniesStartingWithSAndContainingAnotherS() throws DocumentClassNotFoundException {
+
+        Map<String, Object> queryParams = new HashMap<String, Object>(1);
+        final String companyName = "S*s*";
+        queryParams.put("company", companyName);
+
+        Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryParams, "INVOICE");
+
+        assertNotNull(documentReferences);
+        assertEquals(2, documentReferences.size());
+        assertTrue(((String) documentReferences.iterator().next().getIndexes().get("company")).matches("(Swisscom|Sunrise)"));
+    }
+
+    @Test
     public void findInvoicesByCompaniesSunXise() throws DocumentClassNotFoundException {
 
         Map<String, Object> queryParams = new HashMap<String, Object>(1);
@@ -112,6 +127,19 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         Map<String, Object> queryParams = new HashMap<String, Object>(1);
         queryParams.put("invoiceAmount", "100.50");
+
+        Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryParams, "INVOICE");
+
+        assertNotNull(documentReferences);
+        assertEquals(1, documentReferences.size());
+        assertEquals("Sunrise", documentReferences.iterator().next().getIndexes().get("company"));
+    }
+
+    @Test
+    public void findByRangeInvoiceAmount() throws DocumentClassNotFoundException {
+
+        Map<String, Object> queryParams = new HashMap<String, Object>(1);
+        queryParams.put("invoiceAmount", new Range<BigDecimal>(new BigDecimal("100"), new BigDecimal("101")));
 
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryParams, "INVOICE");
 

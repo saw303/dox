@@ -205,6 +205,11 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     private Object makeAssignable(AttributeDataType desiredDataType, Object valueToConvert) {
 
+        if (valueToConvert instanceof Range && isRangeCompatible(desiredDataType)) {
+            logger.debug("Found a range parameter. Skip this one");
+            return valueToConvert;
+        }
+
         if (AttributeDataType.DATE.equals(desiredDataType) && valueToConvert instanceof String) {
             return DateTimeFormat.forPattern("dd.MM.yyyy").parseDateTime((String) valueToConvert);
         } else if (AttributeDataType.DATE.equals(desiredDataType) && valueToConvert instanceof Date) {
@@ -215,6 +220,10 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             return new BigDecimal((String) valueToConvert);
         }
         throw new IllegalArgumentException("Unable to convert data type " + desiredDataType + " and value " + valueToConvert + "(Class: '" + valueToConvert.getClass().getCanonicalName() + "')");
+    }
+
+    private boolean isRangeCompatible(AttributeDataType desiredDataType) {
+        return (AttributeDataType.DATE.equals(desiredDataType) || AttributeDataType.DOUBLE.equals(desiredDataType) || AttributeDataType.INTEGER.equals(desiredDataType) || AttributeDataType.LONG.equals(desiredDataType) || AttributeDataType.SHORT.equals(desiredDataType));
     }
 
     private boolean isAssignableType(AttributeDataType desiredDataType, Class currentType) {

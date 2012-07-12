@@ -1,5 +1,6 @@
 package ch.silviowangler.dox.domain;
 
+import ch.silviowangler.dox.api.Range;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,7 +9,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -52,7 +53,17 @@ public class DocumentRepositoryCustomImpl implements DocumentRepositoryCustom {
                         select.where(criteriaBuilder.equal(document.join("indexStore").<String>get(attribute.getMappingColumn()), castedStringValue));
                     }
                 } else if (AttributeDataType.DOUBLE.equals(attribute.getDataType())) {
-                    select.where(criteriaBuilder.equal(document.join("indexStore").<String>get(attribute.getMappingColumn()), value));
+                    logger.debug("Setting attribute '{}' with value '{}' (data type: {})", new Object[]{attribute.getShortName(), value, value.getClass().getCanonicalName()});
+
+                    if (value instanceof Range) {
+                        Range<BigDecimal> range = (Range<BigDecimal>) value;
+                        select.where(criteriaBuilder.between(
+                                document.join("indexStore").<BigDecimal>get(attribute.getMappingColumn()),
+                                range.getFrom(),
+                                range.getTo()));
+                    } else {
+                        select.where(criteriaBuilder.equal(document.join("indexStore").<String>get(attribute.getMappingColumn()), value));
+                    }
                 }
             } else {
                 logger.warn("Ignoring key '{}' since it is no global attribute", key);
@@ -60,17 +71,12 @@ public class DocumentRepositoryCustomImpl implements DocumentRepositoryCustom {
         }
 
         final List<Document> resultList = em.createQuery(query).getResultList();
-
         logger.info("Found {} index stores", resultList.size());
-
-        if (!resultList.isEmpty()) {
-            return resultList;
-        }
-        return new ArrayList();
+        return resultList;
     }
 
     private String replaceWildcardCharacters(String value) {
-        return value.replace("*", "%").replace("?", "%");
+        return value.replaceAll("(\\*|\\?)", "%");
     }
 
     private boolean containsWildcardCharacters(final String value) {
