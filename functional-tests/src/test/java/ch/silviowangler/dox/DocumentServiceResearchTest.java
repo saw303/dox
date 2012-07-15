@@ -147,4 +147,14 @@ public class DocumentServiceResearchTest extends AbstractTest {
         assertEquals(1, documentReferences.size());
         assertEquals("Sunrise", documentReferences.iterator().next().getIndexes().get("company"));
     }
+
+    @Test
+    public void findBySingleString() {
+
+        Set<DocumentReference> documentReferences = documentService.findDocumentReferences("Sunrise");
+
+        assertNotNull(documentReferences);
+        assertEquals(1, documentReferences.size());
+        assertEquals("Sunrise", documentReferences.iterator().next().getIndexes().get("company"));
+    }
 }

@@ -4,10 +4,8 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Set;
 
 /**
  * @author Silvio Wangler
@@ -32,6 +30,8 @@ public class Document extends AbstractPersistable<Long> {
     @Column(nullable = false)
     @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
     private DateTime creationDate = DateTime.now();
+    @OneToMany(mappedBy = "document")
+    private Set<IndexMapEntry> indexMapEntries;
 
     public Document() {
         super();

@@ -16,4 +16,12 @@ public interface DocumentService {
     PhysicalDocument findPhysicalDocument(Long id) throws DocumentNotFoundException, DocumentNotInStoreException;
 
     Set<DocumentReference> findDocumentReferences(Map<String, Object> queryParams, String documentClassShortName) throws DocumentClassNotFoundException;
+
+    /**
+     * Implement a search à la Google. Uses a single String to find document references.
+     *
+     * @param queryString
+     * @return
+     */
+    Set<DocumentReference> findDocumentReferences(String queryString);
 }

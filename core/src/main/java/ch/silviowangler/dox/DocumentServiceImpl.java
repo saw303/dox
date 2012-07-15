@@ -49,6 +49,8 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     private File archiveDirectory;
     @Autowired
     private Properties mimeTypes;
+    @Autowired
+    private IndexMapEntryRepository indexMapEntryRepository;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -57,6 +59,19 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         Assert.isTrue(archiveDirectory.canRead(), "Archive store must be readable ['" + this.archiveDirectory + "']");
         Assert.isTrue(archiveDirectory.canWrite(), "Archive store must be writable ['" + this.archiveDirectory + "']");
         Assert.notEmpty(mimeTypes, "No mime types have been set");
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+    public Set<DocumentReference> findDocumentReferences(String queryString) {
+
+        List<Document> documents = indexMapEntryRepository.findByValue(queryString.toUpperCase());
+        Set<DocumentReference> documentReferences = new HashSet<DocumentReference>(documents.size());
+
+        for (Document document : documents) {
+            documentReferences.add(toDocumentReference(document));
+        }
+        return documentReferences;
     }
 
     @Override
@@ -155,6 +170,11 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         indexStore.setDocument(document);
         document = documentRepository.save(document);
         indexStoreRepository.save(indexStore);
+
+        for (String key : physicalDocument.getIndexes().keySet()) {
+            IndexMapEntry indexMapEntry = new IndexMapEntry(key, String.valueOf(physicalDocument.getIndexes().get(key)).toUpperCase(), document);
+            indexMapEntryRepository.save(indexMapEntry);
+        }
 
         File target = new File(this.archiveDirectory, hash);
         try {
