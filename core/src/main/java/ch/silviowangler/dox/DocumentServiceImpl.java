@@ -35,6 +35,7 @@ import java.util.*;
 @Service
 public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
+    private static final String DD_MM_YYYY = "dd.MM.yyyy";
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
@@ -198,13 +199,11 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         String indexValueToStore;
 
         if (indexValue instanceof DateTime) {
-            indexValueToStore = ((DateTime) indexValue).toString("dd.MM.yyyy");
+            indexValueToStore = ((DateTime) indexValue).toString(DD_MM_YYYY);
         } else {
             indexValueToStore = String.valueOf(indexValue);
         }
-
         logger.debug("String representation of index value '{}' is '{}'", indexValue, indexValueToStore);
-
         return indexValueToStore;
     }
 
@@ -253,7 +252,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         }
 
         if (AttributeDataType.DATE.equals(desiredDataType) && valueToConvert instanceof String) {
-            return DateTimeFormat.forPattern("dd.MM.yyyy").parseDateTime((String) valueToConvert);
+            return DateTimeFormat.forPattern(DD_MM_YYYY).parseDateTime((String) valueToConvert);
         } else if (AttributeDataType.DATE.equals(desiredDataType) && valueToConvert instanceof Date) {
             return new DateTime(valueToConvert);
         } else if (AttributeDataType.DOUBLE.equals(desiredDataType) && valueToConvert instanceof Double) {
@@ -261,6 +260,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         } else if (AttributeDataType.DOUBLE.equals(desiredDataType) && valueToConvert instanceof String && ((String) valueToConvert).matches("(\\d.*|\\d.*\\.\\d{1,2})")) {
             return new BigDecimal((String) valueToConvert);
         }
+        logger.error("Unable to convert data type '{}' and value '{}' (class: '{}')", new Object[]{desiredDataType, valueToConvert, valueToConvert.getClass().getCanonicalName()});
         throw new IllegalArgumentException("Unable to convert data type " + desiredDataType + " and value " + valueToConvert + "(Class: '" + valueToConvert.getClass().getCanonicalName() + "')");
     }
 
