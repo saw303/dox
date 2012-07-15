@@ -159,6 +159,26 @@ public class DocumentServiceResearchTest extends AbstractTest {
     }
 
     @Test
+    public void findBySingleStringReferringToIndexCompanyUsingLowercaseString() {
+
+        Set<DocumentReference> documentReferences = documentService.findDocumentReferences("sunrise");
+
+        assertNotNull(documentReferences);
+        assertEquals(1, documentReferences.size());
+        assertEquals("Sunrise", documentReferences.iterator().next().getIndexes().get("company"));
+    }
+
+    @Test
+    public void findBySingleStringReferringToIndexCompanyUsingFunnyFormattedString() {
+
+        Set<DocumentReference> documentReferences = documentService.findDocumentReferences("sUnRiSE");
+
+        assertNotNull(documentReferences);
+        assertEquals(1, documentReferences.size());
+        assertEquals("Sunrise", documentReferences.iterator().next().getIndexes().get("company"));
+    }
+
+    @Test
     public void findBySingleStringReferringToInvoiceAmount() {
 
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences("100.5");
