@@ -65,8 +65,12 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public Set<DocumentReference> findDocumentReferences(String queryString) {
 
+        logger.debug("About to find document references for query string '{}'", queryString);
+
         List<Document> documents = indexMapEntryRepository.findByValue(queryString.toUpperCase());
         Set<DocumentReference> documentReferences = new HashSet<DocumentReference>(documents.size());
+
+        logger.info("Found {} documents for query string '{}'", documents.size(), queryString);
 
         for (Document document : documents) {
             documentReferences.add(toDocumentReference(document));
@@ -172,7 +176,11 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         indexStoreRepository.save(indexStore);
 
         for (String key : physicalDocument.getIndexes().keySet()) {
-            IndexMapEntry indexMapEntry = new IndexMapEntry(key, String.valueOf(physicalDocument.getIndexes().get(key)).toUpperCase(), document);
+            final Object value = physicalDocument.getIndexes().get(key);
+
+            String valueToStore = getStringRepresentation(value);
+
+            IndexMapEntry indexMapEntry = new IndexMapEntry(key, valueToStore.toUpperCase(), document);
             indexMapEntryRepository.save(indexMapEntry);
         }
 
@@ -184,6 +192,20 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         }
         DocumentReference docRef = toDocumentReference(document);
         return docRef;
+    }
+
+    private String getStringRepresentation(Object indexValue) {
+        String indexValueToStore;
+
+        if (indexValue instanceof DateTime) {
+            indexValueToStore = ((DateTime) indexValue).toString("dd.MM.yyyy");
+        } else {
+            indexValueToStore = String.valueOf(indexValue);
+        }
+
+        logger.debug("String representation of index value '{}' is '{}'", indexValue, indexValueToStore);
+
+        return indexValueToStore;
     }
 
     private String investigateMimeType(final String fileName) {
