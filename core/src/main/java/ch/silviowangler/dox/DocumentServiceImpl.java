@@ -339,11 +339,11 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             PdfReader pdfReader;
             try {
                 pdfReader = new PdfReader(physicalDocument.getContent());
+                numberOfPages = pdfReader.getNumberOfPages();
             } catch (IOException e) {
                 logger.error("Unable to determine the number of pages", e);
                 return numberOfPages;
             }
-            numberOfPages = pdfReader.getNumberOfPages();
         } else if ("text/plain".equals(mimeType)) {
             numberOfPages = -1;
         } else if ("image/tiff".equals(mimeType)) {
