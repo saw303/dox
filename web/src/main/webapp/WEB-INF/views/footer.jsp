@@ -1,1 +1,2 @@
-I am your footer and I was brought you by Apache Tiles 2.2.1
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<p><spring:message code="application.footer"/></p>

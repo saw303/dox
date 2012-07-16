@@ -9,9 +9,8 @@
         <put-attribute name="body" value="/WEB-INF/views/query.jsp"/>
         <put-attribute name="footer" value="/WEB-INF/views/footer.jsp"/>
     </definition>
-    <definition name="result.definition" template="/WEB-INF/views/layout.jsp">
-        <put-attribute name="title" value="Silvio Wangler Test"/>
+
+    <definition name="result.definition" extends="base.definition">
         <put-attribute name="body" value="/WEB-INF/views/result.jsp"/>
-        <put-attribute name="footer" value="/WEB-INF/views/footer.jsp"/>
     </definition>
 </tiles-definitions>

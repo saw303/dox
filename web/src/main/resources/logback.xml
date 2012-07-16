@@ -12,6 +12,7 @@
     <logger name="org.springframework" level="ERROR"/>
     <logger name="org.springframework.jdbc" level="ERROR"/>
     <logger name="org.springframework.jdbc.datasource.init" level="ERROR"/>
+    <logger name="org.springframework.jdbc.datasource.embedded" level="ERROR"/>
     <logger name="org.springframework.data" level="ERROR"/>
     <logger name="org.hibernate" level="ERROR"/>
     <logger name="org.apache.commons" level="ERROR"/>

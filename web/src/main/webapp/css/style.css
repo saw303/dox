@@ -275,6 +275,56 @@ td {
 Author: Silvio Wangler
 ========================================================================== */
 
+html {
+    background: #444;
+}
+
+body {
+    width: 60em;
+    margin: 0 auto;
+    background: #eee;
+    box-shadow: 0 0 1em #000;
+}
+
+#container {
+    padding: 2em;
+}
+
+header {
+    margin: 2em 0;
+    border-bottom: 1px dotted;
+    padding-bottom: 1em;
+    text-align: center;
+}
+
+header a {
+    font-size: 2em;
+    padding: 0.25em 0.5em
+}
+
+header a:hover {
+    background: #ccc;
+    border: 0;
+}
+
+footer {
+    text-align: center;
+    margin: 2em 0 1em 0;
+}
+
+footer p {
+    font-size: 0.9em;
+}
+
+#query {
+    /*width: 80%;*/
+    text-align: center;
+}
+
+#q {
+    width: 30em;
+}
+
 /* =============================================================================
 Media Queries
 ========================================================================== */

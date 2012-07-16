@@ -28,11 +28,6 @@ public class HomeController {
     @Autowired
     private DocumentService documentService;
 
-    @RequestMapping(value = "/index.html", method = RequestMethod.GET)
-    public String showEntryPage() {
-        return "base.definition";
-    }
-
     @RequestMapping(method = RequestMethod.POST, value = "query.html")
     public ModelAndView query(@RequestParam("q") String queryString) {
 
