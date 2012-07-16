@@ -83,13 +83,14 @@ project(':web') {
     dependencies {
         compile project(':core')
         compile "org.springframework:spring-webmvc:${ext.springVersion}"
+        runtime 'javax.servlet:jstl:1.2'
+        runtime 'javax.servlet.jsp:jsp-api:2.1'
         providedRuntime 'javax.servlet:javax.servlet-api:3.0.1'
         runtime "org.apache.tiles:tiles-core:${ext.tilesVersion}"
         runtime "org.apache.tiles:tiles-servlet:${ext.tilesVersion}"
         runtime "org.apache.tiles:tiles-jsp:${ext.tilesVersion}"
         runtime "org.apache.tiles:tiles-template:${ext.tilesVersion}"
         runtime "ch.qos.logback:logback-access:${ext.logbackVersion}"
-        runtime 'jstl:jstl:1.2', "com.h2database:h2:${ext.h2Version}", 'jstl:jstl:1.2'
-
+        runtime "com.h2database:h2:${ext.h2Version}"
     }
 }
