@@ -316,8 +316,7 @@ footer p {
     font-size: 0.9em;
 }
 
-#query {
-    /*width: 80%;*/
+#main {
     text-align: center;
 }
 
@@ -325,12 +324,116 @@ footer p {
     width: 30em;
 }
 
+nav a {
+    font-size: 1em;
+    color: #609;
+    text-decoration: none;
+}
+
+nav a:hover {
+    background-color: #ffff00;
+}
+
+/*
+=============================================================
+Form upload
+================================================================
+*/
+
+#fileUpload {
+    background-color: #F2F7F9;
+    width: 60%;
+    padding: 20px;
+    margin: 50px auto;
+    border: 6px solid #8FB5C1;
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    border-radius: 15px;
+    position: relative;
+    text-align: left;
+}
+
+#fileUpload .required {
+    font-weight: bold;
+    color: #F00;
+}
+
+#fileUpload input,
+#fileUpload select,
+#fileUpload label {
+    font-size: 15px;
+    margin-bottom: 2px;
+}
+
+#fileUpload input,
+#fileUpload select {
+    width: 95%;
+    border: 1px solid #CEE1E8;
+    margin-bottom: 20px;
+    padding: 4px;
+}
+
+#fileUpload input:focus,
+#fileUpload select:focus {
+    border: 1px solid #AFCDD8;
+    background-color: #EBF2F4;
+}
+
+#fileUpload label {
+    display: block;
+}
+
+#errors {
+    text-align: left;
+    border: solid 1px #E58E8E;
+    padding: 0 1em 0 5em;
+    margin: 25px 0px;
+    display: block;
+    width: 80%;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    background: #FFE6E6 url(../img/cancel_48.png) no-repeat 10px center;
+    display: block;
+}
+
+#errors li {
+    padding: 2px;
+    list-style: none;
+}
+
+#errors li:before {
+    content: ' - ';
+}
+
+#errors #info {
+    font-weight: bold;
+}
+
+#errors #info:before {
+    content: '';
+}
+
 /* =============================================================================
 Media Queries
 ========================================================================== */
 
-@media only screen and (min-width: 35em) {
+/*
+Smart phones (Android / iPhone)
+*/
+@media only screen and (max-width: 550px) {
     /* Style adjustments for viewports that meet the condition */
+    body {
+        width: 100%;
+    }
+
+    #q {
+        width: 80%;
+    }
+
+    #fileUpload {
+        width: 80%;
+    }
 }
 
 /* =============================================================================

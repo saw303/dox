@@ -83,6 +83,7 @@ project(':web') {
     dependencies {
         compile project(':core')
         compile "org.springframework:spring-webmvc:${ext.springVersion}"
+        compile 'org.springframework.mobile:spring-mobile-device:1.0.0.RELEASE'
         runtime 'javax.servlet:jstl:1.2'
         runtime 'javax.servlet.jsp:jsp-api:2.1'
         providedRuntime 'javax.servlet:javax.servlet-api:3.0.1'

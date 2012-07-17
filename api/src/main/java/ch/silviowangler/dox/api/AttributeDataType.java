@@ -1,4 +1,4 @@
-package ch.silviowangler.dox.domain;
+package ch.silviowangler.dox.api;
 
 import java.io.Serializable;
 

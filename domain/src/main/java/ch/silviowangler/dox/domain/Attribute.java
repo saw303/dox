@@ -1,5 +1,6 @@
 package ch.silviowangler.dox.domain;
 
+import ch.silviowangler.dox.api.AttributeDataType;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
@@ -25,6 +26,16 @@ public class Attribute extends AbstractPersistable<Long> {
     private Set<DocumentClass> documentClasses;
     @Column(nullable = false, length = 4)
     private String mappingColumn;
+    @Column(nullable = false)
+    private boolean updateable;
+
+    public boolean isUpdateable() {
+        return updateable;
+    }
+
+    public void setUpdateable(boolean updateable) {
+        this.updateable = updateable;
+    }
 
     public boolean isOptional() {
         return optional;

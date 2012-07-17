@@ -1,5 +1,6 @@
 package ch.silviowangler.dox.domain;
 
+import ch.silviowangler.dox.api.AttributeDataType;
 import ch.silviowangler.dox.api.Range;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

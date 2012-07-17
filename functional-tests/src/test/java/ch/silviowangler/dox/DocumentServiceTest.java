@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import static junit.framework.Assert.*;
 
@@ -26,6 +27,26 @@ public class DocumentServiceTest extends AbstractTest {
     @Before
     public void init() {
         this.documentClass = new DocumentClass("INVOICE");
+    }
+
+    @Test
+    public void findAttributesForDocumentClassInvoice() {
+        Set<Attribute> attributes = documentService.findAttributes(this.documentClass);
+
+        assertNotNull(attributes);
+        assertEquals(3, attributes.size());
+        for (Attribute attribute : attributes) {
+            assertTrue("", attribute.getShortName().matches("(invoiceAmount|invoiceDate|company)"));
+        }
+    }
+
+    @Test
+    public void findDocumentClasses() {
+        Set<DocumentClass> documentClasses = documentService.findDocumentClasses();
+
+        assertNotNull(documentClasses);
+        assertEquals(1, documentClasses.size());
+        assertEquals("INVOICE", documentClasses.iterator().next().getShortName());
     }
 
     @Test(expected = DocumentNotFoundException.class)

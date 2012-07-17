@@ -1,6 +1,7 @@
 package ch.silviowangler.dox;
 
 import ch.silviowangler.dox.api.*;
+import ch.silviowangler.dox.domain.Attribute;
 import ch.silviowangler.dox.domain.*;
 import ch.silviowangler.dox.domain.DocumentClass;
 import com.itextpdf.text.pdf.PdfReader;
@@ -60,6 +61,31 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         Assert.isTrue(archiveDirectory.canRead(), "Archive store must be readable ['" + this.archiveDirectory + "']");
         Assert.isTrue(archiveDirectory.canWrite(), "Archive store must be writable ['" + this.archiveDirectory + "']");
         Assert.notEmpty(mimeTypes, "No mime types have been set");
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+    public Set<ch.silviowangler.dox.api.Attribute> findAttributes(ch.silviowangler.dox.api.DocumentClass documentClass) {
+
+        DocumentClass docClass = documentClassRepository.findByShortName(documentClass.getShortName());
+
+        List<Attribute> attributes = attributeRepository.findAttributesForDocumentClass(docClass);
+        return toAttributeApi(attributes);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+    public Set<ch.silviowangler.dox.api.DocumentClass> findDocumentClasses() {
+
+        Set<ch.silviowangler.dox.api.DocumentClass> result = new HashSet<ch.silviowangler.dox.api.DocumentClass>();
+        Iterable<DocumentClass> documentClasses = documentClassRepository.findAll();
+
+        for (DocumentClass documentClass : documentClasses) {
+            logger.debug("Processing document class '{}' with id {}", documentClass.getShortName(), documentClass.getId());
+            result.add(toDocumentClassApi(documentClass));
+        }
+
+        return result;
     }
 
     @Override
@@ -398,5 +424,24 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             map.put(attribute.getShortName(), attribute);
         }
         return map;
+    }
+
+    private Set<ch.silviowangler.dox.api.Attribute> toAttributeApi(List<Attribute> attributes) {
+        Set<ch.silviowangler.dox.api.Attribute> result = new HashSet<ch.silviowangler.dox.api.Attribute>(attributes.size());
+
+        for (Attribute attribute : attributes) {
+            ch.silviowangler.dox.api.Attribute attr = toAttributeApi(attribute);
+            result.add(attr);
+        }
+        return result;
+    }
+
+    private ch.silviowangler.dox.api.Attribute toAttributeApi(Attribute attribute) {
+        return new ch.silviowangler.dox.api.Attribute(
+                attribute.getShortName(),
+                attribute.isOptional(),
+                attribute.getDomain() != null ? attribute.getDomain().getValues() : null,
+                attribute.getDataType(),
+                attribute.isUpdateable());
     }
 }

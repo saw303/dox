@@ -24,4 +24,14 @@ public interface DocumentService {
      * @return all documents that are holding this keyword as a part of an index
      */
     Set<DocumentReference> findDocumentReferences(String queryString);
+
+    Set<DocumentClass> findDocumentClasses();
+
+    /**
+     * Finds all attributes assigned to the given document class. It returns the global and the document class specific attributes.
+     *
+     * @param documentClass
+     * @return
+     */
+    Set<Attribute> findAttributes(DocumentClass documentClass);
 }
