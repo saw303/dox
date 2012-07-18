@@ -1,6 +1,5 @@
 package ch.silviowangler.dox.web;
 
-import ch.silviowangler.dox.api.DocumentClass;
 import ch.silviowangler.dox.api.DocumentReference;
 import ch.silviowangler.dox.api.DocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,11 +29,7 @@ public class HomeController {
     @RequestMapping(method = RequestMethod.POST, value = "query.html")
     public ModelAndView query(@RequestParam("q") String queryString) {
 
-        Set<DocumentReference> documentReferences = new HashSet<DocumentReference>();
-
-        DocumentReference documentReference = new DocumentReference("jkdhafjdh", 7, "text/plain", new DocumentClass("XXX"), null, "hell.txt");
-        documentReferences.add(documentReference);
-
+        Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryString);
         Map<String, Object> model = new HashMap<String, Object>(1);
         model.put("documents", documentReferences);
 

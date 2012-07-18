@@ -17,4 +17,8 @@
     <definition name="import.definition" extends="base.definition">
         <put-attribute name="body" value="/WEB-INF/views/import.jsp"/>
     </definition>
+
+    <definition name="import.after.definition" extends="base.definition">
+        <put-attribute name="body" value="/WEB-INF/views/afterImport.jsp"/>
+    </definition>
 </tiles-definitions>

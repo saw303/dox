@@ -1,9 +1,6 @@
 package ch.silviowangler.dox.web;
 
-import ch.silviowangler.dox.api.Attribute;
-import ch.silviowangler.dox.api.AttributeDataType;
-import ch.silviowangler.dox.api.DocumentClass;
-import ch.silviowangler.dox.api.DocumentService;
+import ch.silviowangler.dox.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -17,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.HtmlUtils;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * @author Silvio Wangler
@@ -35,6 +32,7 @@ import java.util.Set;
 @Controller
 public class ImportController implements MessageSourceAware, InitializingBean {
 
+    private static final String DOCUMENT_CLASS_SHORT_NAME = "documentClassShortName";
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
@@ -61,7 +59,7 @@ public class ImportController implements MessageSourceAware, InitializingBean {
 
     @RequestMapping(method = RequestMethod.POST, value = "/ajax/attributes")
     @ResponseBody
-    public String getAttributeForm(@RequestParam("documentClassShortName") String documentClassShortName, Locale locale, Device device) {
+    public String getAttributeForm(@RequestParam(DOCUMENT_CLASS_SHORT_NAME) String documentClassShortName, Locale locale, Device device) {
 
         logger.debug("Normal device: {}, mobile device: {}, tablet device: {}", new Boolean[]{device.isNormal(), device.isMobile(), device.isTablet()});
         logger.debug("About to generate form for document class '{}'", documentClassShortName);
@@ -72,7 +70,7 @@ public class ImportController implements MessageSourceAware, InitializingBean {
 
         if (!attributes.isEmpty()) {
             sb = new StringBuffer("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n");
-            sb.append("<input name=\"documentClassShortName\" type=\"hidden\" value=\"").append(documentClassShortName).append("\"/>\n");
+            sb.append("<input name=\"").append(DOCUMENT_CLASS_SHORT_NAME).append("\" type=\"hidden\" value=\"").append(documentClassShortName).append("\"/>\n");
 
             for (Attribute attribute : attributes) {
                 sb.append("<label for=\"").append(attribute.getShortName()).append("\">");
@@ -117,6 +115,39 @@ public class ImportController implements MessageSourceAware, InitializingBean {
         html = sb.toString();
         logger.debug("Returning HTML code {}", html);
         return html;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "performImport.html")
+    public ModelAndView importDocument(MultipartFile file, HttpServletRequest request) {
+
+        try {
+            DocumentClass documentClass = new DocumentClass(request.getParameter(DOCUMENT_CLASS_SHORT_NAME));
+
+            Enumeration<String> params = request.getParameterNames();
+            Map<String, Object> indices = new HashMap<String, Object>();
+
+            while (params.hasMoreElements()) {
+                String param = params.nextElement();
+                if (!DOCUMENT_CLASS_SHORT_NAME.endsWith(param)) {
+                    indices.put(param, request.getParameter(param));
+                }
+            }
+
+            PhysicalDocument physicalDocument = new PhysicalDocument(
+                    documentClass,
+                    file.getBytes(),
+                    indices,
+                    file.getOriginalFilename());
+
+            DocumentReference documentReference = documentService.importDocument(physicalDocument);
+        } catch (ValdiationException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (DocumentDuplicationException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return new ModelAndView("import.after.definition");
     }
 
     private String getInputType(AttributeDataType dataType) {

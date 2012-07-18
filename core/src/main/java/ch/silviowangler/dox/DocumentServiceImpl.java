@@ -37,6 +37,7 @@ import java.util.*;
 public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     private static final String DD_MM_YYYY = "dd.MM.yyyy";
+    private static final String YYYY_MM_DD = "yyyy-MM-dd";
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
@@ -278,7 +279,19 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         }
 
         if (AttributeDataType.DATE.equals(desiredDataType) && valueToConvert instanceof String) {
-            return DateTimeFormat.forPattern(DD_MM_YYYY).parseDateTime((String) valueToConvert);
+
+            final String stringValueToConvert = (String) valueToConvert;
+            String regexPattern;
+
+            if (stringValueToConvert.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                regexPattern = YYYY_MM_DD;
+            } else if (stringValueToConvert.matches("\\d{2}\\.\\d{2}\\.\\d{4}")) {
+                regexPattern = DD_MM_YYYY;
+            } else {
+                logger.error("Unsupported format of a date string '{}'", stringValueToConvert);
+                throw new UnsupportedOperationException("Unknown date format " + stringValueToConvert);
+            }
+            return DateTimeFormat.forPattern(regexPattern).parseDateTime(stringValueToConvert);
         } else if (AttributeDataType.DATE.equals(desiredDataType) && valueToConvert instanceof Date) {
             return new DateTime(valueToConvert);
         } else if (AttributeDataType.DOUBLE.equals(desiredDataType) && valueToConvert instanceof Double) {

@@ -70,12 +70,7 @@
         </init-param>
 
         <load-on-startup>1</load-on-startup>
-        <multipart-config>
-            <location>C:\</location>
-            <max-file-size>50000</max-file-size>
-            <max-request-size>50000</max-request-size>
-            <file-size-threshold>50000</file-size-threshold>
-        </multipart-config>
+        <multipart-config/>
     </servlet>
 
     <servlet-mapping>
