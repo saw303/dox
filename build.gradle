@@ -4,16 +4,19 @@ allprojects {
 
     group = 'ch.silviowangler.dox'
     version = '0.1-SNAPSHOT'
-    project.ext.springVersion = '3.2.0.M1'
-    project.ext.springDataVersion = '1.1.0.RELEASE'
-    project.ext.hibernateVersion = '4.1.5.Final'
-    project.ext.slf4jVersion = '1.6.4'
-    project.ext.logbackVersion = '1.0.3'
-    project.ext.junitVersion = '4.10'
-    project.ext.tilesVersion = '2.2.2'
-    project.ext.commonsIOVersion = '2.3'
-    project.ext.jodaTimeVersion = '2.1'
-    project.ext.h2Version = '1.3.167'
+
+    project.ext {
+        springVersion = '3.2.0.M1'
+        springDataVersion = '1.1.0.RELEASE'
+        hibernateVersion = '4.1.5.Final'
+        slf4jVersion = '1.6.4'
+        logbackVersion = '1.0.3'
+        junitVersion = '4.10'
+        tilesVersion = '2.2.2'
+        commonsIOVersion = '2.3'
+        jodaTimeVersion = '2.1'
+        h2Version = '1.3.167'
+    }
 }
 
 subprojects {

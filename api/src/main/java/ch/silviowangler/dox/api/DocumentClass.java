@@ -24,12 +24,18 @@ public class DocumentClass implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         DocumentClass that = (DocumentClass) o;
 
-        if (!shortName.equals(that.shortName)) return false;
+        if (!shortName.equals(that.shortName)) {
+            return false;
+        }
 
         return true;
     }
