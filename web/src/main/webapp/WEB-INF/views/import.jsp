@@ -17,11 +17,14 @@
   ~ limitations under the License.
   --%>
 
-<div><spring:message code="document.import.label.document.class"/>: <form:select id="docClass" name="docClass"
-                                                                                 path="docClass"
-                                                                                 items="${documentClasses}"
-                                                                                 itemLabel="shortName"
-                                                                                 itemValue="shortName"
-                                                                                 htmlEscape="true"/></div>
+<div>
+    <spring:message code="document.import.label.document.class"/>: <form:select id="docClass" name="docClass"
+                                                                                path="docClass"
+                                                                                multiple="false">
 
+    <form:option value="-" htmlEscape="true" label="-- choose --"/>
+    <form:options items="${documentClasses}" itemLabel="shortName" itemValue="shortName" htmlEscape="true"/>
+
+</form:select>
+</div>
 <div id="docClassAttributes"></div>
