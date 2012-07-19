@@ -26,7 +26,7 @@ import java.util.List;
  *        Date: 17.07.12 11:12
  *        </div>
  */
-public class Attribute implements Serializable {
+public class Attribute implements Serializable, Comparable<Attribute> {
 
     private String shortName;
     private boolean optional = false;
@@ -88,5 +88,10 @@ public class Attribute implements Serializable {
 
     public void setDataType(AttributeDataType dataType) {
         this.dataType = dataType;
+    }
+
+    @Override
+    public int compareTo(Attribute o) {
+        return this.shortName.compareTo(o.getShortName());
     }
 }

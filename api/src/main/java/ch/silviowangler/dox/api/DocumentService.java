@@ -18,6 +18,7 @@ package ch.silviowangler.dox.api;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 
 /**
  * @author Silvio Wangler
@@ -49,5 +50,5 @@ public interface DocumentService {
      * @param documentClass
      * @return
      */
-    Set<Attribute> findAttributes(DocumentClass documentClass);
+    SortedSet<Attribute> findAttributes(DocumentClass documentClass);
 }

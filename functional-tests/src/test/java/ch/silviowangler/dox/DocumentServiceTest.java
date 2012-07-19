@@ -25,10 +25,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static junit.framework.Assert.*;
 
@@ -47,13 +44,15 @@ public class DocumentServiceTest extends AbstractTest {
 
     @Test
     public void findAttributesForDocumentClassInvoice() {
-        Set<Attribute> attributes = documentService.findAttributes(this.documentClass);
+        SortedSet<Attribute> attributes = documentService.findAttributes(this.documentClass);
 
         assertNotNull(attributes);
         assertEquals(3, attributes.size());
-        for (Attribute attribute : attributes) {
-            assertTrue("", attribute.getShortName().matches("(invoiceAmount|invoiceDate|company)"));
-        }
+
+        final Iterator<Attribute> iterator = (attributes).iterator();
+        assertEquals("Wrong order", "company", iterator.next().getShortName());
+        assertEquals("Wrong order", "invoiceAmount", iterator.next().getShortName());
+        assertEquals("Wrong order", "invoiceDate", iterator.next().getShortName());
     }
 
     @Test

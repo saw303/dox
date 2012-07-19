@@ -82,7 +82,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-    public Set<ch.silviowangler.dox.api.Attribute> findAttributes(ch.silviowangler.dox.api.DocumentClass documentClass) {
+    public SortedSet<ch.silviowangler.dox.api.Attribute> findAttributes(ch.silviowangler.dox.api.DocumentClass documentClass) {
 
         DocumentClass docClass = documentClassRepository.findByShortName(documentClass.getShortName());
 
@@ -462,8 +462,8 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         return map;
     }
 
-    private Set<ch.silviowangler.dox.api.Attribute> toAttributeApi(List<Attribute> attributes) {
-        Set<ch.silviowangler.dox.api.Attribute> result = new HashSet<ch.silviowangler.dox.api.Attribute>(attributes.size());
+    private SortedSet<ch.silviowangler.dox.api.Attribute> toAttributeApi(List<Attribute> attributes) {
+        SortedSet<ch.silviowangler.dox.api.Attribute> result = new TreeSet<ch.silviowangler.dox.api.Attribute>();
 
         for (Attribute attribute : attributes) {
             ch.silviowangler.dox.api.Attribute attr = toAttributeApi(attribute);
