@@ -24,7 +24,7 @@
             <th scope="col"><spring:message code="document.mimeType" htmlEscape="true"/></th>
             <th scope="col"><spring:message code="document.pageCount" htmlEscape="true"/></th>
             <th scope="col"><spring:message code="document.fileName" htmlEscape="true"/></th>
-            <th scope="col">Eigenschaften</th>
+            <th scope="col"><spring:message code="document.indices" htmlEscape="true"/></th>
         </tr>
         </thead>
         <tbody>
