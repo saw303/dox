@@ -30,6 +30,9 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import static ch.silviowangler.dox.domain.DomainUtils.containsWildcardCharacters;
+import static ch.silviowangler.dox.domain.DomainUtils.replaceWildcardCharacters;
+
 /**
  * @author Silvio Wangler
  * @since 0.1
@@ -90,13 +93,5 @@ public class DocumentRepositoryCustomImpl implements DocumentRepositoryCustom {
         final List<Document> resultList = em.createQuery(query).getResultList();
         logger.info("Found {} index stores", resultList.size());
         return resultList;
-    }
-
-    private String replaceWildcardCharacters(String value) {
-        return value.replaceAll("(\\*|\\?)", "%");
-    }
-
-    private boolean containsWildcardCharacters(final String value) {
-        return value.contains("*") || value.contains("?");
     }
 }

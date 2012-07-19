@@ -33,9 +33,11 @@
 
     <meta name="viewport" content="width=device-width">
 
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="resources/css/style.css"/>
+    <link rel="stylesheet" href="js/libs/datatables/media/css/jquery.dataTables.css"/>
+
     <link type="text/plain" rel="author" href="humans.txt"/>
-    <script src="js/libs/modernizr-2.5.3.min.js"></script>
+    <script src="js/libs/boilerplate/modernizr-2.5.3.min.js"></script>
 </head>
 <body>
 
@@ -52,7 +54,9 @@
 </div>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.2.min.js"><\/script>')</script>
+<script>window.jQuery || document.write('<script src="js/libs/boilerplate/jquery-1.7.2.min.js"><\/script>')</script>
+
+<script type="text/javascript" language="javascript" src="js/libs/datatables/media/js/jquery.dataTables.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -63,6 +67,17 @@
                     });
         });
     });
+
+    if ($("#resultTable").length) {
+        $('#resultTable').dataTable({
+            "bPaginate":false,
+            "bLengthChange":false,
+            "bFilter":false,
+            "bSort":false,
+            "bInfo":false,
+            "bAutoWidth":false
+        });
+    }
 </script>
 
 </body>

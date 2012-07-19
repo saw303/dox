@@ -25,7 +25,7 @@ import java.util.Set;
  */
 public interface DocumentService {
 
-    DocumentReference importDocument(PhysicalDocument physicalDocument) throws ValdiationException, DocumentDuplicationException;
+    DocumentReference importDocument(PhysicalDocument physicalDocument) throws ValidationException, DocumentDuplicationException;
 
     DocumentReference findDocumentReference(Long id) throws DocumentNotFoundException;
 

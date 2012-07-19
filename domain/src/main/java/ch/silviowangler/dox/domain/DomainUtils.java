@@ -14,19 +14,34 @@
  * limitations under the License.
  */
 
-package ch.silviowangler.dox.api;
+package ch.silviowangler.dox.domain;
 
 /**
  * @author Silvio Wangler
- * @version 0.1
+ * @since 0.1
+ *        <div>
+ *        Date: 19.07.12 08:08
+ *        </div>
  */
-public class ValdiationException extends Exception {
+public class DomainUtils {
 
-    public ValdiationException(String message) {
-        super(message);
+    /**
+     * Replaces characters ? or * to %.
+     *
+     * @param value
+     * @return
+     */
+    public static String replaceWildcardCharacters(final String value) {
+        return value.replaceAll("(\\*|\\?)", "%");
     }
 
-    public ValdiationException(String message, Throwable cause) {
-        super(message, cause);
+    /**
+     * Checks whether the string contains characters like ? or *
+     *
+     * @param value
+     * @return
+     */
+    public static boolean containsWildcardCharacters(final String value) {
+        return value.contains("*") || value.contains("?");
     }
 }

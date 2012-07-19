@@ -30,11 +30,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.HtmlUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.*;
 
@@ -109,8 +109,21 @@ public class ImportController implements MessageSourceAware, InitializingBean {
                     sb.append("<input name=\"").append(attribute.getShortName()).append("\" list=\"list-")
                             .append(attribute.getShortName()).append("\"/>\n");
                 } else {
-                    sb.append("<input name=\"").append(attribute.getShortName()).append("\" type=\"")
-                            .append(getInputType(attribute.getDataType())).append("\"/>\n");
+
+                    if (isNumeric(attribute.getDataType())) {
+                        sb.append("<input name=\"").append(attribute.getShortName()).append("\" type=\"")
+                                .append(getInputType(attribute.getDataType())).append("\" min=\"0\" ");
+
+                        if (isFloatPointNumber(attribute.getDataType())) {
+                            sb.append("step=\"0.1\"");
+                        } else {
+                            sb.append("step=\"1\"");
+                        }
+                        sb.append(" />\n");
+                    } else {
+                        sb.append("<input name=\"").append(attribute.getShortName()).append("\" type=\"")
+                                .append(getInputType(attribute.getDataType())).append("\"/>\n");
+                    }
                 }
             }
 
@@ -134,16 +147,16 @@ public class ImportController implements MessageSourceAware, InitializingBean {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "performImport.html")
-    public ModelAndView importDocument(MultipartFile file, HttpServletRequest request) {
+    public ModelAndView importDocument(MultipartFile file, WebRequest request) {
 
         try {
             DocumentClass documentClass = new DocumentClass(request.getParameter(DOCUMENT_CLASS_SHORT_NAME));
 
-            Enumeration<String> params = request.getParameterNames();
+            Iterator<String> params = request.getParameterNames();
             Map<String, Object> indices = new HashMap<String, Object>();
 
-            while (params.hasMoreElements()) {
-                String param = params.nextElement();
+            while (params.hasNext()) {
+                String param = params.next();
                 if (!DOCUMENT_CLASS_SHORT_NAME.endsWith(param)) {
                     indices.put(param, request.getParameter(param));
                 }
@@ -156,24 +169,31 @@ public class ImportController implements MessageSourceAware, InitializingBean {
                     file.getOriginalFilename());
 
             DocumentReference documentReference = documentService.importDocument(physicalDocument);
-        } catch (ValdiationException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (ValidationException e) {
+            logger.error("Unable to import document", e);
         } catch (DocumentDuplicationException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            logger.error("Unable to import document. Duplicate document detected", e);
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            logger.error("Unable to import document", e);
         }
         return new ModelAndView("import.after.definition");
     }
 
     private String getInputType(AttributeDataType dataType) {
-
         if (AttributeDataType.DATE.equals(dataType)) return "date";
-        else if (AttributeDataType.LONG.equals(dataType)) return "number";
-        else if (AttributeDataType.DOUBLE.equals(dataType)) return "number";
-        else if (AttributeDataType.SHORT.equals(dataType)) return "number";
-        else if (AttributeDataType.INTEGER.equals(dataType)) return "number";
-
+        else if (isNumeric(dataType)) return "number";
         return "text";
+    }
+
+    private boolean isNumeric(AttributeDataType dataType) {
+        return isNaturalNumber(dataType) || isFloatPointNumber(dataType);
+    }
+
+    private boolean isFloatPointNumber(AttributeDataType dataType) {
+        return AttributeDataType.DOUBLE.equals(dataType);
+    }
+
+    private boolean isNaturalNumber(AttributeDataType dataType) {
+        return AttributeDataType.LONG.equals(dataType) || AttributeDataType.SHORT.equals(dataType) || AttributeDataType.INTEGER.equals(dataType);
     }
 }

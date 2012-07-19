@@ -107,7 +107,7 @@ project(':web') {
         compile 'org.springframework.mobile:spring-mobile-device:1.0.0.RELEASE'
         runtime 'javax.servlet:jstl:1.2'
         runtime 'javax.servlet.jsp:jsp-api:2.1'
-        providedCompile 'javax.servlet:javax.servlet-api:3.0.1'
+        providedRuntime 'javax.servlet:javax.servlet-api:3.0.1'
         runtime "org.apache.tiles:tiles-core:${ext.tilesVersion}"
         runtime "org.apache.tiles:tiles-servlet:${ext.tilesVersion}"
         runtime "org.apache.tiles:tiles-jsp:${ext.tilesVersion}"

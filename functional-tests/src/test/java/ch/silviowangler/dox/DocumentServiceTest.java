@@ -71,7 +71,7 @@ public class DocumentServiceTest extends AbstractTest {
     }
 
     @Test
-    public void importSinglePagePdf() throws IOException, ValdiationException, DocumentNotFoundException, DocumentDuplicationException {
+    public void importSinglePagePdf() throws IOException, ValidationException, DocumentNotFoundException, DocumentDuplicationException {
 
         File singlePagePdf = loadFile("document-1p.pdf");
 
@@ -105,7 +105,7 @@ public class DocumentServiceTest extends AbstractTest {
     }
 
     @Test
-    public void importFivePagesPdf() throws IOException, ValdiationException, DocumentNotFoundException, DocumentNotInStoreException, DocumentDuplicationException {
+    public void importFivePagesPdf() throws IOException, ValidationException, DocumentNotFoundException, DocumentNotInStoreException, DocumentDuplicationException {
 
         File fivePagesPdfFile = loadFile("document-5p.pdf");
 
@@ -138,8 +138,8 @@ public class DocumentServiceTest extends AbstractTest {
         assertDocumentReference(documentReference, docFromDox);
     }
 
-    @Test(expected = ValdiationException.class)
-    public void importSinglePagePdfUsingAnUnknownDocumentClass() throws IOException, ValdiationException, DocumentDuplicationException {
+    @Test(expected = ValidationException.class)
+    public void importSinglePagePdfUsingAnUnknownDocumentClass() throws IOException, ValidationException, DocumentDuplicationException {
 
         File singlePagePdf = loadFile("document-1p.pdf");
 
@@ -153,8 +153,8 @@ public class DocumentServiceTest extends AbstractTest {
         documentService.importDocument(doc);
     }
 
-    @Test(expected = ValdiationException.class)
-    public void importSinglePagePdfMissingAnIndexKeyThatIsMandatory() throws IOException, ValdiationException, DocumentDuplicationException {
+    @Test(expected = ValidationException.class)
+    public void importSinglePagePdfMissingAnIndexKeyThatIsMandatory() throws IOException, ValidationException, DocumentDuplicationException {
 
         File singlePagePdf = loadFile("document-1p.pdf");
 
@@ -166,8 +166,8 @@ public class DocumentServiceTest extends AbstractTest {
         documentService.importDocument(doc);
     }
 
-    @Test(expected = ValdiationException.class)
-    public void importSinglePagePdfUsingAnIndexKeyThatDoesNotExist() throws IOException, ValdiationException, DocumentDuplicationException {
+    @Test(expected = ValidationException.class)
+    public void importSinglePagePdfUsingAnIndexKeyThatDoesNotExist() throws IOException, ValidationException, DocumentDuplicationException {
 
         File singlePagePdf = loadFile("document-1p.pdf");
 
@@ -182,7 +182,7 @@ public class DocumentServiceTest extends AbstractTest {
     }
 
     @Test
-    public void importDocumentUsingProperFormattedStringOnDateIndex() throws IOException, ValdiationException, DocumentNotFoundException, DocumentDuplicationException {
+    public void importDocumentUsingProperFormattedStringOnDateIndex() throws IOException, ValidationException, DocumentNotFoundException, DocumentDuplicationException {
         File singlePagePdf = loadFile("document-16p.pdf");
 
         Map<String, Object> indexes = new HashMap<String, Object>(2);
@@ -204,7 +204,7 @@ public class DocumentServiceTest extends AbstractTest {
     }
 
     @Test
-    public void addingTheSameDocumentTwiceToDoxShouldThrowAnException() throws IOException, ValdiationException, DocumentDuplicationException {
+    public void addingTheSameDocumentTwiceToDoxShouldThrowAnException() throws IOException, ValidationException, DocumentDuplicationException {
         File temp = createTestFile("hello.world.txt", "Lorem ipsum");
 
         Map<String, Object> indexes = new HashMap<String, Object>(2);
@@ -228,16 +228,16 @@ public class DocumentServiceTest extends AbstractTest {
     }
 
     @Test
-    public void importSinglePageTiff() throws IOException, ValdiationException, DocumentNotFoundException, DocumentDuplicationException {
+    public void importSinglePageTiff() throws IOException, ValidationException, DocumentNotFoundException, DocumentDuplicationException {
         importTiff("document-1p.tif", 1);
     }
 
     @Test
-    public void importTwentyPageTiff() throws IOException, ValdiationException, DocumentNotFoundException, DocumentDuplicationException {
+    public void importTwentyPageTiff() throws IOException, ValidationException, DocumentNotFoundException, DocumentDuplicationException {
         importTiff("document-20p.tif", 20);
     }
 
-    private void importTiff(String fileName, int expectedPageCount) throws IOException, ValdiationException, DocumentDuplicationException, DocumentNotFoundException {
+    private void importTiff(String fileName, int expectedPageCount) throws IOException, ValidationException, DocumentDuplicationException, DocumentNotFoundException {
         File singlePagePdf = loadFile(fileName);
 
         Map<String, Object> indexes = new HashMap<String, Object>(2);

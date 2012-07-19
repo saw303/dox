@@ -14,25 +14,19 @@
  * limitations under the License.
  */
 
-package ch.silviowangler.dox.domain;
-
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-
-import java.util.List;
+package ch.silviowangler.dox.api;
 
 /**
  * @author Silvio Wangler
- * @since 0.1
- *        <div>
- *        Date: 15.07.12 19:16
- *        </div>
+ * @version 0.1
  */
-public interface IndexMapEntryRepository extends CrudRepository<IndexMapEntry, Long> {
+public class ValidationException extends Exception {
 
-    @Query("select distinct i.document from IndexMapEntry i where stringRepresentation = ?")
-    List<Document> findByValue(String upperCaseValue);
+    public ValidationException(String message) {
+        super(message);
+    }
 
-    @Query("select distinct i.document from IndexMapEntry i where stringRepresentation like ?")
-    List<Document> findByValueLike(String upperCaseValue);
+    public ValidationException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

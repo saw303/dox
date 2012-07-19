@@ -111,7 +111,14 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
         logger.debug("About to find document references for query string '{}'", queryString);
 
-        List<Document> documents = indexMapEntryRepository.findByValue(queryString.toUpperCase());
+        List<Document> documents;
+
+        if (DomainUtils.containsWildcardCharacters(queryString)) {
+            documents = indexMapEntryRepository.findByValueLike(DomainUtils.replaceWildcardCharacters(queryString).toUpperCase());
+        } else {
+            documents = indexMapEntryRepository.findByValue(queryString.toUpperCase());
+        }
+
         Set<DocumentReference> documentReferences = new HashSet<DocumentReference>(documents.size());
 
         logger.info("Found {} documents for query string '{}'", documents.size(), queryString);
@@ -183,14 +190,14 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-    public DocumentReference importDocument(PhysicalDocument physicalDocument) throws ValdiationException, DocumentDuplicationException {
+    public DocumentReference importDocument(PhysicalDocument physicalDocument) throws ValidationException, DocumentDuplicationException {
 
         final String documentClassShortName = physicalDocument.getDocumentClass().getShortName();
         DocumentClass documentClassEntity = documentClassRepository.findByShortName(documentClassShortName);
 
         if (documentClassEntity == null) {
             logger.error("No such document class with name '{}' found", documentClassShortName);
-            throw new ValdiationException("No such document class with name '" + documentClassShortName + "' available");
+            throw new ValidationException("No such document class with name '" + documentClassShortName + "' available");
         }
 
         List<Attribute> attributes = attributeRepository.findAttributesForDocumentClass(documentClassEntity);
@@ -358,7 +365,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         }
     }
 
-    private void verifyUnknownKeys(PhysicalDocument physicalDocument, String documentClassShortName, List<Attribute> attributes) throws ValdiationException {
+    private void verifyUnknownKeys(PhysicalDocument physicalDocument, String documentClassShortName, List<Attribute> attributes) throws ValidationException {
         for (String key : physicalDocument.getIndexes().keySet()) {
             boolean exists = false;
             for (Attribute attribute : attributes) {
@@ -369,17 +376,17 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             }
             if (!exists) {
                 logger.warn("Key '{}' does not belong to document class '{}'", documentClassShortName);
-                throw new ValdiationException("Key " + key + " does not belong to document class " + documentClassShortName);
+                throw new ValidationException("Key " + key + " does not belong to document class " + documentClassShortName);
             }
         }
     }
 
-    private void verifyMandatoryAttributes(PhysicalDocument physicalDocument, List<Attribute> attributes) throws ValdiationException {
+    private void verifyMandatoryAttributes(PhysicalDocument physicalDocument, List<Attribute> attributes) throws ValidationException {
         for (Attribute attribute : attributes) {
             if (!attribute.isOptional()) {
                 if (!physicalDocument.getIndexes().containsKey(attribute.getShortName())) {
                     logger.warn("Attribute '{}' is required for document class(es) '{}' and not was not provided.", attribute.getShortName(), attribute.getDocumentClasses());
-                    throw new ValdiationException("Attribute " + attribute.getShortName() + " is mandatory");
+                    throw new ValidationException("Attribute " + attribute.getShortName() + " is mandatory");
                 }
             }
         }

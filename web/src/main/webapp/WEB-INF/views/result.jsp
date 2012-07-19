@@ -17,22 +17,30 @@
   --%>
 
 <div>
-    <table>
+    <table id="resultTable">
         <thead>
         <tr>
             <th scope="col"><spring:message code="document.hashCode" htmlEscape="true"/></th>
             <th scope="col"><spring:message code="document.mimeType" htmlEscape="true"/></th>
             <th scope="col"><spring:message code="document.pageCount" htmlEscape="true"/></th>
             <th scope="col"><spring:message code="document.fileName" htmlEscape="true"/></th>
+            <th scope="col">Eigenschaften</th>
         </tr>
         </thead>
         <tbody>
         <c:forEach var="doc" items="${documents}">
             <tr>
-                <td>${doc.hash}</td>
-                <td>${doc.mimeType}</td>
+                <td title="${doc.hash}">${doc.hash.substring(0,10)}</td>
+                <td><img src="/resources/img/file-extensions/pdf.png" alt="${doc.mimeType}" title="${doc.mimeType}"
+                         width="32" height="32"/></td>
                 <td>${doc.pageCount}</td>
                 <td>${doc.fileName}</td>
+                <td>
+                    <c:forEach var="index" items="${doc.indexes.keySet()}">
+                        ${index} = ${doc.indexes.get(index)} <br/>
+                    </c:forEach>
+
+                </td>
             </tr>
         </c:forEach>
         </tbody>

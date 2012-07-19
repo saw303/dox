@@ -40,7 +40,7 @@ import static junit.framework.Assert.*;
 public class DocumentServiceResearchTest extends AbstractTest {
 
     @Before
-    public void init() throws ValdiationException, DocumentDuplicationException, IOException, DocumentNotFoundException {
+    public void init() throws ValidationException, DocumentDuplicationException, IOException, DocumentNotFoundException {
 
         Map<String, Object> indexes = new HashMap<String, Object>(2);
         indexes.put("company", "Sunrise");
@@ -57,7 +57,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
         importFile("file-2.txt", "This is a test content that contains more text", "INVOICE", indexes);
     }
 
-    private DocumentReference importFile(final String fileName, final String content, final String docClassShortName, final Map<String, Object> indices) throws ValdiationException, DocumentDuplicationException, IOException, DocumentNotFoundException {
+    private DocumentReference importFile(final String fileName, final String content, final String docClassShortName, final Map<String, Object> indices) throws ValidationException, DocumentDuplicationException, IOException, DocumentNotFoundException {
         File textFile01 = createTestFile(fileName, content);
         PhysicalDocument doc = new PhysicalDocument(new DocumentClass(docClassShortName), FileUtils.readFileToByteArray(textFile01), indices, fileName);
         try {
@@ -107,7 +107,9 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         assertNotNull(documentReferences);
         assertEquals(2, documentReferences.size());
-        assertTrue(((String) documentReferences.iterator().next().getIndexes().get("company")).matches("(Swisscom|Sunrise)"));
+        for (DocumentReference documentReference : documentReferences) {
+            assertTrue(((String) documentReference.getIndexes().get("company")).matches("(Swisscom|Sunrise)"));
+        }
     }
 
     @Test
@@ -121,7 +123,9 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         assertNotNull(documentReferences);
         assertEquals(2, documentReferences.size());
-        assertTrue(((String) documentReferences.iterator().next().getIndexes().get("company")).matches("(Swisscom|Sunrise)"));
+        for (DocumentReference documentReference : documentReferences) {
+            assertTrue(((String) documentReference.getIndexes().get("company")).matches("(Swisscom|Sunrise)"));
+        }
     }
 
     @Test
@@ -212,5 +216,39 @@ public class DocumentServiceResearchTest extends AbstractTest {
         assertNotNull(documentReferences);
         assertEquals(1, documentReferences.size());
         assertEquals("Swisscom", documentReferences.iterator().next().getIndexes().get("company"));
+    }
+
+    @Test
+    public void findBySingleStringReferringToIndexCompanyUsingStringThatContainsWildcard() {
+
+        Set<DocumentReference> documentReferences = documentService.findDocumentReferences("S*");
+
+        assertNotNull(documentReferences);
+        assertEquals(2, documentReferences.size());
+        for (DocumentReference documentReference : documentReferences) {
+            assertTrue(((String) documentReference.getIndexes().get("company")).matches("(Swisscom|Sunrise)"));
+        }
+    }
+
+    @Test
+    public void findBySingleStringReferringToAllProperties() {
+
+        Set<DocumentReference> documentReferences = documentService.findDocumentReferences("*");
+
+        assertNotNull(documentReferences);
+        assertEquals(2, documentReferences.size());
+        for (DocumentReference documentReference : documentReferences) {
+            assertTrue(((String) documentReference.getIndexes().get("company")).matches("(Swisscom|Sunrise)"));
+        }
+    }
+
+    @Test
+    public void findBySingleStringReferringToIndexCompanyUsingStringThatContainsWildcards() {
+
+        Set<DocumentReference> documentReferences = documentService.findDocumentReferences("?unrise");
+
+        assertNotNull(documentReferences);
+        assertEquals(1, documentReferences.size());
+        assertEquals("Sunrise", documentReferences.iterator().next().getIndexes().get("company"));
     }
 }
