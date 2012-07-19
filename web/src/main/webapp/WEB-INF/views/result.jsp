@@ -30,7 +30,7 @@
         <tbody>
         <c:forEach var="doc" items="${documents}">
             <tr>
-                <td title="${doc.hash}">${doc.hash.substring(0,10)}</td>
+                <td title="${doc.hash}">${doc.id}</td>
                 <td><img src="/resources/img/file-extensions/pdf.png" alt="${doc.mimeType}" title="${doc.mimeType}"
                          width="32" height="32"/></td>
                 <td>${doc.pageCount}</td>
