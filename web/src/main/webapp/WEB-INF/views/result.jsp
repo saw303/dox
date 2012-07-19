@@ -39,7 +39,6 @@
                     <c:forEach var="index" items="${doc.indexes.keySet()}">
                         ${index} = ${doc.indexes.get(index)} <br/>
                     </c:forEach>
-
                 </td>
             </tr>
         </c:forEach>
