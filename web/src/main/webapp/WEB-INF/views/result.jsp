@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@taglib uri="/WEB-INF/dox.tld" prefix="dox" %>
 <%--
   ~ Copyright 2012 Silvio Wangler (silvio.wangler@gmail.com)
   ~
@@ -20,7 +21,7 @@
     <table id="resultTable">
         <thead>
         <tr>
-            <th scope="col"><spring:message code="document.hashCode" htmlEscape="true"/></th>
+            <th scope="col"><spring:message code="document.id" htmlEscape="true"/></th>
             <th scope="col"><spring:message code="document.mimeType" htmlEscape="true"/></th>
             <th scope="col"><spring:message code="document.pageCount" htmlEscape="true"/></th>
             <th scope="col"><spring:message code="document.fileName" htmlEscape="true"/></th>
@@ -35,11 +36,7 @@
                          width="32" height="32"/></td>
                 <td>${doc.pageCount}</td>
                 <td>${doc.fileName}</td>
-                <td>
-                    <c:forEach var="index" items="${doc.indexes.keySet()}">
-                        ${index} = ${doc.indexes.get(index)} <br/>
-                    </c:forEach>
-                </td>
+                <td><dox:listAttributes documentReference="${doc}"/></td>
             </tr>
         </c:forEach>
         </tbody>

@@ -79,7 +79,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         assertNotNull(documentReferences);
         assertEquals(1, documentReferences.size());
-        assertEquals(companyName, documentReferences.iterator().next().getIndexes().get("company"));
+        assertEquals(companyName, documentReferences.iterator().next().getIndices().get("company"));
     }
 
     @Test
@@ -93,7 +93,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         assertNotNull(documentReferences);
         assertEquals(1, documentReferences.size());
-        assertEquals(companyName, documentReferences.iterator().next().getIndexes().get("company"));
+        assertEquals(companyName, documentReferences.iterator().next().getIndices().get("company"));
     }
 
     @Test
@@ -108,7 +108,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
         assertNotNull(documentReferences);
         assertEquals(2, documentReferences.size());
         for (DocumentReference documentReference : documentReferences) {
-            assertTrue(((String) documentReference.getIndexes().get("company")).matches("(Swisscom|Sunrise)"));
+            assertTrue(((String) documentReference.getIndices().get("company")).matches("(Swisscom|Sunrise)"));
         }
     }
 
@@ -124,7 +124,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
         assertNotNull(documentReferences);
         assertEquals(2, documentReferences.size());
         for (DocumentReference documentReference : documentReferences) {
-            assertTrue(((String) documentReference.getIndexes().get("company")).matches("(Swisscom|Sunrise)"));
+            assertTrue(((String) documentReference.getIndices().get("company")).matches("(Swisscom|Sunrise)"));
         }
     }
 
@@ -139,7 +139,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         assertNotNull(documentReferences);
         assertEquals(1, documentReferences.size());
-        assertEquals("Sunrise", documentReferences.iterator().next().getIndexes().get("company"));
+        assertEquals("Sunrise", documentReferences.iterator().next().getIndices().get("company"));
     }
 
     @Test
@@ -152,7 +152,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         assertNotNull(documentReferences);
         assertEquals(1, documentReferences.size());
-        assertEquals("Sunrise", documentReferences.iterator().next().getIndexes().get("company"));
+        assertEquals("Sunrise", documentReferences.iterator().next().getIndices().get("company"));
     }
 
     @Test
@@ -165,7 +165,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         assertNotNull(documentReferences);
         assertEquals(1, documentReferences.size());
-        assertEquals("Sunrise", documentReferences.iterator().next().getIndexes().get("company"));
+        assertEquals("Sunrise", documentReferences.iterator().next().getIndices().get("company"));
     }
 
     @Test
@@ -175,7 +175,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         assertNotNull(documentReferences);
         assertEquals(1, documentReferences.size());
-        assertEquals("Sunrise", documentReferences.iterator().next().getIndexes().get("company"));
+        assertEquals("Sunrise", documentReferences.iterator().next().getIndices().get("company"));
     }
 
     @Test
@@ -185,7 +185,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         assertNotNull(documentReferences);
         assertEquals(1, documentReferences.size());
-        assertEquals("Sunrise", documentReferences.iterator().next().getIndexes().get("company"));
+        assertEquals("Sunrise", documentReferences.iterator().next().getIndices().get("company"));
     }
 
     @Test
@@ -195,7 +195,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         assertNotNull(documentReferences);
         assertEquals(1, documentReferences.size());
-        assertEquals("Sunrise", documentReferences.iterator().next().getIndexes().get("company"));
+        assertEquals("Sunrise", documentReferences.iterator().next().getIndices().get("company"));
     }
 
     @Test
@@ -205,7 +205,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         assertNotNull(documentReferences);
         assertEquals(1, documentReferences.size());
-        assertEquals("Sunrise", documentReferences.iterator().next().getIndexes().get("company"));
+        assertEquals("Sunrise", documentReferences.iterator().next().getIndices().get("company"));
     }
 
     @Test
@@ -215,7 +215,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         assertNotNull(documentReferences);
         assertEquals(1, documentReferences.size());
-        assertEquals("Swisscom", documentReferences.iterator().next().getIndexes().get("company"));
+        assertEquals("Swisscom", documentReferences.iterator().next().getIndices().get("company"));
     }
 
     @Test
@@ -226,7 +226,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
         assertNotNull(documentReferences);
         assertEquals(2, documentReferences.size());
         for (DocumentReference documentReference : documentReferences) {
-            assertTrue(((String) documentReference.getIndexes().get("company")).matches("(Swisscom|Sunrise)"));
+            assertTrue(((String) documentReference.getIndices().get("company")).matches("(Swisscom|Sunrise)"));
         }
     }
 
@@ -238,7 +238,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
         assertNotNull(documentReferences);
         assertEquals(2, documentReferences.size());
         for (DocumentReference documentReference : documentReferences) {
-            assertTrue(((String) documentReference.getIndexes().get("company")).matches("(Swisscom|Sunrise)"));
+            assertTrue(((String) documentReference.getIndices().get("company")).matches("(Swisscom|Sunrise)"));
         }
     }
 
@@ -249,6 +249,6 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         assertNotNull(documentReferences);
         assertEquals(1, documentReferences.size());
-        assertEquals("Sunrise", documentReferences.iterator().next().getIndexes().get("company"));
+        assertEquals("Sunrise", documentReferences.iterator().next().getIndices().get("company"));
     }
 }

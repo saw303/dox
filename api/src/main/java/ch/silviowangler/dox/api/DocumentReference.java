@@ -31,24 +31,24 @@ public class DocumentReference implements Serializable {
     private int pageCount;
     private String mimeType;
     private DocumentClass documentClass;
-    private Map<String, Object> indexes = new HashMap<String, Object>();
+    private Map<String, Object> indices = new HashMap<String, Object>();
     private String fileName;
 
     public DocumentReference(String fileName) {
         this.fileName = fileName;
     }
 
-    public DocumentReference(String hash, int pageCount, String mimeType, DocumentClass documentClass, Map<String, Object> indexes, String fileName) {
-        this(hash, null, pageCount, mimeType, documentClass, indexes, fileName);
+    public DocumentReference(String hash, int pageCount, String mimeType, DocumentClass documentClass, Map<String, Object> indices, String fileName) {
+        this(hash, null, pageCount, mimeType, documentClass, indices, fileName);
     }
 
-    public DocumentReference(String hash, Long id, int pageCount, String mimeType, DocumentClass documentClass, Map<String, Object> indexes, String fileName) {
+    public DocumentReference(String hash, Long id, int pageCount, String mimeType, DocumentClass documentClass, Map<String, Object> indices, String fileName) {
         this.hash = hash;
         this.id = id;
         this.pageCount = pageCount;
         this.mimeType = mimeType;
         this.documentClass = documentClass;
-        this.indexes = indexes;
+        this.indices = indices;
         this.fileName = fileName;
     }
 
@@ -92,12 +92,12 @@ public class DocumentReference implements Serializable {
         this.documentClass = documentClass;
     }
 
-    public Map<String, Object> getIndexes() {
-        return indexes;
+    public Map<String, Object> getIndices() {
+        return indices;
     }
 
-    public void setIndexes(Map<String, Object> indexes) {
-        this.indexes = indexes;
+    public void setIndices(Map<String, Object> indices) {
+        this.indices = indices;
     }
 
     public String getFileName() {
@@ -116,7 +116,7 @@ public class DocumentReference implements Serializable {
                 ", pageCount=" + pageCount +
                 ", mimeType='" + mimeType + '\'' +
                 ", documentClass=" + documentClass +
-                ", indexes=" + indexes +
+                ", indices=" + indices +
                 ", fileName='" + fileName + '\'' +
                 '}';
     }

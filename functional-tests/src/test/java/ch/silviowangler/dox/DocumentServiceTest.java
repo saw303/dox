@@ -89,14 +89,14 @@ public class DocumentServiceTest extends AbstractTest {
         assertNotNull(documentReference.getId());
         assertEquals("INVOICE", documentReference.getDocumentClass().getShortName());
         assertEquals("document-1p.pdf", documentReference.getFileName());
-        assertNotNull(documentReference.getIndexes());
-        assertEquals(3, documentReference.getIndexes().size());
-        assertTrue(documentReference.getIndexes().containsKey("company"));
-        assertEquals("Sunrise", documentReference.getIndexes().get("company"));
-        assertTrue(documentReference.getIndexes().containsKey("invoiceDate"));
-        assertTrue("Is not org.joda.time.DateTime. It's " + documentReference.getIndexes().get("invoiceDate").getClass().getCanonicalName(), documentReference.getIndexes().get("invoiceDate") instanceof DateTime);
-        assertTrue(documentReference.getIndexes().containsKey("invoiceAmount"));
-        assertEquals(new BigDecimal("50.00"), documentReference.getIndexes().get("invoiceAmount"));
+        assertNotNull(documentReference.getIndices());
+        assertEquals(3, documentReference.getIndices().size());
+        assertTrue(documentReference.getIndices().containsKey("company"));
+        assertEquals("Sunrise", documentReference.getIndices().get("company"));
+        assertTrue(documentReference.getIndices().containsKey("invoiceDate"));
+        assertTrue("Is not org.joda.time.DateTime. It's " + documentReference.getIndices().get("invoiceDate").getClass().getCanonicalName(), documentReference.getIndices().get("invoiceDate") instanceof DateTime);
+        assertTrue(documentReference.getIndices().containsKey("invoiceAmount"));
+        assertEquals(new BigDecimal("50.00"), documentReference.getIndices().get("invoiceAmount"));
 
         DocumentReference documentReferenceFromDatabase = documentService.findDocumentReference(documentReference.getId());
 
@@ -123,14 +123,14 @@ public class DocumentServiceTest extends AbstractTest {
         assertNotNull(documentReference.getId());
         assertEquals("INVOICE", documentReference.getDocumentClass().getShortName());
         assertEquals("document-5p.pdf", documentReference.getFileName());
-        assertNotNull(documentReference.getIndexes());
-        assertEquals(3, documentReference.getIndexes().size());
-        assertTrue(documentReference.getIndexes().containsKey("company"));
-        assertEquals("Swisscom", documentReference.getIndexes().get("company"));
-        assertTrue(documentReference.getIndexes().containsKey("invoiceDate"));
-        assertTrue("Is not org.joda.time.DateTime. It's " + documentReference.getIndexes().get("invoiceDate").getClass().getCanonicalName(), documentReference.getIndexes().get("invoiceDate") instanceof DateTime);
-        assertTrue(documentReference.getIndexes().containsKey("invoiceAmount"));
-        assertEquals(new BigDecimal("50.25"), documentReference.getIndexes().get("invoiceAmount"));
+        assertNotNull(documentReference.getIndices());
+        assertEquals(3, documentReference.getIndices().size());
+        assertTrue(documentReference.getIndices().containsKey("company"));
+        assertEquals("Swisscom", documentReference.getIndices().get("company"));
+        assertTrue(documentReference.getIndices().containsKey("invoiceDate"));
+        assertTrue("Is not org.joda.time.DateTime. It's " + documentReference.getIndices().get("invoiceDate").getClass().getCanonicalName(), documentReference.getIndices().get("invoiceDate") instanceof DateTime);
+        assertTrue(documentReference.getIndices().containsKey("invoiceAmount"));
+        assertEquals(new BigDecimal("50.25"), documentReference.getIndices().get("invoiceAmount"));
 
         PhysicalDocument docFromDox = documentService.findPhysicalDocument(documentReference.getId());
 
@@ -197,9 +197,9 @@ public class DocumentServiceTest extends AbstractTest {
 
         DocumentReference documentReferenceFromStore = documentService.findDocumentReference(documentReference.getId());
 
-        assertTrue(documentReferenceFromStore.getIndexes().containsKey("invoiceDate"));
-        assertTrue(documentReferenceFromStore.getIndexes().get("invoiceDate") instanceof DateTime);
-        assertEquals(new DateTime(1978, 11, 1, 0, 0), documentReferenceFromStore.getIndexes().get("invoiceDate"));
+        assertTrue(documentReferenceFromStore.getIndices().containsKey("invoiceDate"));
+        assertTrue(documentReferenceFromStore.getIndices().get("invoiceDate") instanceof DateTime);
+        assertEquals(new DateTime(1978, 11, 1, 0, 0), documentReferenceFromStore.getIndices().get("invoiceDate"));
     }
 
     @Test
@@ -252,9 +252,9 @@ public class DocumentServiceTest extends AbstractTest {
 
         DocumentReference documentReferenceFromStore = documentService.findDocumentReference(documentReference.getId());
 
-        assertTrue(documentReferenceFromStore.getIndexes().containsKey("invoiceDate"));
-        assertTrue(documentReferenceFromStore.getIndexes().get("invoiceDate") instanceof DateTime);
-        assertEquals(new DateTime(2012, 11, 1, 0, 0), documentReferenceFromStore.getIndexes().get("invoiceDate"));
+        assertTrue(documentReferenceFromStore.getIndices().containsKey("invoiceDate"));
+        assertTrue(documentReferenceFromStore.getIndices().get("invoiceDate") instanceof DateTime);
+        assertEquals(new DateTime(2012, 11, 1, 0, 0), documentReferenceFromStore.getIndices().get("invoiceDate"));
         assertEquals("image/tiff", documentReferenceFromStore.getMimeType());
         assertEquals(expectedPageCount, documentReferenceFromStore.getPageCount());
     }
@@ -267,7 +267,7 @@ public class DocumentServiceTest extends AbstractTest {
         assertEquals(expectedInstance.getId(), actualInstance.getId());
         assertEquals(expectedInstance.getDocumentClass(), actualInstance.getDocumentClass());
         assertEquals(expectedInstance.getFileName(), actualInstance.getFileName());
-        assertEquals(expectedInstance.getIndexes().size(), actualInstance.getIndexes().size());
-        assertEquals(expectedInstance.getIndexes(), actualInstance.getIndexes());
+        assertEquals(expectedInstance.getIndices().size(), actualInstance.getIndices().size());
+        assertEquals(expectedInstance.getIndices(), actualInstance.getIndices());
     }
 }

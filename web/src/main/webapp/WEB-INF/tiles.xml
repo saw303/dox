@@ -41,4 +41,8 @@
     <definition name="import.duplicate.document" extends="base.definition">
         <put-attribute name="body" value="/WEB-INF/views/duplicateDocument.jsp"/>
     </definition>
+
+    <definition name="import.successful" extends="base.definition">
+        <put-attribute name="body" value="/WEB-INF/views/importSuccessful.jsp"/>
+    </definition>
 </tiles-definitions>

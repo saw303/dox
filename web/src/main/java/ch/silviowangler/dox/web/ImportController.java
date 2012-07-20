@@ -149,6 +149,8 @@ public class ImportController implements MessageSourceAware, InitializingBean {
     @RequestMapping(method = RequestMethod.POST, value = "performImport.html")
     public ModelAndView importDocument(MultipartFile file, WebRequest request) {
 
+        Map<String, Object> model = new HashMap<String, Object>();
+
         try {
             DocumentClass documentClass = new DocumentClass(request.getParameter(DOCUMENT_CLASS_SHORT_NAME));
 
@@ -169,11 +171,14 @@ public class ImportController implements MessageSourceAware, InitializingBean {
                     file.getOriginalFilename());
 
             DocumentReference documentReference = documentService.importDocument(physicalDocument);
+
+            model.put("doc", documentReference);
+            return new ModelAndView("import.successful", model);
+
         } catch (ValidationException e) {
             logger.error("Unable to import document", e);
         } catch (DocumentDuplicationException e) {
             logger.error("Unable to import document. Duplicate document detected", e);
-            Map<String, Object> model = new HashMap<String, Object>(2);
             model.put("docId", e.getDocumentId());
             model.put("docHash", e.getHash());
             return new ModelAndView("import.duplicate.document", model);

@@ -207,7 +207,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         verifyMandatoryAttributes(physicalDocument, attributes);
         verifyUnknownKeys(physicalDocument, documentClassShortName, attributes);
 
-        physicalDocument.setIndexes(fixDataTypesOfIndices(physicalDocument.getIndexes(), attributes));
+        physicalDocument.setIndices(fixDataTypesOfIndices(physicalDocument.getIndices(), attributes));
 
         final String mimeType = investigateMimeType(physicalDocument.getFileName());
         final String hash = DigestUtils.sha256Hex(physicalDocument.getContent());
@@ -226,8 +226,8 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         document = documentRepository.save(document);
         indexStoreRepository.save(indexStore);
 
-        for (String key : physicalDocument.getIndexes().keySet()) {
-            final Object value = physicalDocument.getIndexes().get(key);
+        for (String key : physicalDocument.getIndices().keySet()) {
+            final Object value = physicalDocument.getIndices().get(key);
 
             String valueToStore = getStringRepresentation(value);
 
@@ -345,12 +345,12 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     private void updateIndices(DocumentReference physicalDocument, IndexStore indexStore) {
-        for (String key : physicalDocument.getIndexes().keySet()) {
+        for (String key : physicalDocument.getIndices().keySet()) {
 
             Attribute attribute = attributeRepository.findByShortName(key);
             assert attribute != null : "Attribute " + key + " must be there";
 
-            final Object value = physicalDocument.getIndexes().get(key);
+            final Object value = physicalDocument.getIndices().get(key);
             try {
                 final String propertyName = attribute.getMappingColumn().toLowerCase();
                 logger.debug("About to set column '{}' using value '{}' on index store", propertyName, value);
@@ -366,7 +366,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     private void verifyUnknownKeys(PhysicalDocument physicalDocument, String documentClassShortName, List<Attribute> attributes) throws ValidationException {
-        for (String key : physicalDocument.getIndexes().keySet()) {
+        for (String key : physicalDocument.getIndices().keySet()) {
             boolean exists = false;
             for (Attribute attribute : attributes) {
                 if (attribute.getShortName().equals(key)) {
@@ -384,7 +384,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     private void verifyMandatoryAttributes(PhysicalDocument physicalDocument, List<Attribute> attributes) throws ValidationException {
         for (Attribute attribute : attributes) {
             if (!attribute.isOptional()) {
-                if (!physicalDocument.getIndexes().containsKey(attribute.getShortName())) {
+                if (!physicalDocument.getIndices().containsKey(attribute.getShortName())) {
                     logger.warn("Attribute '{}' is required for document class(es) '{}' and not was not provided.", attribute.getShortName(), attribute.getDocumentClasses());
                     throw new ValidationException("Attribute " + attribute.getShortName() + " is mandatory");
                 }
