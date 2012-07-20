@@ -173,6 +173,10 @@ public class ImportController implements MessageSourceAware, InitializingBean {
             logger.error("Unable to import document", e);
         } catch (DocumentDuplicationException e) {
             logger.error("Unable to import document. Duplicate document detected", e);
+            Map<String, Object> model = new HashMap<String, Object>(2);
+            model.put("docId", e.getDocumentId());
+            model.put("docHash", e.getHash());
+            return new ModelAndView("import.duplicate.document", model);
         } catch (IOException e) {
             logger.error("Unable to import document", e);
         }
