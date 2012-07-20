@@ -66,10 +66,10 @@ public class ImportController implements MessageSourceAware, InitializingBean {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "import.html")
-    public ModelAndView query() {
+    public ModelAndView query(Locale locale) {
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("documentClasses", documentService.findDocumentClasses());
-        model.put("docClass", "");
+        model.put("defaultMessage", messageSource.getMessage("document.import.choose.document.class", null, locale));
         return new ModelAndView("import.definition", model);
     }
 

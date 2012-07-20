@@ -19,10 +19,10 @@
 
 <div>
     <spring:message code="document.import.label.document.class"/>: <form:select id="docClass" name="docClass"
-                                                                                path="docClass"
+                                                                                path="documentClasses"
                                                                                 multiple="false">
 
-    <form:option value="-" htmlEscape="true" label="-- choose --"/>
+    <form:option value="-" htmlEscape="true" label="${defaultMessage}"/>
     <form:options items="${documentClasses}" itemLabel="shortName" itemValue="shortName" htmlEscape="true"/>
 
 </form:select>
