@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 
 /**
@@ -60,5 +61,14 @@ public abstract class AbstractTest {
         temp.deleteOnExit();
 
         return temp;
+    }
+
+    public static void assertByteArrayEquals(String message, byte[] expected, byte[] actual) {
+
+        assertEquals(message, expected.length, actual.length);
+
+        for (int i = 0; i < actual.length; i++) {
+            assertEquals(message, expected[i], actual[i]);
+        }
     }
 }

@@ -134,6 +134,8 @@ public class DocumentServiceTest extends AbstractTest {
 
         PhysicalDocument docFromDox = documentService.findPhysicalDocument(documentReference.getId());
 
+        assertNotNull("Must have a content", docFromDox.getContent());
+        assertByteArrayEquals("Wrong content", FileUtils.readFileToByteArray(fivePagesPdfFile), doc.getContent());
         assertDocumentReference(documentReference, docFromDox);
     }
 

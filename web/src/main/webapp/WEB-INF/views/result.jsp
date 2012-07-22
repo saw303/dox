@@ -30,7 +30,7 @@
         </thead>
         <tbody>
         <c:forEach var="doc" items="${documents}">
-            <tr>
+            <tr onclick="window.open('document/${doc.id}')">
                 <td title="${doc.hash}">${doc.id}</td>
                 <td><img src="/resources/img/file-extensions/pdf.png" alt="${doc.mimeType}" title="${doc.mimeType}"
                          width="32" height="32"/></td>

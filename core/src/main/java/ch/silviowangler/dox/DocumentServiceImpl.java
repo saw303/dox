@@ -166,7 +166,11 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         if (!file.exists()) {
             throw new DocumentNotInStoreException(doc.getHash(), doc.getId());
         }
-
+        try {
+            document.setContent(FileUtils.readFileToByteArray(file));
+        } catch (IOException e) {
+            logger.error("Unable to read content of file '{}'", file.getAbsolutePath(), e);
+        }
         return document;
     }
 
