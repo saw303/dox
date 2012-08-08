@@ -238,6 +238,63 @@ public class DocumentServiceTest extends AbstractTest {
         importTiff("document-20p.tif", 20);
     }
 
+    @Test
+    public void importMustRespectAttributesAssignedToADomain() throws IOException, DocumentDuplicationException, ValidationException {
+        File temp = createTestFile("hello2.world.txt", "Must not import");
+
+        Map<String, Object> indexes = new HashMap<String, Object>(2);
+
+        final String valueNotInDomain = "This value does not belong to the company domain";
+        indexes.put("company", valueNotInDomain);
+        indexes.put("invoiceAmount", 100.0);
+        indexes.put("invoiceDate", new Date());
+
+        PhysicalDocument doc = new PhysicalDocument(documentClass, FileUtils.readFileToByteArray(temp), indexes, temp.getName());
+        try {
+            documentService.importDocument(doc);
+            fail("Should throw a validation exception");
+        } catch (ValueNotInDomainException e) {
+            assertEquals(valueNotInDomain, e.getValue());
+            assertEquals(2, e.getValidValues().size());
+            assertTrue(e.getValidValues().contains("Sunrise"));
+            assertTrue(e.getValidValues().contains("Swisscom"));
+        }
+    }
+
+    @Test
+    public void importMustAcceptIntegerOnDoubleField() throws IOException, DocumentDuplicationException, ValidationException {
+        File temp = createTestFile("hello2.world.txt", "Content");
+
+        Map<String, Object> indexes = new HashMap<String, Object>(2);
+
+        indexes.put("company", "Sunrise");
+        indexes.put("invoiceAmount", 100);
+        indexes.put("invoiceDate", new Date());
+
+        PhysicalDocument doc = new PhysicalDocument(documentClass, FileUtils.readFileToByteArray(temp), indexes, temp.getName());
+        DocumentReference reference = documentService.importDocument(doc);
+
+        assertEquals(BigDecimal.class, reference.getIndices().get("invoiceAmount").getClass());
+        assertEquals("100", String.valueOf(reference.getIndices().get("invoiceAmount")));
+    }
+
+    @Test
+    public void importMustAcceptLongOnDoubleField() throws IOException, DocumentDuplicationException, ValidationException {
+        File temp = createTestFile("hello2.world.txt", "This is a content");
+
+        Map<String, Object> indexes = new HashMap<String, Object>(2);
+
+        indexes.put("company", "Sunrise");
+        indexes.put("invoiceAmount", 100L);
+        indexes.put("invoiceDate", new Date());
+
+        PhysicalDocument doc = new PhysicalDocument(documentClass, FileUtils.readFileToByteArray(temp), indexes, temp.getName());
+        DocumentReference reference = documentService.importDocument(doc);
+
+        assertEquals(BigDecimal.class, reference.getIndices().get("invoiceAmount").getClass());
+        assertEquals("100", String.valueOf(reference.getIndices().get("invoiceAmount")));
+    }
+
     private void importTiff(String fileName, int expectedPageCount) throws IOException, ValidationException, DocumentDuplicationException, DocumentNotFoundException {
         File singlePagePdf = loadFile(fileName);
 

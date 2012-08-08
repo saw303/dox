@@ -210,6 +210,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
         verifyMandatoryAttributes(physicalDocument, attributes);
         verifyUnknownKeys(physicalDocument, documentClassShortName, attributes);
+        verifyDomainValues(physicalDocument, attributes);
 
         physicalDocument.setIndices(fixDataTypesOfIndices(physicalDocument.getIndices(), attributes));
 
@@ -247,6 +248,21 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         }
         DocumentReference docRef = toDocumentReference(document);
         return docRef;
+    }
+
+    private void verifyDomainValues(PhysicalDocument physicalDocument, List<Attribute> attributes) throws ValueNotInDomainException {
+        for (Attribute attribute : attributes) {
+            final String attributeShortName = attribute.getShortName();
+            if (attribute.getDomain() != null && physicalDocument.getIndices().containsKey(attributeShortName)) {
+                final String attributeValue = String.valueOf(physicalDocument.getIndices().get(attributeShortName));
+                logger.debug("Analyzing domain value on attribute '{}' for value '{}'", attributeShortName, attributeValue);
+                if (!attribute.getDomain().getValues().contains(attributeValue)) {
+                    logger.error("Attribute '{}' belongs to a domain. This domain does not contain the value '{}'", attributeShortName, attributeValue);
+                    throw new ValueNotInDomainException("", attributeValue, attribute.getDomain().getValues());
+                }
+            }
+        }
+        logger.info("All domains and their values have been respected");
     }
 
     private String getStringRepresentation(Object indexValue) {
@@ -325,6 +341,10 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             return BigDecimal.valueOf((Double) valueToConvert);
         } else if (AttributeDataType.DOUBLE.equals(desiredDataType) && valueToConvert instanceof String && ((String) valueToConvert).matches("(\\d.*|\\d.*\\.\\d{1,2})")) {
             return new BigDecimal((String) valueToConvert);
+        } else if (AttributeDataType.DOUBLE.equals(desiredDataType) && valueToConvert instanceof Integer) {
+            return BigDecimal.valueOf(Long.parseLong(String.valueOf(valueToConvert)));
+        } else if (AttributeDataType.DOUBLE.equals(desiredDataType) && valueToConvert instanceof Long) {
+            return BigDecimal.valueOf((Long) valueToConvert);
         }
         logger.error("Unable to convert data type '{}' and value '{}' (class: '{}')", new Object[]{desiredDataType, valueToConvert, valueToConvert.getClass().getCanonicalName()});
         throw new IllegalArgumentException("Unable to convert data type " + desiredDataType + " and value " + valueToConvert + "(Class: '" + valueToConvert.getClass().getCanonicalName() + "')");
