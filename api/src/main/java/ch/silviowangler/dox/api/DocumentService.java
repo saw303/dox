@@ -25,8 +25,8 @@ import java.util.SortedSet;
  * <p/>
  * DOX knows the following types of documents:
  * <ul>
- * <li>Document reference - a metadata representation of a document (everything but the binary content)</li>
- * <li>Physical documents - is the document reference plus the binary content</li>
+ * <li><code>Document reference</code> - a metadata representation of a document (everything but the binary content)</li>
+ * <li><code>Physical document</code> - is the document reference plus its binary content</li>
  * </ul>
  *
  * @author Silvio Wangler
