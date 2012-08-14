@@ -101,7 +101,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             logger.debug("Processing document class '{}' with id {}", documentClass.getShortName(), documentClass.getId());
             result.add(toDocumentClassApi(documentClass));
         }
-
+        logger.info("Found {} document classes in DOX", result.size());
         return result;
     }
 
@@ -124,6 +124,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         logger.info("Found {} documents for query string '{}'", documents.size(), queryString);
 
         for (Document document : documents) {
+            logger.trace("Found document with id {}", document.getId());
             documentReferences.add(toDocumentReference(document));
         }
         return documentReferences;
@@ -133,14 +134,15 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public Set<DocumentReference> findDocumentReferences(Map<String, Object> queryParams, String documentClassShortName) throws DocumentClassNotFoundException {
 
+        logger.debug("Trying to find document references in document class '{}' using params '{}'", documentClassShortName, queryParams);
         DocumentClass documentClass = documentClassRepository.findByShortName(documentClassShortName);
         List<Attribute> attributes = attributeRepository.findAttributesForDocumentClass(documentClass);
 
         List<Document> documents = documentRepository.findDocuments(fixDataTypesOfIndices(queryParams, attributes), toAttributeMap(attributes));
 
-        HashSet<DocumentReference> documentReferences = new HashSet<DocumentReference>();
-
+        HashSet<DocumentReference> documentReferences = new HashSet<DocumentReference>(documents.size());
         for (Document document : documents) {
+            logger.trace("Found document with id {}", document.getId());
             documentReferences.add(toDocumentReference(document));
         }
         return documentReferences;
@@ -164,8 +166,10 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         File file = new File(this.archiveDirectory, doc.getHash());
 
         if (!file.exists()) {
+            logger.error("Unable to find file for document hash '{}' on path '{}'", doc.getHash(), file.getAbsolutePath());
             throw new DocumentNotInStoreException(doc.getHash(), doc.getId());
         }
+
         try {
             document.setContent(FileUtils.readFileToByteArray(file));
         } catch (IOException e) {
@@ -368,13 +372,13 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         }
     }
 
-    private void updateIndices(DocumentReference physicalDocument, IndexStore indexStore) {
-        for (String key : physicalDocument.getIndices().keySet()) {
+    private void updateIndices(DocumentReference documentReference, IndexStore indexStore) {
+        for (String key : documentReference.getIndices().keySet()) {
 
             Attribute attribute = attributeRepository.findByShortName(key);
             assert attribute != null : "Attribute " + key + " must be there";
 
-            final Object value = physicalDocument.getIndices().get(key);
+            final Object value = documentReference.getIndices().get(key);
             try {
                 final String propertyName = attribute.getMappingColumn().toLowerCase();
                 logger.debug("About to set column '{}' using value '{}' on index store", propertyName, value);
@@ -408,6 +412,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     private void verifyMandatoryAttributes(PhysicalDocument physicalDocument, List<Attribute> attributes) throws ValidationException {
         for (Attribute attribute : attributes) {
             if (!attribute.isOptional()) {
+                logger.trace("Analyzing mandatory attribute '{}'", attribute.getShortName());
                 if (!physicalDocument.getIndices().containsKey(attribute.getShortName())) {
                     logger.warn("Attribute '{}' is required for document class(es) '{}' and not was not provided.", attribute.getShortName(), attribute.getDocumentClasses());
                     throw new ValidationException("Attribute " + attribute.getShortName() + " is mandatory");
