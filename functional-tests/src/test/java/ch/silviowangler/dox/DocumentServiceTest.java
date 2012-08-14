@@ -31,7 +31,7 @@ import static junit.framework.Assert.*;
 
 /**
  * @author Silvio Wangler
- * @version 0.1
+ * @since 0.1
  */
 public class DocumentServiceTest extends AbstractTest {
 

@@ -47,7 +47,7 @@ import java.util.*;
 
 /**
  * @author Silvio Wangler
- * @version 0.1
+ * @since 0.1
  */
 @Service
 public class DocumentServiceImpl implements DocumentService, InitializingBean {

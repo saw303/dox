@@ -25,7 +25,7 @@ import java.util.Set;
 
 /**
  * @author Silvio Wangler
- * @version 0.1
+ * @since 0.1
  */
 @Entity
 @Table(name = "DOX_DOC")

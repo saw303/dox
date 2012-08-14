@@ -21,15 +21,47 @@ import java.util.Set;
 import java.util.SortedSet;
 
 /**
+ * This is the general service when it comes to working with documents in DOX.
+ * <p/>
+ * DOX knows the following types of documents:
+ * <ul>
+ * <li>Document reference - a metadata representation of a document (everything but the binary content)</li>
+ * <li>Physical documents - is the document reference plus the binary content</li>
+ * </ul>
+ *
  * @author Silvio Wangler
- * @version 0.1
+ * @since 0.1
  */
 public interface DocumentService {
 
+    /**
+     * Imports a document inclusive its binary content into DOX.
+     *
+     * @param physicalDocument the document to create in DOX.
+     * @return The document reference that was created in DOX
+     * @throws ValidationException
+     * @throws DocumentDuplicationException
+     */
     DocumentReference importDocument(PhysicalDocument physicalDocument) throws ValidationException, DocumentDuplicationException;
 
+    /**
+     * Find a document reference using the unique identifier (ID)
+     *
+     * @param id unique identifier
+     * @return the document reference with all its metadata
+     * @throws DocumentNotFoundException if the document does not exist
+     */
     DocumentReference findDocumentReference(Long id) throws DocumentNotFoundException;
 
+    /**
+     * Works like finding a document reference but returns also the binary content of a document.
+     *
+     * @param id
+     * @return returns the physical document
+     * @throws DocumentNotFoundException   if there is no document for that ID
+     * @throws DocumentNotInStoreException if there is a document in the database registered but the binary content cannot be found in the underlying data store that DOX uses.
+     * @see DocumentService#findDocumentReference(Long)
+     */
     PhysicalDocument findPhysicalDocument(Long id) throws DocumentNotFoundException, DocumentNotInStoreException;
 
     Set<DocumentReference> findDocumentReferences(Map<String, Object> queryParams, String documentClassShortName) throws DocumentClassNotFoundException;
@@ -48,7 +80,7 @@ public interface DocumentService {
      * Finds all attributes assigned to the given document class. It returns the global and the document class specific attributes.
      *
      * @param documentClass
-     * @return
+     * @return all attributes to the given document class
      */
     SortedSet<Attribute> findAttributes(DocumentClass documentClass);
 }

@@ -18,7 +18,7 @@ package ch.silviowangler.dox.api;
 
 /**
  * @author Silvio Wangler
- * @version 0.1
+ * @since 0.1
  */
 public class ValidationException extends Exception {
 

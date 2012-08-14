@@ -34,7 +34,7 @@ import static junit.framework.Assert.assertTrue;
 
 /**
  * @author Silvio Wangler
- * @version 0.1
+ * @since 0.1
  */
 @ContextConfiguration("classpath:applicationContext-test.xml")
 @RunWith(SpringJUnit4ClassRunner.class)

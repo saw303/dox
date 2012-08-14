@@ -22,7 +22,7 @@ import java.util.Map;
 
 /**
  * @author Silvio Wangler
- * @version 0.1
+ * @since 0.1
  */
 public class DocumentReference implements Serializable {
 
