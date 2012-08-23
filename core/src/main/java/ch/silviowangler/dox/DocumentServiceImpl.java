@@ -82,10 +82,9 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-    public SortedSet<ch.silviowangler.dox.api.Attribute> findAttributes(ch.silviowangler.dox.api.DocumentClass documentClass) {
+    public SortedSet<ch.silviowangler.dox.api.Attribute> findAttributes(ch.silviowangler.dox.api.DocumentClass documentClass) throws DocumentClassNotFoundException {
 
-        DocumentClass docClass = documentClassRepository.findByShortName(documentClass.getShortName());
-
+        DocumentClass docClass = findDocumentClass(documentClass.getShortName());
         List<Attribute> attributes = attributeRepository.findAttributesForDocumentClass(docClass);
         return toAttributeApi(attributes);
     }
@@ -135,7 +134,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     public Set<DocumentReference> findDocumentReferences(Map<String, Object> queryParams, String documentClassShortName) throws DocumentClassNotFoundException {
 
         logger.debug("Trying to find document references in document class '{}' using params '{}'", documentClassShortName, queryParams);
-        DocumentClass documentClass = documentClassRepository.findByShortName(documentClassShortName);
+        DocumentClass documentClass = findDocumentClass(documentClassShortName);
         List<Attribute> attributes = attributeRepository.findAttributesForDocumentClass(documentClass);
 
         List<Document> documents = documentRepository.findDocuments(fixDataTypesOfIndices(queryParams, attributes), toAttributeMap(attributes));
@@ -198,15 +197,10 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-    public DocumentReference importDocument(PhysicalDocument physicalDocument) throws ValidationException, DocumentDuplicationException {
+    public DocumentReference importDocument(PhysicalDocument physicalDocument) throws ValidationException, DocumentDuplicationException, DocumentClassNotFoundException {
 
         final String documentClassShortName = physicalDocument.getDocumentClass().getShortName();
-        DocumentClass documentClassEntity = documentClassRepository.findByShortName(documentClassShortName);
-
-        if (documentClassEntity == null) {
-            logger.error("No such document class with name '{}' found", documentClassShortName);
-            throw new ValidationException("No such document class with name '" + documentClassShortName + "' available");
-        }
+        DocumentClass documentClassEntity = findDocumentClass(documentClassShortName);
 
         List<Attribute> attributes = attributeRepository.findAttributesForDocumentClass(documentClassEntity);
 
@@ -252,6 +246,27 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         }
         DocumentReference docRef = toDocumentReference(document);
         return docRef;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    public DocumentReference updateIndices(DocumentReference reference) throws DocumentNotFoundException {
+
+        DocumentReference documentReference = findDocumentReference(reference.getId());
+        documentReference.getIndices().putAll(reference.getIndices());
+
+        Document document = documentRepository.findOne(reference.getId());
+        DocumentClass documentClassEntity = document.getDocumentClass();
+
+        List<Attribute> attributes = attributeRepository.findAttributesForDocumentClass(documentClassEntity);
+
+        documentReference.setIndices(fixDataTypesOfIndices(documentReference.getIndices(), attributes));
+
+        updateIndices(documentReference, document.getIndexStore());
+
+        indexStoreRepository.save(document.getIndexStore());
+
+        return findDocumentReference(reference.getId());
     }
 
     private void verifyDomainValues(PhysicalDocument physicalDocument, List<Attribute> attributes) throws ValueNotInDomainException {
@@ -508,5 +523,16 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
                 attribute.getDomain() != null ? attribute.getDomain().getValues() : null,
                 attribute.getDataType(),
                 attribute.isUpdateable());
+    }
+
+
+    private DocumentClass findDocumentClass(String documentClassShortName) throws DocumentClassNotFoundException {
+        DocumentClass documentClassEntity = documentClassRepository.findByShortName(documentClassShortName);
+
+        if (documentClassEntity == null) {
+            logger.error("No such document class with name '{}' found", documentClassShortName);
+            throw new DocumentClassNotFoundException(documentClassShortName);
+        }
+        return documentClassEntity;
     }
 }

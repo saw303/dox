@@ -40,7 +40,7 @@ import static junit.framework.Assert.*;
 public class DocumentServiceResearchTest extends AbstractTest {
 
     @Before
-    public void init() throws ValidationException, DocumentDuplicationException, IOException, DocumentNotFoundException {
+    public void init() throws ValidationException, DocumentDuplicationException, IOException, DocumentNotFoundException, DocumentClassNotFoundException {
 
         Map<String, Object> indexes = new HashMap<String, Object>(2);
         indexes.put("company", "Sunrise");
@@ -57,7 +57,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
         importFile("file-2.txt", "This is a test content that contains more text", "INVOICE", indexes);
     }
 
-    private DocumentReference importFile(final String fileName, final String content, final String docClassShortName, final Map<String, Object> indices) throws ValidationException, DocumentDuplicationException, IOException, DocumentNotFoundException {
+    private DocumentReference importFile(final String fileName, final String content, final String docClassShortName, final Map<String, Object> indices) throws ValidationException, DocumentDuplicationException, IOException, DocumentNotFoundException, DocumentClassNotFoundException {
         File textFile01 = createTestFile(fileName, content);
         PhysicalDocument doc = new PhysicalDocument(new DocumentClass(docClassShortName), FileUtils.readFileToByteArray(textFile01), indices, fileName);
         try {

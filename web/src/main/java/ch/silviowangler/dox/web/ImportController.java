@@ -80,7 +80,13 @@ public class ImportController implements MessageSourceAware, InitializingBean {
         logger.debug("Normal device: {}, mobile device: {}, tablet device: {}", new Boolean[]{device.isNormal(), device.isMobile(), device.isTablet()});
         logger.debug("About to generate form for document class '{}'", documentClassShortName);
 
-        Set<Attribute> attributes = documentService.findAttributes(new DocumentClass(documentClassShortName));
+        Set<Attribute> attributes;
+        try {
+            attributes = documentService.findAttributes(new DocumentClass(documentClassShortName));
+        } catch (DocumentClassNotFoundException e) {
+            logger.error("Unable to find attributes for document class short name '{}'", documentClassShortName, e);
+            attributes = new HashSet<Attribute>();
+        }
         StringBuffer sb;
         String html;
 
@@ -183,6 +189,8 @@ public class ImportController implements MessageSourceAware, InitializingBean {
             model.put("docHash", e.getHash());
             return new ModelAndView("import.duplicate.document", model);
         } catch (IOException e) {
+            logger.error("Unable to import document", e);
+        } catch (DocumentClassNotFoundException e) {
             logger.error("Unable to import document", e);
         }
         return new ModelAndView("import.after.definition");

@@ -41,8 +41,9 @@ public interface DocumentService {
      * @return The document reference that was created in DOX
      * @throws ValidationException
      * @throws DocumentDuplicationException
+     * @throws DocumentClassNotFoundException if the document class cannot be found
      */
-    DocumentReference importDocument(PhysicalDocument physicalDocument) throws ValidationException, DocumentDuplicationException;
+    DocumentReference importDocument(PhysicalDocument physicalDocument) throws ValidationException, DocumentDuplicationException, DocumentClassNotFoundException;
 
     /**
      * Find a document reference using the unique identifier (ID)
@@ -56,7 +57,7 @@ public interface DocumentService {
     /**
      * Works like finding a document reference but returns also the binary content of a document.
      *
-     * @param id
+     * @param id id of the physical document to retrieve
      * @return returns the physical document
      * @throws DocumentNotFoundException   if there is no document for that ID
      * @throws DocumentNotInStoreException if there is a document in the database registered but the binary content cannot be found in the underlying data store that DOX uses.
@@ -79,8 +80,18 @@ public interface DocumentService {
     /**
      * Finds all attributes assigned to the given document class. It returns the global and the document class specific attributes.
      *
-     * @param documentClass
+     * @param documentClass document class to retrieve the attributes from
      * @return all attributes to the given document class
+     * @throws DocumentClassNotFoundException if the document class does not exist
      */
-    SortedSet<Attribute> findAttributes(DocumentClass documentClass);
+    SortedSet<Attribute> findAttributes(DocumentClass documentClass) throws DocumentClassNotFoundException;
+
+    /**
+     * Updates the index values of an existing document reference
+     *
+     * @param reference the document reference containing the new index values
+     * @return returns the up to date document reference
+     * @throws DocumentNotFoundException
+     */
+    DocumentReference updateIndices(DocumentReference reference) throws DocumentNotFoundException;
 }

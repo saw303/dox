@@ -41,6 +41,9 @@ public class IndexMapEntry extends AbstractPersistable<Long> {
     @JoinColumn
     private Document document;
 
+    public IndexMapEntry() {
+    }
+
     public IndexMapEntry(String attributeName, String stringRepresentation, Document document) {
         this.attributeName = attributeName;
         this.stringRepresentation = stringRepresentation;
