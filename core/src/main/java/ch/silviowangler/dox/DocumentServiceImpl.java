@@ -229,14 +229,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         document = documentRepository.save(document);
         indexStoreRepository.save(indexStore);
 
-        for (String key : physicalDocument.getIndices().keySet()) {
-            final Object value = physicalDocument.getIndices().get(key);
-
-            String valueToStore = getStringRepresentation(value);
-
-            IndexMapEntry indexMapEntry = new IndexMapEntry(key, valueToStore.toUpperCase(), document);
-            indexMapEntryRepository.save(indexMapEntry);
-        }
+        updateIndexMapEntries(physicalDocument.getIndices(), document);
 
         File target = new File(this.archiveDirectory, hash);
         try {
@@ -265,6 +258,8 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         updateIndices(documentReference, document.getIndexStore());
 
         indexStoreRepository.save(document.getIndexStore());
+
+        updateIndexMapEntries(documentReference.getIndices(), document);
 
         return findDocumentReference(reference.getId());
     }
@@ -534,5 +529,17 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             throw new DocumentClassNotFoundException(documentClassShortName);
         }
         return documentClassEntity;
+    }
+
+    private void updateIndexMapEntries(final Map<String, Object> indices, Document document) {
+        List<IndexMapEntry> indexMapEntries = indexMapEntryRepository.findByDocument(document);
+        indexMapEntryRepository.delete(indexMapEntries);
+
+        for (String key : indices.keySet()) {
+            final Object value = indices.get(key);
+            String valueToStore = getStringRepresentation(value);
+            IndexMapEntry indexMapEntry = new IndexMapEntry(key, valueToStore.toUpperCase(), document);
+            indexMapEntryRepository.save(indexMapEntry);
+        }
     }
 }

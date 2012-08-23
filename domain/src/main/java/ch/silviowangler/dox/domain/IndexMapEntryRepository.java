@@ -35,4 +35,6 @@ public interface IndexMapEntryRepository extends CrudRepository<IndexMapEntry, L
 
     @Query("select distinct i.document from IndexMapEntry i where stringRepresentation like ?")
     List<Document> findByValueLike(String upperCaseValue);
+
+    List<IndexMapEntry> findByDocument(Document document);
 }
