@@ -26,14 +26,17 @@ allprojects {
     project.ext {
         springVersion = '3.2.0.M1'
         springDataVersion = '1.1.0.RELEASE'
-        hibernateVersion = '4.1.5.Final'
-        slf4jVersion = '1.6.4'
-        logbackVersion = '1.0.3'
+        hibernateVersion = '4.1.6.Final'
+        slf4jVersion = '1.6.6'
+        logbackVersion = '1.0.6'
         junitVersion = '4.10'
         tilesVersion = '2.2.2'
-        commonsIOVersion = '2.3'
+        commonsIOVersion = '2.4'
+        commonsCodecVersion = '1.6'
+        commonsBeanUtilsVersion = '1.8.3'
         jodaTimeVersion = '2.1'
-        h2Version = '1.3.167'
+        h2Version = '1.3.168'
+        iTextVersion = '5.3.1'
     }
 }
 
@@ -72,8 +75,8 @@ project(':core') {
     dependencies {
         compile project(':api'), project(':domain'),
                 "org.springframework:spring-orm:${ext.springVersion}",
-                'commons-codec:commons-codec:1.6', 'com.itextpdf:itextpdf:5.3.0',
-                'commons-beanutils:commons-beanutils:1.8.3', "commons-io:commons-io:${ext.commonsIOVersion}",
+                "commons-codec:commons-codec:${ext.commonsCodecVersion}", "com.itextpdf:itextpdf:${ext.iTextVersion}",
+                "commons-beanutils:commons-beanutils:${ext.commonsBeanUtilsVersion}", "commons-io:commons-io:${ext.commonsIOVersion}",
                 "joda-time:joda-time:${ext.jodaTimeVersion}"
         runtime "org.slf4j:jcl-over-slf4j:${ext.slf4jVersion}", "ch.qos.logback:logback-classic:${ext.logbackVersion}"
     }
