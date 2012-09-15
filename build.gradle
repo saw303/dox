@@ -74,9 +74,11 @@ subprojects {
 project(':core') {
     dependencies {
         compile project(':api'), project(':domain'),
-                "org.springframework:spring-orm:${ext.springVersion}",
-                "commons-codec:commons-codec:${ext.commonsCodecVersion}", "com.itextpdf:itextpdf:${ext.iTextVersion}",
-                "commons-beanutils:commons-beanutils:${ext.commonsBeanUtilsVersion}", "commons-io:commons-io:${ext.commonsIOVersion}",
+                "org.springframework:spring-context:${ext.springVersion}",
+                "commons-codec:commons-codec:${ext.commonsCodecVersion}",
+                "com.itextpdf:itextpdf:${ext.iTextVersion}",
+                "commons-beanutils:commons-beanutils:${ext.commonsBeanUtilsVersion}",
+                "commons-io:commons-io:${ext.commonsIOVersion}",
                 "joda-time:joda-time:${ext.jodaTimeVersion}"
         runtime "org.slf4j:jcl-over-slf4j:${ext.slf4jVersion}", "ch.qos.logback:logback-classic:${ext.logbackVersion}"
     }
@@ -84,7 +86,9 @@ project(':core') {
 
 project(':domain') {
     dependencies {
-        compile project(':api'), "org.hibernate:hibernate-core:${ext.hibernateVersion}", "org.hibernate:hibernate-entitymanager:${ext.hibernateVersion}"
+        compile project(':api'),
+                "org.hibernate:hibernate-core:${ext.hibernateVersion}",
+                "org.hibernate:hibernate-entitymanager:${ext.hibernateVersion}"
         compile("org.springframework.data:spring-data-jpa:${ext.springDataVersion}") {
             exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
         }
