@@ -26,6 +26,7 @@ allprojects {
     project.ext {
         springVersion = '3.2.0.M1'
         springDataVersion = '1.1.0.RELEASE'
+        springSecurityVersion = '3.1.2.RELEASE'
         hibernateVersion = '4.1.6.Final'
         slf4jVersion = '1.6.6'
         logbackVersion = '1.0.6'
@@ -75,6 +76,7 @@ project(':core') {
     dependencies {
         compile project(':api'), project(':domain'),
                 "org.springframework:spring-context:${ext.springVersion}",
+                "org.springframework.security:spring-security-core:${ext.springSecurityVersion}",
                 "commons-codec:commons-codec:${ext.commonsCodecVersion}",
                 "com.itextpdf:itextpdf:${ext.iTextVersion}",
                 "commons-beanutils:commons-beanutils:${ext.commonsBeanUtilsVersion}",
