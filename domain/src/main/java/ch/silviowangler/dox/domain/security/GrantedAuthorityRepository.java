@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
  * @author Silvio Wangler
  * @since 0.1
  */
-public interface PermissionRepository extends CrudRepository<Permission, Long> {
+public interface GrantedAuthorityRepository extends CrudRepository<GrantedAuthority, Long> {
 }

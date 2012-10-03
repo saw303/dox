@@ -12,7 +12,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "DOX_PERMISSION")
-public class Permission extends AbstractPersistable<Long> {
+public class GrantedAuthority extends AbstractPersistable<Long> {
 
     @Column(nullable = false, unique = true)
     private String name;

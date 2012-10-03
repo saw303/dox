@@ -20,7 +20,7 @@ public class Role extends AbstractPersistable<Long> {
     private String name;
 
     @OneToMany
-    private Set<Permission> permissions;
+    private Set<GrantedAuthority> grantedAuthorities;
 
     public String getName() {
         return name;
@@ -30,11 +30,11 @@ public class Role extends AbstractPersistable<Long> {
         this.name = name;
     }
 
-    public Set<Permission> getPermissions() {
-        return permissions;
+    public Set<GrantedAuthority> getGrantedAuthorities() {
+        return grantedAuthorities;
     }
 
-    public void setPermissions(Set<Permission> permissions) {
-        this.permissions = permissions;
+    public void setGrantedAuthorities(Set<GrantedAuthority> grantedAuthorities) {
+        this.grantedAuthorities = grantedAuthorities;
     }
 }
