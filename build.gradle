@@ -82,7 +82,9 @@ project(':core') {
                 "commons-beanutils:commons-beanutils:${ext.commonsBeanUtilsVersion}",
                 "commons-io:commons-io:${ext.commonsIOVersion}",
                 "joda-time:joda-time:${ext.jodaTimeVersion}"
-        runtime "org.slf4j:jcl-over-slf4j:${ext.slf4jVersion}", "ch.qos.logback:logback-classic:${ext.logbackVersion}"
+        runtime "org.slf4j:jcl-over-slf4j:${ext.slf4jVersion}",
+                "ch.qos.logback:logback-classic:${ext.logbackVersion}",
+                "org.springframework.security:spring-security-config:${ext.springSecurityVersion}"
     }
 }
 
