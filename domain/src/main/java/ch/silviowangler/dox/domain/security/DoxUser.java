@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -37,7 +38,7 @@ public class DoxUser extends AbstractPersistable<Long> {
     private String email;
 
     @OneToMany
-    Set<Role> roles;
+    Set<Role> roles = new HashSet<Role>();
 
     public String getEmail() {
         return email;
@@ -61,5 +62,13 @@ public class DoxUser extends AbstractPersistable<Long> {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

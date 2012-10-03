@@ -2,15 +2,19 @@ package ch.silviowangler.dox.security;
 
 import ch.silviowangler.dox.domain.security.DoxUser;
 import ch.silviowangler.dox.domain.security.DoxUserRepository;
+import ch.silviowangler.dox.domain.security.Role;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 /**
  * @author Silvio Wangler
@@ -22,22 +26,38 @@ import java.util.Collections;
 @Service
 public class DoxUserDetailService implements UserDetailsService {
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
     @Autowired
     private DoxUserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
+        logger.trace("Trying create user details for user '{}'", username);
+
         final DoxUser user = userRepository.findByUsername(username);
 
         if (user == null) {
+            logger.info("No such user with name '{}'", username);
             throw new  UsernameNotFoundException("No such user " + username);
         }
 
         return new UserDetails() {
             @Override
             public Collection<? extends GrantedAuthority> getAuthorities() {
-                return Collections.emptyList();
+
+                Collection<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<SimpleGrantedAuthority>();
+
+                for (Role role : user.getRoles()) {
+                    for (ch.silviowangler.dox.domain.security.GrantedAuthority grantedAuthority : role.getGrantedAuthorities()) {
+                        grantedAuthorities.add(new SimpleGrantedAuthority(grantedAuthority.getName()));
+                    }
+                }
+
+                logger.trace("User '{}' has these granted authorities '{}'", user.getUsername(), grantedAuthorities);
+
+                return grantedAuthorities;
             }
 
             @Override

@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -20,7 +21,7 @@ public class Role extends AbstractPersistable<Long> {
     private String name;
 
     @OneToMany
-    private Set<GrantedAuthority> grantedAuthorities;
+    private Set<GrantedAuthority> grantedAuthorities = new HashSet<GrantedAuthority>();
 
     public String getName() {
         return name;

@@ -17,6 +17,14 @@ public class GrantedAuthority extends AbstractPersistable<Long> {
     @Column(nullable = false, unique = true)
     private String name;
 
+    public GrantedAuthority() {
+        super();
+    }
+
+    public GrantedAuthority(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }
