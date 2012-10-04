@@ -4,13 +4,13 @@ import ch.silviowangler.dox.domain.security.DoxUser;
 import ch.silviowangler.dox.domain.security.DoxUserRepository;
 import ch.silviowangler.dox.domain.security.GrantedAuthority;
 import ch.silviowangler.dox.domain.security.Role;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,6 +26,7 @@ import static org.mockito.Mockito.when;
  * @author Silvio Wangler
  * @since 0.1
  */
+@RunWith(MockitoJUnitRunner.class)
 public class DoxUserDetailServiceTest {
 
     @Mock
@@ -37,11 +38,6 @@ public class DoxUserDetailServiceTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-
-    @Before
-    public void init() {
-        MockitoAnnotations.initMocks(this);
-    }
 
     @Test
     public void testLoadUserByUsername() throws Exception {
