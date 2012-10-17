@@ -24,9 +24,9 @@ allprojects {
     version = '0.1-SNAPSHOT'
 
     project.ext {
-        springVersion = '3.2.0.M1'
-        springDataVersion = '1.1.0.RELEASE'
-        springSecurityVersion = '3.1.2.RELEASE'
+        springVersion = '3.1.2.RELEASE'
+        springDataVersion = '1.2.0.RELEASE'
+        springSecurityVersion = '3.1.3.RELEASE'
         hibernateVersion = '4.1.6.Final'
         slf4jVersion = '1.6.6'
         logbackVersion = '1.0.6'
@@ -103,7 +103,8 @@ project(':domain') {
 project(':functional-tests') {
     dependencies {
         testCompile project(':core'), "org.springframework:spring-test:${ext.springVersion}", "commons-io:commons-io:${ext.commonsIOVersion}"
-        runtime "ch.qos.logback:logback-classic:${ext.logbackVersion}", "com.h2database:h2:${ext.h2Version}"
+        runtime "ch.qos.logback:logback-classic:${ext.logbackVersion}",
+                "com.h2database:h2:${ext.h2Version}"
     }
 }
 
