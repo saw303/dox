@@ -73,7 +73,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        Assert.notNull(archiveDirectory, "Archive directory must not be null");
+        Assert.notNull(archiveDirectory, "Archive directory must not be null. Please make sure you have properly set environment variable DOX_STORE");
         Assert.isTrue(archiveDirectory.isDirectory(), "Archive store must be a directory ['" + this.archiveDirectory + "']");
         Assert.isTrue(archiveDirectory.canRead(), "Archive store must be readable ['" + this.archiveDirectory + "']");
         Assert.isTrue(archiveDirectory.canWrite(), "Archive store must be writable ['" + this.archiveDirectory + "']");
