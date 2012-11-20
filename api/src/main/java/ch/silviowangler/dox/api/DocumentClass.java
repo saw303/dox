@@ -60,4 +60,13 @@ public class DocumentClass implements Serializable {
     public int hashCode() {
         return shortName.hashCode();
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("DocumentClass");
+        sb.append("{shortName='").append(shortName).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

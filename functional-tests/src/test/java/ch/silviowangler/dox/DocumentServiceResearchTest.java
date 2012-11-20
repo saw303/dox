@@ -29,6 +29,8 @@ import java.util.Map;
 import java.util.Set;
 
 import static junit.framework.Assert.*;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Silvio Wangler
@@ -78,8 +80,11 @@ public class DocumentServiceResearchTest extends AbstractTest {
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryParams, "INVOICE");
 
         assertNotNull(documentReferences);
-        assertEquals(1, documentReferences.size());
-        assertEquals(companyName, documentReferences.iterator().next().getIndices().get("company"));
+
+        logger.debug("Found {}", documentReferences);
+
+        assertThat(documentReferences.size(), is(1));
+        assertThat((String) documentReferences.iterator().next().getIndices().get("company"), is(companyName));
     }
 
     @Test
