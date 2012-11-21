@@ -18,6 +18,7 @@ package ch.silviowangler.dox.web;
 
 import ch.silviowangler.dox.api.DocumentReference;
 import ch.silviowangler.dox.api.DocumentService;
+import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -46,9 +46,7 @@ public class HomeController {
     public ModelAndView query(@RequestParam("q") String queryString) {
 
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryString);
-        Map<String, Object> model = new HashMap<>(1);
-        model.put("documents", documentReferences);
-
+        Map<String, Set<DocumentReference>> model = ImmutableMap.of("documents", documentReferences);
         return new ModelAndView("result.definition", model);
     }
 }

@@ -24,10 +24,10 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
 import static junit.framework.Assert.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -44,14 +44,14 @@ public class DocumentServiceResearchTest extends AbstractTest {
     @Before
     public void init() throws ValidationException, DocumentDuplicationException, IOException, DocumentNotFoundException, DocumentClassNotFoundException {
 
-        Map<String, Object> indexes = new HashMap<>(2);
+        Map<String, Object> indexes = newHashMapWithExpectedSize(3);
         indexes.put("company", "Sunrise");
         indexes.put("invoiceDate", "01.12.2009");
         indexes.put("invoiceAmount", "100.5");
 
         importFile("file-1.txt", "This is a test content", "INVOICE", indexes);
 
-        indexes = new HashMap<>(2);
+        indexes = newHashMapWithExpectedSize(3);
         indexes.put("company", "Swisscom");
         indexes.put("invoiceDate", "02.12.2009");
         indexes.put("invoiceAmount", "1200.99");
@@ -73,7 +73,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
     @Test
     public void findSwisscomInvoice() throws DocumentClassNotFoundException {
 
-        Map<String, Object> queryParams = new HashMap<>(1);
+        Map<String, Object> queryParams = newHashMapWithExpectedSize(1);
         final String companyName = "Swisscom";
         queryParams.put("company", companyName);
 
@@ -90,7 +90,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
     @Test
     public void findSunriseInvoice() throws DocumentClassNotFoundException {
 
-        Map<String, Object> queryParams = new HashMap<>(1);
+        Map<String, Object> queryParams = newHashMapWithExpectedSize(1);
         final String companyName = "Sunrise";
         queryParams.put("company", companyName);
 
@@ -104,7 +104,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
     @Test
     public void findInvoicesByCompaniesStartingWithS() throws DocumentClassNotFoundException {
 
-        Map<String, Object> queryParams = new HashMap<>(1);
+        Map<String, Object> queryParams = newHashMapWithExpectedSize(1);
         final String companyName = "S*";
         queryParams.put("company", companyName);
 
@@ -120,7 +120,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
     @Test
     public void findInvoicesByCompaniesStartingWithSAndContainingAnotherS() throws DocumentClassNotFoundException {
 
-        Map<String, Object> queryParams = new HashMap<>(1);
+        Map<String, Object> queryParams = newHashMapWithExpectedSize(1);
         final String companyName = "S*s*";
         queryParams.put("company", companyName);
 
@@ -136,7 +136,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
     @Test
     public void findInvoicesByCompaniesSunXise() throws DocumentClassNotFoundException {
 
-        Map<String, Object> queryParams = new HashMap<>(1);
+        Map<String, Object> queryParams = newHashMapWithExpectedSize(1);
         final String companyName = "Sun?ise";
         queryParams.put("company", companyName);
 
@@ -150,7 +150,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
     @Test
     public void findByExactInvoiceAmount() throws DocumentClassNotFoundException {
 
-        Map<String, Object> queryParams = new HashMap<>(1);
+        Map<String, Object> queryParams = newHashMapWithExpectedSize(1);
         queryParams.put("invoiceAmount", "100.50");
 
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryParams, "INVOICE");
@@ -163,7 +163,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
     @Test
     public void findByRangeInvoiceAmount() throws DocumentClassNotFoundException {
 
-        Map<String, Object> queryParams = new HashMap<>(1);
+        Map<String, Object> queryParams = newHashMapWithExpectedSize(1);
         queryParams.put("invoiceAmount", new Range<>(new BigDecimal("100"), new BigDecimal("101")));
 
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryParams, "INVOICE");

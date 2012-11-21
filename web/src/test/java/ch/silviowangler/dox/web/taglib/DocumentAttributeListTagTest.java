@@ -17,6 +17,7 @@
 package ch.silviowangler.dox.web.taglib;
 
 import ch.silviowangler.dox.api.DocumentReference;
+import com.google.common.collect.Maps;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +42,6 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -69,7 +69,7 @@ public class DocumentAttributeListTagTest {
     @Before
     public void init() {
 
-        indices = new HashMap<>();
+        indices = Maps.newHashMap();
 
         servletContext = new MockServletContext();
 

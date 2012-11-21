@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 
+import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
 import static junit.framework.Assert.*;
 
 /**
@@ -74,7 +75,7 @@ public class DocumentServiceTest extends AbstractTest {
 
         File singlePagePdf = loadFile("document-1p.pdf");
 
-        Map<String, Object> indexes = new HashMap<>(2);
+        Map<String, Object> indexes = newHashMapWithExpectedSize(3);
 
         indexes.put("company", "Sunrise");
         indexes.put("invoiceDate", new Date());
@@ -108,7 +109,7 @@ public class DocumentServiceTest extends AbstractTest {
 
         File fivePagesPdfFile = loadFile("document-5p.pdf");
 
-        Map<String, Object> indexes = new HashMap<>(2);
+        Map<String, Object> indexes = newHashMapWithExpectedSize(3);
 
         indexes.put("company", "Swisscom");
         indexes.put("invoiceDate", new Date());
@@ -145,7 +146,7 @@ public class DocumentServiceTest extends AbstractTest {
         File singlePagePdf = loadFile("document-1p.pdf");
 
         documentClass = new DocumentClass("WHATEVAMAN");
-        Map<String, Object> indexes = new HashMap<>(2);
+        Map<String, Object> indexes = newHashMapWithExpectedSize(2);
 
         indexes.put("company", "Sunrise");
         indexes.put("invoiceDate", new Date());
@@ -159,8 +160,7 @@ public class DocumentServiceTest extends AbstractTest {
 
         File singlePagePdf = loadFile("document-1p.pdf");
 
-        Map<String, Object> indexes = new HashMap<>(1);
-
+        Map<String, Object> indexes = newHashMapWithExpectedSize(1);
         indexes.put("company", "Sunrise");
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, FileUtils.readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
@@ -172,7 +172,7 @@ public class DocumentServiceTest extends AbstractTest {
 
         File singlePagePdf = loadFile("document-1p.pdf");
 
-        Map<String, Object> indexes = new HashMap<>(3);
+        Map<String, Object> indexes = newHashMapWithExpectedSize(3);
 
         indexes.put("company", "Sunrise");
         indexes.put("invoiceDate", new Date());
@@ -186,7 +186,7 @@ public class DocumentServiceTest extends AbstractTest {
     public void importDocumentUsingProperFormattedStringOnDateIndex() throws IOException, ValidationException, DocumentNotFoundException, DocumentDuplicationException, DocumentClassNotFoundException {
         File singlePagePdf = loadFile("document-16p.pdf");
 
-        Map<String, Object> indexes = new HashMap<>(2);
+        Map<String, Object> indexes = newHashMapWithExpectedSize(2);
 
         indexes.put("company", "Sunrise");
         indexes.put("invoiceDate", "01.11.1978");
@@ -208,7 +208,7 @@ public class DocumentServiceTest extends AbstractTest {
     public void addingTheSameDocumentTwiceToDoxShouldThrowAnException() throws IOException, ValidationException, DocumentDuplicationException, DocumentClassNotFoundException {
         File temp = createTestFile("hello.world.txt", "Lorem ipsum");
 
-        Map<String, Object> indexes = new HashMap<>(2);
+        Map<String, Object> indexes = newHashMapWithExpectedSize(2);
 
         indexes.put("company", "Sunrise");
         indexes.put("invoiceDate", "01.11.1978");
@@ -242,7 +242,7 @@ public class DocumentServiceTest extends AbstractTest {
     public void importMustRespectAttributesAssignedToADomain() throws IOException, DocumentDuplicationException, ValidationException, DocumentClassNotFoundException {
         File temp = createTestFile("hello2.world.txt", "Must not import");
 
-        Map<String, Object> indexes = new HashMap<>(2);
+        Map<String, Object> indexes = newHashMapWithExpectedSize(3);
 
         final String valueNotInDomain = "This value does not belong to the company domain";
         indexes.put("company", valueNotInDomain);
@@ -265,7 +265,7 @@ public class DocumentServiceTest extends AbstractTest {
     public void importMustAcceptIntegerOnDoubleField() throws IOException, DocumentDuplicationException, ValidationException, DocumentClassNotFoundException {
         File temp = createTestFile("hello2.world.txt", "Content");
 
-        Map<String, Object> indexes = new HashMap<>(2);
+        Map<String, Object> indexes = newHashMapWithExpectedSize(3);
 
         indexes.put("company", "Sunrise");
         indexes.put("invoiceAmount", 100);
@@ -282,7 +282,7 @@ public class DocumentServiceTest extends AbstractTest {
     public void importMustAcceptLongOnDoubleField() throws IOException, DocumentDuplicationException, ValidationException, DocumentClassNotFoundException {
         File temp = createTestFile("hello2.world.txt", "This is a content");
 
-        Map<String, Object> indexes = new HashMap<>(2);
+        Map<String, Object> indexes = newHashMapWithExpectedSize(3);
 
         indexes.put("company", "Sunrise");
         indexes.put("invoiceAmount", 100L);
@@ -300,7 +300,7 @@ public class DocumentServiceTest extends AbstractTest {
 
         File temp = createTestFile("file.txt", "content of this file");
 
-        Map<String, Object> indexes = new HashMap<>(2);
+        Map<String, Object> indexes = newHashMapWithExpectedSize(3);
 
         indexes.put("company", "Sunrise");
         indexes.put("invoiceAmount", 101L);
@@ -324,7 +324,7 @@ public class DocumentServiceTest extends AbstractTest {
     private void importTiff(String fileName, int expectedPageCount) throws IOException, ValidationException, DocumentDuplicationException, DocumentNotFoundException, DocumentClassNotFoundException {
         File singlePagePdf = loadFile(fileName);
 
-        Map<String, Object> indexes = new HashMap<>(2);
+        Map<String, Object> indexes = newHashMapWithExpectedSize(3);
 
         indexes.put("company", "Sunrise");
         indexes.put("invoiceDate", "01.11.2012");

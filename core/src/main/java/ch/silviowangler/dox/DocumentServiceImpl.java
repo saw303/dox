@@ -20,6 +20,7 @@ import ch.silviowangler.dox.api.*;
 import ch.silviowangler.dox.domain.Attribute;
 import ch.silviowangler.dox.domain.*;
 import ch.silviowangler.dox.domain.DocumentClass;
+import com.google.common.collect.Maps;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.RandomAccessFileOrArray;
 import com.itextpdf.text.pdf.codec.TiffImage;
@@ -44,6 +45,8 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.*;
+
+import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
 
 /**
  * @author Silvio Wangler
@@ -309,7 +312,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     private Map<String, Object> fixDataTypesOfIndices(final Map<String, Object> indexes, List<Attribute> attributes) {
 
-        Map<String, Object> resultMap = new HashMap<>(indexes); // copy elements
+        Map<String, Object> resultMap = Maps.newHashMap(indexes); // copy elements
 
         for (Attribute attribute : attributes) {
 
@@ -466,7 +469,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     private Map<String, Object> toIndexMap(IndexStore indexStore, List<Attribute> attributes) {
 
-        Map<String, Object> indices = new HashMap<>(attributes.size());
+        Map<String, Object> indices = newHashMapWithExpectedSize(attributes.size());
 
         for (Attribute attribute : attributes) {
             try {
@@ -483,7 +486,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     private Map<String, Attribute> toAttributeMap(List<Attribute> attributes) {
-        Map<String, Attribute> map = new HashMap<>(attributes.size());
+        Map<String, Attribute> map = newHashMapWithExpectedSize(attributes.size());
 
         for (Attribute attribute : attributes) {
             map.put(attribute.getShortName(), attribute);

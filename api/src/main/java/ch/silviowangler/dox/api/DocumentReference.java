@@ -16,8 +16,9 @@
 
 package ch.silviowangler.dox.api;
 
+import com.google.common.collect.Maps;
+
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -31,7 +32,7 @@ public class DocumentReference implements Serializable {
     private int pageCount;
     private String mimeType;
     private DocumentClass documentClass;
-    private Map<String, Object> indices = new HashMap<>();
+    private Map<String, Object> indices = Maps.newHashMap();
     private String fileName;
 
     public DocumentReference(String fileName) {

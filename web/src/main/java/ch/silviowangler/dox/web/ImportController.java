@@ -17,6 +17,7 @@
 package ch.silviowangler.dox.web;
 
 import ch.silviowangler.dox.api.*;
+import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -67,7 +68,7 @@ public class ImportController implements MessageSourceAware, InitializingBean {
 
     @RequestMapping(method = RequestMethod.GET, value = "import.html")
     public ModelAndView query(Locale locale) {
-        Map<String, Object> model = new HashMap<>();
+        Map<String, Object> model = Maps.newHashMap();
         model.put("documentClasses", documentService.findDocumentClasses());
         model.put("defaultMessage", messageSource.getMessage("document.import.choose.document.class", null, locale));
         return new ModelAndView("import.definition", model);
@@ -155,13 +156,13 @@ public class ImportController implements MessageSourceAware, InitializingBean {
     @RequestMapping(method = RequestMethod.POST, value = "performImport.html")
     public ModelAndView importDocument(MultipartFile file, WebRequest request) {
 
-        Map<String, Object> model = new HashMap<>();
+        Map<String, Object> model = Maps.newHashMap();
 
         try {
             DocumentClass documentClass = new DocumentClass(request.getParameter(DOCUMENT_CLASS_SHORT_NAME));
 
             Iterator<String> params = request.getParameterNames();
-            Map<String, Object> indices = new HashMap<>();
+            Map<String, Object> indices = Maps.newHashMap();
 
             while (params.hasNext()) {
                 String param = params.next();
