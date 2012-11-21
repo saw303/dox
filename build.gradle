@@ -144,7 +144,7 @@ project(':web') {
 }
 
 idea.project {
-    jdkName = '1.7'
+    jdkName = '1.7 (Oracle)'
     languageLevel = '1.7'
 
     // update the source wildcards
