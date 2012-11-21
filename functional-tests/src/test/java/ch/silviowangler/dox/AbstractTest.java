@@ -18,10 +18,12 @@ package ch.silviowangler.dox;
 
 import ch.silviowangler.dox.api.DocumentService;
 import org.apache.commons.io.FileUtils;
+import org.junit.After;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -71,5 +73,10 @@ public abstract class AbstractTest extends AbstractTransactionalJUnit4SpringCont
         for (int i = 0; i < actual.length; i++) {
             assertEquals(message, expected[i], actual[i]);
         }
+    }
+
+    @After
+    public void clearSecurityContext() {
+        SecurityContextHolder.clearContext();
     }
 }

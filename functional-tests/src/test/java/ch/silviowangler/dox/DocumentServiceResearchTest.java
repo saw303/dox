@@ -59,6 +59,8 @@ public class DocumentServiceResearchTest extends AbstractTest {
         indexes.put("invoiceAmount", "1200.99");
 
         importFile("file-2.txt", "This is a test content that contains more text", "INVOICE", indexes);
+
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("root", "velo"));
     }
 
     private DocumentReference importFile(final String fileName, final String content, final String docClassShortName, final Map<String, Object> indices) throws ValidationException, DocumentDuplicationException, IOException, DocumentNotFoundException, DocumentClassNotFoundException {
@@ -74,8 +76,6 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
     @Test
     public void findSwisscomInvoice() throws DocumentClassNotFoundException {
-
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("root", "velo"));
 
         Map<String, Object> queryParams = newHashMapWithExpectedSize(1);
         final String companyName = "Swisscom";
