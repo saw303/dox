@@ -93,7 +93,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public Set<ch.silviowangler.dox.api.DocumentClass> findDocumentClasses() {
 
-        Set<ch.silviowangler.dox.api.DocumentClass> result = new HashSet<ch.silviowangler.dox.api.DocumentClass>();
+        Set<ch.silviowangler.dox.api.DocumentClass> result = new HashSet<>();
         Iterable<DocumentClass> documentClasses = documentClassRepository.findAll();
 
         for (DocumentClass documentClass : documentClasses) {
@@ -118,7 +118,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             documents = indexMapEntryRepository.findByValue(queryString.toUpperCase());
         }
 
-        Set<DocumentReference> documentReferences = new HashSet<DocumentReference>(documents.size());
+        Set<DocumentReference> documentReferences = new HashSet<>(documents.size());
 
         logger.info("Found {} documents for query string '{}'", documents.size(), queryString);
 
@@ -139,7 +139,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
         List<Document> documents = documentRepository.findDocuments(fixDataTypesOfIndices(queryParams, attributes), toAttributeMap(attributes));
 
-        HashSet<DocumentReference> documentReferences = new HashSet<DocumentReference>(documents.size());
+        HashSet<DocumentReference> documentReferences = new HashSet<>(documents.size());
         for (Document document : documents) {
             logger.trace("Found document with id {}", document.getId());
             documentReferences.add(toDocumentReference(document));
@@ -309,7 +309,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     private Map<String, Object> fixDataTypesOfIndices(final Map<String, Object> indexes, List<Attribute> attributes) {
 
-        Map<String, Object> resultMap = new HashMap<String, Object>(indexes); // copy elements
+        Map<String, Object> resultMap = new HashMap<>(indexes); // copy elements
 
         for (Attribute attribute : attributes) {
 
@@ -466,7 +466,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     private Map<String, Object> toIndexMap(IndexStore indexStore, List<Attribute> attributes) {
 
-        Map<String, Object> indices = new HashMap<String, Object>(attributes.size());
+        Map<String, Object> indices = new HashMap<>(attributes.size());
 
         for (Attribute attribute : attributes) {
             try {
@@ -483,7 +483,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     private Map<String, Attribute> toAttributeMap(List<Attribute> attributes) {
-        Map<String, Attribute> map = new HashMap<String, Attribute>(attributes.size());
+        Map<String, Attribute> map = new HashMap<>(attributes.size());
 
         for (Attribute attribute : attributes) {
             map.put(attribute.getShortName(), attribute);
@@ -492,7 +492,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     private SortedSet<ch.silviowangler.dox.api.Attribute> toAttributeApi(List<Attribute> attributes) {
-        SortedSet<ch.silviowangler.dox.api.Attribute> result = new TreeSet<ch.silviowangler.dox.api.Attribute>();
+        SortedSet<ch.silviowangler.dox.api.Attribute> result = new TreeSet<>();
 
         for (Attribute attribute : attributes) {
             ch.silviowangler.dox.api.Attribute attr = toAttributeApi(attribute);

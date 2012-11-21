@@ -47,7 +47,7 @@ public class DoxUserDetailService implements UserDetailsService {
             @Override
             public Collection<? extends GrantedAuthority> getAuthorities() {
 
-                Collection<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<SimpleGrantedAuthority>();
+                Collection<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<>();
 
                 for (Role role : user.getRoles()) {
                     for (ch.silviowangler.dox.domain.security.GrantedAuthority grantedAuthority : role.getGrantedAuthorities()) {

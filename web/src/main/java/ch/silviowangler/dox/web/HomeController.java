@@ -46,7 +46,7 @@ public class HomeController {
     public ModelAndView query(@RequestParam("q") String queryString) {
 
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryString);
-        Map<String, Object> model = new HashMap<String, Object>(1);
+        Map<String, Object> model = new HashMap<>(1);
         model.put("documents", documentReferences);
 
         return new ModelAndView("result.definition", model);

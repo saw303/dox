@@ -69,7 +69,7 @@ public class DocumentAttributeListTagTest {
     @Before
     public void init() {
 
-        indices = new HashMap<String, Object>();
+        indices = new HashMap<>();
 
         servletContext = new MockServletContext();
 

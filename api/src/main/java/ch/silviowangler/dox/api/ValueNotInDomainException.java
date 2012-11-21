@@ -29,7 +29,7 @@ import java.util.List;
 public class ValueNotInDomainException extends ValidationException {
 
     private String value;
-    private List<String> validValues = new ArrayList<String>();
+    private List<String> validValues = new ArrayList<>();
 
     public ValueNotInDomainException(String message, String value, List<String> validValues) {
         super(message);

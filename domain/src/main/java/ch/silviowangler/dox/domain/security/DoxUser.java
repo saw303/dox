@@ -38,7 +38,7 @@ public class DoxUser extends AbstractPersistable<Long> {
     private String email;
 
     @OneToMany
-    Set<Role> roles = new HashSet<Role>();
+    Set<Role> roles = new HashSet<>();
 
     public String getEmail() {
         return email;

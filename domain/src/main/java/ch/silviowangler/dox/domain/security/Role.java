@@ -21,7 +21,7 @@ public class Role extends AbstractPersistable<Long> {
     private String name;
 
     @OneToMany
-    private Set<GrantedAuthority> grantedAuthorities = new HashSet<GrantedAuthority>();
+    private Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 
     public String getName() {
         return name;

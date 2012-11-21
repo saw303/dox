@@ -67,7 +67,7 @@ public class ImportController implements MessageSourceAware, InitializingBean {
 
     @RequestMapping(method = RequestMethod.GET, value = "import.html")
     public ModelAndView query(Locale locale) {
-        Map<String, Object> model = new HashMap<String, Object>();
+        Map<String, Object> model = new HashMap<>();
         model.put("documentClasses", documentService.findDocumentClasses());
         model.put("defaultMessage", messageSource.getMessage("document.import.choose.document.class", null, locale));
         return new ModelAndView("import.definition", model);
@@ -85,7 +85,7 @@ public class ImportController implements MessageSourceAware, InitializingBean {
             attributes = documentService.findAttributes(new DocumentClass(documentClassShortName));
         } catch (DocumentClassNotFoundException e) {
             logger.error("Unable to find attributes for document class short name '{}'", documentClassShortName, e);
-            attributes = new HashSet<Attribute>();
+            attributes = new HashSet<>();
         }
         StringBuffer sb;
         String html;
@@ -155,13 +155,13 @@ public class ImportController implements MessageSourceAware, InitializingBean {
     @RequestMapping(method = RequestMethod.POST, value = "performImport.html")
     public ModelAndView importDocument(MultipartFile file, WebRequest request) {
 
-        Map<String, Object> model = new HashMap<String, Object>();
+        Map<String, Object> model = new HashMap<>();
 
         try {
             DocumentClass documentClass = new DocumentClass(request.getParameter(DOCUMENT_CLASS_SHORT_NAME));
 
             Iterator<String> params = request.getParameterNames();
-            Map<String, Object> indices = new HashMap<String, Object>();
+            Map<String, Object> indices = new HashMap<>();
 
             while (params.hasNext()) {
                 String param = params.next();

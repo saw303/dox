@@ -31,7 +31,7 @@ public class DocumentReference implements Serializable {
     private int pageCount;
     private String mimeType;
     private DocumentClass documentClass;
-    private Map<String, Object> indices = new HashMap<String, Object>();
+    private Map<String, Object> indices = new HashMap<>();
     private String fileName;
 
     public DocumentReference(String fileName) {
