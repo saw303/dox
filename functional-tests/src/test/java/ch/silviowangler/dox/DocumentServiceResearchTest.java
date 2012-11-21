@@ -60,8 +60,9 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         importFile("file-2.txt", "This is a test content that contains more text", "INVOICE", indexes);
 
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("root", "velo"));
+        loginAsRoot();
     }
+
 
     private DocumentReference importFile(final String fileName, final String content, final String docClassShortName, final Map<String, Object> indices) throws ValidationException, DocumentDuplicationException, IOException, DocumentNotFoundException, DocumentClassNotFoundException {
         File textFile01 = createTestFile(fileName, content);
