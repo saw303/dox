@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -134,6 +135,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+    @PreAuthorize("hasRole('ROLE_USER')")
     public Set<DocumentReference> findDocumentReferences(Map<String, Object> queryParams, String documentClassShortName) throws DocumentClassNotFoundException {
 
         logger.debug("Trying to find document references in document class '{}' using params '{}'", documentClassShortName, queryParams);

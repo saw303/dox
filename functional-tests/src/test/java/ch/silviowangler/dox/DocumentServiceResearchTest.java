@@ -20,6 +20,8 @@ import ch.silviowangler.dox.api.*;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.File;
 import java.io.IOException;
@@ -72,6 +74,8 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
     @Test
     public void findSwisscomInvoice() throws DocumentClassNotFoundException {
+
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("root", "velo"));
 
         Map<String, Object> queryParams = newHashMapWithExpectedSize(1);
         final String companyName = "Swisscom";

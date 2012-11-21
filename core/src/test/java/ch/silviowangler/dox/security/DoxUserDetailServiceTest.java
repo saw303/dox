@@ -42,7 +42,7 @@ public class DoxUserDetailServiceTest {
     @Test
     public void testLoadUserByUsername() throws Exception {
 
-        DoxUser user = new DoxUser("silvio.wangler@email.ch", "a password".getBytes(), "silvio");
+        DoxUser user = new DoxUser("silvio.wangler@email.ch", "a password", "silvio");
         when(repository.findByUsername("silvio")).thenReturn(user);
 
         UserDetails userDetails = userDetailService.loadUserByUsername("silvio");
@@ -62,7 +62,7 @@ public class DoxUserDetailServiceTest {
     @Test
     public void testLoadUserByUsernameWithGrantedAuthorities() throws Exception {
 
-        DoxUser user = new DoxUser("silvio.wangler@email.ch", "a password".getBytes(), "silvio");
+        DoxUser user = new DoxUser("silvio.wangler@email.ch", "a password", "silvio");
 
         Role roleAdmin = new Role();
         roleAdmin.getGrantedAuthorities().add(new GrantedAuthority("delete"));

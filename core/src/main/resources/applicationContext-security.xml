@@ -25,7 +25,11 @@
 
     <authentication-manager>
         <authentication-provider user-service-ref="doxUserDetailService">
-            <password-encoder hash="sha-256"/>
+            <password-encoder hash="sha-256">
+                <salt-source system-wide="hajhjdhfjk7777"/>
+            </password-encoder>
         </authentication-provider>
     </authentication-manager>
+
+    <global-method-security pre-post-annotations="enabled"></global-method-security>
 </beans:beans>

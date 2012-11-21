@@ -24,7 +24,7 @@ public class DoxUser extends AbstractPersistable<Long> {
         super();
     }
 
-    public DoxUser(String email, byte[] password, String username) {
+    public DoxUser(String email, String password, String username) {
         this.email = email;
         this.password = password;
         this.username = username;
@@ -33,7 +33,7 @@ public class DoxUser extends AbstractPersistable<Long> {
     @Column(unique = true, nullable = false, length = 25)
     private String username;
     @Column(nullable = false)
-    private byte[] password;
+    private String password;
     @Column(nullable = false)
     private String email;
 
@@ -48,11 +48,11 @@ public class DoxUser extends AbstractPersistable<Long> {
         this.email = email;
     }
 
-    public byte[] getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(byte[] password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 

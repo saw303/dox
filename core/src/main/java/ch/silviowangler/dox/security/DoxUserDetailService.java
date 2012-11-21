@@ -50,6 +50,7 @@ public class DoxUserDetailService implements UserDetailsService {
                 Collection<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<>();
 
                 for (Role role : user.getRoles()) {
+                    grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
                     for (ch.silviowangler.dox.domain.security.GrantedAuthority grantedAuthority : role.getGrantedAuthorities()) {
                         grantedAuthorities.add(new SimpleGrantedAuthority(grantedAuthority.getName()));
                     }
@@ -72,12 +73,12 @@ public class DoxUserDetailService implements UserDetailsService {
 
             @Override
             public boolean isAccountNonExpired() {
-                return false;
+                return true;
             }
 
             @Override
             public boolean isAccountNonLocked() {
-                return false;
+                return true;
             }
 
             @Override
