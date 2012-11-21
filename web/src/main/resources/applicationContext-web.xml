@@ -27,6 +27,6 @@
     </jdbc:embedded-database>
 
     <jdbc:initialize-database>
-        <jdbc:script location="classpath:install.sql"/>
+        <jdbc:script location="classpath*:install.sql"/>
     </jdbc:initialize-database>
 </beans>

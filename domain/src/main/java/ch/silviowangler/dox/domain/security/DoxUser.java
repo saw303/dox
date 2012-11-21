@@ -4,7 +4,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
@@ -37,7 +37,7 @@ public class DoxUser extends AbstractPersistable<Long> {
     @Column(nullable = false)
     private String email;
 
-    @OneToMany
+    @ManyToMany
     Set<Role> roles = new HashSet<>();
 
     public String getEmail() {

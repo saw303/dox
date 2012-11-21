@@ -17,6 +17,14 @@ import java.util.Set;
 @Table(name = "DOX_ROLE")
 public class Role extends AbstractPersistable<Long> {
 
+    public Role() {
+        super();
+    }
+
+    public Role(String name) {
+        this.name = name;
+    }
+
     @Column(unique = true, nullable = false)
     private String name;
 

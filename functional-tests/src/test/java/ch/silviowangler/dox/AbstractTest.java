@@ -50,7 +50,7 @@ public abstract class AbstractTest extends AbstractTransactionalJUnit4SpringCont
     protected DocumentService documentService;
 
     protected void loginAsRoot() {
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("root", "velo"));
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("root_test", "velo"));
     }
 
     protected File loadFile(String fileName) {

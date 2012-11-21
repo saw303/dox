@@ -61,8 +61,12 @@ public class DocumentServiceTest extends AbstractTest {
         Set<DocumentClass> documentClasses = documentService.findDocumentClasses();
 
         assertNotNull(documentClasses);
-        assertEquals(1, documentClasses.size());
-        assertEquals("INVOICE", documentClasses.iterator().next().getShortName());
+        assertEquals(2, documentClasses.size());
+
+        for (DocumentClass currentDocumentClass : documentClasses) {
+            final String currentShortName = currentDocumentClass.getShortName();
+            assertTrue("Unexpected document class " + currentShortName, currentShortName.matches("(INVOICE|TAXES)"));
+        }
     }
 
     @Test(expected = DocumentNotFoundException.class)
