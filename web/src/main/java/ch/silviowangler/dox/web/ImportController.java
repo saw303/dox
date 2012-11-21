@@ -181,17 +181,13 @@ public class ImportController implements MessageSourceAware, InitializingBean {
             model.put("doc", documentReference);
             return new ModelAndView("import.successful", model);
 
-        } catch (ValidationException e) {
+        } catch (ValidationException | IOException | DocumentClassNotFoundException e) {
             logger.error("Unable to import document", e);
         } catch (DocumentDuplicationException e) {
             logger.error("Unable to import document. Duplicate document detected", e);
             model.put("docId", e.getDocumentId());
             model.put("docHash", e.getHash());
             return new ModelAndView("import.duplicate.document", model);
-        } catch (IOException e) {
-            logger.error("Unable to import document", e);
-        } catch (DocumentClassNotFoundException e) {
-            logger.error("Unable to import document", e);
         }
         return new ModelAndView("import.after.definition");
     }

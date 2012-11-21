@@ -156,9 +156,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
         try {
             BeanUtils.copyProperties(document, doc);
-        } catch (IllegalAccessException e) {
-            logger.error("Unable to copy properties", e);
-        } catch (InvocationTargetException e) {
+        } catch (IllegalAccessException | InvocationTargetException e) {
             logger.error("Unable to copy properties", e);
         }
 
@@ -393,11 +391,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
                 final String propertyName = attribute.getMappingColumn().toLowerCase();
                 logger.debug("About to set column '{}' using value '{}' on index store", propertyName, value);
                 PropertyUtils.setProperty(indexStore, propertyName, value);
-            } catch (IllegalAccessException e) {
-                logger.error("Error setting property '{}' with value '{}'", new Object[]{key, value, e});
-            } catch (InvocationTargetException e) {
-                logger.error("Error setting property '{}' with value '{}'", new Object[]{key, value, e});
-            } catch (NoSuchMethodException e) {
+            } catch (IllegalAccessException  | InvocationTargetException | NoSuchMethodException e) {
                 logger.error("Error setting property '{}' with value '{}'", new Object[]{key, value, e});
             }
         }
@@ -477,11 +471,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         for (Attribute attribute : attributes) {
             try {
                 indices.put(attribute.getShortName(), PropertyUtils.getProperty(indexStore, attribute.getMappingColumn().toLowerCase()));
-            } catch (IllegalAccessException e) {
-                logger.error("Error setting property '{}'", attribute.getShortName(), e);
-            } catch (InvocationTargetException e) {
-                logger.error("Error setting property '{}'", attribute.getShortName(), e);
-            } catch (NoSuchMethodException e) {
+            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 logger.error("Error setting property '{}'", attribute.getShortName(), e);
             }
         }

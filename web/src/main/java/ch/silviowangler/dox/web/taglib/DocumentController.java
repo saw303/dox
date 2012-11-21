@@ -57,10 +57,7 @@ public class DocumentController {
             response.setStatus(SC_OK);
             response.addHeader("Content-Type", document.getMimeType());
             response.getOutputStream().write(document.getContent());
-        } catch (DocumentNotFoundException e) {
-            logger.warn("Document with id '{}' not found", id, e);
-            response.setStatus(SC_NOT_FOUND);
-        } catch (DocumentNotInStoreException e) {
+        } catch (DocumentNotFoundException | DocumentNotInStoreException e) {
             logger.warn("Document with id '{}' not found", id, e);
             response.setStatus(SC_NOT_FOUND);
         } catch (IOException e) {
