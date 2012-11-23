@@ -72,6 +72,14 @@ subprojects {
     }
 }
 
+project(':api') {
+    dependencies {
+        compile "joda-time:joda-time:${ext.jodaTimeVersion}"
+    }
+
+}
+
+
 project(':core') {
     dependencies {
         compile project(':api'), project(':domain'),
@@ -111,7 +119,7 @@ project(':web') {
     war.archiveName = "dox-${version}.war"
 
     dependencies {
-        compile project(':core')
+        compile project(':api')
         compile "org.springframework:spring-webmvc:${ext.springVersion}"
         testCompile "org.springframework:spring-test:${ext.springVersion}"
         compile 'org.springframework.mobile:spring-mobile-device:1.0.0.RELEASE'
