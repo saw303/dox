@@ -4,4 +4,4 @@ jdk:
     - openjdk7
 
 env:
-    - DOX_STORE=.
+    - DOX_STORE=~
