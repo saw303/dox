@@ -1,2 +1,5 @@
 language: java
 jdk: oraclejdk7
+
+env:
+    - DOX_STORE=.
