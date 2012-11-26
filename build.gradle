@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
-
 allprojects {
 
     apply plugin: 'idea'
@@ -28,9 +25,9 @@ allprojects {
         springVersion = '3.1.3.RELEASE'
         springDataVersion = '1.2.0.RELEASE'
         springSecurityVersion = '3.1.3.RELEASE'
-        hibernateVersion = '4.1.6.Final'
+        hibernateVersion = '4.1.7.Final'
         slf4jVersion = '1.6.6'
-        logbackVersion = '1.0.6'
+        logbackVersion = '1.0.7'
         junitVersion = '4.10'
         tilesVersion = '2.2.2'
         commonsIOVersion = '2.4'
@@ -38,7 +35,7 @@ allprojects {
         commonsBeanUtilsVersion = '1.8.3'
         jodaTimeVersion = '2.1'
         h2Version = '1.3.168'
-        iTextVersion = '5.3.1'
+        iTextVersion = '5.3.4'
         guavaVersion = '13.0.1'
     }
 }
@@ -94,18 +91,6 @@ project(':core') {
         runtime "org.slf4j:jcl-over-slf4j:${ext.slf4jVersion}",
                 "ch.qos.logback:logback-classic:${ext.logbackVersion}",
                 "org.springframework.security:spring-security-config:${ext.springSecurityVersion}"
-    }
-}
-
-project(':domain') {
-    dependencies {
-        compile project(':api'),
-                "org.hibernate:hibernate-core:${ext.hibernateVersion}",
-                "org.hibernate:hibernate-entitymanager:${ext.hibernateVersion}"
-        compile("org.springframework.data:spring-data-jpa:${ext.springDataVersion}") {
-            exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
-        }
-        compile "joda-time:joda-time:${ext.jodaTimeVersion}"
     }
 }
 
