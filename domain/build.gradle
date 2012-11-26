@@ -99,6 +99,8 @@ class HibernateJpaSchemaGenerationTask extends DefaultTask {
     @TaskAction
     def performSchemaGeneration() {
 
+        logging.captureStandardOutput LogLevel.DEBUG
+
         if (!target.exists()) {
             assert target.mkdir()
         }
