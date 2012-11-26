@@ -28,7 +28,6 @@ buildscript {
         }
     }
     dependencies {
-        classpath project(':api')
         classpath "org.hibernate:hibernate-core:${ext.hibernateVersion}",
                 "org.hibernate:hibernate-entitymanager:${ext.hibernateVersion}",
                 "com.h2database:h2:${ext.h2Version}",

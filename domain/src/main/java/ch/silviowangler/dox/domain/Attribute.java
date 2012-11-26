@@ -16,7 +16,6 @@
 
 package ch.silviowangler.dox.domain;
 
-import ch.silviowangler.dox.api.AttributeDataType;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;

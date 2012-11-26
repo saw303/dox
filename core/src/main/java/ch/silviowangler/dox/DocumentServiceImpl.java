@@ -19,6 +19,7 @@ package ch.silviowangler.dox;
 import ch.silviowangler.dox.api.*;
 import ch.silviowangler.dox.domain.Attribute;
 import ch.silviowangler.dox.domain.*;
+import ch.silviowangler.dox.domain.AttributeDataType;
 import ch.silviowangler.dox.domain.DocumentClass;
 import com.google.common.collect.Maps;
 import com.itextpdf.text.pdf.PdfReader;
@@ -511,7 +512,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
                 attribute.getShortName(),
                 attribute.isOptional(),
                 attribute.getDomain() != null ? attribute.getDomain().getValues() : null,
-                attribute.getDataType(),
+                ch.silviowangler.dox.api.AttributeDataType.valueOf(attribute.getDataType().toString()),
                 attribute.isUpdateable());
     }
 

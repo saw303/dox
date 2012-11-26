@@ -68,7 +68,9 @@ public class DocumentServiceResearchTest extends AbstractTest {
         File textFile01 = createTestFile(fileName, content);
         PhysicalDocument doc = new PhysicalDocument(new DocumentClass(docClassShortName), FileUtils.readFileToByteArray(textFile01), indices, fileName);
         try {
-            return documentService.importDocument(doc);
+            DocumentReference documentReference = documentService.importDocument(doc);
+            logger.debug("File '{}' received id {}", fileName, documentReference.getId());
+            return documentReference;
 
         } catch (DocumentDuplicationException e) {
             return documentService.findDocumentReference(e.getDocumentId());
