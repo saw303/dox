@@ -133,7 +133,7 @@ project(':web') {
 }
 
 idea.project {
-    jdkName = '1.7 (Oracle)'
+    jdkName = '1.7'
     languageLevel = '1.7'
 
     // update the source wildcards
@@ -148,6 +148,6 @@ idea.project {
 
         // Set Gradle home
         def gradleSettings = node.appendNode('component', [name: 'GradleSettings'])
-        gradleSettings.appendNode('option', [name: 'SDK_HOME', value: gradle.gradleHomeDir])
+        gradleSettings.appendNode('option', [name: 'SDK_HOME', value: gradle.gradleHomeDir])n
     }
 }
