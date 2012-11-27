@@ -1,6 +1,7 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
+<%@page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%--
   ~ Copyright 2012 Silvio Wangler (silvio.wangler@gmail.com)
   ~
@@ -25,7 +26,7 @@
 <html class="no-js" lang="de"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1">
 
     <title><spring:message code="application.html.title"/></title>
     <meta name="description" content="">
@@ -33,11 +34,11 @@
 
     <meta name="viewport" content="width=device-width">
 
-    <link rel="stylesheet" href="resources/css/style.css"/>
-    <link rel="stylesheet" href="js/libs/datatables/media/css/jquery.dataTables.css"/>
+    <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/js/libs/datatables/media/css/jquery.dataTables.css"/>"/>
 
     <link type="text/plain" rel="author" href="humans.txt"/>
-    <script src="js/libs/boilerplate/modernizr-2.5.3.min.js"></script>
+    <script src="<c:url value="/js/libs/boilerplate/modernizr-2.5.3.min.js"/>"></script>
 </head>
 <body>
 
@@ -61,7 +62,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $("#docClass").change(function (event) {
-            $("#docClassAttributes").load("/ajax/attributes",
+            $("#docClassAttributes").load("<c:url value="/ajax/attributes"/>",
                     {
                         documentClassShortName:this.value
                     });

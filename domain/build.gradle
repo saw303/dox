@@ -39,8 +39,7 @@ buildscript {
 }
 
 dependencies {
-    compile project(':api'),
-            "org.hibernate:hibernate-core:${ext.hibernateVersion}",
+    compile "org.hibernate:hibernate-core:${ext.hibernateVersion}",
             "org.hibernate:hibernate-entitymanager:${ext.hibernateVersion}",
             "joda-time:joda-time:${ext.jodaTimeVersion}"
     compile("org.springframework.data:spring-data-jpa:${ext.springDataVersion}") {

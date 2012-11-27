@@ -18,9 +18,10 @@ package ch.silviowangler.dox;
 
 import ch.silviowangler.dox.api.*;
 import ch.silviowangler.dox.domain.Attribute;
-import ch.silviowangler.dox.domain.*;
 import ch.silviowangler.dox.domain.AttributeDataType;
+import ch.silviowangler.dox.domain.*;
 import ch.silviowangler.dox.domain.DocumentClass;
+import ch.silviowangler.dox.domain.Range;
 import com.google.common.collect.Maps;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.RandomAccessFileOrArray;
@@ -334,9 +335,26 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     private Object makeAssignable(AttributeDataType desiredDataType, Object valueToConvert) {
 
-        if (valueToConvert instanceof Range && isRangeCompatible(desiredDataType)) {
+        if (valueToConvert instanceof ch.silviowangler.dox.api.Range && isRangeCompatible(desiredDataType)) {
             logger.debug("Found a range parameter. Skip this one");
-            return valueToConvert;
+
+            if (AttributeDataType.DATE.equals(desiredDataType)) {
+                ch.silviowangler.dox.api.Range<DateTime> original = (ch.silviowangler.dox.api.Range<DateTime>) valueToConvert;
+                return new Range<>(original.getFrom(), original.getTo());
+            } else if (AttributeDataType.DOUBLE.equals(desiredDataType)) {
+                ch.silviowangler.dox.api.Range<BigDecimal> original = (ch.silviowangler.dox.api.Range<BigDecimal>) valueToConvert;
+                return new Range<>(original.getFrom(), original.getTo());
+            } else if (AttributeDataType.INTEGER.equals(desiredDataType)) {
+                ch.silviowangler.dox.api.Range<Integer> original = (ch.silviowangler.dox.api.Range<Integer>) valueToConvert;
+                return new Range<>(original.getFrom(), original.getTo());
+            } else if (AttributeDataType.LONG.equals(desiredDataType)) {
+                ch.silviowangler.dox.api.Range<Long> original = (ch.silviowangler.dox.api.Range<Long>) valueToConvert;
+                return new Range<>(original.getFrom(), original.getTo());
+            } else if (AttributeDataType.SHORT.equals(desiredDataType)) {
+                ch.silviowangler.dox.api.Range<Short> original = (ch.silviowangler.dox.api.Range<Short>) valueToConvert;
+                return new Range<>(original.getFrom(), original.getTo());
+            }
+            throw new IllegalArgumentException();
         }
 
         if (AttributeDataType.DATE.equals(desiredDataType) && valueToConvert instanceof String) {
@@ -369,7 +387,11 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     private boolean isRangeCompatible(AttributeDataType desiredDataType) {
-        return (AttributeDataType.DATE.equals(desiredDataType) || AttributeDataType.DOUBLE.equals(desiredDataType) || AttributeDataType.INTEGER.equals(desiredDataType) || AttributeDataType.LONG.equals(desiredDataType) || AttributeDataType.SHORT.equals(desiredDataType));
+        return (AttributeDataType.DATE.equals(desiredDataType) ||
+                AttributeDataType.DOUBLE.equals(desiredDataType) ||
+                AttributeDataType.INTEGER.equals(desiredDataType) ||
+                AttributeDataType.LONG.equals(desiredDataType) ||
+                AttributeDataType.SHORT.equals(desiredDataType));
     }
 
     private boolean isAssignableType(AttributeDataType desiredDataType, Class currentType) {
@@ -397,7 +419,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
                 final String propertyName = attribute.getMappingColumn().toLowerCase();
                 logger.debug("About to set column '{}' using value '{}' on index store", propertyName, value);
                 PropertyUtils.setProperty(indexStore, propertyName, value);
-            } catch (IllegalAccessException  | InvocationTargetException | NoSuchMethodException e) {
+            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 logger.error("Error setting property '{}' with value '{}'", new Object[]{key, value, e});
             }
         }

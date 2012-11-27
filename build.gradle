@@ -108,12 +108,11 @@ project(':functional-tests') {
 
 project(':web') {
     apply plugin: 'war'
-    apply plugin: 'jetty'	
 
     war.archiveName = "dox-${version}.war"
 
     dependencies {
-	compile project(':api')
+        compile project(':api')
         runtime project(':core')
         compile "org.springframework:spring-webmvc:${ext.springVersion}"
         testCompile "org.springframework:spring-test:${ext.springVersion}"
@@ -122,7 +121,7 @@ project(':web') {
         compile 'javax.servlet.jsp:jsp-api:2.1'
         compile 'javax.servlet:javax.servlet-api:3.0.1'
         compile "com.google.guava:guava:${ext.guavaVersion}"
-	compile "joda-time:joda-time:${ext.jodaTimeVersion}"
+        compile "joda-time:joda-time:${ext.jodaTimeVersion}"
         runtime "org.apache.tiles:tiles-core:${ext.tilesVersion}"
         runtime "org.apache.tiles:tiles-servlet:${ext.tilesVersion}"
         runtime "org.apache.tiles:tiles-jsp:${ext.tilesVersion}"

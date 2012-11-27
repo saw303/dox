@@ -1,4 +1,5 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%--
   ~ Copyright 2012 Silvio Wangler (silvio.wangler@gmail.com)
   ~
@@ -16,7 +17,7 @@
   --%>
 
 <div id="query">
-    <form action="query.html" method="post">
+    <form action="<c:url value="/query.html"/>" method="post">
         <input id="q" name="q" value="" tabindex="1"/>
         <button type="submit" tabindex="2" accesskey="S"><spring:message code="query.start.button"/></button>
     </form>
