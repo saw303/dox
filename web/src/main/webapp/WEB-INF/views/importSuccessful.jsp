@@ -33,7 +33,7 @@
         </tr>
         <tr>
             <th><spring:message code="document.mimeType"/>:</th>
-            <td><img src="/resources/img/file-extensions/pdf.png" alt="${doc.mimeType}" title="${doc.mimeType}"
+            <td><img src="<c:url value="/resources/img/file-extensions/pdf.png"/> " alt="${doc.mimeType}" title="${doc.mimeType}"
                      width="32" height="32"/></td>
         </tr>
         <tr>
