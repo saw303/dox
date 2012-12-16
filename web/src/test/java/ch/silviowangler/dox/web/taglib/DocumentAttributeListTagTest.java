@@ -80,6 +80,11 @@ public class DocumentAttributeListTagTest {
 
         request.setAttribute(RequestContext.WEB_APPLICATION_CONTEXT_ATTRIBUTE, new WebApplicationContext() {
             @Override
+            public String getApplicationName() {
+                return "DOX";
+            }
+
+            @Override
             public ServletContext getServletContext() {
                 return servletContext;
             }
