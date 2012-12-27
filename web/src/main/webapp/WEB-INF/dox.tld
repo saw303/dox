@@ -38,6 +38,4 @@
             <type>ch.silviowangler.dox.api.DocumentReference</type>
         </attribute>
     </tag>
-
-
 </taglib>

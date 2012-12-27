@@ -34,6 +34,7 @@
 
     <!--mvc:resources mapping="/resources/**" location="/resources/" cache-period="31556926"/-->
 
+    <mvc:view-controller path="/login" view-name="login.definition"/>
     <mvc:view-controller path="/" view-name="base.definition"/>
 
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
