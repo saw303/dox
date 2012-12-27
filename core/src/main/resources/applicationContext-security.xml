@@ -26,7 +26,7 @@
     <authentication-manager alias="authenticationManager">
         <authentication-provider user-service-ref="doxUserDetailService">
             <password-encoder hash="sha-256">
-                <salt-source system-wide="hajhjdhfjk7777"/>
+                <salt-source user-property="username"/>
             </password-encoder>
         </authentication-provider>
     </authentication-manager>

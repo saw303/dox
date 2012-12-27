@@ -3,17 +3,17 @@ package ch.silviowangler.dox.security;
 import ch.silviowangler.dox.domain.security.DoxUser;
 import ch.silviowangler.dox.domain.security.DoxUserRepository;
 import ch.silviowangler.dox.domain.security.Role;
+import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -42,53 +42,19 @@ public class DoxUserDetailService implements UserDetailsService {
             logger.info("No such user with name '{}'", username);
             throw new UsernameNotFoundException("No such user " + username);
         }
+        Collection<SimpleGrantedAuthority> authorities = Sets.newHashSet();
 
-        return new UserDetails() {
-            @Override
-            public Collection<? extends GrantedAuthority> getAuthorities() {
-
-                Collection<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<>();
-
-                for (Role role : user.getRoles()) {
-                    grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
-                    for (ch.silviowangler.dox.domain.security.GrantedAuthority grantedAuthority : role.getGrantedAuthorities()) {
-                        grantedAuthorities.add(new SimpleGrantedAuthority(grantedAuthority.getName()));
-                    }
-                }
-
-                logger.trace("User '{}' has these granted authorities '{}'", user.getUsername(), grantedAuthorities);
-                return grantedAuthorities;
+        for (Role role : user.getRoles()) {
+            final String roleName = "ROLE_" + role.getName();
+            logger.debug("Adding role {}", roleName);
+            authorities.add(new SimpleGrantedAuthority(roleName));
+            for (ch.silviowangler.dox.domain.security.GrantedAuthority grantedAuthority : role.getGrantedAuthorities()) {
+                authorities.add(new SimpleGrantedAuthority(grantedAuthority.getName()));
             }
+        }
+        User springSecurityUser = new User(user.getUsername(), user.getPassword(), authorities);
 
-            @Override
-            public String getPassword() {
-                return new String(user.getPassword());
-            }
-
-            @Override
-            public String getUsername() {
-                return user.getUsername();
-            }
-
-            @Override
-            public boolean isAccountNonExpired() {
-                return true;
-            }
-
-            @Override
-            public boolean isAccountNonLocked() {
-                return true;
-            }
-
-            @Override
-            public boolean isCredentialsNonExpired() {
-                return true;
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return true;
-            }
-        };
+        logger.trace("User '{}' has these granted authorities '{}'", springSecurityUser.getUsername(), springSecurityUser.getAuthorities());
+        return springSecurityUser;
     }
 }
