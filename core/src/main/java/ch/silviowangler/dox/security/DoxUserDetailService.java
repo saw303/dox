@@ -40,7 +40,7 @@ public class DoxUserDetailService implements UserDetailsService {
 
         if (user == null) {
             logger.info("No such user with name '{}'", username);
-            throw new  UsernameNotFoundException("No such user " + username);
+            throw new UsernameNotFoundException("No such user " + username);
         }
 
         return new UserDetails() {
@@ -57,7 +57,6 @@ public class DoxUserDetailService implements UserDetailsService {
                 }
 
                 logger.trace("User '{}' has these granted authorities '{}'", user.getUsername(), grantedAuthorities);
-
                 return grantedAuthorities;
             }
 

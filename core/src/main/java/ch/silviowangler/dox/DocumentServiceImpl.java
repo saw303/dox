@@ -50,6 +50,9 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
+import static org.springframework.util.Assert.isTrue;
+import static org.springframework.util.Assert.notEmpty;
+import static org.springframework.util.Assert.notNull;
 
 /**
  * @author Silvio Wangler
@@ -79,11 +82,11 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        Assert.notNull(archiveDirectory, "Archive directory must not be null. Please make sure you have properly set environment variable DOX_STORE");
-        Assert.isTrue(archiveDirectory.isDirectory(), "Archive store must be a directory ['" + this.archiveDirectory + "']");
-        Assert.isTrue(archiveDirectory.canRead(), "Archive store must be readable ['" + this.archiveDirectory + "']");
-        Assert.isTrue(archiveDirectory.canWrite(), "Archive store must be writable ['" + this.archiveDirectory + "']");
-        Assert.notEmpty(mimeTypes, "No mime types have been set");
+        notNull(archiveDirectory, "Archive directory must not be null. Please make sure you have properly set environment variable DOX_STORE");
+        isTrue(archiveDirectory.isDirectory(), "Archive store must be a directory ['" + this.archiveDirectory + "']");
+        isTrue(archiveDirectory.canRead(), "Archive store must be readable ['" + this.archiveDirectory + "']");
+        isTrue(archiveDirectory.canWrite(), "Archive store must be writable ['" + this.archiveDirectory + "']");
+        notEmpty(mimeTypes, "No mime types have been set");
     }
 
     @Override
