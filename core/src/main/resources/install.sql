@@ -14,7 +14,7 @@ INSERT INTO DOX_DOC_CLASS_DOX_ATTR(attributes_id, documentClasses_id ) VALUES ((
 INSERT INTO DOX_DOC_CLASS_DOX_ATTR(attributes_id, documentClasses_id) VALUES ((select id from DOX_ATTR where shortName='invoiceDate'), (select id from DOX_DOC_CLASS where shortName='INVOICE'));
 INSERT INTO DOX_DOC_CLASS_DOX_ATTR(attributes_id, documentClasses_id) VALUES ((select id from DOX_ATTR where shortName='invoiceAmount'), (select id from DOX_DOC_CLASS where shortName='INVOICE'));
 
-INSERT INTO DOX_USER(email,password,username) VALUES('root@local.localdomain', 'velo', 'root');
+INSERT INTO DOX_USER(email,password,username) VALUES('root@local.localdomain', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'root');
 INSERT INTO DOX_ROLE(name) VALUES('USER');
 INSERT INTO DOX_ROLE(name) VALUES('ADMIN');
 

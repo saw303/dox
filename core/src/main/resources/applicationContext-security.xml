@@ -23,7 +23,7 @@
        http://www.springframework.org/schema/security/spring-security.xsd"
              xmlns:beans="http://www.springframework.org/schema/beans">
 
-    <authentication-manager>
+    <authentication-manager alias="authenticationManager">
         <authentication-provider user-service-ref="doxUserDetailService">
             <password-encoder hash="sha-256">
                 <salt-source system-wide="hajhjdhfjk7777"/>
@@ -31,5 +31,5 @@
         </authentication-provider>
     </authentication-manager>
 
-    <global-method-security pre-post-annotations="enabled"></global-method-security>
+    <global-method-security pre-post-annotations="enabled" />
 </beans:beans>
