@@ -34,12 +34,17 @@
         <jdbc:script location="classpath*:install.sql"/>
     </jdbc:initialize-database>
 
+    <!--<security:http pattern="/favicon.ico" secured="none"/>
+    <security:http pattern="/resources/**" secured="none"/>
+    <security:http pattern="/js/**" secured="none"/>
+    <security:http pattern="/humans.txt" secured="none"/>-->
+
     <security:http auto-config="true" use-expressions="true">
-        <security:intercept-url pattern="/login*" access="isAnonymous()"/>
-        <security:intercept-url pattern="/favicon.ico" access="isAnonymous()"/>
-        <security:intercept-url pattern="/resources/**" access="isAnonymous()"/>
-        <security:intercept-url pattern="/js/**" access="isAnonymous()"/>
-        <security:intercept-url pattern="/humans.txt" access="isAnonymous()"/>
+        <security:intercept-url pattern="/login*" access="isAnonymous() || isAuthenticated()"/>
+        <security:intercept-url pattern="/favicon.ico" access="isAnonymous() || isAuthenticated()"/>
+        <security:intercept-url pattern="/resources/**" access="isAnonymous() || isAuthenticated()"/>
+        <security:intercept-url pattern="/js/**" access="isAnonymous() || isAuthenticated()"/>
+        <security:intercept-url pattern="/humans.txt" access="isAnonymous() || isAuthenticated()"/>
         <security:intercept-url pattern="/**" access="hasRole('ROLE_USER')"/>
         <security:form-login login-page="/login"
                              login-processing-url="/login/verify"
