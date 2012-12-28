@@ -56,7 +56,6 @@ subprojects {
         maven {
             url 'https://repository.jboss.org/nexus/content/groups/public'
             url 'http://repo.springsource.org/libs-milestone'
-            //url 'http://repo.springsource.org/libs-snapshot'
         }
     }
 
@@ -82,13 +81,15 @@ project(':core') {
     dependencies {
         compile project(':api'), project(':domain'),
                 "org.springframework:spring-context:${ext.springVersion}",
-                "org.springframework.security:spring-security-core:${ext.springSecurityVersion}",
                 "commons-codec:commons-codec:${ext.commonsCodecVersion}",
                 "com.itextpdf:itextpdf:${ext.iTextVersion}",
                 "commons-beanutils:commons-beanutils:${ext.commonsBeanUtilsVersion}",
                 "commons-io:commons-io:${ext.commonsIOVersion}",
                 "joda-time:joda-time:${ext.jodaTimeVersion}",
                 "com.google.guava:guava:${ext.guavaVersion}"
+        compile("org.springframework.security:spring-security-core:${ext.springSecurityVersion}") {
+            exclude group: 'org.springframework', module: 'spring-beans'
+        }
         runtime "org.slf4j:jcl-over-slf4j:${ext.slf4jVersion}",
                 "ch.qos.logback:logback-classic:${ext.logbackVersion}",
                 "org.springframework.security:spring-security-config:${ext.springSecurityVersion}"
@@ -115,9 +116,14 @@ project(':web') {
         compile project(':api')
         runtime project(':core')
         compile "org.springframework:spring-webmvc:${ext.springVersion}"
-        compile "org.springframework.security:spring-security-web:${ext.springSecurityVersion}"
-        compile "org.springframework.security:spring-security-web:${ext.springSecurityVersion}"
-        runtime "org.springframework.security:spring-security-taglibs:${ext.springSecurityVersion}"
+        compile("org.springframework.security:spring-security-web:${ext.springSecurityVersion}") {
+            exclude group: 'org.springframework', module: 'spring-tx'
+            exclude group: 'org.springframework', module: 'spring-jdbc'
+        }
+        compile("org.springframework.security:spring-security-taglibs:${ext.springSecurityVersion}") {
+            exclude group: 'org.springframework', module: 'spring-tx'
+            exclude group: 'org.springframework', module: 'spring-jdbc'
+        }
         testCompile "org.springframework:spring-test:${ext.springVersion}"
         compile 'org.springframework.mobile:spring-mobile-device:1.0.0.RELEASE'
         runtime 'javax.servlet:jstl:1.2'
