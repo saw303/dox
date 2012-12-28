@@ -56,7 +56,7 @@ subprojects {
         maven {
             url 'https://repository.jboss.org/nexus/content/groups/public'
             url 'http://repo.springsource.org/libs-milestone'
-            url 'http://repo.springsource.org/libs-snapshot'
+            //url 'http://repo.springsource.org/libs-snapshot'
         }
     }
 
@@ -116,7 +116,8 @@ project(':web') {
         runtime project(':core')
         compile "org.springframework:spring-webmvc:${ext.springVersion}"
         compile "org.springframework.security:spring-security-web:${ext.springSecurityVersion}"
-        runtime "org.springframework.security:spring-security-config:${ext.springSecurityVersion}"
+        compile "org.springframework.security:spring-security-web:${ext.springSecurityVersion}"
+        runtime "org.springframework.security:spring-security-taglibs:${ext.springSecurityVersion}"
         testCompile "org.springframework:spring-test:${ext.springVersion}"
         compile 'org.springframework.mobile:spring-mobile-device:1.0.0.RELEASE'
         runtime 'javax.servlet:jstl:1.2'
@@ -138,7 +139,7 @@ idea.project {
     languageLevel = '1.7'
 
     // update the source wildcards
-    //wildcards += '!?*.txt;!?*.pdf;!?*.xml;!?*.tif'
+    wildcards += '!?*.txt;!?*.pdf;!?*.xml;!?*.tif;!?*.sql'
 
     ipr.withXml { provider ->
         def node = provider.asNode()

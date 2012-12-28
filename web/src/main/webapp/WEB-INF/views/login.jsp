@@ -1,3 +1,5 @@
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%--
   ~ Copyright 2012 Silvio Wangler (silvio.wangler@gmail.com)
   ~
@@ -14,4 +16,18 @@
   ~ limitations under the License.
   --%>
 
-<div>login form</div>
+<div>
+    <form action="<c:url value="/login/verify"/>" method="post">
+        <div>
+            <label for="username"><spring:message code="login.username" htmlEscape="true"/></label>
+            <input type="text" maxlength="25" required="true" name="username" id="username"/>
+        </div>
+        <div>
+            <label for="pwd"><spring:message code="login.password" htmlEscape="true"/></label>
+            <input type="password" required="true" name="pwd" id="pwd"/>
+        </div>
+        <div>
+            <input type="submit" value="<spring:message code="login.submit" htmlEscape="true"/>"/>
+        </div>
+    </form>
+</div>

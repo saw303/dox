@@ -1,5 +1,6 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <%--
   ~ Copyright 2012 Silvio Wangler (silvio.wangler@gmail.com)
   ~
@@ -17,9 +18,12 @@
   --%>
 
 <h1><spring:message code="application.header"/></h1>
+<sec:authorize access="isAuthenticated()">
 <nav>
     <ul>
         <li><a href="<c:url value="/"/>"><spring:message code="nav.home" htmlEscape="true"/></a></li>
         <li><a href="<c:url value="/import.html"/>"><spring:message code="nav.add.new.document" htmlEscape="true"/></a></li>
+        <li><a href="<c:url value="/logout"/>"><spring:message code="nav.logout" htmlEscape="true"/></a></li>
     </ul>
 </nav>
+</sec:authorize>
