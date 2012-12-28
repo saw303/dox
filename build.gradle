@@ -39,6 +39,25 @@ allprojects {
         guavaVersion = '13.0.1'
         mockitoVersion = '1.9.0'
     }
+
+    configurations.all {
+        resolutionStrategy {
+            forcedModules = [
+                    "org.springframework:spring-aop:${project.ext.springVersion}",
+                    "org.springframework:spring-asm:${project.ext.springVersion}",
+                    "org.springframework:spring-beans:${project.ext.springVersion}",
+                    "org.springframework:spring-context:${project.ext.springVersion}",
+                    "org.springframework:spring-core:${project.ext.springVersion}",
+                    "org.springframework:spring-expression:${project.ext.springVersion}",
+                    "org.springframework:spring-jdbc:${project.ext.springVersion}",
+                    "org.springframework:spring-orm:${project.ext.springVersion}",
+                    "org.springframework:spring-test:${project.ext.springVersion}",
+                    "org.springframework:spring-tx:${project.ext.springVersion}",
+                    "org.springframework:spring-web:${project.ext.springVersion}",
+                    "org.springframework:spring-webmvc:${project.ext.springVersion}"
+            ]
+        }
+    }
 }
 
 subprojects {
@@ -156,6 +175,6 @@ idea.project {
 
         // Set Gradle home
         def gradleSettings = node.appendNode('component', [name: 'GradleSettings'])
-        gradleSettings.appendNode('option', [name: 'SDK_HOME', value: gradle.gradleHomeDir])n
+        gradleSettings.appendNode('option', [name: 'SDK_HOME', value: gradle.gradleHomeDir]) n
     }
 }
