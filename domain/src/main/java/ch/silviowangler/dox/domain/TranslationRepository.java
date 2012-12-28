@@ -14,38 +14,20 @@
  * limitations under the License.
  */
 
-package ch.silviowangler.dox.domain.security;
+package ch.silviowangler.dox.domain;
 
-import org.springframework.data.jpa.domain.AbstractPersistable;
+import org.springframework.data.repository.CrudRepository;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * @author Silvio Wangler
  * @since 0.1
  */
-@Entity
-@Table(name = "DOX_PERMISSION")
-public class GrantedAuthority extends AbstractPersistable<Long> {
+public interface TranslationRepository extends CrudRepository<Translation, Long> {
 
-    @Column(nullable = false, unique = true)
-    private String name;
+    List<Translation> findByKey(String key);
 
-    public GrantedAuthority() {
-        super();
-    }
-
-    public GrantedAuthority(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    Translation findByKeyAndLocale(String key, Locale locale);
 }
