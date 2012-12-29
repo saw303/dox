@@ -370,4 +370,15 @@ public class DocumentServiceTest extends AbstractTest {
             assertNotNull("There should be a translation available", attribute.getTranslation());
         }
     }
+
+    @Test
+    public void verifyThatDocumentClassIsTranslatableAndGetsTranslated() throws DocumentClassNotFoundException {
+
+        Set<DocumentClass> documentClasses = documentService.findDocumentClasses();
+
+        for (DocumentClass documentClass : documentClasses) {
+            assertTrue(documentClass instanceof Translatable);
+            assertNotNull("There should be a translation available", ((Translatable) documentClass).getTranslation());
+        }
+    }
 }
