@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *         http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,13 +26,14 @@ import java.util.List;
  *        Date: 17.07.12 11:12
  *        </div>
  */
-public class Attribute implements Serializable, Comparable<Attribute> {
+public class Attribute implements Serializable, Comparable<Attribute>, Translatable {
 
     private String shortName;
     private boolean optional = false;
     private List<String> domainValues;
     private AttributeDataType dataType;
     private boolean updateable;
+    private String translation;
 
     public Attribute(String shortName, boolean optional, List<String> domainValues, AttributeDataType dataType) {
         this(shortName, optional, domainValues, dataType, true);
@@ -88,6 +89,21 @@ public class Attribute implements Serializable, Comparable<Attribute> {
 
     public void setDataType(AttributeDataType dataType) {
         this.dataType = dataType;
+    }
+
+    @Override
+    public String getTranslation() {
+        return this.translation;
+    }
+
+    @Override
+    public void setTranslation(String translation) {
+        this.translation = translation;
+    }
+
+    @Override
+    public String retrieveKeyPostfix() {
+        return this.shortName;
     }
 
     @Override

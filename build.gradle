@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+
 allprojects {
 
     apply plugin: 'idea'
@@ -102,6 +104,7 @@ project(':core') {
     dependencies {
         compile project(':api'), project(':domain'),
                 "org.springframework:spring-context:${ext.springVersion}",
+                "org.springframework:spring-aop:${ext.springVersion}",
                 "commons-codec:commons-codec:${ext.commonsCodecVersion}",
                 "com.itextpdf:itextpdf:${ext.iTextVersion}",
                 "commons-beanutils:commons-beanutils:${ext.commonsBeanUtilsVersion}",
@@ -113,7 +116,8 @@ project(':core') {
         }
         runtime "org.slf4j:jcl-over-slf4j:${ext.slf4jVersion}",
                 "ch.qos.logback:logback-classic:${ext.logbackVersion}",
-                "org.springframework.security:spring-security-config:${ext.springSecurityVersion}"
+                "org.springframework.security:spring-security-config:${ext.springSecurityVersion}",
+                'org.aspectj:aspectjweaver:1.7.0' // need this version because 1.6.x is buggy with Spring 3.x (http://goo.gl/73Pwi)
     }
 }
 
