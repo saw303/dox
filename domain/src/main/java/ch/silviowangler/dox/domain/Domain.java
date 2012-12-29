@@ -35,7 +35,9 @@ public class Domain extends AbstractPersistable<Long> {
     private String shortName;
 
     @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "DOX_DOMAIN_VALUES")
     @Sort(type = SortType.NATURAL)
+    @Column(nullable = false, name = "VAL")
     private List<String> values;
 
     public String getShortName() {
