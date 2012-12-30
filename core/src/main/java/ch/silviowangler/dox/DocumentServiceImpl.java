@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *         http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -41,7 +41,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,9 +49,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
-import static org.springframework.util.Assert.isTrue;
-import static org.springframework.util.Assert.notEmpty;
-import static org.springframework.util.Assert.notNull;
+import static org.springframework.util.Assert.*;
 
 /**
  * @author Silvio Wangler
