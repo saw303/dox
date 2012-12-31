@@ -31,7 +31,7 @@ allprojects {
         slf4jVersion = '1.6.6'
         logbackVersion = '1.0.7'
         junitVersion = '4.11'
-        tilesVersion = '2.2.2'
+        tilesVersion = '3.0.1'
         commonsIOVersion = '2.4'
         commonsCodecVersion = '1.6'
         commonsBeanUtilsVersion = '1.8.3'
