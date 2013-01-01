@@ -15,6 +15,8 @@
  */
 
 
+
+
 allprojects {
 
     apply plugin: 'idea'
@@ -90,11 +92,12 @@ subprojects {
     jar {
         manifest {
             attributes(
-                    'Implementation-Title': "DOX : ${project.name}",
+                    'Built-By': "Gradle ${gradle.gradleVersion}",
+                    'Implementation-Title': "DOX-${project.name}",
                     'Implementation-Version': project.version,
                     'Implementation-Vendor': 'Silvio Wangler',
                     'Specification-Vendor': 'Silvio Wangler',
-                    'Specification-Title': "DOX : ${project.name}",
+                    'Specification-Title': "DOX-${project.name}",
                     'Specification-Version': project.version
             )
         }
