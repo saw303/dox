@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Silvio Wangler (silvio.wangler@gmail.com)
+ * Copyright 2013 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -89,7 +89,14 @@ subprojects {
 
     jar {
         manifest {
-            attributes('Implementation-Title': "DOX : ${project.name}", 'Implementation-Version': project.version)
+            attributes(
+                    'Implementation-Title': "DOX : ${project.name}",
+                    'Implementation-Version': project.version,
+                    'Implementation-Vendor': 'Silvio Wangler',
+                    'Specification-Vendor': 'Silvio Wangler',
+                    'Specification-Title': "DOX : ${project.name}",
+                    'Specification-Version': project.version
+            )
         }
     }
 }
