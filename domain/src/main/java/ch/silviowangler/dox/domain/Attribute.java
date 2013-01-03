@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Silvio Wangler (silvio.wangler@gmail.com)
+ * Copyright 2013 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,9 @@ import java.util.Set;
  * @since 0.1
  */
 @Entity
-@Table(name = "DOX_ATTR")
+@Table(name = "DOX_ATTR", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"dataType", "mappingColumn"})
+})
 public class Attribute extends AbstractPersistable<Long> {
 
     @Column(unique = true, length = 15, nullable = false)
