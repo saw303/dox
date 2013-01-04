@@ -8,12 +8,13 @@ INSERT INTO DOX_DOMAIN_VALUES(Domain_id, VAL) VALUES ((SELECT id FROM DOX_DOMAIN
 
 INSERT INTO DOX_ATTR(dataType, optional, shortName, domain_id, mappingColumn, updateable) VALUES('STRING', 0, 'company', (SELECT id FROM DOX_DOMAIN WHERE shortName='company'), 'S_01', 1);
 INSERT INTO DOX_ATTR(dataType, optional, shortName, domain_id, mappingColumn, updateable) VALUES('DATE', 0, 'invoiceDate', NULL, 'D_01', 1);
--- INSERT INTO DOX_ATTR(dataType, optional, shortName, domain_id, mappingColumn, updateable) VALUES('DATE', 0, 'taxDate', NULL, 'D_02', 1);
+INSERT INTO DOX_ATTR(dataType, optional, shortName, domain_id, mappingColumn, updateable) VALUES('DATE', 0, 'taxDate', NULL, 'D_02', 1);
 INSERT INTO DOX_ATTR(dataType, optional, shortName, domain_id, mappingColumn, updateable) VALUES('DOUBLE', 0, 'invoiceAmount', NULL, 'F_01', 1);
 
 INSERT INTO DOX_DOC_CLASS_DOX_ATTR(attributes_id, documentClasses_id ) VALUES ((SELECT id FROM DOX_ATTR WHERE shortName='company'), (SELECT id FROM DOX_DOC_CLASS WHERE shortName='INVOICE'));
 INSERT INTO DOX_DOC_CLASS_DOX_ATTR(attributes_id, documentClasses_id) VALUES ((SELECT id FROM DOX_ATTR WHERE shortName='invoiceDate'), (SELECT id FROM DOX_DOC_CLASS WHERE shortName='INVOICE'));
 INSERT INTO DOX_DOC_CLASS_DOX_ATTR(attributes_id, documentClasses_id) VALUES ((SELECT id FROM DOX_ATTR WHERE shortName='invoiceAmount'), (SELECT id FROM DOX_DOC_CLASS WHERE shortName='INVOICE'));
+INSERT INTO DOX_DOC_CLASS_DOX_ATTR(attributes_id, documentClasses_id) VALUES ((SELECT id FROM DOX_ATTR WHERE shortName='taxDate'), (SELECT id FROM DOX_DOC_CLASS WHERE shortName='TAXES'));
 
 INSERT INTO DOX_USER(email,password,username) VALUES('root@local.localdomain', '118b1695b6f328ef2c403078c213e9c98b94da55edb6a7f84905cca1352718e5', 'root');
 INSERT INTO DOX_USER(email,password,username) VALUES('a.faehndrich@hotmail.com', '0b9574900e694db245bfeb747031e60f38dece540d258367ae7320cefd9fb540', 'angela');
