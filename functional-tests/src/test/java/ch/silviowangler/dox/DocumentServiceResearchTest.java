@@ -28,9 +28,8 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
-import static junit.framework.Assert.*;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 /**
  * @author Silvio Wangler

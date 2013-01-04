@@ -18,8 +18,8 @@ package ch.silviowangler.dox.domain;
 
 import org.junit.Test;
 
-import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Silvio Wangler

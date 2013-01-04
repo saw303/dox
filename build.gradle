@@ -66,6 +66,9 @@ allprojects {
 subprojects {
     apply plugin: 'java'
 
+    compileJava.options.compilerArgs = ['-Xlint:unchecked', '-Xlint:deprecation']
+    compileTestJava.options.compilerArgs = ['-Xlint:unchecked', '-Xlint:deprecation']
+
     sourceCompatibility = 7
     targetCompatibility = 7
 

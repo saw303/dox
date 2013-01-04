@@ -27,8 +27,8 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 /**

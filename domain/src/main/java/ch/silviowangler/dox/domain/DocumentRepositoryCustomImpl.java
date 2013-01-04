@@ -46,6 +46,7 @@ public class DocumentRepositoryCustomImpl implements DocumentRepositoryCustom {
     private EntityManager em;
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Document> findDocuments(Map<String, Object> indices, Map<String, Attribute> attributes) {
 
         final CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();

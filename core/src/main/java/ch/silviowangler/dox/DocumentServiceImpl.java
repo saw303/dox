@@ -48,6 +48,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.*;
 
+import static ch.silviowangler.dox.domain.AttributeDataType.*;
 import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
 import static org.springframework.util.Assert.*;
 
@@ -333,31 +334,32 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         return resultMap;
     }
 
+    @SuppressWarnings("unchecked")
     private Object makeAssignable(AttributeDataType desiredDataType, Object valueToConvert) {
 
         if (valueToConvert instanceof ch.silviowangler.dox.api.Range && isRangeCompatible(desiredDataType)) {
             logger.debug("Found a range parameter. Skip this one");
 
-            if (AttributeDataType.DATE.equals(desiredDataType)) {
+            if (DATE.equals(desiredDataType)) {
                 ch.silviowangler.dox.api.Range<DateTime> original = (ch.silviowangler.dox.api.Range<DateTime>) valueToConvert;
                 return new Range<>(original.getFrom(), original.getTo());
-            } else if (AttributeDataType.DOUBLE.equals(desiredDataType)) {
+            } else if (DOUBLE.equals(desiredDataType)) {
                 ch.silviowangler.dox.api.Range<BigDecimal> original = (ch.silviowangler.dox.api.Range<BigDecimal>) valueToConvert;
                 return new Range<>(original.getFrom(), original.getTo());
-            } else if (AttributeDataType.INTEGER.equals(desiredDataType)) {
+            } else if (INTEGER.equals(desiredDataType)) {
                 ch.silviowangler.dox.api.Range<Integer> original = (ch.silviowangler.dox.api.Range<Integer>) valueToConvert;
                 return new Range<>(original.getFrom(), original.getTo());
-            } else if (AttributeDataType.LONG.equals(desiredDataType)) {
+            } else if (LONG.equals(desiredDataType)) {
                 ch.silviowangler.dox.api.Range<Long> original = (ch.silviowangler.dox.api.Range<Long>) valueToConvert;
                 return new Range<>(original.getFrom(), original.getTo());
-            } else if (AttributeDataType.SHORT.equals(desiredDataType)) {
+            } else if (SHORT.equals(desiredDataType)) {
                 ch.silviowangler.dox.api.Range<Short> original = (ch.silviowangler.dox.api.Range<Short>) valueToConvert;
                 return new Range<>(original.getFrom(), original.getTo());
             }
             throw new IllegalArgumentException();
         }
 
-        if (AttributeDataType.DATE.equals(desiredDataType) && valueToConvert instanceof String) {
+        if (DATE.equals(desiredDataType) && valueToConvert instanceof String) {
 
             final String stringValueToConvert = (String) valueToConvert;
             String regexPattern;
@@ -371,15 +373,15 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
                 throw new UnsupportedOperationException("Unknown date format " + stringValueToConvert);
             }
             return DateTimeFormat.forPattern(regexPattern).parseDateTime(stringValueToConvert);
-        } else if (AttributeDataType.DATE.equals(desiredDataType) && valueToConvert instanceof Date) {
+        } else if (DATE.equals(desiredDataType) && valueToConvert instanceof Date) {
             return new DateTime(valueToConvert);
-        } else if (AttributeDataType.DOUBLE.equals(desiredDataType) && valueToConvert instanceof Double) {
+        } else if (DOUBLE.equals(desiredDataType) && valueToConvert instanceof Double) {
             return BigDecimal.valueOf((Double) valueToConvert);
-        } else if (AttributeDataType.DOUBLE.equals(desiredDataType) && valueToConvert instanceof String && ((String) valueToConvert).matches("(\\d.*|\\d.*\\.\\d{1,2})")) {
+        } else if (DOUBLE.equals(desiredDataType) && valueToConvert instanceof String && ((String) valueToConvert).matches("(\\d.*|\\d.*\\.\\d{1,2})")) {
             return new BigDecimal((String) valueToConvert);
-        } else if (AttributeDataType.DOUBLE.equals(desiredDataType) && valueToConvert instanceof Integer) {
+        } else if (DOUBLE.equals(desiredDataType) && valueToConvert instanceof Integer) {
             return BigDecimal.valueOf(Long.parseLong(String.valueOf(valueToConvert)));
-        } else if (AttributeDataType.DOUBLE.equals(desiredDataType) && valueToConvert instanceof Long) {
+        } else if (DOUBLE.equals(desiredDataType) && valueToConvert instanceof Long) {
             return BigDecimal.valueOf((Long) valueToConvert);
         }
         logger.error("Unable to convert data type '{}' and value '{}' (class: '{}')", new Object[]{desiredDataType, valueToConvert, valueToConvert.getClass().getCanonicalName()});
@@ -387,20 +389,21 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     private boolean isRangeCompatible(AttributeDataType desiredDataType) {
-        return (AttributeDataType.DATE.equals(desiredDataType) ||
-                AttributeDataType.DOUBLE.equals(desiredDataType) ||
-                AttributeDataType.INTEGER.equals(desiredDataType) ||
-                AttributeDataType.LONG.equals(desiredDataType) ||
-                AttributeDataType.SHORT.equals(desiredDataType));
+        return (DATE.equals(desiredDataType) ||
+                DOUBLE.equals(desiredDataType) ||
+                INTEGER.equals(desiredDataType) ||
+                LONG.equals(desiredDataType) ||
+                SHORT.equals(desiredDataType));
     }
 
+    @SuppressWarnings("unchecked")
     private boolean isAssignableType(AttributeDataType desiredDataType, Class currentType) {
 
-        if (desiredDataType == AttributeDataType.DATE) {
+        if (desiredDataType == DATE) {
             return currentType.isAssignableFrom(DateTime.class);
-        } else if (desiredDataType == AttributeDataType.STRING) {
+        } else if (desiredDataType == STRING) {
             return currentType.isAssignableFrom(String.class);
-        } else if (desiredDataType == AttributeDataType.DOUBLE) {
+        } else if (desiredDataType == DOUBLE) {
             return currentType.isAssignableFrom(BigDecimal.class);
         } else {
             logger.error("Unknown data type '{}'", desiredDataType);

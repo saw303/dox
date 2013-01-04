@@ -74,6 +74,7 @@ public class DoxUserDetailServiceTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testLoadUserByUsernameWithGrantedAuthorities() throws Exception {
 
         DoxUser user = new DoxUser("silvio.wangler@email.ch", "a password", "silvio");

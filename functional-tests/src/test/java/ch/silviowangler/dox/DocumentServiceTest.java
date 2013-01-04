@@ -28,7 +28,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 
 /**
  * @author Silvio Wangler
