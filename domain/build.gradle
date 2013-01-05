@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Silvio Wangler (silvio.wangler@gmail.com)
+ * Copyright 2013 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -87,13 +87,19 @@ class HibernateJpaSchemaGenerationTask extends DefaultTask {
     def source = project.sourceSets.main.output.classesDir
     def target = new File(project.projectDir, 'src/main/generated')
 
-    /*@InputFiles
+    @InputFiles
     def getInputFiles() {
         this.loader = new URLClassLoader(source.toURI().toURL() as URL[], getClass().getClassLoader())
 
-        jpaEntities = findJpaEntities(this.loader)
+        def jpaEntities = findJpaEntities(this.loader)
         if (jpaEntities && !jpaEntities.isEmpty()) {
-            def inputFiles = jpaEntities.collect { c -> project.sourceSets.main.java.getFiles().find { f -> if (f.name.endsWith(c.simpleName + '.java')) {f}}}
+            def inputFiles = jpaEntities.collect { c ->
+                project.sourceSets.main.java.getFiles().find { f ->
+                    if (f.name.endsWith(c.simpleName + '.java')) {
+                        f
+                    }
+                }
+            }
             logger.debug("Input files for this task are ${inputFiles.dump()}")
             return inputFiles
         }
@@ -107,7 +113,7 @@ class HibernateJpaSchemaGenerationTask extends DefaultTask {
         outputFiles.addAll dialects.collect { new File(target, "ddl_${it.key.toLowerCase()}_drop.sql") }
         logger.debug("Expected output files for this task are ${inputFiles.dump()}")
         return outputFiles
-    } */
+    }
 
     @TaskAction
     def performSchemaGeneration() {
