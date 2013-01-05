@@ -16,6 +16,8 @@
 
 
 
+
+
 allprojects {
 
     apply plugin: 'idea'
@@ -173,7 +175,7 @@ project(':web') {
         runtime "org.apache.tiles:tiles-jsp:${ext.tilesVersion}"
         runtime "org.apache.tiles:tiles-template:${ext.tilesVersion}"
         runtime "ch.qos.logback:logback-access:${ext.logbackVersion}"
-        runtime "com.h2database:h2:${ext.h2Version}"
+        providedRuntime "com.h2database:h2:${ext.h2Version}"
     }
 }
 
