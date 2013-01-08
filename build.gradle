@@ -179,6 +179,12 @@ project(':web') {
     }
 }
 
+project(':inexport') {
+	dependencies {
+	        compile project(':api')
+	}
+}
+
 idea.project {
     jdkName = '1.7'
     languageLevel = '1.7'
