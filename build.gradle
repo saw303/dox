@@ -116,7 +116,7 @@ project(':api') {
 
 project(':core') {
     dependencies {
-        compile project(':api'), project(':domain'),
+        compile project(':api'), project(':domain'), project(':inexport'),
                 "org.springframework:spring-context:${ext.springVersion}",
                 "org.springframework:spring-aop:${ext.springVersion}",
                 "commons-codec:commons-codec:${ext.commonsCodecVersion}",
@@ -181,7 +181,9 @@ project(':web') {
 
 project(':inexport') {
 	dependencies {
-	        compile project(':api')
+	        compile project(':api'),
+                    "org.springframework:spring-context:${ext.springVersion}"
+            compile 'com.thoughtworks.xstream:xstream:1.4.3', { transitive = false }
 	}
 }
 

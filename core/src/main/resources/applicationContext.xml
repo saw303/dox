@@ -19,6 +19,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:util="http://www.springframework.org/schema/util" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:c="http://www.springframework.org/schema/c"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/tx
@@ -63,4 +64,6 @@
                                  returning="retVal"/>
         </aop:aspect>
     </aop:config>
+
+    <bean id="appVersion" class="ch.silviowangler.dox.DoxVersion" c:version="0.1"/>
 </beans>
