@@ -1,11 +1,11 @@
 /*
- * Copyright 2012 - 2013 Silvio Wangler (silvio.wangler@gmail.com)
+ * Copyright 2013 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *         http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,6 +28,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
 /**
@@ -325,17 +326,23 @@ public class DocumentServiceTest extends AbstractTest {
         assertEquals(new DateTime(1982, 12, 15, 0, 0), referenceAfterUpdate.getIndices().get("invoiceDate"));
     }
 
+    @Test
+    public void fetchAllDocuments() throws ValidationException, DocumentClassNotFoundException, DocumentDuplicationException, IOException {
+
+        DocumentReference tiff1 = importDocument("document-1p.tif", this.documentClass.getShortName());
+        DocumentReference pdf16 = importDocument("document-16p.pdf", this.documentClass.getShortName());
+        DocumentReference pdf5 = importDocument("document-5p.pdf", this.documentClass.getShortName());
+
+        Set<DocumentReference> documentReferences = documentService.retrieveAllDocumentReferences();
+
+        assertThat(documentReferences.size(), is(3));
+        assertTrue(documentReferences.contains(tiff1));
+        assertTrue(documentReferences.contains(pdf16));
+        assertTrue(documentReferences.contains(pdf5));
+    }
+
     private void importTiff(String fileName, int expectedPageCount) throws IOException, ValidationException, DocumentDuplicationException, DocumentNotFoundException, DocumentClassNotFoundException {
-        File singlePagePdf = loadFile(fileName);
-
-        Map<String, Object> indexes = newHashMapWithExpectedSize(3);
-
-        indexes.put("company", "Sunrise");
-        indexes.put("invoiceDate", "01.11.2012");
-        indexes.put("invoiceAmount", "2000");
-
-        PhysicalDocument doc = new PhysicalDocument(documentClass, FileUtils.readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
-        DocumentReference documentReference = documentService.importDocument(doc);
+        DocumentReference documentReference = importDocument(fileName, this.documentClass.getShortName());
 
         assertNotNull(documentReference.getId());
 

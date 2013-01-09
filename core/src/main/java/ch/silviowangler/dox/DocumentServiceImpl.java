@@ -1,11 +1,11 @@
 /*
- * Copyright 2012 - 2013 Silvio Wangler (silvio.wangler@gmail.com)
+ * Copyright 2013 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *         http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,6 +23,7 @@ import ch.silviowangler.dox.domain.*;
 import ch.silviowangler.dox.domain.DocumentClass;
 import ch.silviowangler.dox.domain.Range;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.RandomAccessFileOrArray;
 import com.itextpdf.text.pdf.codec.TiffImage;
@@ -39,7 +40,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
@@ -50,6 +50,8 @@ import java.util.*;
 
 import static ch.silviowangler.dox.domain.AttributeDataType.*;
 import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
+import static org.springframework.transaction.annotation.Propagation.REQUIRED;
+import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
 import static org.springframework.util.Assert.*;
 
 /**
@@ -88,7 +90,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+    @Transactional(propagation = SUPPORTS, readOnly = true)
     public SortedSet<ch.silviowangler.dox.api.Attribute> findAttributes(ch.silviowangler.dox.api.DocumentClass documentClass) throws DocumentClassNotFoundException {
 
         DocumentClass docClass = findDocumentClass(documentClass.getShortName());
@@ -97,7 +99,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+    @Transactional(propagation = SUPPORTS, readOnly = true)
     public Set<ch.silviowangler.dox.api.DocumentClass> findDocumentClasses() {
 
         Set<ch.silviowangler.dox.api.DocumentClass> result = new HashSet<>();
@@ -112,7 +114,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+    @Transactional(propagation = SUPPORTS, readOnly = true)
     public Set<DocumentReference> findDocumentReferences(String queryString) {
 
         logger.debug("About to find document references for query string '{}'", queryString);
@@ -137,7 +139,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+    @Transactional(propagation = SUPPORTS, readOnly = true)
     @PreAuthorize("hasRole('ROLE_USER')")
     public Set<DocumentReference> findDocumentReferences(Map<String, Object> queryParams, String documentClassShortName) throws DocumentClassNotFoundException {
 
@@ -156,7 +158,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+    @Transactional(propagation = SUPPORTS, readOnly = true)
     public PhysicalDocument findPhysicalDocument(Long id) throws DocumentNotFoundException, DocumentNotInStoreException {
 
         DocumentReference doc = findDocumentReference(id);
@@ -184,7 +186,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+    @Transactional(propagation = SUPPORTS, readOnly = true)
     public DocumentReference findDocumentReference(Long id) throws DocumentNotFoundException {
         logger.info("About to find document by using id {}", id);
 
@@ -202,7 +204,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Transactional(propagation = REQUIRED, readOnly = false)
     public DocumentReference importDocument(PhysicalDocument physicalDocument) throws ValidationException, DocumentDuplicationException, DocumentClassNotFoundException {
 
         final String documentClassShortName = physicalDocument.getDocumentClass().getShortName();
@@ -248,7 +250,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Transactional(propagation = REQUIRED, readOnly = false)
     public DocumentReference updateIndices(DocumentReference reference) throws DocumentNotFoundException {
 
         DocumentReference documentReference = findDocumentReference(reference.getId());
@@ -268,6 +270,21 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         updateIndexMapEntries(documentReference.getIndices(), document);
 
         return findDocumentReference(reference.getId());
+    }
+
+    @Override
+    @Transactional(propagation = SUPPORTS, readOnly = true)
+    public Set<DocumentReference> retrieveAllDocumentReferences() {
+        logger.info("Retrieving all document references from repository");
+        Iterable<Document> documents = documentRepository.findAll();
+        Set<DocumentReference> documentReferences = Sets.newHashSet();
+
+        for (Document document : documents) {
+            logger.debug("Processing document {}", document);
+            documentReferences.add(toDocumentReference(document));
+        }
+        logger.info("Done retrieving all document references from repository. Fetched {} document references", documentReferences.size());
+        return documentReferences;
     }
 
     private void verifyDomainValues(PhysicalDocument physicalDocument, List<Attribute> attributes) throws ValueNotInDomainException {

@@ -1,11 +1,11 @@
 /*
- * Copyright 2012 - 2013 Silvio Wangler (silvio.wangler@gmail.com)
+ * Copyright 2013 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *         http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,7 +16,7 @@
 
 package ch.silviowangler.dox;
 
-import ch.silviowangler.dox.api.DocumentService;
+import ch.silviowangler.dox.api.*;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.runner.RunWith;
@@ -32,7 +32,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Map;
 
+import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -78,6 +80,23 @@ public abstract class AbstractTest extends AbstractTransactionalJUnit4SpringCont
         for (int i = 0; i < actual.length; i++) {
             assertEquals(message, expected[i], actual[i]);
         }
+    }
+
+    protected DocumentReference importDocument(String fileName, String documentClassShortname) throws IOException, ValidationException, DocumentDuplicationException, DocumentClassNotFoundException {
+
+        Map<String, Object> indexes = newHashMapWithExpectedSize(3);
+
+        indexes.put("company", "Sunrise");
+        indexes.put("invoiceDate", "01.11.2012");
+        indexes.put("invoiceAmount", "2000");
+
+        return importDocument(fileName, indexes, documentClassShortname);
+    }
+
+    protected DocumentReference importDocument(String fileName, Map<String, Object> indexes, String documentClassShortName) throws IOException, ValidationException, DocumentDuplicationException, DocumentClassNotFoundException {
+        File singlePagePdf = loadFile(fileName);
+        PhysicalDocument doc = new PhysicalDocument(new DocumentClass(documentClassShortName), FileUtils.readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
+        return documentService.importDocument(doc);
     }
 
     @After
