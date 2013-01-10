@@ -36,6 +36,15 @@ public class Attribute implements Serializable {
     private Set<String> assignedDocumentClasses;
     private boolean modifiable;
     private Domain domain;
+    private String mappingColumn;
+
+    public String getMappingColumn() {
+        return mappingColumn;
+    }
+
+    public void setMappingColumn(String mappingColumn) {
+        this.mappingColumn = mappingColumn;
+    }
 
     public Domain getDomain() {
         return domain;

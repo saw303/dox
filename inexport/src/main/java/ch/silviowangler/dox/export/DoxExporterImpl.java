@@ -88,6 +88,9 @@ public final class DoxExporterImpl implements DoxExporter {
                             BeanUtils.copyProperties(attribute, exportAttribute);
                             exportAttributes.add(exportAttribute);
 
+                            //TODO List domain values
+
+
                         }
 
                         repository.add(new ch.silviowangler.dox.export.DocumentClass(exportAttributes, documentClass.getShortName()));

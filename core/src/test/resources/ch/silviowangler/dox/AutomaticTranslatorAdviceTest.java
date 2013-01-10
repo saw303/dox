@@ -60,7 +60,7 @@ public class AutomaticTranslatorAdviceTest {
         final String expectedTranslation = "This is an english text";
         when(translationService.findTranslation("Attribute:hello", ENGLISH)).thenReturn(expectedTranslation);
 
-        Attribute attribute = new Attribute("hello", true, new ArrayList<String>(), STRING);
+        Attribute attribute = new Attribute("hello", true, new ArrayList<String>(), STRING, "S_1");
 
         assertNull(attribute.getTranslation());
 
@@ -78,7 +78,7 @@ public class AutomaticTranslatorAdviceTest {
         when(translationService.findTranslation("Attribute:hello", ENGLISH)).thenReturn(expectedTranslation);
         when(translationService.findTranslation("Attribute:and good bye", ENGLISH)).thenReturn(expectedTranslation);
 
-        List<Attribute> list = Arrays.asList(new Attribute("hello", true, new ArrayList<String>(), STRING), new Attribute("and good bye", true, new ArrayList<String>(), STRING));
+        List<Attribute> list = Arrays.asList(new Attribute("hello", true, new ArrayList<String>(), STRING, "S_1"), new Attribute("and good bye", true, new ArrayList<String>(), STRING, "S_2"));
         advice.addTranslationIfNeeded(list);
 
         for (Attribute attribute : list) {
@@ -95,7 +95,7 @@ public class AutomaticTranslatorAdviceTest {
         when(translationService.findTranslation("Attribute:hello", ENGLISH)).thenReturn(expectedTranslation);
         when(translationService.findTranslation("Attribute:and good bye", ENGLISH)).thenReturn(expectedTranslation);
 
-        Attribute[] array = {new Attribute("hello", true, new ArrayList<String>(), STRING), new Attribute("and good bye", true, new ArrayList<String>(), STRING)};
+        Attribute[] array = {new Attribute("hello", true, new ArrayList<String>(), STRING, "S_1"), new Attribute("and good bye", true, new ArrayList<String>(), STRING, "S_2")};
         advice.addTranslationIfNeeded(array);
 
         for (Attribute attribute : array) {
@@ -112,7 +112,7 @@ public class AutomaticTranslatorAdviceTest {
         final String expectedTranslation = "No translation available for key 'hello' and locale ''";
         when(messageSource.getMessage("translationadvice.no.translation.available", new Object[]{"Attribute:hello", ENGLISH}, ENGLISH)).thenReturn(expectedTranslation);
 
-        Attribute attribute = new Attribute("hello", true, new ArrayList<String>(), STRING);
+        Attribute attribute = new Attribute("hello", true, new ArrayList<String>(), STRING, "S_1");
 
         assertNull(attribute.getTranslation());
 

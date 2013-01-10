@@ -555,7 +555,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
                 attribute.isOptional(),
                 attribute.getDomain() != null ? attribute.getDomain().getValues() : null,
                 ch.silviowangler.dox.api.AttributeDataType.valueOf(attribute.getDataType().toString()),
-                attribute.isUpdateable());
+                attribute.isUpdateable(), attribute.getMappingColumn());
     }
 
 

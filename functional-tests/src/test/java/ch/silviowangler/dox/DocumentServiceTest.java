@@ -374,6 +374,7 @@ public class DocumentServiceTest extends AbstractTest {
 
         for (Attribute attribute : attributes) {
             assertTrue(attribute instanceof Translatable);
+            assertNotNull(attribute.getMappingColumn());
             assertNotNull("There should be a translation available", attribute.getTranslation());
         }
     }

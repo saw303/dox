@@ -34,17 +34,27 @@ public class Attribute implements Serializable, Comparable<Attribute>, Translata
     private AttributeDataType dataType;
     private boolean modifiable;
     private String translation;
+    private String mappingColumn;
 
-    public Attribute(String shortName, boolean optional, List<String> domainValues, AttributeDataType dataType) {
-        this(shortName, optional, domainValues, dataType, true);
+    public Attribute(String shortName, boolean optional, List<String> domainValues, AttributeDataType dataType, String mappingColumn) {
+        this(shortName, optional, domainValues, dataType, true, mappingColumn);
     }
 
-    public Attribute(String shortName, boolean optional, List<String> domainValues, AttributeDataType dataType, boolean modifiable) {
+    public Attribute(String shortName, boolean optional, List<String> domainValues, AttributeDataType dataType, boolean modifiable, String mappingColumn) {
         this.shortName = shortName;
         this.optional = optional;
         this.domainValues = domainValues;
         this.dataType = dataType;
         this.modifiable = modifiable;
+        this.mappingColumn = mappingColumn;
+    }
+
+    public String getMappingColumn() {
+        return mappingColumn;
+    }
+
+    public void setMappingColumn(String mappingColumn) {
+        this.mappingColumn = mappingColumn;
     }
 
     public boolean isModifiable() {
