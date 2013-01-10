@@ -40,3 +40,5 @@ INSERT INTO DOX_TRANSLATIONS(TRS_KEY, TRS_TXT, TRS_LOC) VALUES('Attribute:invoic
 INSERT INTO DOX_TRANSLATIONS(TRS_KEY, TRS_TXT, TRS_LOC) VALUES('Attribute:invoiceDate', 'Invoice date', 'en');
 INSERT INTO DOX_TRANSLATIONS(TRS_KEY, TRS_TXT, TRS_LOC) VALUES('Attribute:invoiceAmount', 'Rechnungsbetrag', 'de');
 INSERT INTO DOX_TRANSLATIONS(TRS_KEY, TRS_TXT, TRS_LOC) VALUES('Attribute:invoiceAmount', 'Invoice amount', 'en');
+INSERT INTO DOX_TRANSLATIONS(TRS_KEY, TRS_TXT, TRS_LOC) VALUES('Attribute:taxDate', 'Steuerjahr', 'de');
+INSERT INTO DOX_TRANSLATIONS(TRS_KEY, TRS_TXT, TRS_LOC) VALUES('Attribute:taxDate', 'Tax year', 'en');

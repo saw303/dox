@@ -17,13 +17,16 @@
 package ch.silviowangler.dox.export;
 
 import ch.silviowangler.dox.DoxVersion;
-import ch.silviowangler.dox.api.DocumentClass;
+import ch.silviowangler.dox.api.Attribute;
+import ch.silviowangler.dox.api.DocumentClassNotFoundException;
 import ch.silviowangler.dox.api.DocumentReference;
 import ch.silviowangler.dox.api.DocumentService;
+import com.google.common.collect.Sets;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -32,6 +35,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -58,7 +62,7 @@ public final class DoxExporterImpl implements DoxExporter {
 
         logger.info("About to export repository");
 
-        final Set<DocumentClass> documentClasses = documentService.findDocumentClasses();
+        final Set<ch.silviowangler.dox.api.DocumentClass> documentClasses = documentService.findDocumentClasses();
 
         File target = new File(new File(System.getProperty("java.io.tmpdir")), "DOX-Export-" + System.currentTimeMillis() + ".zip");
         if (!documentClasses.isEmpty()) {
@@ -66,21 +70,37 @@ public final class DoxExporterImpl implements DoxExporter {
             logger.debug("Creating new ZIP file '{}'", target.getAbsolutePath());
             target.createNewFile();
 
-            try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(target)))
-            {
+            try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(target))) {
                 out.putNextEntry(new ZipEntry("repository.xml"));
                 Repository repository = new Repository();
                 repository.setVersion(version);
 
-                for (DocumentClass documentClass : documentClasses) {
+                for (ch.silviowangler.dox.api.DocumentClass documentClass : documentClasses) {
                     logger.debug("Processing document class {}", documentClass);
 
-                    repository.add(documentClass);
+                    try {
+                        SortedSet<Attribute> attributes = documentService.findAttributes(documentClass);
+                        Set<ch.silviowangler.dox.export.Attribute> exportAttributes = Sets.newHashSetWithExpectedSize(attributes.size());
+
+                        for (Attribute attribute : attributes) {
+                            ch.silviowangler.dox.export.Attribute exportAttribute = new ch.silviowangler.dox.export.Attribute();
+
+                            BeanUtils.copyProperties(attribute, exportAttribute);
+                            exportAttributes.add(exportAttribute);
+
+                        }
+
+                        repository.add(new ch.silviowangler.dox.export.DocumentClass(exportAttributes, documentClass.getShortName()));
+                    } catch (DocumentClassNotFoundException e) {
+                        logger.error("Unexpected error. That document class must exist {}", documentClass, e);
+                    }
+
                 }
                 // do work on current file
                 XStream xStream = new XStream(new StaxDriver());
                 xStream.alias("repository", Repository.class);
                 xStream.alias("documentClass", DocumentClass.class);
+                xStream.alias("attribute", ch.silviowangler.dox.export.Attribute.class);
                 xStream.useAttributeFor(DoxVersion.class, "version");
 
                 final String data = xStream.toXML(repository);
@@ -92,9 +112,9 @@ public final class DoxExporterImpl implements DoxExporter {
 
                 // Process files
                 xStream = new XStream(new StaxDriver());
-                final Set<DocumentReference> documentReferences = documentService.findDocumentReferences("*");
+                final Set<DocumentReference> documentReferences = documentService.retrieveAllDocumentReferences();
 
-                for (DocumentReference documentReference : documentReferences){
+                for (DocumentReference documentReference : documentReferences) {
                     logger.debug("Processing document reference {}", documentReference.getId());
 
                     out.putNextEntry(new ZipEntry("repository/" + documentReference.getHash() + ".xml"));

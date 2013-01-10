@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -79,7 +80,19 @@ public class AutomaticTranslatorAdvice {
             String translation = translationService.findTranslation(messageKey, locale);
             translatable.setTranslation(translation);
         } catch (NoTranslationFoundException e) {
-            translatable.setTranslation(messageSource.getMessage("translationadvice.no.translation.available", new Object[]{messageKey, locale}, locale));
+            String message = getTranslation(messageKey, locale);
+            translatable.setTranslation(message);
+        }
+    }
+
+    private String getTranslation(String messageKey, Locale locale) {
+        try {
+            return messageSource.getMessage("translationadvice.no.translation.available", new Object[]{messageKey, locale}, locale);
+        } catch (NoSuchMessageException e1) {
+            if (Locale.GERMAN.equals(locale)) {
+                throw new NoSuchMessageException(messageKey, locale);
+            }
+            return getTranslation(messageKey, Locale.GERMAN);
         }
     }
 }

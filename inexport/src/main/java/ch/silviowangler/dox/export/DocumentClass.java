@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *         http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,38 +16,36 @@
 
 package ch.silviowangler.dox.export;
 
-import ch.silviowangler.dox.DoxVersion;
-
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
  * @author Silvio Wangler
  * @since 0.1
  */
-public class Repository implements Serializable {
+public class DocumentClass implements Serializable {
 
-    private Set<DocumentClass> documentClasses = new HashSet<>();
-    private DoxVersion version;
+    private String shortName;
+    private Set<Attribute> attributes;
 
-    public Set<DocumentClass> getDocumentClasses() {
-        return documentClasses;
+    public DocumentClass(Set<Attribute> attributes, String shortName) {
+        this.attributes = attributes;
+        this.shortName = shortName;
     }
 
-    public void add(DocumentClass documentClass) {
-        documentClasses.add(documentClass);
+    public Set<Attribute> getAttributes() {
+        return attributes;
     }
 
-    public void setDocumentClasses(Set<DocumentClass> documentClasses) {
-        this.documentClasses = documentClasses;
+    public void setAttributes(Set<Attribute> attributes) {
+        this.attributes = attributes;
     }
 
-    public DoxVersion getVersion() {
-        return version;
+    public String getShortName() {
+        return shortName;
     }
 
-    public void setVersion(DoxVersion version) {
-        this.version = version;
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 }

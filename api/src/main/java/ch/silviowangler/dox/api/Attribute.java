@@ -32,27 +32,27 @@ public class Attribute implements Serializable, Comparable<Attribute>, Translata
     private boolean optional = false;
     private List<String> domainValues;
     private AttributeDataType dataType;
-    private boolean updateable;
+    private boolean modifiable;
     private String translation;
 
     public Attribute(String shortName, boolean optional, List<String> domainValues, AttributeDataType dataType) {
         this(shortName, optional, domainValues, dataType, true);
     }
 
-    public Attribute(String shortName, boolean optional, List<String> domainValues, AttributeDataType dataType, boolean updateable) {
+    public Attribute(String shortName, boolean optional, List<String> domainValues, AttributeDataType dataType, boolean modifiable) {
         this.shortName = shortName;
         this.optional = optional;
         this.domainValues = domainValues;
         this.dataType = dataType;
-        this.updateable = updateable;
+        this.modifiable = modifiable;
     }
 
-    public boolean isUpdateable() {
-        return updateable;
+    public boolean isModifiable() {
+        return modifiable;
     }
 
-    public void setUpdateable(boolean updateable) {
-        this.updateable = updateable;
+    public void setModifiable(boolean modifiable) {
+        this.modifiable = modifiable;
     }
 
     public boolean hasDomainValues() {
