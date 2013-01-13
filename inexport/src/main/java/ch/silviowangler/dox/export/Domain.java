@@ -16,6 +16,8 @@
 
 package ch.silviowangler.dox.export;
 
+import com.google.common.collect.Lists;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -29,5 +31,28 @@ import java.util.List;
 public class Domain implements Serializable {
 
     private String name;
-    private List<String> values;
+    private List<String> values = Lists.newArrayList();
+
+    public Domain() {
+    }
+
+    public Domain(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<String> getValues() {
+        return values;
+    }
+
+    public void setValues(List<String> values) {
+        this.values = values;
+    }
 }

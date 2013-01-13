@@ -105,11 +105,11 @@ public class ImportController implements MessageSourceAware, InitializingBean {
                 }
                 sb.append("</label>\n");
 
-                if (attribute.hasDomainValues()) {
+                if (attribute.containsDomain()) {
 
                     sb.append("<datalist id=\"list-").append(attribute.getShortName()).append("\">");
 
-                    for (String value : attribute.getDomainValues()) {
+                    for (String value : attribute.getDomain().getValues()) {
                         sb.append("<option value=\"").append(value).append("\"/>");
                     }
                     sb.append("</datalist>\n");

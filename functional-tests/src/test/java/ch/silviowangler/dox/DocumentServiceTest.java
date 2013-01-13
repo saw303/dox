@@ -28,6 +28,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
@@ -55,6 +56,15 @@ public class DocumentServiceTest extends AbstractTest {
         assertEquals("Wrong order", "company", iterator.next().getShortName());
         assertEquals("Wrong order", "invoiceAmount", iterator.next().getShortName());
         assertEquals("Wrong order", "invoiceDate", iterator.next().getShortName());
+
+        for (Attribute attribute : attributes) {
+            if (attribute.containsDomain()) {
+                Domain domain=  attribute.getDomain();
+                assertNotNull(domain.getShortName());
+                assertThat(domain.getValues().size(), is(not(0)));
+                assertNotNull("Translation is missing", domain.getTranslation());
+            }
+        }
     }
 
     @Test

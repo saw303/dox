@@ -27,6 +27,10 @@ import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Locale;
 
@@ -62,12 +66,21 @@ public class AutomaticTranslatorAdvice {
                 if (isTranslatable(o)) translate((Translatable) o);
             }
         }
-
-        logger.debug("Ret val {}", retVal);
+        logger.debug("Return value is {}", retVal);
     }
 
     private boolean isTranslatable(Object retVal) {
-        return retVal instanceof Translatable;
+        boolean translatable;
+
+        if (retVal instanceof Class) {
+            translatable = Translatable.class.isAssignableFrom((Class) retVal);
+        } else {
+            translatable = retVal instanceof Translatable;
+        }
+
+
+        logger.trace("Is object '{}' translatable? {}", retVal.getClass().getName(), translatable);
+        return translatable;
     }
 
     private void translate(Translatable translatable) {
@@ -82,6 +95,21 @@ public class AutomaticTranslatorAdvice {
         } catch (NoTranslationFoundException e) {
             String message = getTranslation(messageKey, locale);
             translatable.setTranslation(message);
+        }
+
+        final Field[] declaredFields = translatable.getClass().getDeclaredFields();
+
+        for (Field field : declaredFields) {
+            if (isTranslatable(field.getType())) {
+                try {
+                    Translatable objectToTranslate = (Translatable) new PropertyDescriptor(field.getName(), translatable.getClass()).getReadMethod().invoke(translatable);
+                    if (objectToTranslate != null) {
+                        translate(objectToTranslate);
+                    }
+                } catch (IllegalAccessException | IntrospectionException | InvocationTargetException e) {
+                    logger.error("Unable to translate", e);
+                }
+            }
         }
     }
 
