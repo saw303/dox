@@ -17,6 +17,7 @@
 package ch.silviowangler.dox.api;
 
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * @author Silvio Wangler
@@ -40,4 +41,11 @@ public interface TranslationService {
      * @throws NoTranslationFoundException if there is no translation available for the key and the locale.
      */
     String findTranslation(String key, Locale locale) throws NoTranslationFoundException;
+
+    /**
+     * Retrieves all translations within the repository
+     *
+     * @return all translations within the repository
+     */
+    Set<Translation> findAll();
 }

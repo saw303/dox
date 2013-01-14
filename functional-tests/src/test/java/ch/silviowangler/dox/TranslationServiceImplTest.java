@@ -17,15 +17,18 @@
 package ch.silviowangler.dox;
 
 import ch.silviowangler.dox.api.NoTranslationFoundException;
+import ch.silviowangler.dox.api.Translation;
 import ch.silviowangler.dox.api.TranslationService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Locale;
+import java.util.Set;
 
 import static java.util.Locale.ENGLISH;
 import static java.util.Locale.GERMAN;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -42,5 +45,18 @@ public class TranslationServiceImplTest extends AbstractTest {
         assertThat(translationService.findTranslation("Domain:company", GERMAN), is("Firma"));
         assertThat(translationService.findTranslation("Domain:company", new Locale("de", "CH")), is("Firma"));
         assertThat(translationService.findTranslation("Domain:company", ENGLISH), is("Company"));
+    }
+
+    @Test
+    public void readAll() {
+        Set<Translation> translations = translationService.findAll();
+
+        assertThat(translations.size(), is(14));
+
+        for (Translation translation : translations) {
+            assertNotNull(translation.getKey());
+            assertNotNull(translation.getLocale());
+            assertNotNull(translation.getTranslation());
+        }
     }
 }

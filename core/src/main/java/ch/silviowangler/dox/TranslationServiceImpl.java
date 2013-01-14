@@ -20,6 +20,7 @@ import ch.silviowangler.dox.api.NoTranslationFoundException;
 import ch.silviowangler.dox.api.TranslationService;
 import ch.silviowangler.dox.domain.Translation;
 import ch.silviowangler.dox.domain.TranslationRepository;
+import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Locale;
+import java.util.Set;
+
+import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
 
 /**
  * @author Silvio Wangler
@@ -40,7 +44,21 @@ public class TranslationServiceImpl implements TranslationService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, propagation = SUPPORTS)
+    public Set<ch.silviowangler.dox.api.Translation> findAll() {
+
+        Iterable<Translation> translations = translationRepository.findAll();
+        Set<ch.silviowangler.dox.api.Translation> translationsApi = Sets.newHashSet();
+
+        for (Translation translation : translations) {
+            ch.silviowangler.dox.api.Translation translationApi = new ch.silviowangler.dox.api.Translation(translation.getKey(), translation.getLocale(), translation.getLanguageSpecificTranslation());
+            translationsApi.add(translationApi);
+        }
+        return translationsApi;
+    }
+
+    @Override
+    @Transactional(readOnly = true, propagation = SUPPORTS)
     public String findTranslation(String key, Locale locale) throws NoTranslationFoundException {
 
         logger.debug("Trying to find message for key '{}' and locale '{}'", key, locale.getDisplayName());

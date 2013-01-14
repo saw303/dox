@@ -33,6 +33,7 @@ public class Attribute implements Serializable, Comparable<Attribute>, Translata
     private AttributeDataType dataType;
     private boolean modifiable;
     private String translation;
+    private String mappingColumn;
 
     public Attribute(String shortName, boolean optional, AttributeDataType dataType) {
         this(shortName, optional, null, dataType, true);
@@ -46,6 +47,23 @@ public class Attribute implements Serializable, Comparable<Attribute>, Translata
         this.modifiable = modifiable;
     }
 
+    public Attribute(String shortName, boolean optional, Domain domain, AttributeDataType dataType, boolean modifiable, String mappingColumn) {
+        this.shortName = shortName;
+        this.optional = optional;
+        this.domain = domain;
+        this.dataType = dataType;
+        this.modifiable = modifiable;
+        this.mappingColumn = mappingColumn;
+    }
+
+    public String getMappingColumn() {
+        return mappingColumn;
+    }
+
+    public void setMappingColumn(String mappingColumn) {
+        this.mappingColumn = mappingColumn;
+    }
+
     public boolean isModifiable() {
         return modifiable;
     }
@@ -55,7 +73,7 @@ public class Attribute implements Serializable, Comparable<Attribute>, Translata
     }
 
     public boolean containsDomain() {
-        return  domain != null && ! domain.getValues().isEmpty();
+        return domain != null && !domain.getValues().isEmpty();
     }
 
     public Domain getDomain() {
