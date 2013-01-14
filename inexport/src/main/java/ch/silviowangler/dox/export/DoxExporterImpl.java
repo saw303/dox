@@ -110,8 +110,6 @@ public final class DoxExporterImpl implements DoxExporter {
         throw new IllegalStateException("There is nothing to export");
     }
 
-
-
     private XStream getXStreamForRepository() {
         XStream xStream = new XStream(new StaxDriver());
         xStream.alias("repository", Repository.class);
@@ -157,7 +155,6 @@ public final class DoxExporterImpl implements DoxExporter {
         repository.getTranslations().addAll(processTranslations());
         return repository;
     }
-
 
 
     private Set<Translation> processTranslations() {
