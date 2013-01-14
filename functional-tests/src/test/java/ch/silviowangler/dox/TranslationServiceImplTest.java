@@ -54,9 +54,9 @@ public class TranslationServiceImplTest extends AbstractTest {
         assertThat(translations.size(), is(14));
 
         for (Translation translation : translations) {
-            assertNotNull(translation.getKey());
-            assertNotNull(translation.getLocale());
-            assertNotNull(translation.getTranslation());
+            assertNotNull("Key must not be null", translation.getKey());
+            assertNotNull("Locale must not be null", translation.getLocale());
+            assertNotNull("Translation must not be null", translation.getTranslation());
         }
     }
 }
