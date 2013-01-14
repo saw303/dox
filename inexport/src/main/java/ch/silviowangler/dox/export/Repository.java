@@ -44,9 +44,6 @@ public class Repository implements Serializable {
         return documentClasses;
     }
 
-    public void add(DocumentClass documentClass) {
-        documentClasses.add(documentClass);
-    }
 
     public void setDocumentClasses(Set<DocumentClass> documentClasses) {
         this.documentClasses = documentClasses;

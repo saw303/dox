@@ -33,6 +33,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.zip.ZipEntry;
@@ -76,33 +77,7 @@ public final class DoxExporterImpl implements DoxExporter {
                 Repository repository = new Repository();
                 repository.setVersion(version);
 
-                for (ch.silviowangler.dox.api.DocumentClass documentClass : documentClasses) {
-                    logger.debug("Processing document class {}", documentClass);
-
-                    try {
-                        SortedSet<ch.silviowangler.dox.api.Attribute> attributes = documentService.findAttributes(documentClass);
-                        Set<ch.silviowangler.dox.export.Attribute> exportAttributes = Sets.newHashSetWithExpectedSize(attributes.size());
-
-                        for (ch.silviowangler.dox.api.Attribute attribute : attributes) {
-                            ch.silviowangler.dox.export.Attribute exportAttribute = new ch.silviowangler.dox.export.Attribute();
-                            BeanUtils.copyProperties(attribute, exportAttribute, new String[]{"domain"});
-
-                            if (attribute.containsDomain()) {
-                                Domain domain = new Domain(attribute.getDomain().getShortName());
-
-                                for (String domainValue : attribute.getDomain().getValues()) {
-                                    domain.getValues().add(domainValue);
-                                }
-                                exportAttribute.setDomain(domain);
-                            }
-
-                            exportAttributes.add(exportAttribute);
-                        }
-                        repository.add(new ch.silviowangler.dox.export.DocumentClass(exportAttributes, documentClass.getShortName()));
-                    } catch (DocumentClassNotFoundException e) {
-                        logger.error("Unexpected error. That document class must exist {}", documentClass, e);
-                    }
-                }
+                repository.getDocumentClasses().addAll(processDocumentClasses(documentClasses));
 
                 Set<ch.silviowangler.dox.api.Translation> translations = translationService.findAll();
 
@@ -151,5 +126,37 @@ public final class DoxExporterImpl implements DoxExporter {
         }
         logger.warn("There are no document classes. There is nothing to export. Aborting");
         throw new IllegalStateException("There is nothing to export");
+    }
+
+    private Set<DocumentClass> processDocumentClasses(Set<ch.silviowangler.dox.api.DocumentClass> documentClasses) {
+        Set<DocumentClass> docClasses = new HashSet<>(documentClasses.size());
+        for (ch.silviowangler.dox.api.DocumentClass documentClass : documentClasses) {
+            logger.debug("Processing document class {}", documentClass);
+
+            try {
+                SortedSet<ch.silviowangler.dox.api.Attribute> attributes = documentService.findAttributes(documentClass);
+                Set<Attribute> exportAttributes = Sets.newHashSetWithExpectedSize(attributes.size());
+
+                for (ch.silviowangler.dox.api.Attribute attribute : attributes) {
+                    Attribute exportAttribute = new Attribute();
+                    BeanUtils.copyProperties(attribute, exportAttribute, new String[]{"domain"});
+
+                    if (attribute.containsDomain()) {
+                        Domain domain = new Domain(attribute.getDomain().getShortName());
+
+                        for (String domainValue : attribute.getDomain().getValues()) {
+                            domain.getValues().add(domainValue);
+                        }
+                        exportAttribute.setDomain(domain);
+                    }
+
+                    exportAttributes.add(exportAttribute);
+                }
+                docClasses.add(new DocumentClass(exportAttributes, documentClass.getShortName()));
+            } catch (DocumentClassNotFoundException e) {
+                logger.error("Unexpected error. That document class must exist {}", documentClass, e);
+            }
+        }
+        return docClasses;
     }
 }
