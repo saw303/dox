@@ -73,49 +73,26 @@ public final class DoxExporterImpl implements DoxExporter {
             target.createNewFile();
 
             try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(target))) {
-                out.putNextEntry(new ZipEntry("repository.xml"));
-                Repository repository = new Repository();
-                repository.setVersion(version);
 
-                repository.getDocumentClasses().addAll(processDocumentClasses(documentClasses));
-
-                Set<ch.silviowangler.dox.api.Translation> translations = translationService.findAll();
-
-                for (ch.silviowangler.dox.api.Translation translation : translations) {
-                    repository.getTranslations().add(new Translation(translation.getKey(), translation.getLocale(), translation.getTranslation()));
-                }
+                Repository repository = retrieveRepository(documentClasses);
 
                 // do work on current file
-                XStream xStream = new XStream(new StaxDriver());
-                xStream.alias("repository", Repository.class);
-                xStream.alias("documentClass", DocumentClass.class);
-                xStream.alias("attribute", ch.silviowangler.dox.export.Attribute.class);
-                xStream.alias("domainValues", Domain.class);
-                xStream.alias("translations", Translation.class);
-                xStream.useAttributeFor(DoxVersion.class, "version");
+                XStream xStream = getXStreamForRepository();
 
                 final String data = xStream.toXML(repository);
-                if (logger.isTraceEnabled()) {
-                    Writer writer = new StringWriter();
-                    xStream.marshal(repository, new PrettyPrintWriter(writer));
-                    logger.trace("Created XML for repository.xml '{}'", writer.toString());
-                }
-                final byte[] dataBytes = data.getBytes();
-                out.write(dataBytes, 0, dataBytes.length);
-
-                out.closeEntry(); // end of entry
+                logXml(xStream, repository);
+                writeToZipOutputStream(out, data, "repository.xml");
 
                 // Process files
-                xStream = new XStream(new StaxDriver());
+                xStream = getXStreamDocument();
                 final Set<DocumentReference> documentReferences = documentService.retrieveAllDocumentReferences();
+
+                logger.debug("Found {} document references to export", documentReferences.size());
 
                 for (DocumentReference documentReference : documentReferences) {
                     logger.debug("Processing document reference {}", documentReference.getId());
-
-                    out.putNextEntry(new ZipEntry("repository/" + documentReference.getHash() + ".xml"));
-                    final byte[] documentRefDataBytes = xStream.toXML(documentReference).getBytes();
-                    out.write(documentRefDataBytes, 0, documentRefDataBytes.length);
-                    out.closeEntry();
+                    logXml(xStream, documentReference);
+                    writeToZipOutputStream(out, xStream.toXML(documentReference), "repository/" + documentReference.getHash() + ".xml");
                 }
                 return null;
 
@@ -126,6 +103,60 @@ public final class DoxExporterImpl implements DoxExporter {
         }
         logger.warn("There are no document classes. There is nothing to export. Aborting");
         throw new IllegalStateException("There is nothing to export");
+    }
+
+    private XStream getXStreamForRepository() {
+        XStream xStream = new XStream(new StaxDriver());
+        xStream.alias("repository", Repository.class);
+        xStream.alias("documentClass", DocumentClass.class);
+        xStream.alias("attribute", Attribute.class);
+        xStream.alias("domainValues", Domain.class);
+        xStream.alias("translations", Translation.class);
+        xStream.useAttributeFor(DoxVersion.class, "version");
+        return xStream;
+    }
+
+    private XStream getXStreamDocument() {
+        XStream xStream = new XStream(new StaxDriver());
+        xStream.useAttributeFor(ch.silviowangler.dox.api.DocumentClass.class, "shortName");
+        xStream.alias("document", DocumentReference.class);
+        return xStream;
+    }
+
+    private void logXml(XStream xStream, Serializable instanceToDump) {
+        if (logger.isTraceEnabled()) {
+            Writer writer = new StringWriter();
+            xStream.marshal(instanceToDump, new PrettyPrintWriter(writer));
+            logger.trace("Created XML for repository.xml '{}'", writer.toString());
+        }
+    }
+
+    private void writeToZipOutputStream(ZipOutputStream out, String data, String path) throws IOException {
+        logger.trace("Writing to ZIP output stream using path '{}' and data '{}'", path, data);
+        final byte[] dataBytes = data.getBytes();
+        out.putNextEntry(new ZipEntry(path));
+        out.write(dataBytes, 0, dataBytes.length);
+        out.closeEntry(); // end of entry
+    }
+
+    private Repository retrieveRepository(Set<ch.silviowangler.dox.api.DocumentClass> documentClasses) {
+        Repository repository = new Repository();
+        repository.setVersion(version);
+        repository.getDocumentClasses().addAll(processDocumentClasses(documentClasses));
+        repository.getTranslations().addAll(processTranslations());
+        return repository;
+    }
+
+
+
+    private Set<Translation> processTranslations() {
+        Set<ch.silviowangler.dox.api.Translation> translations = translationService.findAll();
+        Set<Translation> translationApi = new HashSet<>(translations.size());
+
+        for (ch.silviowangler.dox.api.Translation translation : translations) {
+            translationApi.add(new Translation(translation.getKey(), translation.getLocale(), translation.getTranslation()));
+        }
+        return translationApi;
     }
 
     private Set<DocumentClass> processDocumentClasses(Set<ch.silviowangler.dox.api.DocumentClass> documentClasses) {

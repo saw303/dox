@@ -78,6 +78,7 @@ public class ImportController implements MessageSourceAware, InitializingBean {
     @ResponseBody
     public String getAttributeForm(@RequestParam(DOCUMENT_CLASS_SHORT_NAME) String documentClassShortName, Locale locale, Device device) {
 
+        // TODO generate HTML using templating engine such as Velocity or even use Groovy
         logger.debug("Normal device: {}, mobile device: {}, tablet device: {}", new Boolean[]{device.isNormal(), device.isMobile(), device.isTablet()});
         logger.debug("About to generate form for document class '{}'", documentClassShortName);
 
