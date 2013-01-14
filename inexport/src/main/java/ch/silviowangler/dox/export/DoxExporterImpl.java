@@ -17,10 +17,10 @@
 package ch.silviowangler.dox.export;
 
 import ch.silviowangler.dox.DoxVersion;
-import ch.silviowangler.dox.api.Attribute;
 import ch.silviowangler.dox.api.DocumentClassNotFoundException;
 import ch.silviowangler.dox.api.DocumentReference;
 import ch.silviowangler.dox.api.DocumentService;
+import ch.silviowangler.dox.api.TranslationService;
 import com.google.common.collect.Sets;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
@@ -54,6 +54,8 @@ public final class DoxExporterImpl implements DoxExporter {
     @Autowired
     private DocumentService documentService;
     @Autowired
+    private TranslationService translationService;
+    @Autowired
     private DoxVersion version;
 
     @Override
@@ -78,17 +80,17 @@ public final class DoxExporterImpl implements DoxExporter {
                     logger.debug("Processing document class {}", documentClass);
 
                     try {
-                        SortedSet<Attribute> attributes = documentService.findAttributes(documentClass);
+                        SortedSet<ch.silviowangler.dox.api.Attribute> attributes = documentService.findAttributes(documentClass);
                         Set<ch.silviowangler.dox.export.Attribute> exportAttributes = Sets.newHashSetWithExpectedSize(attributes.size());
 
-                        for (Attribute attribute : attributes) {
+                        for (ch.silviowangler.dox.api.Attribute attribute : attributes) {
                             ch.silviowangler.dox.export.Attribute exportAttribute = new ch.silviowangler.dox.export.Attribute();
-                            BeanUtils.copyProperties(attribute, exportAttribute, new String[]{ "domain"});
+                            BeanUtils.copyProperties(attribute, exportAttribute, new String[]{"domain"});
 
                             if (attribute.containsDomain()) {
                                 Domain domain = new Domain(attribute.getDomain().getShortName());
 
-                                for ( String domainValue : attribute.getDomain().getValues()) {
+                                for (String domainValue : attribute.getDomain().getValues()) {
                                     domain.getValues().add(domainValue);
                                 }
                                 exportAttribute.setDomain(domain);
@@ -102,12 +104,19 @@ public final class DoxExporterImpl implements DoxExporter {
                     }
                 }
 
+                Set<ch.silviowangler.dox.api.Translation> translations = translationService.findAll();
+
+                for (ch.silviowangler.dox.api.Translation translation : translations) {
+                    repository.getTranslations().add(new Translation(translation.getKey(), translation.getLocale(), translation.getTranslation()));
+                }
+
                 // do work on current file
                 XStream xStream = new XStream(new StaxDriver());
                 xStream.alias("repository", Repository.class);
                 xStream.alias("documentClass", DocumentClass.class);
                 xStream.alias("attribute", ch.silviowangler.dox.export.Attribute.class);
                 xStream.alias("domainValues", Domain.class);
+                xStream.alias("translations", Translation.class);
                 xStream.useAttributeFor(DoxVersion.class, "version");
 
                 final String data = xStream.toXML(repository);

@@ -30,6 +30,15 @@ public class Repository implements Serializable {
 
     private Set<DocumentClass> documentClasses = new HashSet<>();
     private DoxVersion version;
+    private Set<Translation> translations = new HashSet<>();
+
+    public Set<Translation> getTranslations() {
+        return translations;
+    }
+
+    public void setTranslations(Set<Translation> translations) {
+        this.translations = translations;
+    }
 
     public Set<DocumentClass> getDocumentClasses() {
         return documentClasses;
