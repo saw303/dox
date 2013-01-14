@@ -17,6 +17,7 @@
 package ch.silviowangler.dox;
 
 import ch.silviowangler.dox.api.*;
+import ch.silviowangler.dox.api.Domain;
 import ch.silviowangler.dox.domain.Attribute;
 import ch.silviowangler.dox.domain.AttributeDataType;
 import ch.silviowangler.dox.domain.*;
@@ -553,9 +554,19 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         return new ch.silviowangler.dox.api.Attribute(
                 attribute.getShortName(),
                 attribute.isOptional(),
-                attribute.getDomain() != null ? attribute.getDomain().getValues() : null,
+                attribute.getDomain() != null ? toDomainApi(attribute.getDomain()) : null,
                 ch.silviowangler.dox.api.AttributeDataType.valueOf(attribute.getDataType().toString()),
                 attribute.isUpdateable(), attribute.getMappingColumn());
+    }
+
+    private Domain toDomainApi(ch.silviowangler.dox.domain.Domain domain) {
+
+        Domain domainApi = new Domain();
+        domainApi.setShortName(domain.getShortName());
+        for (String domainValue : domain.getValues()) {
+            domainApi.getValues().add(domainValue);
+        }
+        return domainApi;
     }
 
 

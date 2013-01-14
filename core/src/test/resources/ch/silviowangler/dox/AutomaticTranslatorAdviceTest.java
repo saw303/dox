@@ -17,6 +17,7 @@
 package ch.silviowangler.dox;
 
 import ch.silviowangler.dox.api.Attribute;
+import ch.silviowangler.dox.api.Domain;
 import ch.silviowangler.dox.api.NoTranslationFoundException;
 import ch.silviowangler.dox.api.TranslationService;
 import org.junit.Test;
@@ -27,7 +28,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -60,7 +60,7 @@ public class AutomaticTranslatorAdviceTest {
         final String expectedTranslation = "This is an english text";
         when(translationService.findTranslation("Attribute:hello", ENGLISH)).thenReturn(expectedTranslation);
 
-        Attribute attribute = new Attribute("hello", true, new ArrayList<String>(), STRING, "S_1");
+        Attribute attribute = new Attribute("hello", true, STRING);
 
         assertNull(attribute.getTranslation());
 
@@ -78,7 +78,7 @@ public class AutomaticTranslatorAdviceTest {
         when(translationService.findTranslation("Attribute:hello", ENGLISH)).thenReturn(expectedTranslation);
         when(translationService.findTranslation("Attribute:and good bye", ENGLISH)).thenReturn(expectedTranslation);
 
-        List<Attribute> list = Arrays.asList(new Attribute("hello", true, new ArrayList<String>(), STRING, "S_1"), new Attribute("and good bye", true, new ArrayList<String>(), STRING, "S_2"));
+        List<Attribute> list = Arrays.asList(new Attribute("hello", true, STRING), new Attribute("and good bye", true, STRING));
         advice.addTranslationIfNeeded(list);
 
         for (Attribute attribute : list) {
@@ -95,7 +95,7 @@ public class AutomaticTranslatorAdviceTest {
         when(translationService.findTranslation("Attribute:hello", ENGLISH)).thenReturn(expectedTranslation);
         when(translationService.findTranslation("Attribute:and good bye", ENGLISH)).thenReturn(expectedTranslation);
 
-        Attribute[] array = {new Attribute("hello", true, new ArrayList<String>(), STRING, "S_1"), new Attribute("and good bye", true, new ArrayList<String>(), STRING, "S_2")};
+        Attribute[] array = {new Attribute("hello", true, STRING), new Attribute("and good bye", true, STRING)};
         advice.addTranslationIfNeeded(array);
 
         for (Attribute attribute : array) {
@@ -112,12 +112,32 @@ public class AutomaticTranslatorAdviceTest {
         final String expectedTranslation = "No translation available for key 'hello' and locale ''";
         when(messageSource.getMessage("translationadvice.no.translation.available", new Object[]{"Attribute:hello", ENGLISH}, ENGLISH)).thenReturn(expectedTranslation);
 
-        Attribute attribute = new Attribute("hello", true, new ArrayList<String>(), STRING, "S_1");
+        Attribute attribute = new Attribute("hello", true, STRING);
 
         assertNull(attribute.getTranslation());
 
         advice.addTranslationIfNeeded(attribute);
 
         assertThat(attribute.getTranslation(), is(expectedTranslation));
+    }
+
+    @Test
+    public void testAddTranslationCompositeTranslatableIfNeededInException() throws Throwable {
+
+        LocaleContextHolder.setLocale(ENGLISH);
+
+        when(translationService.findTranslation("Attribute:hello", ENGLISH)).thenThrow(new NoTranslationFoundException("hello", ENGLISH));
+        final String expectedDomainName = "Yet another domain name";
+        when(translationService.findTranslation("Domain:I.AM.A.DOMAN", ENGLISH)).thenReturn(expectedDomainName);
+        final String expectedTranslation = "No translation available for key 'hello' and locale ''";
+        when(messageSource.getMessage("translationadvice.no.translation.available", new Object[]{"Attribute:hello", ENGLISH}, ENGLISH)).thenReturn(expectedTranslation);
+
+        Attribute attribute = new Attribute("hello", true, new Domain("I.AM.A.DOMAN"), STRING, false);
+
+        assertNull(attribute.getTranslation());
+
+        advice.addTranslationIfNeeded(attribute);
+
+        assertThat(attribute.getDomain().getTranslation(), is(expectedDomainName));
     }
 }

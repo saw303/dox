@@ -23,6 +23,7 @@ import ch.silviowangler.dox.api.DocumentReference;
 import ch.silviowangler.dox.api.DocumentService;
 import com.google.common.collect.Sets;
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.zip.ZipEntry;
@@ -50,7 +49,7 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 @Scope(SCOPE_PROTOTYPE)
 public final class DoxExporterImpl implements DoxExporter {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = LoggerFactory.getLogger(DoxExporterImpl.class);
 
     @Autowired
     private DocumentService documentService;
@@ -64,8 +63,8 @@ public final class DoxExporterImpl implements DoxExporter {
 
         final Set<ch.silviowangler.dox.api.DocumentClass> documentClasses = documentService.findDocumentClasses();
 
-        File target = new File(new File(System.getProperty("java.io.tmpdir")), "DOX-Export-" + System.currentTimeMillis() + ".zip");
         if (!documentClasses.isEmpty()) {
+            File target = new File(new File(System.getProperty("java.io.tmpdir")), "DOX-Export-" + System.currentTimeMillis() + ".zip");
 
             logger.debug("Creating new ZIP file '{}'", target.getAbsolutePath());
             target.createNewFile();
@@ -84,30 +83,39 @@ public final class DoxExporterImpl implements DoxExporter {
 
                         for (Attribute attribute : attributes) {
                             ch.silviowangler.dox.export.Attribute exportAttribute = new ch.silviowangler.dox.export.Attribute();
+                            BeanUtils.copyProperties(attribute, exportAttribute, new String[]{ "domain"});
 
-                            BeanUtils.copyProperties(attribute, exportAttribute);
+                            if (attribute.containsDomain()) {
+                                Domain domain = new Domain(attribute.getDomain().getShortName());
+
+                                for ( String domainValue : attribute.getDomain().getValues()) {
+                                    domain.getValues().add(domainValue);
+                                }
+                                exportAttribute.setDomain(domain);
+                            }
+
                             exportAttributes.add(exportAttribute);
-
-                            //TODO List domain values
-
-
                         }
-
                         repository.add(new ch.silviowangler.dox.export.DocumentClass(exportAttributes, documentClass.getShortName()));
                     } catch (DocumentClassNotFoundException e) {
                         logger.error("Unexpected error. That document class must exist {}", documentClass, e);
                     }
-
                 }
+
                 // do work on current file
                 XStream xStream = new XStream(new StaxDriver());
                 xStream.alias("repository", Repository.class);
                 xStream.alias("documentClass", DocumentClass.class);
                 xStream.alias("attribute", ch.silviowangler.dox.export.Attribute.class);
+                xStream.alias("domainValues", Domain.class);
                 xStream.useAttributeFor(DoxVersion.class, "version");
 
                 final String data = xStream.toXML(repository);
-                logger.debug("Created XML for repository.xml '{}'", data);
+                if (logger.isTraceEnabled()) {
+                    Writer writer = new StringWriter();
+                    xStream.marshal(repository, new PrettyPrintWriter(writer));
+                    logger.trace("Created XML for repository.xml '{}'", writer.toString());
+                }
                 final byte[] dataBytes = data.getBytes();
                 out.write(dataBytes, 0, dataBytes.length);
 
@@ -125,7 +133,6 @@ public final class DoxExporterImpl implements DoxExporter {
                     out.write(documentRefDataBytes, 0, documentRefDataBytes.length);
                     out.closeEntry();
                 }
-
                 return null;
 
             } catch (IOException e) {

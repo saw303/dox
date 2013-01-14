@@ -49,18 +49,18 @@ public class TranslationServiceImpl implements TranslationService {
 
         if (translation == null) {
             final Locale fallbackLocale = new Locale(locale.getLanguage());
-            logger.debug("No translation found for key {} and locale {}. Falling back to locale {}", new Object[]{key, locale.getDisplayName(), fallbackLocale.getDisplayName()});
+            logger.debug("No translation found for key '{}' and locale '{}'. Falling back to locale '{}'", new Object[]{key, locale.getDisplayName(), fallbackLocale.getDisplayName()});
             translation = translationRepository.findByKeyAndLocale(key, fallbackLocale);
 
             if (translation == null) {
-                logger.warn("No translation found for key {} and locale {}", key, locale);
+                logger.warn("No translation found for key '{}' and locale '{}'", key, locale);
                 throw new NoTranslationFoundException(key, locale);
             } else {
-                logger.debug("Found translation of key {} using fallback locale {}", key, fallbackLocale.getDisplayName());
+                logger.debug("Found translation of key '{}' using fallback locale '{}'", key, fallbackLocale.getDisplayName());
                 return translation.getLanguageSpecificTranslation();
             }
         } else {
-            logger.debug("Found translation of key {} on first attempt using locale {}", key, locale.getDisplayName());
+            logger.debug("Found translation of key '{}' on first attempt using locale '{}'", key, locale.getDisplayName());
             return translation.getLanguageSpecificTranslation();
         }
     }

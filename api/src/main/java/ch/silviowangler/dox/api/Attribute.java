@@ -17,7 +17,6 @@
 package ch.silviowangler.dox.api;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author Silvio Wangler
@@ -30,31 +29,21 @@ public class Attribute implements Serializable, Comparable<Attribute>, Translata
 
     private String shortName;
     private boolean optional = false;
-    private List<String> domainValues;
+    private Domain domain;
     private AttributeDataType dataType;
     private boolean modifiable;
     private String translation;
-    private String mappingColumn;
 
-    public Attribute(String shortName, boolean optional, List<String> domainValues, AttributeDataType dataType, String mappingColumn) {
-        this(shortName, optional, domainValues, dataType, true, mappingColumn);
+    public Attribute(String shortName, boolean optional, AttributeDataType dataType) {
+        this(shortName, optional, null, dataType, true);
     }
 
-    public Attribute(String shortName, boolean optional, List<String> domainValues, AttributeDataType dataType, boolean modifiable, String mappingColumn) {
+    public Attribute(String shortName, boolean optional, Domain domain, AttributeDataType dataType, boolean modifiable) {
         this.shortName = shortName;
         this.optional = optional;
-        this.domainValues = domainValues;
+        this.domain = domain;
         this.dataType = dataType;
         this.modifiable = modifiable;
-        this.mappingColumn = mappingColumn;
-    }
-
-    public String getMappingColumn() {
-        return mappingColumn;
-    }
-
-    public void setMappingColumn(String mappingColumn) {
-        this.mappingColumn = mappingColumn;
     }
 
     public boolean isModifiable() {
@@ -65,8 +54,16 @@ public class Attribute implements Serializable, Comparable<Attribute>, Translata
         this.modifiable = modifiable;
     }
 
-    public boolean hasDomainValues() {
-        return domainValues != null && !domainValues.isEmpty();
+    public boolean containsDomain() {
+        return  domain != null && ! domain.getValues().isEmpty();
+    }
+
+    public Domain getDomain() {
+        return domain;
+    }
+
+    public void setDomain(Domain domain) {
+        this.domain = domain;
     }
 
     public String getShortName() {
@@ -83,14 +80,6 @@ public class Attribute implements Serializable, Comparable<Attribute>, Translata
 
     public void setOptional(boolean optional) {
         this.optional = optional;
-    }
-
-    public List<String> getDomainValues() {
-        return domainValues;
-    }
-
-    public void setDomainValues(List<String> domainValues) {
-        this.domainValues = domainValues;
     }
 
     public AttributeDataType getDataType() {
@@ -119,5 +108,19 @@ public class Attribute implements Serializable, Comparable<Attribute>, Translata
     @Override
     public int compareTo(Attribute o) {
         return this.shortName.compareTo(o.getShortName());
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("Attribute");
+        sb.append("{shortName='").append(shortName).append('\'');
+        sb.append(", optional=").append(optional);
+        sb.append(", domain=").append(domain);
+        sb.append(", dataType=").append(dataType);
+        sb.append(", modifiable=").append(modifiable);
+        sb.append(", translation='").append(translation).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }
