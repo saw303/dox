@@ -17,10 +17,7 @@
 package ch.silviowangler.dox.export;
 
 import ch.silviowangler.dox.DoxVersion;
-import ch.silviowangler.dox.api.DocumentClassNotFoundException;
-import ch.silviowangler.dox.api.DocumentReference;
-import ch.silviowangler.dox.api.DocumentService;
-import ch.silviowangler.dox.api.TranslationService;
+import ch.silviowangler.dox.api.*;
 import com.google.common.collect.Sets;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
@@ -93,6 +90,14 @@ public final class DoxExporterImpl implements DoxExporter {
                     logger.debug("Processing document reference {}", documentReference.getId());
                     logXml(xStream, documentReference);
                     writeToZipOutputStream(out, xStream.toXML(documentReference), "repository/" + documentReference.getHash() + ".xml");
+
+                    try {
+                        PhysicalDocument physicalDocument = documentService.findPhysicalDocument(documentReference.getId());
+                        writeToZipOutputStream(out, physicalDocument.getContent(), "repository/" + documentReference.getHash() + ".bin");
+                    } catch (DocumentNotFoundException | DocumentNotInStoreException e) {
+                        logger.error("Unable to retrieve physical document for document with id {} (hash: '{}')", documentReference.getId(), documentReference.getHash());
+                    }
+
                 }
                 return null;
 
@@ -104,6 +109,8 @@ public final class DoxExporterImpl implements DoxExporter {
         logger.warn("There are no document classes. There is nothing to export. Aborting");
         throw new IllegalStateException("There is nothing to export");
     }
+
+
 
     private XStream getXStreamForRepository() {
         XStream xStream = new XStream(new StaxDriver());
@@ -131,12 +138,16 @@ public final class DoxExporterImpl implements DoxExporter {
         }
     }
 
-    private void writeToZipOutputStream(ZipOutputStream out, String data, String path) throws IOException {
-        logger.trace("Writing to ZIP output stream using path '{}' and data '{}'", path, data);
-        final byte[] dataBytes = data.getBytes();
+    private void writeToZipOutputStream(ZipOutputStream out, byte[] dataBytes, String path) throws IOException {
+        logger.trace("Writing to ZIP output stream using path '{}' and data length '{}'", path, dataBytes.length);
         out.putNextEntry(new ZipEntry(path));
         out.write(dataBytes, 0, dataBytes.length);
         out.closeEntry(); // end of entry
+    }
+
+    private void writeToZipOutputStream(ZipOutputStream out, String data, String path) throws IOException {
+        logger.trace("Writing to ZIP output stream using path '{}' and data '{}'", path, data);
+        writeToZipOutputStream(out, data.getBytes(), path);
     }
 
     private Repository retrieveRepository(Set<ch.silviowangler.dox.api.DocumentClass> documentClasses) {
