@@ -152,7 +152,7 @@ project(':web') {
     war.archiveName = "dox-${version}.war"
 
     dependencies {
-        compile project(':api')
+        compile project(':api'), project(':inexport')
         runtime project(':core')
         compile "org.springframework:spring-webmvc:${ext.springVersion}"
         compile("org.springframework.security:spring-security-web:${ext.springSecurityVersion}") {
@@ -180,11 +180,11 @@ project(':web') {
 }
 
 project(':inexport') {
-	dependencies {
-	        compile project(':api'),
-                    "org.springframework:spring-context:${ext.springVersion}"
-            compile 'com.thoughtworks.xstream:xstream:1.4.3', { transitive = false }
-	}
+    dependencies {
+        compile project(':api'),
+                "org.springframework:spring-context:${ext.springVersion}"
+        compile 'com.thoughtworks.xstream:xstream:1.4.3', { transitive = false }
+    }
 }
 
 idea.project {

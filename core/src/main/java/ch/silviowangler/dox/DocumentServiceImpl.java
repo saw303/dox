@@ -59,7 +59,7 @@ import static org.springframework.util.Assert.*;
  * @author Silvio Wangler
  * @since 0.1
  */
-@Service
+@Service("documentService")
 public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     private static final String DD_MM_YYYY = "dd.MM.yyyy";

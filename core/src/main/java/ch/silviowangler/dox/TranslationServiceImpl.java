@@ -36,7 +36,7 @@ import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
  * @author Silvio Wangler
  * @since 0.1
  */
-@Service
+@Service("translationService")
 public class TranslationServiceImpl implements TranslationService {
 
     @Autowired

@@ -25,6 +25,7 @@
             <li><a href="<c:url value="/"/>"><spring:message code="nav.home" htmlEscape="true"/></a></li>
             <li><a href="<c:url value="/import.html"/>"><spring:message code="nav.add.new.document"
                                                                         htmlEscape="true"/></a></li>
+            <li><a href="<c:url value="/admin/export"/>"><spring:message code="nav.export" htmlEscape="true"/></a></li>
             <li><a href="<c:url value="/logout"/>"><spring:message code="nav.logout" htmlEscape="true"/></a></li>
         </ul>
     </nav>

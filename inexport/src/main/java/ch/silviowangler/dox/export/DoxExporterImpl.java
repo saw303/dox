@@ -34,7 +34,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
@@ -57,7 +56,7 @@ public final class DoxExporterImpl implements DoxExporter {
     private DoxVersion version;
 
     @Override
-    public ZipFile export() throws IOException {
+    public File export() throws IOException {
 
         logger.info("About to export repository");
 
@@ -99,7 +98,8 @@ public final class DoxExporterImpl implements DoxExporter {
                     }
 
                 }
-                return null;
+                out.finish();
+                return target;
 
             } catch (IOException e) {
                 logger.error("Unable to create ZIP file {}", target.getAbsolutePath(), e);

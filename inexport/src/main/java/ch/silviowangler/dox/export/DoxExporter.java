@@ -16,8 +16,8 @@
 
 package ch.silviowangler.dox.export;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.zip.ZipFile;
 
 /**
  * @author Silvio Wangler
@@ -30,5 +30,5 @@ public interface DoxExporter {
      *
      * @return a ZIP file containing the repository
      */
-    ZipFile export() throws IOException;
+    File export() throws IOException;
 }
