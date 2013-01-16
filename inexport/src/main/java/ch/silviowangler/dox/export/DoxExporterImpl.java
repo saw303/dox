@@ -96,7 +96,6 @@ public final class DoxExporterImpl implements DoxExporter {
                     } catch (DocumentNotFoundException | DocumentNotInStoreException e) {
                         logger.error("Unable to retrieve physical document for document with id {} (hash: '{}')", documentReference.getId(), documentReference.getHash());
                     }
-
                 }
                 out.finish();
                 return target;
