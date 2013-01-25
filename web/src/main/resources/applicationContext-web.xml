@@ -26,14 +26,6 @@
 
     <context:property-placeholder location="classpath:application.properties" ignore-resource-not-found="false"/>
 
-    <jdbc:embedded-database id="dataSource" type="H2">
-        <jdbc:script location="classpath*:ddl_h2_create.sql"/>
-    </jdbc:embedded-database>
-
-    <jdbc:initialize-database>
-        <jdbc:script location="classpath*:install.sql"/>
-    </jdbc:initialize-database>
-
     <!--<security:http pattern="/favicon.ico" secured="none"/>
     <security:http pattern="/resources/**" secured="none"/>
     <security:http pattern="/js/**" secured="none"/>
@@ -54,4 +46,22 @@
                              default-target-url="/"/>
         <security:logout logout-url="/logout"/>
     </security:http>
+
+    <beans profile="dev">
+        <jdbc:embedded-database id="dataSource" type="H2">
+            <jdbc:script location="classpath*:ddl_h2_create.sql"/>
+        </jdbc:embedded-database>
+
+        <jdbc:initialize-database>
+            <jdbc:script location="classpath*:install.sql"/>
+        </jdbc:initialize-database>
+    </beans>
+
+    <beans profile="prod">
+        <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+            <property name="jndiName">
+                <value>java:comp/env/jdbc/dox</value>
+            </property>
+        </bean>
+    </beans>
 </beans>

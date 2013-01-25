@@ -36,6 +36,7 @@ allprojects {
         commonsBeanUtilsVersion = '1.8.3'
         jodaTimeVersion = '2.1'
         h2Version = '1.3.170'
+        mysqlVersion = '5.1.22'
         iTextVersion = '5.3.4'
         guavaVersion = '13.0.1'
         mockitoVersion = '1.9.5'
@@ -161,9 +162,6 @@ project(':web') {
         }
         testCompile "org.springframework:spring-test:${ext.springVersion}"
         compile 'org.springframework.mobile:spring-mobile-device:1.0.0.RELEASE'
-        runtime 'javax.servlet:jstl:1.2'
-        compile 'javax.servlet.jsp:jsp-api:2.1'
-        compile 'javax.servlet:javax.servlet-api:3.0.1'
         compile "com.google.guava:guava:${ext.guavaVersion}"
         compile "joda-time:joda-time:${ext.jodaTimeVersion}"
         runtime "org.apache.tiles:tiles-core:${ext.tilesVersion}"
@@ -172,6 +170,10 @@ project(':web') {
         runtime "org.apache.tiles:tiles-template:${ext.tilesVersion}"
         runtime "ch.qos.logback:logback-access:${ext.logbackVersion}"
         providedRuntime "com.h2database:h2:${ext.h2Version}"
+        providedRuntime "mysql:mysql-connector-java:${ext.mysqlVersion}"
+        providedRuntime 'javax.servlet:jstl:1.2'
+        providedCompile 'javax.servlet.jsp:jsp-api:2.1'
+        providedCompile 'javax.servlet:javax.servlet-api:3.0.1'
     }
 }
 
