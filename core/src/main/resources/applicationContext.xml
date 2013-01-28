@@ -51,7 +51,7 @@
         <property name="jpaPropertyMap">
             <props>
                 <prop key="hibernate.hbm2ddl.auto">validate</prop>
-                <prop key=" hibernate.dialect">ch.silviowangler.dox.domain.hibernate.Mysql5InnoDBBitBooleanDialect</prop>
+                <prop key="hibernate.dialect">ch.silviowangler.dox.domain.hibernate.Mysql5InnoDBBitBooleanDialect</prop>
             </props>
         </property>
     </bean>
