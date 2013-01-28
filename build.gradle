@@ -143,10 +143,7 @@ project(':functional-tests') {
     }
 }
 
-project(':web') {
-    apply plugin: 'war'
-
-    war.archiveName = "dox-${version}.war"
+project(':web-core') {
 
     dependencies {
         compile project(':api'), project(':inexport')
@@ -169,11 +166,30 @@ project(':web') {
         runtime "org.apache.tiles:tiles-jsp:${ext.tilesVersion}"
         runtime "org.apache.tiles:tiles-template:${ext.tilesVersion}"
         runtime "ch.qos.logback:logback-access:${ext.logbackVersion}"
+        compile 'javax.servlet:jstl:1.2',
+                'javax.servlet.jsp:jsp-api:2.1',
+                'javax.servlet:javax.servlet-api:3.0.1'
+    }
+}
+
+project(':web-h2') {
+    apply plugin: 'war'
+
+    war.archiveName = "dox-h2-${version}.war"
+
+    dependencies {
+        runtime project(':web-core')
         providedRuntime "com.h2database:h2:${ext.h2Version}"
-        providedRuntime "mysql:mysql-connector-java:${ext.mysqlVersion}"
-        providedRuntime 'javax.servlet:jstl:1.2'
-        providedCompile 'javax.servlet.jsp:jsp-api:2.1'
-        providedCompile 'javax.servlet:javax.servlet-api:3.0.1'
+    }
+}
+
+project(':web-mysql') {
+    apply plugin: 'war'
+
+    war.archiveName = "dox-mysql-${version}.war"
+
+    dependencies {
+        runtime project(':web-core')
     }
 }
 
