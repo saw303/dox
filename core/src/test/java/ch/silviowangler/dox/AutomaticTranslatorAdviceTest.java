@@ -17,7 +17,6 @@
 package ch.silviowangler.dox;
 
 import ch.silviowangler.dox.api.*;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -139,19 +138,20 @@ public class AutomaticTranslatorAdviceTest {
     }
 
     @Test
-    @Ignore
     public void testAnalyzeMapOfDocumentReference() throws Throwable {
 
+        LocaleContextHolder.setLocale(ENGLISH);
         DocumentReference documentReference = new DocumentReference("hello.txt");
 
         documentReference.getIndices().put(new TranslatableKey("hello", null), "World");
+
+        when(translationService.findTranslation("Attribute:hello", ENGLISH)).thenReturn("I am translated text");
 
         advice.addTranslationIfNeeded(documentReference);
 
         assertTrue(documentReference.getIndices().containsKey(new TranslatableKey("hello")));
 
         assertThat(documentReference.getIndices().size(), is(1));
-        assertThat(documentReference.getIndices().keySet().iterator().next().getTranslation(), is("I am translated"));
-
+        assertThat(documentReference.getIndices().keySet().iterator().next().getTranslation(), is("I am translated text"));
     }
 }

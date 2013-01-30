@@ -25,7 +25,7 @@ import java.io.Serializable;
  *        Date: 17.07.12 11:12
  *        </div>
  */
-public class Attribute implements Serializable, Comparable<Attribute>, Translatable {
+public class Attribute extends AbstractTranslatable implements Serializable, Comparable<Attribute> {
 
     private String shortName;
     private boolean optional = false;

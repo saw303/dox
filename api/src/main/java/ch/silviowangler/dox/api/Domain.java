@@ -24,7 +24,7 @@ import java.util.List;
  * @author Silvio Wangler
  * @since 0.1
  */
-public class Domain implements Serializable, Translatable {
+public class Domain extends AbstractTranslatable implements Serializable {
 
     private String shortName;
     private List<String> values = new ArrayList<>();

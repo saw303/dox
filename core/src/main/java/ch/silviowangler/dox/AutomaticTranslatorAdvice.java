@@ -18,6 +18,7 @@ package ch.silviowangler.dox;
 
 import ch.silviowangler.dox.api.NoTranslationFoundException;
 import ch.silviowangler.dox.api.Translatable;
+import ch.silviowangler.dox.api.TranslateProperties;
 import ch.silviowangler.dox.api.TranslationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author Silvio Wangler
@@ -50,23 +52,51 @@ public class AutomaticTranslatorAdvice {
 
     public void addTranslationIfNeeded(Object retVal) throws Throwable {
 
-        if (isTranslatable(retVal)) {
-            Translatable translatable = (Translatable) retVal;
-            translate(translatable);
-        }
+        translateWhenPossible(retVal);
 
-        if (retVal instanceof Collection) {
-            for (Object o : (Collection) retVal) {
-                if (isTranslatable(o)) translate((Translatable) o);
-            }
-        }
+        TranslateProperties translateProperties = retVal.getClass().getAnnotation(TranslateProperties.class);
+        if (translateProperties != null) {
+            final String className = retVal.getClass().getName();
+            logger.debug("detected class that declares translatable properties {}", className);
 
-        if (retVal instanceof Object[]) {
-            for (Object o : (Object[]) retVal) {
-                if (isTranslatable(o)) translate((Translatable) o);
+            for (String propertyName : translateProperties.value()) {
+                logger.trace("About to inspect property {} of class {}", propertyName, className);
+                Object candidateToTranslate = new PropertyDescriptor(propertyName, retVal.getClass()).getReadMethod().invoke(retVal);
+                logger.trace("Property {} is class {}", propertyName, candidateToTranslate.getClass().getName());
+                translateWhenPossible(candidateToTranslate);
             }
         }
         logger.debug("Return value is {}", retVal);
+    }
+
+    private void translateWhenPossible(Object translationCandidate) {
+
+        if (isTranslatable(translationCandidate)) {
+            Translatable translatable = (Translatable) translationCandidate;
+            translate(translatable);
+        }
+
+        if (translationCandidate instanceof Collection) {
+            for (Object o : (Collection) translationCandidate) {
+                if (isTranslatable(o)) translate((Translatable) o);
+            }
+        }
+
+        if (translationCandidate instanceof Object[]) {
+            for (Object o : (Object[]) translationCandidate) {
+                if (isTranslatable(o)) translate((Translatable) o);
+            }
+        }
+
+        if (translationCandidate instanceof Map) {
+
+            Map map = (Map) translationCandidate;
+            for (Object key : map.keySet()) {
+                if (isTranslatable(key)) {
+                    translate((Translatable) key);
+                }
+            }
+        }
     }
 
     private boolean isTranslatable(Object retVal) {
@@ -77,17 +107,15 @@ public class AutomaticTranslatorAdvice {
         } else {
             translatable = retVal instanceof Translatable;
         }
-
-
         logger.trace("Is object '{}' translatable? {}", retVal.getClass().getName(), translatable);
         return translatable;
     }
 
     private void translate(Translatable translatable) {
-        final String simpleClassName = translatable.getClass().getSimpleName();
-        logger.debug("Detected translatable in class {}", simpleClassName);
 
-        final String messageKey = simpleClassName + ":" + translatable.retrieveKeyPostfix();
+        logger.debug("Detected translatable in class {}", translatable.getClass().getName());
+
+        final String messageKey = translatable.retrieveMessageKey();
         final Locale locale = LocaleContextHolder.getLocale();
         try {
             String translation = translationService.findTranslation(messageKey, locale);

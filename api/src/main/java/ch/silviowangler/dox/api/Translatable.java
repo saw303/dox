@@ -33,6 +33,13 @@ public interface Translatable {
     public String retrieveKeyPostfix();
 
     /**
+     * Retrieves the fully qualified message key
+     *
+     * @return message key
+     */
+    public String retrieveMessageKey();
+
+    /**
      * Retrieve the translation
      *
      * @return the translated text

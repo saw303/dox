@@ -22,7 +22,7 @@ import java.io.Serializable;
  * @author Silvio Wangler
  * @since 0.1
  */
-public class DocumentClass implements Serializable, Translatable {
+public class DocumentClass extends AbstractTranslatable implements Serializable {
 
     private String shortName;
     private String translatedText;
