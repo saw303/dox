@@ -63,7 +63,6 @@ public class ImportControllerTest {
         assertThat(modelAndView.getModel().containsKey("documentClasses"), is(true));
         assertThat(modelAndView.getModel().containsKey("defaultMessage"), is(true));
 
-
         assertTrue(modelAndView.getModel().get("documentClasses") instanceof List);
         List<DocumentClass> documentClasses = (List<DocumentClass>) modelAndView.getModel().get("documentClasses");
 
