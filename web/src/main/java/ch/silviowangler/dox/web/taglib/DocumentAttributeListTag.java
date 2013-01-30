@@ -17,10 +17,9 @@
 package ch.silviowangler.dox.web.taglib;
 
 import ch.silviowangler.dox.api.DocumentReference;
+import ch.silviowangler.dox.api.TranslatableKey;
 import org.joda.time.DateTime;
-import org.springframework.web.servlet.support.RequestContext;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -57,13 +56,10 @@ public class DocumentAttributeListTag extends TagSupport {
 
                 StringBuilder sb = new StringBuilder("<ul>");
 
-                for (String key : documentReference.getIndices().keySet()) {
+                for (TranslatableKey key : documentReference.getIndices().keySet()) {
 
-                    sb.append("<li>");
-                    sb.append(new RequestContext((HttpServletRequest) pageContext.getRequest()).getMessage("attr." + key));
-
+                    sb.append("<li>").append(key.getTranslation());
                     Object value = documentReference.getIndices().get(key);
-
 
                     if (value instanceof DateTime) {
                         DateFormat f = getDateInstance(DateFormat.MEDIUM, pageContext.getRequest().getLocale());

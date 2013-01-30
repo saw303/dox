@@ -84,16 +84,16 @@ public abstract class AbstractTest extends AbstractTransactionalJUnit4SpringCont
 
     protected DocumentReference importDocument(String fileName, String documentClassShortname) throws IOException, ValidationException, DocumentDuplicationException, DocumentClassNotFoundException {
 
-        Map<String, Object> indexes = newHashMapWithExpectedSize(3);
+        Map<TranslatableKey, Object> indexes = newHashMapWithExpectedSize(3);
 
-        indexes.put("company", "Sunrise");
-        indexes.put("invoiceDate", "01.11.2012");
-        indexes.put("invoiceAmount", "2000");
+        indexes.put(new TranslatableKey("company"), "Sunrise");
+        indexes.put(new TranslatableKey("invoiceDate"), "01.11.2012");
+        indexes.put(new TranslatableKey("invoiceAmount"), "2000");
 
         return importDocument(fileName, indexes, documentClassShortname);
     }
 
-    protected DocumentReference importDocument(String fileName, Map<String, Object> indexes, String documentClassShortName) throws IOException, ValidationException, DocumentDuplicationException, DocumentClassNotFoundException {
+    protected DocumentReference importDocument(String fileName, Map<TranslatableKey, Object> indexes, String documentClassShortName) throws IOException, ValidationException, DocumentDuplicationException, DocumentClassNotFoundException {
         File singlePagePdf = loadFile(fileName);
         PhysicalDocument doc = new PhysicalDocument(new DocumentClass(documentClassShortName), FileUtils.readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
         return documentService.importDocument(doc);

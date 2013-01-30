@@ -27,8 +27,13 @@ public class DocumentClass implements Serializable, Translatable {
     private String shortName;
     private String translatedText;
 
-    public DocumentClass(String shortName) {
+    public DocumentClass(String shortName, String translatedText) {
         this.shortName = shortName;
+        this.translatedText = translatedText;
+    }
+
+    public DocumentClass(String shortName) {
+        this(shortName, null);
     }
 
     public String getShortName() {

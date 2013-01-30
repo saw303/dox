@@ -32,18 +32,18 @@ public class DocumentReference implements Serializable {
     private int pageCount;
     private String mimeType;
     private DocumentClass documentClass;
-    private Map<String, Object> indices = Maps.newHashMap();
+    private Map<TranslatableKey, Object> indices = Maps.newHashMap();
     private String fileName;
 
     public DocumentReference(String fileName) {
         this.fileName = fileName;
     }
 
-    public DocumentReference(String hash, int pageCount, String mimeType, DocumentClass documentClass, Map<String, Object> indices, String fileName) {
+    public DocumentReference(String hash, int pageCount, String mimeType, DocumentClass documentClass, Map<TranslatableKey, Object> indices, String fileName) {
         this(hash, null, pageCount, mimeType, documentClass, indices, fileName);
     }
 
-    public DocumentReference(String hash, Long id, int pageCount, String mimeType, DocumentClass documentClass, Map<String, Object> indices, String fileName) {
+    public DocumentReference(String hash, Long id, int pageCount, String mimeType, DocumentClass documentClass, Map<TranslatableKey, Object> indices, String fileName) {
         this.hash = hash;
         this.id = id;
         this.pageCount = pageCount;
@@ -93,11 +93,11 @@ public class DocumentReference implements Serializable {
         this.documentClass = documentClass;
     }
 
-    public Map<String, Object> getIndices() {
+    public Map<TranslatableKey, Object> getIndices() {
         return indices;
     }
 
-    public void setIndices(Map<String, Object> indices) {
+    public void setIndices(Map<TranslatableKey, Object> indices) {
         this.indices = indices;
     }
 

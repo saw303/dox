@@ -16,10 +16,8 @@
 
 package ch.silviowangler.dox;
 
-import ch.silviowangler.dox.api.Attribute;
-import ch.silviowangler.dox.api.Domain;
-import ch.silviowangler.dox.api.NoTranslationFoundException;
-import ch.silviowangler.dox.api.TranslationService;
+import ch.silviowangler.dox.api.*;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -34,8 +32,7 @@ import java.util.List;
 import static ch.silviowangler.dox.api.AttributeDataType.STRING;
 import static java.util.Locale.ENGLISH;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 /**
@@ -139,5 +136,22 @@ public class AutomaticTranslatorAdviceTest {
         advice.addTranslationIfNeeded(attribute);
 
         assertThat(attribute.getDomain().getTranslation(), is(expectedDomainName));
+    }
+
+    @Test
+    @Ignore
+    public void testAnalyzeMapOfDocumentReference() throws Throwable {
+
+        DocumentReference documentReference = new DocumentReference("hello.txt");
+
+        documentReference.getIndices().put(new TranslatableKey("hello", null), "World");
+
+        advice.addTranslationIfNeeded(documentReference);
+
+        assertTrue(documentReference.getIndices().containsKey(new TranslatableKey("hello")));
+
+        assertThat(documentReference.getIndices().size(), is(1));
+        assertThat(documentReference.getIndices().keySet().iterator().next().getTranslation(), is("I am translated"));
+
     }
 }

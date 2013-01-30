@@ -17,6 +17,7 @@
 package ch.silviowangler.dox.web;
 
 import ch.silviowangler.dox.api.*;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +70,14 @@ public class ImportController implements MessageSourceAware, InitializingBean {
     @RequestMapping(method = RequestMethod.GET, value = "import.html")
     public ModelAndView query(Locale locale) {
         Map<String, Object> model = Maps.newHashMap();
-        model.put("documentClasses", documentService.findDocumentClasses());
+        ArrayList<DocumentClass> documentClasses = Lists.newArrayList(documentService.findDocumentClasses());
+        Collections.sort(documentClasses, new Comparator<DocumentClass>() {
+            @Override
+            public int compare(DocumentClass o1, DocumentClass o2) {
+                return o1.getTranslation().compareTo(o2.getTranslation());
+            }
+        });
+        model.put("documentClasses", documentClasses);
         model.put("defaultMessage", messageSource.getMessage("document.import.choose.document.class", null, locale));
         return new ModelAndView("import.definition", model);
     }
@@ -98,9 +106,7 @@ public class ImportController implements MessageSourceAware, InitializingBean {
 
             for (Attribute attribute : attributes) {
                 sb.append("<label for=\"").append(attribute.getShortName()).append("\">");
-                sb.append(messageSource.getMessage("attr." + attribute.getShortName(), null, attribute.getShortName(), locale))
-                        .append(":");
-
+                sb.append(attribute.getTranslation()).append(":");
                 if (!attribute.isOptional()) {
                     sb.append(" <span class=\"required\">*</span>");
                 }
@@ -163,12 +169,12 @@ public class ImportController implements MessageSourceAware, InitializingBean {
             DocumentClass documentClass = new DocumentClass(request.getParameter(DOCUMENT_CLASS_SHORT_NAME));
 
             Iterator<String> params = request.getParameterNames();
-            Map<String, Object> indices = Maps.newHashMap();
+            Map<TranslatableKey, Object> indices = Maps.newHashMap();
 
             while (params.hasNext()) {
                 String param = params.next();
                 if (!DOCUMENT_CLASS_SHORT_NAME.endsWith(param)) {
-                    indices.put(param, request.getParameter(param));
+                    indices.put(new TranslatableKey(param), request.getParameter(param));
                 }
             }
 

@@ -142,13 +142,13 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     @Override
     @Transactional(propagation = SUPPORTS, readOnly = true)
     @PreAuthorize("hasRole('ROLE_USER')")
-    public Set<DocumentReference> findDocumentReferences(Map<String, Object> queryParams, String documentClassShortName) throws DocumentClassNotFoundException {
+    public Set<DocumentReference> findDocumentReferences(Map<TranslatableKey, Object> queryParams, String documentClassShortName) throws DocumentClassNotFoundException {
 
         logger.debug("Trying to find document references in document class '{}' using params '{}'", documentClassShortName, queryParams);
         DocumentClass documentClass = findDocumentClass(documentClassShortName);
         List<Attribute> attributes = attributeRepository.findAttributesForDocumentClass(documentClass);
 
-        List<Document> documents = documentRepository.findDocuments(fixDataTypesOfIndices(queryParams, attributes), toAttributeMap(attributes));
+        List<Document> documents = documentRepository.findDocuments(toEntityMap(fixDataTypesOfIndices(queryParams, attributes)), toAttributeMap(attributes));
 
         HashSet<DocumentReference> documentReferences = new HashSet<>(documents.size());
         for (Document document : documents) {
@@ -206,43 +206,43 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     @Override
     @Transactional(propagation = REQUIRED, readOnly = false)
-    public DocumentReference importDocument(PhysicalDocument physicalDocument) throws ValidationException, DocumentDuplicationException, DocumentClassNotFoundException {
+    public DocumentReference importDocument(PhysicalDocument physicalDocumentApi) throws ValidationException, DocumentDuplicationException, DocumentClassNotFoundException {
 
-        final String documentClassShortName = physicalDocument.getDocumentClass().getShortName();
+        final String documentClassShortName = physicalDocumentApi.getDocumentClass().getShortName();
         DocumentClass documentClassEntity = findDocumentClass(documentClassShortName);
 
         List<Attribute> attributes = attributeRepository.findAttributesForDocumentClass(documentClassEntity);
 
         logger.debug("Found {} attributes for document class '{}'", attributes.size(), documentClassShortName);
 
-        verifyMandatoryAttributes(physicalDocument, attributes);
-        verifyUnknownKeys(physicalDocument, documentClassShortName, attributes);
-        verifyDomainValues(physicalDocument, attributes);
+        verifyMandatoryAttributes(physicalDocumentApi, attributes);
+        verifyUnknownKeys(physicalDocumentApi, documentClassShortName, attributes);
+        verifyDomainValues(physicalDocumentApi, attributes);
 
-        physicalDocument.setIndices(fixDataTypesOfIndices(physicalDocument.getIndices(), attributes));
+        physicalDocumentApi.setIndices(fixDataTypesOfIndices(physicalDocumentApi.getIndices(), attributes));
 
-        final String mimeType = investigateMimeType(physicalDocument.getFileName());
-        final String hash = DigestUtils.sha256Hex(physicalDocument.getContent());
+        final String mimeType = investigateMimeType(physicalDocumentApi.getFileName());
+        final String hash = DigestUtils.sha256Hex(physicalDocumentApi.getContent());
 
         final Document documentByHash = documentRepository.findByHash(hash);
         if (documentByHash != null) {
             throw new DocumentDuplicationException(documentByHash.getId(), hash);
         }
 
-        final int numberOfPages = getNumberOfPages(physicalDocument, mimeType);
+        final int numberOfPages = getNumberOfPages(physicalDocumentApi, mimeType);
 
         IndexStore indexStore = new IndexStore();
-        updateIndices(physicalDocument, indexStore);
-        Document document = new Document(hash, documentClassEntity, numberOfPages, mimeType, physicalDocument.getFileName(), indexStore);
+        updateIndices(physicalDocumentApi, indexStore);
+        Document document = new Document(hash, documentClassEntity, numberOfPages, mimeType, physicalDocumentApi.getFileName(), indexStore);
         indexStore.setDocument(document);
         document = documentRepository.save(document);
         indexStoreRepository.save(indexStore);
 
-        updateIndexMapEntries(physicalDocument.getIndices(), document);
+        updateIndexMapEntries(toEntityMap(physicalDocumentApi.getIndices()), document);
 
         File target = new File(this.archiveDirectory, hash);
         try {
-            FileUtils.writeByteArrayToFile(target, physicalDocument.getContent());
+            FileUtils.writeByteArrayToFile(target, physicalDocumentApi.getContent());
         } catch (IOException e) {
             logger.error("Unable to write content to store", e);
         }
@@ -254,21 +254,21 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     @Transactional(propagation = REQUIRED, readOnly = false)
     public DocumentReference updateIndices(DocumentReference reference) throws DocumentNotFoundException {
 
-        DocumentReference documentReference = findDocumentReference(reference.getId());
-        documentReference.getIndices().putAll(reference.getIndices());
+        DocumentReference documentReferenceApi = findDocumentReference(reference.getId());
+        documentReferenceApi.getIndices().putAll(reference.getIndices());
 
         Document document = documentRepository.findOne(reference.getId());
         DocumentClass documentClassEntity = document.getDocumentClass();
 
         List<Attribute> attributes = attributeRepository.findAttributesForDocumentClass(documentClassEntity);
 
-        documentReference.setIndices(fixDataTypesOfIndices(documentReference.getIndices(), attributes));
+        documentReferenceApi.setIndices(fixDataTypesOfIndices(documentReferenceApi.getIndices(), attributes));
 
-        updateIndices(documentReference, document.getIndexStore());
+        updateIndices(documentReferenceApi, document.getIndexStore());
 
         indexStoreRepository.save(document.getIndexStore());
 
-        updateIndexMapEntries(documentReference.getIndices(), document);
+        updateIndexMapEntries(toEntityMap(documentReferenceApi.getIndices()), document);
 
         return findDocumentReference(reference.getId());
     }
@@ -291,12 +291,13 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     private void verifyDomainValues(PhysicalDocument physicalDocument, List<Attribute> attributes) throws ValueNotInDomainException {
         for (Attribute attribute : attributes) {
             final String attributeShortName = attribute.getShortName();
-            if (attribute.getDomain() != null && physicalDocument.getIndices().containsKey(attributeShortName)) {
-                final String attributeValue = String.valueOf(physicalDocument.getIndices().get(attributeShortName));
+            final TranslatableKey key = new TranslatableKey(attributeShortName);
+            if (attribute.getDomain() != null && physicalDocument.getIndices().containsKey(key)) {
+                final String attributeValue = String.valueOf(physicalDocument.getIndices().get(key));
                 logger.debug("Analyzing domain value on attribute '{}' for value '{}'", attributeShortName, attributeValue);
                 if (!attribute.getDomain().getValues().contains(attributeValue)) {
                     logger.error("Attribute '{}' belongs to a domain. This domain does not contain the value '{}'", attributeShortName, attributeValue);
-                    throw new ValueNotInDomainException("", attributeValue, attribute.getDomain().getValues());
+                    throw new ValueNotInDomainException("Value ist not part of this domain", attributeValue, attribute.getDomain().getValues());
                 }
             }
         }
@@ -333,23 +334,32 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         throw new UnsupportedOperationException("No mime type registered for file extension " + fileName);
     }
 
-    private Map<String, Object> fixDataTypesOfIndices(final Map<String, Object> indexes, List<Attribute> attributes) {
+    private Map<TranslatableKey, Object> fixDataTypesOfIndices(final Map<TranslatableKey, Object> indexes, List<Attribute> attributes) {
 
-        Map<String, Object> resultMap = Maps.newHashMap(indexes); // copy elements
+        Map<TranslatableKey, Object> resultMap = Maps.newHashMap(indexes); // copy elements
 
         for (Attribute attribute : attributes) {
 
-            final String attributeShortName = attribute.getShortName();
-            if (resultMap.containsKey(attributeShortName)) {
-                if (!isAssignableType(attribute.getDataType(), resultMap.get(attributeShortName).getClass())) {
-                    logger.debug("Attribute '{}' is not assignable to '{}'", attributeShortName, attribute.getDataType());
-                    resultMap.put(attributeShortName, makeAssignable(attribute.getDataType(), resultMap.get(attributeShortName)));
+            final TranslatableKey key = new TranslatableKey(attribute.getShortName());
+            if (resultMap.containsKey(key)) {
+                if (!isAssignableType(attribute.getDataType(), resultMap.get(key).getClass())) {
+                    logger.debug("Attribute '{}' is not assignable to '{}'", key, attribute.getDataType());
+                    resultMap.put(key, makeAssignable(attribute.getDataType(), resultMap.get(key)));
                 }
             } else {
-                logger.debug("Ignoring attribute '{}' since it was not mentioned in the index map", attributeShortName);
+                logger.debug("Ignoring attribute '{}' since it was not mentioned in the index map", key);
             }
         }
         return resultMap;
+    }
+
+    private Map<String, Object> toEntityMap(final Map<TranslatableKey, Object> indices) {
+        Map<String, Object> entityMap = Maps.newHashMapWithExpectedSize(indices.size());
+
+        for(TranslatableKey key : indices.keySet()) {
+            entityMap.put(key.getKey(), indices.get(key));
+        }
+        return entityMap;
     }
 
     @SuppressWarnings("unchecked")
@@ -430,9 +440,9 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     private void updateIndices(DocumentReference documentReference, IndexStore indexStore) {
-        for (String key : documentReference.getIndices().keySet()) {
+        for (TranslatableKey key : documentReference.getIndices().keySet()) {
 
-            Attribute attribute = attributeRepository.findByShortName(key);
+            Attribute attribute = attributeRepository.findByShortName(key.getKey());
             assert attribute != null : "Attribute " + key + " must be there";
 
             final Object value = documentReference.getIndices().get(key);
@@ -447,10 +457,10 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     private void verifyUnknownKeys(PhysicalDocument physicalDocument, String documentClassShortName, List<Attribute> attributes) throws ValidationException {
-        for (String key : physicalDocument.getIndices().keySet()) {
+        for (TranslatableKey key : physicalDocument.getIndices().keySet()) {
             boolean exists = false;
             for (Attribute attribute : attributes) {
-                if (attribute.getShortName().equals(key)) {
+                if (attribute.getShortName().equals(key.getKey())) {
                     exists = true;
                     continue;
                 }
@@ -466,7 +476,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         for (Attribute attribute : attributes) {
             if (!attribute.isOptional()) {
                 logger.trace("Analyzing mandatory attribute '{}'", attribute.getShortName());
-                if (!physicalDocument.getIndices().containsKey(attribute.getShortName())) {
+                if (!physicalDocument.getIndices().containsKey(new TranslatableKey(attribute.getShortName()))) {
                     logger.warn("Attribute '{}' is required for document class(es) '{}' and not was not provided.", attribute.getShortName(), attribute.getDocumentClasses());
                     throw new ValidationException("Attribute " + attribute.getShortName() + " is mandatory");
                 }
@@ -513,13 +523,13 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
                 document.getOriginalFilename());
     }
 
-    private Map<String, Object> toIndexMap(IndexStore indexStore, List<Attribute> attributes) {
+    private Map<TranslatableKey, Object> toIndexMap(IndexStore indexStore, List<Attribute> attributes) {
 
-        Map<String, Object> indices = newHashMapWithExpectedSize(attributes.size());
+        Map<TranslatableKey, Object> indices = newHashMapWithExpectedSize(attributes.size());
 
         for (Attribute attribute : attributes) {
             try {
-                indices.put(attribute.getShortName(), PropertyUtils.getProperty(indexStore, attribute.getMappingColumn().toLowerCase()));
+                indices.put(new TranslatableKey(attribute.getShortName()), PropertyUtils.getProperty(indexStore, attribute.getMappingColumn().toLowerCase()));
             } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 logger.error("Error setting property '{}'", attribute.getShortName(), e);
             }
