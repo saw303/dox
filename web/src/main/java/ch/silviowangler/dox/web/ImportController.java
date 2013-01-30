@@ -27,7 +27,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
 import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,6 +38,8 @@ import org.springframework.web.util.HtmlUtils;
 
 import java.io.IOException;
 import java.util.*;
+
+import static org.springframework.util.Assert.notNull;
 
 /**
  * @author Silvio Wangler
@@ -64,7 +65,7 @@ public class ImportController implements MessageSourceAware, InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        Assert.notNull(this.messageSource, "Message source must not be null");
+        notNull(this.messageSource, "Message source must not be null");
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "import.html")
