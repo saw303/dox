@@ -72,11 +72,11 @@ public class DocumentServiceTest extends AbstractTest {
         Set<DocumentClass> documentClasses = documentService.findDocumentClasses();
 
         assertNotNull(documentClasses);
-        assertEquals(2, documentClasses.size());
+        assertEquals(3, documentClasses.size());
 
         for (DocumentClass currentDocumentClass : documentClasses) {
             final String currentShortName = currentDocumentClass.getShortName();
-            assertTrue("Unexpected document class " + currentShortName, currentShortName.matches("(INVOICE|TAXES)"));
+            assertTrue("Unexpected document class " + currentShortName, currentShortName.matches("(INVOICE|TAXES|SALARY_REPORTS)"));
         }
     }
 

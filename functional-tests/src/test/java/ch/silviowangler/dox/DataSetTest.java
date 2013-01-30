@@ -46,7 +46,7 @@ public class DataSetTest extends AbstractTest {
 
     @Test
     public void verifyDocumentClassCount() {
-        assertEquals("Please verify the numbers of document classes", 2, documentClassRepository.count());
+        assertEquals("Please verify the numbers of document classes", 3, documentClassRepository.count());
     }
 
     @Test
@@ -72,6 +72,6 @@ public class DataSetTest extends AbstractTest {
 
         assertThat(translation.getKey(), is("DocumentClass:TAXES"));
         assertThat(translation.getLocale(), is(GERMAN));
-        assertThat(translation.getLanguageSpecificTranslation(), is("Steuer"));
+        assertThat(translation.getLanguageSpecificTranslation(), is("Steuern"));
     }
 }
