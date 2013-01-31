@@ -24,13 +24,14 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletResponse;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
-import static javax.servlet.http.HttpServletResponse.SC_OK;
+import static javax.servlet.http.HttpServletResponse.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Silvio Wangler
@@ -81,5 +82,17 @@ public class DocumentControllerTest {
         when(documentService.findPhysicalDocument(expectedDocumentId)).thenThrow(new DocumentNotInStoreException("adsfdfadsf", expectedDocumentId));
         controller.getDocument(expectedDocumentId, response);
         assertThat(response.getStatus(), is(SC_NOT_FOUND));
+    }
+
+    @Test
+    public void getTheDocumentContentExpectNotFound3() throws DocumentNotFoundException, DocumentNotInStoreException, IOException {
+
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        when(response.getOutputStream()).thenThrow(new IOException());
+        long expectedDocumentId = 2L;
+        when(documentService.findPhysicalDocument(expectedDocumentId)).thenReturn(new PhysicalDocument());
+        controller.getDocument(expectedDocumentId, response);
+
+        verify(response).setStatus(SC_INTERNAL_SERVER_ERROR);
     }
 }

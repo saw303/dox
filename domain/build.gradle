@@ -21,6 +21,8 @@ import org.hibernate.tool.hbm2ddl.SchemaExport
 
 import javax.persistence.Entity
 
+displayName = 'Domain module'
+
 buildscript {
     repositories {
         mavenCentral()
