@@ -105,6 +105,16 @@ subprojects {
             )
         }
     }
+
+    processResources {
+        from(sourceSets.main.resources.srcDirs) {
+            include '**/*.properties' filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
+                    'dox.app.version': "${version}-${new Date().format("yyyyMMddHHmmss")}".toString(),
+                    'gradleVersion': project.gradle.gradleVersion
+            ])
+        }
+        from(sourceSets.main.resources.srcDirs) { exclude '**/*.properties' }
+    }
 }
 
 project(':api') {

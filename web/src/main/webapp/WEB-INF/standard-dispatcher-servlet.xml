@@ -40,10 +40,6 @@
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
           p:basenames="classpath:messages" p:defaultEncoding="UTF-8"/>
 
-    <!-- Handles GET requests for /resources/** by efficiently serving static content in the ${webappRoot}/resources dir -->
-    <!--<mvc:resources mapping="/resources/**" location="/resources/" />-->
-
-
     <!-- Configures Handler Interceptors -->
     <mvc:interceptors>
         <!-- Changes the locale when a 'lang' request parameter is sent; e.g. /?lang=de -->
