@@ -16,11 +16,13 @@
 
 package ch.silviowangler.dox;
 
+import java.io.Serializable;
+
 /**
  * @author Silvio Wangler
  * @since 0.1
  */
-public class DoxVersion {
+public class DoxVersion implements Serializable {
 
     private String version;
 

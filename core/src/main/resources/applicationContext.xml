@@ -36,10 +36,10 @@
     <import resource="classpath*:applicationContext-jpa.xml"/>
     <import resource="classpath:applicationContext-security.xml"/>
 
-    <context:property-placeholder location="classpath:application.properties" ignore-resource-not-found="false"/>
+    <context:property-placeholder location="classpath*:application.properties" ignore-resource-not-found="false" ignore-unresolvable="false" order="1"/>
     <context:component-scan base-package="ch.silviowangler.dox"/>
 
-    <bean id="appVersion" class="ch.silviowangler.dox.DoxVersion" scope="singleton" c:version="0.1" />
+    <bean id="appVersion" class="ch.silviowangler.dox.DoxVersion" scope="singleton" c:version="${app.version}" />
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
