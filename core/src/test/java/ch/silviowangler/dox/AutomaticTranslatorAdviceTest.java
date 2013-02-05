@@ -17,6 +17,7 @@
 package ch.silviowangler.dox;
 
 import ch.silviowangler.dox.api.*;
+import com.google.common.collect.Sets;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -27,6 +28,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static ch.silviowangler.dox.api.AttributeDataType.STRING;
 import static java.util.Locale.ENGLISH;
@@ -148,6 +150,25 @@ public class AutomaticTranslatorAdviceTest {
         when(translationService.findTranslation("Attribute:hello", ENGLISH)).thenReturn("I am translated text");
 
         advice.addTranslationIfNeeded(documentReference);
+
+        assertTrue(documentReference.getIndices().containsKey(new TranslatableKey("hello")));
+
+        assertThat(documentReference.getIndices().size(), is(1));
+        assertThat(documentReference.getIndices().keySet().iterator().next().getTranslation(), is("I am translated text"));
+    }
+
+    @Test
+    public void testAnalyzeMapOfDocumentReferenceOnSet() throws Throwable {
+
+        LocaleContextHolder.setLocale(ENGLISH);
+        DocumentReference documentReference = new DocumentReference("hello.txt");
+        documentReference.getIndices().put(new TranslatableKey("hello", null), "World");
+
+        Set<DocumentReference> resultSet = Sets.newHashSet(documentReference);
+
+        when(translationService.findTranslation("Attribute:hello", ENGLISH)).thenReturn("I am translated text");
+
+        advice.addTranslationIfNeeded(resultSet);
 
         assertTrue(documentReference.getIndices().containsKey(new TranslatableKey("hello")));
 

@@ -78,7 +78,11 @@ public class AutomaticTranslatorAdvice {
 
         if (translationCandidate instanceof Collection) {
             for (Object o : (Collection) translationCandidate) {
-                if (isTranslatable(o)) translate((Translatable) o);
+                try {
+                    addTranslationIfNeeded(o);
+                } catch (Throwable throwable) {
+                    logger.error("Unable to translate", throwable);
+                }
             }
         }
 
