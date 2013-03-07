@@ -40,7 +40,7 @@ allprojects {
         springVersion = '3.2.0.RELEASE'
         springDataVersion = '1.2.0.RELEASE'
         springSecurityVersion = '3.2.0.M1'
-        hibernateVersion = '4.1.9.Final'
+        hibernateVersion = '4.1.10.Final'
         slf4jVersion = '1.7.2'
         logbackVersion = '1.0.9'
         junitVersion = '4.11'
