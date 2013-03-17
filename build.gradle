@@ -37,7 +37,7 @@ allprojects {
     version = '0.1-SNAPSHOT'
 
     project.ext {
-        springVersion = '3.2.0.RELEASE'
+        springVersion = '3.2.2.RELEASE'
         springDataVersion = '1.2.0.RELEASE'
         springSecurityVersion = '3.2.0.M1'
         hibernateVersion = '4.1.9.Final'
