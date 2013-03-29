@@ -127,13 +127,8 @@ public class ImportController implements MessageSourceAware, InitializingBean {
 
                     if (isNumeric(attribute.getDataType())) {
                         sb.append("<input name=\"").append(attribute.getShortName()).append("\" type=\"")
-                                .append(getInputType(attribute.getDataType())).append("\" min=\"0\" ");
+                                .append(getInputType(attribute.getDataType())).append("\" min=\"0\" ").append("step=\"any\"");
 
-                        if (isFloatPointNumber(attribute.getDataType())) {
-                            sb.append("step=\"0.1\"");
-                        } else {
-                            sb.append("step=\"1\"");
-                        }
                         sb.append(" />\n");
                     } else {
                         sb.append("<input name=\"").append(attribute.getShortName()).append("\" type=\"")
