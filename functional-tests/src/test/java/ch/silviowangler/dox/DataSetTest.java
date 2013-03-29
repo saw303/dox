@@ -46,7 +46,7 @@ public class DataSetTest extends AbstractTest {
 
     @Test
     public void verifyDocumentClassCount() {
-        assertEquals("Please verify the numbers of document classes", 3, documentClassRepository.count());
+        assertEquals("Please verify the numbers of document classes", 7, documentClassRepository.count());
     }
 
     @Test

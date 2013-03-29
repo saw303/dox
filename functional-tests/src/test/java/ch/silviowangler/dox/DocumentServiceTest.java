@@ -29,6 +29,7 @@ import java.util.*;
 
 import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
@@ -75,11 +76,11 @@ public class DocumentServiceTest extends AbstractTest {
         Set<DocumentClass> documentClasses = documentService.findDocumentClasses();
 
         assertNotNull(documentClasses);
-        assertEquals(3, documentClasses.size());
+        assertEquals(7, documentClasses.size());
 
         for (DocumentClass currentDocumentClass : documentClasses) {
             final String currentShortName = currentDocumentClass.getShortName();
-            assertTrue("Unexpected document class " + currentShortName, currentShortName.matches("(INVOICE|TAXES|SALARY_REPORTS)"));
+            assertTrue("Unexpected document class " + currentShortName, currentShortName.matches("(INVOICE|TAXES|SALARY_REPORTS|CONTRACTS|BANK_DOCUMENTS|VARIA|DIPLOMA)"));
         }
     }
 
@@ -273,7 +274,7 @@ public class DocumentServiceTest extends AbstractTest {
             fail("Should throw a validation exception");
         } catch (ValueNotInDomainException e) {
             assertEquals(valueNotInDomain, e.getValue());
-            assertEquals(2, e.getValidValues().size());
+            assertEquals(4, e.getValidValues().size());
             assertTrue(e.getValidValues().contains("Sunrise"));
             assertTrue(e.getValidValues().contains("Swisscom"));
         }
@@ -399,7 +400,7 @@ public class DocumentServiceTest extends AbstractTest {
 
         for (DocumentClass documentClass : documentClasses) {
             assertTrue(documentClass instanceof Translatable);
-            assertNotNull("There should be a translation available", ((Translatable) documentClass).getTranslation());
+            assertThat("There should be a translation available", documentClass.getTranslation(), is(not(nullValue())));
         }
     }
 }
