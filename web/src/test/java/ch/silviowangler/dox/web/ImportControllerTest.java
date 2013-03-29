@@ -51,6 +51,7 @@ public class ImportControllerTest {
 
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testQuerySortAlphabeticallyByTranslationInGerman() throws Exception {
 
         when(documentService.findDocumentClasses()).thenReturn(
@@ -73,6 +74,7 @@ public class ImportControllerTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testQuerySortAlphabeticallyByTranslationInEnglish() throws Exception {
 
         when(documentService.findDocumentClasses()).thenReturn(
