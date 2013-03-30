@@ -30,11 +30,13 @@ public class ValueNotInDomainException extends ValidationException {
 
     private String value;
     private List<String> validValues = new ArrayList<>();
+    private String domainName;
 
-    public ValueNotInDomainException(String message, String value, List<String> validValues) {
+    public ValueNotInDomainException(String message, String value, List<String> validValues, String domainName) {
         super(message);
         this.value = value;
         this.validValues = validValues;
+        this.domainName = domainName;
     }
 
     public List<String> getValidValues() {
@@ -43,5 +45,9 @@ public class ValueNotInDomainException extends ValidationException {
 
     public String getValue() {
         return value;
+    }
+
+    public String getDomainName() {
+        return domainName;
     }
 }

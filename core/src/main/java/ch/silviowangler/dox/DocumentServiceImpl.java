@@ -292,12 +292,12 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         for (Attribute attribute : attributes) {
             final String attributeShortName = attribute.getShortName();
             final TranslatableKey key = new TranslatableKey(attributeShortName);
-            if (attribute.getDomain() != null && physicalDocument.getIndices().containsKey(key)) {
+            if (attribute.getDomain() != null && attribute.getDomain().isStrict() && physicalDocument.getIndices().containsKey(key)) {
                 final String attributeValue = String.valueOf(physicalDocument.getIndices().get(key));
                 logger.debug("Analyzing domain value on attribute '{}' for value '{}'", attributeShortName, attributeValue);
                 if (!attribute.getDomain().getValues().contains(attributeValue)) {
                     logger.error("Attribute '{}' belongs to a domain. This domain does not contain the value '{}'", attributeShortName, attributeValue);
-                    throw new ValueNotInDomainException("Value ist not part of this domain", attributeValue, attribute.getDomain().getValues());
+                    throw new ValueNotInDomainException("Value ist not part of this domain", attributeValue, attribute.getDomain().getValues(), attribute.getDomain().getShortName());
                 }
             }
         }
@@ -341,7 +341,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         for (Attribute attribute : attributes) {
 
             final TranslatableKey key = new TranslatableKey(attribute.getShortName());
-            if (resultMap.containsKey(key)) {
+            if (resultMap.containsKey(key) && resultMap.get(key) != null) {
                 if (!isAssignableType(attribute.getDataType(), resultMap.get(key).getClass())) {
                     logger.debug("Attribute '{}' is not assignable to '{}'", key, attribute.getDataType());
                     resultMap.put(key, makeAssignable(attribute.getDataType(), resultMap.get(key)));

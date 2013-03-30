@@ -40,6 +40,9 @@ public class Domain extends AbstractPersistable<Long> {
     @Column(nullable = false, name = "VAL")
     private List<String> values;
 
+    @Column(nullable = false)
+    private boolean strict = true;
+
     public String getShortName() {
         return shortName;
     }
@@ -54,5 +57,13 @@ public class Domain extends AbstractPersistable<Long> {
 
     public void setValues(List<String> values) {
         this.values = values;
+    }
+
+    public boolean isStrict() {
+        return strict;
+    }
+
+    public void setStrict(boolean strict) {
+        this.strict = strict;
     }
 }

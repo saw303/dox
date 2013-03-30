@@ -28,9 +28,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 /**
@@ -42,6 +40,7 @@ public class DocumentServiceTest extends AbstractTest {
     public static final TranslatableKey INVOICE_DATE = new TranslatableKey("invoiceDate");
     public static final TranslatableKey INVOICE_AMOUNT = new TranslatableKey("invoiceAmount");
     public static final TranslatableKey COMPANY = new TranslatableKey("company");
+    public static final TranslatableKey STRICT_COMPANY = new TranslatableKey("strictcompany");
     private DocumentClass documentClass;
 
     @Before
@@ -54,7 +53,7 @@ public class DocumentServiceTest extends AbstractTest {
         SortedSet<Attribute> attributes = documentService.findAttributes(this.documentClass);
 
         assertNotNull(attributes);
-        assertEquals(3, attributes.size());
+        assertEquals(4, attributes.size());
 
         final Iterator<Attribute> iterator = (attributes).iterator();
         assertEquals("Wrong order", "company", iterator.next().getShortName());
@@ -110,7 +109,7 @@ public class DocumentServiceTest extends AbstractTest {
         assertEquals("INVOICE", documentReference.getDocumentClass().getShortName());
         assertEquals("document-1p.pdf", documentReference.getFileName());
         assertNotNull(documentReference.getIndices());
-        assertEquals(3, documentReference.getIndices().size());
+        assertEquals(4, documentReference.getIndices().size());
         assertTrue(documentReference.getIndices().containsKey(COMPANY));
         assertEquals("Sunrise", documentReference.getIndices().get(COMPANY));
         assertTrue(documentReference.getIndices().containsKey(INVOICE_DATE));
@@ -144,7 +143,7 @@ public class DocumentServiceTest extends AbstractTest {
         assertEquals("INVOICE", documentReference.getDocumentClass().getShortName());
         assertEquals("document-5p.pdf", documentReference.getFileName());
         assertNotNull(documentReference.getIndices());
-        assertEquals(3, documentReference.getIndices().size());
+        assertEquals(4, documentReference.getIndices().size());
         assertTrue(documentReference.getIndices().containsKey(COMPANY));
         assertEquals("Swisscom", documentReference.getIndices().get(COMPANY));
         assertTrue(documentReference.getIndices().containsKey(INVOICE_DATE));
@@ -265,6 +264,7 @@ public class DocumentServiceTest extends AbstractTest {
 
         final String valueNotInDomain = "This value does not belong to the company domain";
         indexes.put(COMPANY, valueNotInDomain);
+        indexes.put(STRICT_COMPANY, valueNotInDomain);
         indexes.put(INVOICE_AMOUNT, 100.0);
         indexes.put(INVOICE_DATE, new Date());
 
@@ -273,8 +273,9 @@ public class DocumentServiceTest extends AbstractTest {
             documentService.importDocument(doc);
             fail("Should throw a validation exception");
         } catch (ValueNotInDomainException e) {
+            assertThat(e.getDomainName(), is("strictdomain"));
             assertEquals(valueNotInDomain, e.getValue());
-            assertEquals(4, e.getValidValues().size());
+            assertEquals(2, e.getValidValues().size());
             assertTrue(e.getValidValues().contains("Sunrise"));
             assertTrue(e.getValidValues().contains("Swisscom"));
         }
@@ -334,7 +335,7 @@ public class DocumentServiceTest extends AbstractTest {
 
         DocumentReference referenceAfterUpdate = documentService.updateIndices(reference);
 
-        assertEquals(3, referenceAfterUpdate.getIndices().size());
+        assertEquals(4, referenceAfterUpdate.getIndices().size());
         assertEquals("Swisscom", referenceAfterUpdate.getIndices().get(COMPANY));
         assertEquals("2", String.valueOf(referenceAfterUpdate.getIndices().get(INVOICE_AMOUNT)));
         assertEquals(new DateTime(1982, 12, 15, 0, 0), referenceAfterUpdate.getIndices().get(INVOICE_DATE));

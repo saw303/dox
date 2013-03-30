@@ -51,7 +51,7 @@ public class TranslationServiceImplTest extends AbstractTest {
     public void readAll() {
         Set<Translation> translations = translationService.findAll();
 
-        assertThat(translations.size(), is(34));
+        assertThat(translations.size(), is(36));
 
         for (Translation translation : translations) {
             assertNotNull("Key must not be null", translation.getKey());
