@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Locale;
 import java.util.Set;
 
+import static java.util.Locale.GERMAN;
 import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
 
 /**
@@ -70,9 +71,9 @@ public class TranslationServiceImpl implements TranslationService {
             logger.debug("No translation found for key '{}' and locale '{}'. Falling back to locale '{}'", new Object[]{key, locale.getDisplayName(), fallbackLocale.getDisplayName()});
             translation = translationRepository.findByKeyAndLocale(key, fallbackLocale);
 
-            if (translation == null) {
+            if (translation == null && !fallbackLocale.equals(GERMAN)) {
 
-                translation = translationRepository.findByKeyAndLocale(key, Locale.GERMAN);
+                translation = translationRepository.findByKeyAndLocale(key, GERMAN);
 
                 if (translation == null) {
                     logger.warn("No translation found for key '{}' and locale '{}'", key, locale);
@@ -82,6 +83,7 @@ public class TranslationServiceImpl implements TranslationService {
 
             } else {
                 logger.debug("Found translation of key '{}' using fallback locale '{}'", key, fallbackLocale.getDisplayName());
+                if (translation == null) throw new NoTranslationFoundException(key, locale);
                 return translation.getLanguageSpecificTranslation();
             }
         } else {
