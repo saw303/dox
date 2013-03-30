@@ -15,4 +15,4 @@
   ~ limitations under the License.
   --%>
 
-<p><spring:message code="application.footer"/></p>
+<p><spring:message code="application.footer" arguments="<%=new java.util.Date()%>"/></p>
