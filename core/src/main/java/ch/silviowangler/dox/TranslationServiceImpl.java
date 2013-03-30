@@ -71,8 +71,15 @@ public class TranslationServiceImpl implements TranslationService {
             translation = translationRepository.findByKeyAndLocale(key, fallbackLocale);
 
             if (translation == null) {
-                logger.warn("No translation found for key '{}' and locale '{}'", key, locale);
-                throw new NoTranslationFoundException(key, locale);
+
+                translation = translationRepository.findByKeyAndLocale(key, Locale.GERMAN);
+
+                if (translation == null) {
+                    logger.warn("No translation found for key '{}' and locale '{}'", key, locale);
+                    throw new NoTranslationFoundException(key, locale);
+                }
+                return translation.getLanguageSpecificTranslation();
+
             } else {
                 logger.debug("Found translation of key '{}' using fallback locale '{}'", key, fallbackLocale.getDisplayName());
                 return translation.getLanguageSpecificTranslation();
