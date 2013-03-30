@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   ~ Copyright 2012 - 2013 Silvio Wangler (silvio.wangler@gmail.com)
   ~
@@ -13,5 +14,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   --%>
-
-<div>well done. you successfully imported a document</div>
+<div>Sorry. Something went wrong</div>
+<c:if test="${exception != null}">
+    <div>${exception.getMessage()}</div>
+</c:if>

@@ -71,6 +71,8 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     @Autowired
     private DocumentRepository documentRepository;
     @Autowired
+    private DomainRepository domainRepository;
+    @Autowired
     private AttributeRepository attributeRepository;
     @Autowired
     private IndexStoreRepository indexStoreRepository;
@@ -217,7 +219,20 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
         verifyMandatoryAttributes(physicalDocumentApi, attributes);
         verifyUnknownKeys(physicalDocumentApi, documentClassShortName, attributes);
-        verifyDomainValues(physicalDocumentApi, attributes);
+        try {
+            verifyDomainValues(physicalDocumentApi, attributes);
+        } catch (ValueNotInDomainException e) {
+            ch.silviowangler.dox.domain.Domain domain = domainRepository.findByShortName(e.getDomainName());
+
+            if (domain.isStrict()) {
+                logger.warn("Domain '{}' is defined as strict domain and can therefore only accept predefined value", e.getDomainName());
+                throw e;
+            }
+            logger.debug("Adding value '{}' to domain '{}'", e.getValue(), e.getDomainName());
+            domain.getValues().add(e.getValue());
+            domainRepository.save(domain);
+            verifyDomainValues(physicalDocumentApi, attributes);
+        }
 
         physicalDocumentApi.setIndices(fixDataTypesOfIndices(physicalDocumentApi.getIndices(), attributes));
 
@@ -292,12 +307,12 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         for (Attribute attribute : attributes) {
             final String attributeShortName = attribute.getShortName();
             final TranslatableKey key = new TranslatableKey(attributeShortName);
-            if (attribute.getDomain() != null && attribute.getDomain().isStrict() && physicalDocument.getIndices().containsKey(key)) {
+            if (attribute.getDomain() != null && physicalDocument.getIndices().containsKey(key)) {
                 final String attributeValue = String.valueOf(physicalDocument.getIndices().get(key));
                 logger.debug("Analyzing domain value on attribute '{}' for value '{}'", attributeShortName, attributeValue);
                 if (!attribute.getDomain().getValues().contains(attributeValue)) {
                     logger.error("Attribute '{}' belongs to a domain. This domain does not contain the value '{}'", attributeShortName, attributeValue);
-                    throw new ValueNotInDomainException("Value ist not part of this domain", attributeValue, attribute.getDomain().getValues(), attribute.getDomain().getShortName());
+                    throw new ValueNotInDomainException("Value is not part of this domain", attributeValue, attribute.getDomain().getValues(), attribute.getDomain().getShortName());
                 }
             }
         }

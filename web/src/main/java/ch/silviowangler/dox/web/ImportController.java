@@ -18,7 +18,6 @@ package ch.silviowangler.dox.web;
 
 import ch.silviowangler.dox.api.*;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -39,6 +38,7 @@ import org.springframework.web.util.HtmlUtils;
 import java.io.IOException;
 import java.util.*;
 
+import static com.google.common.collect.Maps.newHashMap;
 import static org.springframework.util.Assert.notNull;
 
 /**
@@ -70,7 +70,7 @@ public class ImportController implements MessageSourceAware, InitializingBean {
 
     @RequestMapping(method = RequestMethod.GET, value = "import.html")
     public ModelAndView query(Locale locale) {
-        Map<String, Object> model = Maps.newHashMap();
+        Map<String, Object> model = newHashMap();
         ArrayList<DocumentClass> documentClasses = Lists.newArrayList(documentService.findDocumentClasses());
         Collections.sort(documentClasses, new Comparator<DocumentClass>() {
             @Override
@@ -159,13 +159,13 @@ public class ImportController implements MessageSourceAware, InitializingBean {
     @RequestMapping(method = RequestMethod.POST, value = "performImport.html")
     public ModelAndView importDocument(MultipartFile file, WebRequest request) {
 
-        Map<String, Object> model = Maps.newHashMap();
+        Map<String, Object> model = newHashMap();
 
         try {
             DocumentClass documentClass = new DocumentClass(request.getParameter(DOCUMENT_CLASS_SHORT_NAME));
 
             Iterator<String> params = request.getParameterNames();
-            Map<TranslatableKey, Object> indices = Maps.newHashMap();
+            Map<TranslatableKey, Object> indices = newHashMap();
 
             while (params.hasNext()) {
                 String param = params.next();
@@ -187,13 +187,14 @@ public class ImportController implements MessageSourceAware, InitializingBean {
 
         } catch (ValidationException | IOException | DocumentClassNotFoundException e) {
             logger.error("Unable to import document", e);
+            model.put("exception", e);
+            return new ModelAndView("import.failure", model);
         } catch (DocumentDuplicationException e) {
             logger.error("Unable to import document. Duplicate document detected", e);
             model.put("docId", e.getDocumentId());
             model.put("docHash", e.getHash());
             return new ModelAndView("import.duplicate.document", model);
         }
-        return new ModelAndView("import.after.definition");
     }
 
     private String getInputType(AttributeDataType dataType) {

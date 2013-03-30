@@ -17,6 +17,7 @@
 package ch.silviowangler.dox;
 
 import ch.silviowangler.dox.api.*;
+import com.google.common.base.Predicate;
 import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -28,6 +29,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
+import static com.google.common.collect.Sets.filter;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
@@ -62,7 +64,7 @@ public class DocumentServiceTest extends AbstractTest {
 
         for (Attribute attribute : attributes) {
             if (attribute.containsDomain()) {
-                Domain domain=  attribute.getDomain();
+                Domain domain = attribute.getDomain();
                 assertNotNull(domain.getShortName());
                 assertThat(domain.getValues().size(), is(not(0)));
                 assertNotNull("Translation is missing", domain.getTranslation());
@@ -279,6 +281,42 @@ public class DocumentServiceTest extends AbstractTest {
             assertTrue(e.getValidValues().contains("Sunrise"));
             assertTrue(e.getValidValues().contains("Swisscom"));
         }
+    }
+
+    @Test
+    public void importCanAddNewValuesToNonStrictDomains() throws IOException, DocumentDuplicationException, ValidationException, DocumentClassNotFoundException {
+        File temp = createTestFile("hello2.world.txt", "Must not import");
+
+        final SortedSet<Attribute> attributesBefore = documentService.findAttributes(documentClass);
+
+        Map<TranslatableKey, Object> indexes = newHashMapWithExpectedSize(3);
+
+        indexes.put(COMPANY, "Hello");
+        indexes.put(STRICT_COMPANY, "Swisscom");
+        indexes.put(INVOICE_AMOUNT, 100.0);
+        indexes.put(INVOICE_DATE, new Date());
+
+        PhysicalDocument doc = new PhysicalDocument(documentClass, FileUtils.readFileToByteArray(temp), indexes, temp.getName());
+        documentService.importDocument(doc);
+
+        SortedSet<Attribute> attributesAfter = documentService.findAttributes(documentClass);
+
+        Predicate<Attribute> company = new Predicate<Attribute>() {
+            @Override
+            public boolean apply(Attribute input) {
+                return "company".equals(input.getShortName());
+            }
+        };
+
+        Predicate<Attribute> strictCompany = new Predicate<Attribute>() {
+            @Override
+            public boolean apply(Attribute input) {
+                return "strictcompany".equals(input.getShortName());
+            }
+        };
+
+        assertThat("Adding a new value must not be allowed", filter(attributesAfter, strictCompany).iterator().next().getDomain().getValues().size(), is(filter(attributesBefore, strictCompany).iterator().next().getDomain().getValues().size()));
+        assertThat("Adding a new value is allowed", filter(attributesAfter, company).iterator().next().getDomain().getValues().size() - 1, is(filter(attributesBefore, company).iterator().next().getDomain().getValues().size()));
     }
 
     @Test

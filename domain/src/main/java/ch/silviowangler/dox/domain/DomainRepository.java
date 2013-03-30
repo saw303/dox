@@ -23,4 +23,5 @@ import org.springframework.data.repository.CrudRepository;
  * @since 0.1
  */
 public interface DomainRepository extends CrudRepository<Domain, Long> {
+    Domain findByShortName(String domainName);
 }
