@@ -33,8 +33,10 @@
     <logger name="org.springframework.security" level="DEBUG"/>
     <logger name="org.hibernate" level="ERROR"/>
     <logger name="org.apache.commons" level="ERROR"/>
+    <logger name="com.googlecode.flyway" level="INFO"/>
     <logger name="ch.silviowangler.dox" level="DEBUG"/>
-    <root level="debug">
+
+    <root level="ERROR">
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

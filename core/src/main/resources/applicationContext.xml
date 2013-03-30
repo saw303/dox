@@ -47,23 +47,6 @@
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
 
-    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="packagesToScan" value="ch.silviowangler.dox.domain"/>
-        <property name="jpaVendorAdapter">
-            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-                <property name="generateDdl" value="false"/>
-                <property name="showSql" value="${show.sql}"/>
-            </bean>
-        </property>
-        <property name="jpaPropertyMap">
-            <props>
-                <prop key="hibernate.hbm2ddl.auto">validate</prop>
-                <prop key="hibernate.dialect">ch.silviowangler.dox.domain.hibernate.Mysql5InnoDBBitBooleanDialect</prop>
-            </props>
-        </property>
-    </bean>
-
     <util:properties id="mimeTypes" location="classpath:mimeTypes.properties"/>
 
     <aop:config>

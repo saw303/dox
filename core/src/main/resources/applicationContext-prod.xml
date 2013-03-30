@@ -17,11 +17,11 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+    <import resource="applicationContext.xml"/>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" depends-on="flyway">
         <property name="dataSource" ref="dataSource"/>
         <property name="packagesToScan" value="ch.silviowangler.dox.domain"/>
         <property name="jpaVendorAdapter">
@@ -33,18 +33,13 @@
         <property name="jpaPropertyMap">
             <props>
                 <prop key="hibernate.hbm2ddl.auto">validate</prop>
+                <prop key="hibernate.dialect">ch.silviowangler.dox.domain.hibernate.Mysql5InnoDBBitBooleanDialect</prop>
             </props>
         </property>
     </bean>
 
-    <jdbc:embedded-database id="dataSource" type="H2">
-        <jdbc:script location="classpath*:ddl_h2_create.sql"/>
-    </jdbc:embedded-database>
+    <bean id="flyway" class="com.googlecode.flyway.core.Flyway" init-method="migrate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
 
-    <jdbc:initialize-database>
-        <jdbc:script location="classpath*:install.sql"/>
-        <jdbc:script location="classpath:install-test-data.sql"/>
-    </jdbc:initialize-database>
-
-    <import resource="classpath*:applicationContext.xml"/>
 </beans>

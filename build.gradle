@@ -52,8 +52,9 @@ allprojects {
         h2Version = '1.3.170'
         mysqlVersion = '5.1.22'
         iTextVersion = '5.3.4'
-        guavaVersion = '13.0.1'
+        guavaVersion = '14.0.1'
         mockitoVersion = '1.9.5'
+        flywayVersion = '2.1.1'
     }
 
     configurations.all {
@@ -135,7 +136,8 @@ project(':core') {
                 "commons-beanutils:commons-beanutils:${ext.commonsBeanUtilsVersion}",
                 "commons-io:commons-io:${ext.commonsIOVersion}",
                 "joda-time:joda-time:${ext.jodaTimeVersion}",
-                "com.google.guava:guava:${ext.guavaVersion}"
+                "com.google.guava:guava:${ext.guavaVersion}",
+                "com.googlecode.flyway:flyway-core:${ext.flywayVersion}"
         compile("org.springframework.security:spring-security-core:${ext.springSecurityVersion}") {
             exclude group: 'org.springframework', module: 'spring-beans'
         }
