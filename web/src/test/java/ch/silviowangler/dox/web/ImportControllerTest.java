@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TreeSet;
 
+import static ch.silviowangler.dox.api.AttributeDataType.DATE;
 import static ch.silviowangler.dox.api.AttributeDataType.INTEGER;
 import static ch.silviowangler.dox.api.AttributeDataType.STRING;
 import static com.google.common.collect.Lists.newArrayList;
@@ -121,6 +122,18 @@ public class ImportControllerTest {
     }
 
     @Test
+    public void verifyHtmlInDocumentClassNotFound() throws DocumentClassNotFoundException {
+
+        final String docclass = "docclass";
+        when(documentService.findAttributes(new DocumentClass(docclass))).thenThrow(new DocumentClassNotFoundException(docclass));
+        when(messageSource.getMessage("document.import.no.attributes", new Object[]{docclass}, GERMAN)).thenReturn("an error message bla bla bla");
+
+        String html = controller.getAttributeForm(docclass, GERMAN, new DeviceMock());
+
+        assertThat(html, is("<ul id=\"errors\"><li id=\"info\">an error message bla bla bla</li></ul>"));
+    }
+
+    @Test
     public void verifyHtmlForMandatoryStringAttribute() throws DocumentClassNotFoundException {
 
         final String docclass = "docclass";
@@ -176,7 +189,7 @@ public class ImportControllerTest {
     }
 
     @Test
-    public void verifyHtmlForMandatoryIntegerttribute() throws DocumentClassNotFoundException {
+    public void verifyHtmlForMandatoryIntegerAttribute() throws DocumentClassNotFoundException {
 
         final String docclass = "docclass";
         when(documentService.findAttributes(new DocumentClass(docclass))).thenReturn(newTreeSet(newArrayList(new Attribute("attr2", false, INTEGER))));
@@ -185,11 +198,10 @@ public class ImportControllerTest {
         String html = controller.getAttributeForm(docclass, GERMAN, new DeviceMock());
 
         assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr2\">null: <span class=\"required\">*</span></label>\n<input name=\"attr2\" type=\"number\" min=\"0\" step=\"any\" required />\n<input name=\"file\" type=\"file\" required/>\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
-
     }
 
     @Test
-    public void verifyHtmlForOptionalIntegerttribute() throws DocumentClassNotFoundException {
+    public void verifyHtmlForOptionalIntegerAttribute() throws DocumentClassNotFoundException {
 
         final String docclass = "docclass";
         when(documentService.findAttributes(new DocumentClass(docclass))).thenReturn(newTreeSet(newArrayList(new Attribute("attr2", true, INTEGER))));
@@ -198,6 +210,29 @@ public class ImportControllerTest {
         String html = controller.getAttributeForm(docclass, GERMAN, new DeviceMock());
 
         assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr2\">null:</label>\n<input name=\"attr2\" type=\"number\" min=\"0\" step=\"any\" />\n<input name=\"file\" type=\"file\" required/>\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
+    }
 
+    @Test
+    public void verifyHtmlForMandatoryDateAttribute() throws DocumentClassNotFoundException {
+
+        final String docclass = "docclass";
+        when(documentService.findAttributes(new DocumentClass(docclass))).thenReturn(newTreeSet(newArrayList(new Attribute("attr3", false, DATE))));
+        when(messageSource.getMessage("document.import.button.submit", null, GERMAN)).thenReturn("Senden");
+
+        String html = controller.getAttributeForm(docclass, GERMAN, new DeviceMock());
+
+        assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr3\">null: <span class=\"required\">*</span></label>\n<input name=\"attr3\" type=\"date\" required />\n<input name=\"file\" type=\"file\" required/>\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
+    }
+
+    @Test
+    public void verifyHtmlForOptionalDateAttribute() throws DocumentClassNotFoundException {
+
+        final String docclass = "docclass";
+        when(documentService.findAttributes(new DocumentClass(docclass))).thenReturn(newTreeSet(newArrayList(new Attribute("attr3", true, DATE))));
+        when(messageSource.getMessage("document.import.button.submit", null, GERMAN)).thenReturn("Senden");
+
+        String html = controller.getAttributeForm(docclass, GERMAN, new DeviceMock());
+
+        assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr3\">null:</label>\n<input name=\"attr3\" type=\"date\" />\n<input name=\"file\" type=\"file\" required/>\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
     }
 }
