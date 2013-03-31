@@ -16,8 +16,11 @@
 
 package ch.silviowangler.dox.web;
 
+import ch.silviowangler.dox.api.Attribute;
 import ch.silviowangler.dox.api.DocumentClass;
+import ch.silviowangler.dox.api.DocumentClassNotFoundException;
 import ch.silviowangler.dox.api.DocumentService;
+import ch.silviowangler.dox.web.util.DeviceMock;
 import com.google.common.collect.Sets;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,11 +28,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.context.MessageSource;
+import org.springframework.mobile.device.Device;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.TreeSet;
 
+import static com.google.common.collect.Sets.newHashSet;
+import static java.util.Locale.GERMAN;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -55,10 +63,10 @@ public class ImportControllerTest {
     public void testQuerySortAlphabeticallyByTranslationInGerman() throws Exception {
 
         when(documentService.findDocumentClasses()).thenReturn(
-                Sets.newHashSet(new DocumentClass("a", "Z-Klasse"), new DocumentClass("b", "A-Klasse"), new DocumentClass("c", "C-Klasse"))
+                newHashSet(new DocumentClass("a", "Z-Klasse"), new DocumentClass("b", "A-Klasse"), new DocumentClass("c", "C-Klasse"))
         );
 
-        ModelAndView modelAndView = controller.query(Locale.GERMAN);
+        ModelAndView modelAndView = controller.query(GERMAN);
 
         assertThat(modelAndView.getModel().size(), is(2));
         assertThat(modelAndView.getModel().containsKey("documentClasses"), is(true));
@@ -78,10 +86,10 @@ public class ImportControllerTest {
     public void testQuerySortAlphabeticallyByTranslationInEnglish() throws Exception {
 
         when(documentService.findDocumentClasses()).thenReturn(
-                Sets.newHashSet(new DocumentClass("z", "Aeroport"), new DocumentClass("d", "Houston"), new DocumentClass("c", "Zero"))
+                newHashSet(new DocumentClass("z", "Aeroport"), new DocumentClass("d", "Houston"), new DocumentClass("c", "Zero"))
         );
 
-        ModelAndView modelAndView = controller.query(Locale.GERMAN);
+        ModelAndView modelAndView = controller.query(GERMAN);
 
         assertThat(modelAndView.getViewName(), is("import.definition"));
         assertThat(modelAndView.getModel().size(), is(2));
@@ -96,5 +104,17 @@ public class ImportControllerTest {
         assertThat(documentClasses.get(0).getShortName(), is("z"));
         assertThat(documentClasses.get(1).getShortName(), is("d"));
         assertThat(documentClasses.get(2).getShortName(), is("c"));
+    }
+
+    @Test
+    public void attributeForm() throws DocumentClassNotFoundException {
+
+        final String docclass = "docclass";
+        when(documentService.findAttributes(new DocumentClass(docclass))).thenReturn(new TreeSet<Attribute>());
+        when(messageSource.getMessage("document.import.no.attributes", new Object[]{docclass}, GERMAN)).thenReturn("an error message");
+
+        String html = controller.getAttributeForm(docclass, GERMAN, new DeviceMock());
+
+        assertThat(html, is("<ul id=\"errors\"><li id=\"info\">an error message</li></ul>"));
     }
 }
