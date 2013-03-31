@@ -142,6 +142,37 @@ public class ImportControllerTest {
         String html = controller.getAttributeForm(docclass, GERMAN, new DeviceMock());
 
         assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr1\">null:</label>\n<input name=\"attr1\" type=\"text\" />\n<input name=\"file\" type=\"file\" required/>\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
+    }
+
+    @Test
+    public void verifyHtmlForMandatoryStringAttributeWithDomain() throws DocumentClassNotFoundException {
+
+        final String docclass = "docclass";
+        Domain domain = new Domain("domain");
+        domain.getValues().add("A");
+        domain.getValues().add("B");
+        when(documentService.findAttributes(new DocumentClass(docclass))).thenReturn(newTreeSet(newArrayList(new Attribute("attr1", false, domain, STRING, true))));
+        when(messageSource.getMessage("document.import.button.submit", null, GERMAN)).thenReturn("Senden");
+
+        String html = controller.getAttributeForm(docclass, GERMAN, new DeviceMock());
+
+        assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr1\">null: <span class=\"required\">*</span></label>\n<datalist id=\"list-attr1\"><option value=\"A\"/><option value=\"B\"/></datalist>\n<input name=\"attr1\" list=\"list-attr1\" required />\n<input name=\"file\" type=\"file\" required/>\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
+
+    }
+
+    @Test
+    public void verifyHtmlForOptionalStringAttributeWithDomain() throws DocumentClassNotFoundException {
+
+        final String docclass = "docclass";
+        Domain domain = new Domain("domain");
+        domain.getValues().add("A");
+        domain.getValues().add("B");
+        when(documentService.findAttributes(new DocumentClass(docclass))).thenReturn(newTreeSet(newArrayList(new Attribute("attr1", true, domain, STRING, true))));
+        when(messageSource.getMessage("document.import.button.submit", null, GERMAN)).thenReturn("Senden");
+
+        String html = controller.getAttributeForm(docclass, GERMAN, new DeviceMock());
+
+        assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr1\">null:</label>\n<datalist id=\"list-attr1\"><option value=\"A\"/><option value=\"B\"/></datalist>\n<input name=\"attr1\" list=\"list-attr1\" />\n<input name=\"file\" type=\"file\" required/>\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
 
     }
 }

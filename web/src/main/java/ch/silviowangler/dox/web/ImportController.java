@@ -125,7 +125,11 @@ public class ImportController implements MessageSourceAware, InitializingBean {
                     }
                     sb.append("</datalist>\n");
                     sb.append("<input name=\"").append(attribute.getShortName()).append("\" list=\"list-")
-                            .append(attribute.getShortName()).append("\"/>\n");
+                            .append(attribute.getShortName()).append("\"");
+
+                    if (!attribute.isOptional()) sb.append(" required");
+
+                    sb.append(" />\n");
                 } else {
 
                     if (isNumeric(attribute.getDataType())) {
