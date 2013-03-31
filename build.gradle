@@ -34,7 +34,7 @@ allprojects {
     }
 
     group = 'ch.silviowangler.dox'
-    version = '0.1'
+    version = '0.2-SNAPSHOT'
 
     project.ext {
         springVersion = '3.2.2.RELEASE'
