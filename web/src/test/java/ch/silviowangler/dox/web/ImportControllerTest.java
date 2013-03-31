@@ -16,11 +16,9 @@
 
 package ch.silviowangler.dox.web;
 
-import ch.silviowangler.dox.api.Attribute;
-import ch.silviowangler.dox.api.DocumentClass;
-import ch.silviowangler.dox.api.DocumentClassNotFoundException;
-import ch.silviowangler.dox.api.DocumentService;
+import ch.silviowangler.dox.api.*;
 import ch.silviowangler.dox.web.util.DeviceMock;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +34,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TreeSet;
 
+import static ch.silviowangler.dox.api.AttributeDataType.STRING;
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
+import static com.google.common.collect.Sets.newTreeSet;
 import static java.util.Locale.GERMAN;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -107,7 +108,7 @@ public class ImportControllerTest {
     }
 
     @Test
-    public void attributeForm() throws DocumentClassNotFoundException {
+    public void verifyHtmlInErrorCase() throws DocumentClassNotFoundException {
 
         final String docclass = "docclass";
         when(documentService.findAttributes(new DocumentClass(docclass))).thenReturn(new TreeSet<Attribute>());
@@ -116,5 +117,31 @@ public class ImportControllerTest {
         String html = controller.getAttributeForm(docclass, GERMAN, new DeviceMock());
 
         assertThat(html, is("<ul id=\"errors\"><li id=\"info\">an error message</li></ul>"));
+    }
+
+    @Test
+    public void verifyHtmlForMandatoryStringAttribute() throws DocumentClassNotFoundException {
+
+        final String docclass = "docclass";
+        when(documentService.findAttributes(new DocumentClass(docclass))).thenReturn(newTreeSet(newArrayList(new Attribute("attr1", false, STRING))));
+        when(messageSource.getMessage("document.import.button.submit", null, GERMAN)).thenReturn("Senden");
+
+        String html = controller.getAttributeForm(docclass, GERMAN, new DeviceMock());
+
+        assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr1\">null: <span class=\"required\">*</span></label>\n<input name=\"attr1\" type=\"text\" required />\n<input name=\"file\" type=\"file\" required/>\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
+
+    }
+
+    @Test
+    public void verifyHtmlForOptionalStringAttribute() throws DocumentClassNotFoundException {
+
+        final String docclass = "docclass";
+        when(documentService.findAttributes(new DocumentClass(docclass))).thenReturn(newTreeSet(newArrayList(new Attribute("attr1", true, STRING))));
+        when(messageSource.getMessage("document.import.button.submit", null, GERMAN)).thenReturn("Senden");
+
+        String html = controller.getAttributeForm(docclass, GERMAN, new DeviceMock());
+
+        assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr1\">null:</label>\n<input name=\"attr1\" type=\"text\" />\n<input name=\"file\" type=\"file\" required/>\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
+
     }
 }

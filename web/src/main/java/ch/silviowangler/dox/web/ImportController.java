@@ -18,6 +18,7 @@ package ch.silviowangler.dox.web;
 
 import ch.silviowangler.dox.api.*;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -39,7 +40,9 @@ import java.io.IOException;
 import java.util.*;
 
 import static com.google.common.collect.Maps.newHashMap;
+import static com.google.common.collect.Sets.newHashSet;
 import static org.springframework.util.Assert.notNull;
+import static org.springframework.web.util.HtmlUtils.htmlEscape;
 
 /**
  * @author Silvio Wangler
@@ -96,7 +99,7 @@ public class ImportController implements MessageSourceAware, InitializingBean {
             attributes = documentService.findAttributes(new DocumentClass(documentClassShortName));
         } catch (DocumentClassNotFoundException e) {
             logger.error("Unable to find attributes for document class short name '{}'", documentClassShortName, e);
-            attributes = new HashSet<>();
+            attributes = newHashSet();
         }
         StringBuffer sb;
         String html;
@@ -129,15 +132,20 @@ public class ImportController implements MessageSourceAware, InitializingBean {
                         sb.append("<input name=\"").append(attribute.getShortName()).append("\" type=\"")
                                 .append(getInputType(attribute.getDataType())).append("\" min=\"0\" ").append("step=\"any\"");
 
+                        if (!attribute.isOptional()) sb.append(" required");
+
                         sb.append(" />\n");
                     } else {
                         sb.append("<input name=\"").append(attribute.getShortName()).append("\" type=\"")
-                                .append(getInputType(attribute.getDataType())).append("\"/>\n");
+                                .append(getInputType(attribute.getDataType())).append("\"");
+
+                        if (!attribute.isOptional()) sb.append(" required");
+                        sb.append(" />\n");
                     }
                 }
             }
 
-            sb.append("<input name=\"file\" type=\"file\"/>\n");
+            sb.append("<input name=\"file\" type=\"file\" required/>\n");
 
             sb.append("<button type=\"submit\" id=\"importDocBtn\">")
                     .append(messageSource.getMessage("document.import.button.submit", null, locale))
@@ -147,7 +155,7 @@ public class ImportController implements MessageSourceAware, InitializingBean {
         } else {
             sb = new StringBuffer("<ul id=\"errors\">");
 
-            final String message = HtmlUtils.htmlEscape(messageSource.getMessage("document.import.no.attributes", new Object[]{documentClassShortName}, locale));
+            final String message = htmlEscape(messageSource.getMessage("document.import.no.attributes", new Object[]{documentClassShortName}, locale));
             sb.append("<li id=\"info\">").append(message).append("</li>");
             sb.append("</ul>");
         }
