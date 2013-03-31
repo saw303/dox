@@ -39,6 +39,8 @@ import org.springframework.web.util.HtmlUtils;
 import java.io.IOException;
 import java.util.*;
 
+import static ch.silviowangler.dox.api.AttributeDataType.*;
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Sets.newHashSet;
 import static org.springframework.util.Assert.notNull;
@@ -74,7 +76,7 @@ public class ImportController implements MessageSourceAware, InitializingBean {
     @RequestMapping(method = RequestMethod.GET, value = "import.html")
     public ModelAndView query(Locale locale) {
         Map<String, Object> model = newHashMap();
-        ArrayList<DocumentClass> documentClasses = Lists.newArrayList(documentService.findDocumentClasses());
+        ArrayList<DocumentClass> documentClasses = newArrayList(documentService.findDocumentClasses());
         Collections.sort(documentClasses, new Comparator<DocumentClass>() {
             @Override
             public int compare(DocumentClass o1, DocumentClass o2) {
@@ -220,10 +222,10 @@ public class ImportController implements MessageSourceAware, InitializingBean {
     }
 
     private boolean isFloatPointNumber(AttributeDataType dataType) {
-        return AttributeDataType.DOUBLE.equals(dataType);
+        return DOUBLE.equals(dataType);
     }
 
     private boolean isNaturalNumber(AttributeDataType dataType) {
-        return AttributeDataType.LONG.equals(dataType) || AttributeDataType.SHORT.equals(dataType) || AttributeDataType.INTEGER.equals(dataType);
+        return newArrayList(LONG, SHORT, INTEGER).contains(dataType);
     }
 }
