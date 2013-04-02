@@ -1,0 +1,7 @@
+<form id="fileUpload" method="POST" action="performImport.html" enctype="multipart/form-data">
+<input name="documentClassShortName" type="hidden" value="${docclass}"/>
+<%attributes.each { attribute -> %><label for="${attribute.shortName}">${attribute.translation}:<%if (!attribute.isOptional()) print ' <span class="required">*</span>'%></label>
+<%if (attribute.dataType == ch.silviowangler.dox.api.AttributeDataType.DATE) {%><input name="${attribute.shortName}" type="date"<%if (!attribute.isOptional()) print ' required'%> /><%}}%>
+<input name="file" type="file" required/>
+<button type="submit" id="importDocBtn">Senden</button>
+</form>

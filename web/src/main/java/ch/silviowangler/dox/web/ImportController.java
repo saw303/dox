@@ -17,6 +17,8 @@
 package ch.silviowangler.dox.web;
 
 import ch.silviowangler.dox.api.*;
+import ch.silviowangler.dox.web.util.TemplateEngine;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.slf4j.Logger;
@@ -61,6 +63,8 @@ public class ImportController implements MessageSourceAware, InitializingBean {
 
     @Autowired
     private DocumentService documentService;
+    @Autowired
+    private TemplateEngine templateEngine;
     private MessageSource messageSource;
 
     @Override
@@ -107,7 +111,11 @@ public class ImportController implements MessageSourceAware, InitializingBean {
         String html;
 
         if (!attributes.isEmpty()) {
-            sb = new StringBuffer("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n");
+            Map<String, Object> binding = new HashMap<>();
+            binding.put("docclass", documentClassShortName);
+            binding.put("attributes", ImmutableList.copyOf(attributes));
+            return templateEngine.render("templates/import-form.doxview", binding);
+            /*sb = new StringBuffer("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n");
             sb.append("<input name=\"").append(DOCUMENT_CLASS_SHORT_NAME).append("\" type=\"hidden\" value=\"").append(documentClassShortName).append("\"/>\n");
 
             for (Attribute attribute : attributes) {
@@ -157,7 +165,7 @@ public class ImportController implements MessageSourceAware, InitializingBean {
                     .append(messageSource.getMessage("document.import.button.submit", null, locale))
                     .append("</button>\n");
             sb.append("</form>");
-
+*/
         } else {
             sb = new StringBuffer("<ul id=\"errors\">");
 

@@ -18,12 +18,16 @@ package ch.silviowangler.dox.web;
 
 import ch.silviowangler.dox.api.*;
 import ch.silviowangler.dox.web.util.DeviceMock;
+import ch.silviowangler.dox.web.util.TemplateEngine;
+import ch.silviowangler.dox.web.util.TemplateEngineImpl;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.context.MessageSource;
 import org.springframework.mobile.device.Device;
@@ -59,7 +63,8 @@ public class ImportControllerTest {
     private DocumentService documentService;
     @Mock
     private MessageSource messageSource;
-
+    @Spy
+    private TemplateEngine templateEngine = new TemplateEngineImpl();
 
     @Test
     @SuppressWarnings("unchecked")

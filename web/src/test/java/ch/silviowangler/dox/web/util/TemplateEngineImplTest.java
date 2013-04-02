@@ -32,4 +32,15 @@ public class TemplateEngineImplTest {
 
         assertThat(response, is("Hello World"));
     }
+
+    @Test
+    public void testRender2() throws Exception {
+
+        Map<String, Object> binding = Maps.newHashMap();
+        binding.put("name", "stranger");
+
+        String response = templateEngine.render("template.txt", binding);
+
+        assertThat(response, is("Hello stranger"));
+    }
 }
