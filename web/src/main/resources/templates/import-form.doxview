@@ -11,12 +11,12 @@ if(attribute.dataType == ch.silviowangler.dox.api.AttributeDataType.DATE) {
 }
 else if(attribute.dataType == ch.silviowangler.dox.api.AttributeDataType.STRING) {
     if (attribute.containsDomain()) {
-        print "<datalist id=\"list-attr1\">"
+        print "<datalist id=\"list-${attribute.shortName}\">"
         attribute.domain.values.each { domainValue ->
             print "<option value=\"${domainValue}\"/>"
         }
         println "</datalist>"
-        print "<input name=\"attr1\" list=\"list-attr1\""
+        print "<input name=\"${attribute.shortName}\" list=\"list-${attribute.shortName}\""
         if (!attribute.isOptional()) print " required"
         println " />"
     }
