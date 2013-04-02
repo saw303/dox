@@ -1,0 +1,1 @@
+<ul id="errors"><li id="info">${message}</li></ul>

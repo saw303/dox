@@ -19,8 +19,6 @@ package ch.silviowangler.dox.web;
 import ch.silviowangler.dox.api.*;
 import ch.silviowangler.dox.web.util.TemplateEngine;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -36,7 +34,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.util.HtmlUtils;
 
 import java.io.IOException;
 import java.util.*;
@@ -107,73 +104,19 @@ public class ImportController implements MessageSourceAware, InitializingBean {
             logger.error("Unable to find attributes for document class short name '{}'", documentClassShortName, e);
             attributes = newHashSet();
         }
-        StringBuffer sb;
+
         String html;
+        Map<String, Object> binding = new HashMap<>();
 
         if (!attributes.isEmpty()) {
-            Map<String, Object> binding = new HashMap<>();
             binding.put("docclass", documentClassShortName);
             binding.put("attributes", ImmutableList.copyOf(attributes));
-            return templateEngine.render("templates/import-form.doxview", binding);
-            /*sb = new StringBuffer("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n");
-            sb.append("<input name=\"").append(DOCUMENT_CLASS_SHORT_NAME).append("\" type=\"hidden\" value=\"").append(documentClassShortName).append("\"/>\n");
-
-            for (Attribute attribute : attributes) {
-                sb.append("<label for=\"").append(attribute.getShortName()).append("\">");
-                sb.append(attribute.getTranslation()).append(":");
-                if (!attribute.isOptional()) {
-                    sb.append(" <span class=\"required\">*</span>");
-                }
-                sb.append("</label>\n");
-
-                if (attribute.containsDomain()) {
-
-                    sb.append("<datalist id=\"list-").append(attribute.getShortName()).append("\">");
-
-                    for (String value : attribute.getDomain().getValues()) {
-                        sb.append("<option value=\"").append(value).append("\"/>");
-                    }
-                    sb.append("</datalist>\n");
-                    sb.append("<input name=\"").append(attribute.getShortName()).append("\" list=\"list-")
-                            .append(attribute.getShortName()).append("\"");
-
-                    if (!attribute.isOptional()) sb.append(" required");
-
-                    sb.append(" />\n");
-                } else {
-
-                    if (isNumeric(attribute.getDataType())) {
-                        sb.append("<input name=\"").append(attribute.getShortName()).append("\" type=\"")
-                                .append(getInputType(attribute.getDataType())).append("\" min=\"0\" ").append("step=\"any\"");
-
-                        if (!attribute.isOptional()) sb.append(" required");
-
-                        sb.append(" />\n");
-                    } else {
-                        sb.append("<input name=\"").append(attribute.getShortName()).append("\" type=\"")
-                                .append(getInputType(attribute.getDataType())).append("\"");
-
-                        if (!attribute.isOptional()) sb.append(" required");
-                        sb.append(" />\n");
-                    }
-                }
-            }
-
-            sb.append("<input name=\"file\" type=\"file\" required/>\n");
-
-            sb.append("<button type=\"submit\" id=\"importDocBtn\">")
-                    .append(messageSource.getMessage("document.import.button.submit", null, locale))
-                    .append("</button>\n");
-            sb.append("</form>");
-*/
+            html = templateEngine.render("templates/import-form.doxview", binding);
         } else {
-            sb = new StringBuffer("<ul id=\"errors\">");
-
             final String message = htmlEscape(messageSource.getMessage("document.import.no.attributes", new Object[]{documentClassShortName}, locale));
-            sb.append("<li id=\"info\">").append(message).append("</li>");
-            sb.append("</ul>");
+            binding.put("message", message);
+            html = templateEngine.render("templates/import-failure.doxview", binding);
         }
-        html = sb.toString();
         logger.debug("Returning HTML code {}", html);
         return html;
     }
