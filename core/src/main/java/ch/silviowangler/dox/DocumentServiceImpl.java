@@ -25,6 +25,8 @@ import ch.silviowangler.dox.domain.DocumentClass;
 import ch.silviowangler.dox.domain.Range;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.itextpdf.text.io.RandomAccessSource;
+import com.itextpdf.text.io.RandomAccessSourceFactory;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.RandomAccessFileOrArray;
 import com.itextpdf.text.pdf.codec.TiffImage;
@@ -516,7 +518,8 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         } else if ("text/plain".equals(mimeType)) {
             numberOfPages = -1;
         } else if ("image/tiff".equals(mimeType)) {
-            numberOfPages = TiffImage.getNumberOfPages(new RandomAccessFileOrArray(physicalDocument.getContent()));
+            RandomAccessSource source = new RandomAccessSourceFactory().createSource(physicalDocument.getContent());
+            numberOfPages = TiffImage.getNumberOfPages(new RandomAccessFileOrArray(source));
         } else {
             throw new UnsupportedOperationException("Cannot determine page count from a document with a mime type '" + mimeType + "'");
         }

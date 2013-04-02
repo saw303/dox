@@ -46,11 +46,13 @@ public class PersistentDateTime implements EnhancedUserType, Serializable {
 
     @Override
     public String toXMLString(Object value) {
+        // will be removed when Hibernate 5 gets released
         throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
     public Object fromXMLString(String xmlValue) {
+        // will be removed when Hibernate 5 gets released
         throw new UnsupportedOperationException("not yet implemented");
     }
 

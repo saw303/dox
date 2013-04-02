@@ -14,10 +14,20 @@
  * limitations under the License.
  */
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.3'
+    }
+}
+
 allprojects {
 
     apply plugin: 'idea'
     apply plugin: 'project-report'
+    apply plugin: 'versions'
     apply from: 'https://raw.github.com/brunodecarvalho/gradle-plugins/master/jacoco-multiproject-aggregator.gradle'
 
     configurations {
@@ -38,20 +48,20 @@ allprojects {
 
     project.ext {
         springVersion = '3.2.2.RELEASE'
-        springDataVersion = '1.2.0.RELEASE'
+        springDataVersion = '1.3.0.RELEASE'
         springSecurityVersion = '3.2.0.M1'
-        hibernateVersion = '4.1.9.Final'
-        slf4jVersion = '1.7.2'
-        logbackVersion = '1.0.9'
+        hibernateVersion = '4.2.0.Final'
+        slf4jVersion = '1.7.5'
+        logbackVersion = '1.0.11'
         junitVersion = '4.11'
         tilesVersion = '3.0.1'
         commonsIOVersion = '2.4'
-        commonsCodecVersion = '1.6'
+        commonsCodecVersion = '1.7'
         commonsBeanUtilsVersion = '1.8.3'
-        jodaTimeVersion = '2.1'
-        h2Version = '1.3.170'
-        mysqlVersion = '5.1.22'
-        iTextVersion = '5.3.4'
+        jodaTimeVersion = '2.2'
+        h2Version = '1.3.171'
+        mysqlVersion = '5.1.24'
+        iTextVersion = '5.4.0'
         guavaVersion = '14.0.1'
         mockitoVersion = '1.9.5'
         flywayVersion = '2.1.1'
@@ -144,7 +154,7 @@ project(':core') {
         runtime "org.slf4j:jcl-over-slf4j:${ext.slf4jVersion}",
                 "ch.qos.logback:logback-classic:${ext.logbackVersion}",
                 "org.springframework.security:spring-security-config:${ext.springSecurityVersion}",
-                'org.aspectj:aspectjweaver:1.7.0' // need this version because 1.6.x is buggy with Spring 3.x (http://goo.gl/73Pwi)
+                'org.aspectj:aspectjweaver:1.7.2' // need this version because 1.6.x is buggy with Spring 3.x (http://goo.gl/73Pwi)
     }
 }
 
@@ -202,7 +212,7 @@ project(':inexport') {
     dependencies {
         compile project(':api'),
                 "org.springframework:spring-context:${ext.springVersion}"
-        compile 'com.thoughtworks.xstream:xstream:1.4.3', { transitive = false }
+        compile 'com.thoughtworks.xstream:xstream:1.4.4', { transitive = false }
     }
 }
 
