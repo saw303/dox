@@ -65,6 +65,7 @@ allprojects {
         guavaVersion = '14.0.1'
         mockitoVersion = '1.9.5'
         flywayVersion = '2.1.1'
+        groovyVersion = '2.1.1'
     }
 
     configurations.all {
@@ -181,6 +182,7 @@ project(':web') {
         compile project(':api'), project(':inexport')
         runtime project(':core')
         compile "commons-io:commons-io:${ext.commonsIOVersion}"
+        compile "org.codehaus.groovy:groovy-templates:${ext.groovyVersion}"
         compile "org.springframework:spring-webmvc:${ext.springVersion}"
         compile("org.springframework.security:spring-security-web:${ext.springSecurityVersion}") {
             exclude group: 'org.springframework', module: 'spring-tx'
