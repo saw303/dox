@@ -53,6 +53,7 @@ public class DocumentController {
             PhysicalDocument document = documentService.findPhysicalDocument(id);
             response.setStatus(SC_OK);
             response.addHeader("Content-Type", document.getMimeType());
+            response.addHeader("Content-Disposition", "inline; filename=\"" + document.getFileName() + "\"");
             response.getOutputStream().write(document.getContent());
             response.getOutputStream().flush();
         } catch (DocumentNotFoundException | DocumentNotInStoreException e) {

@@ -62,6 +62,7 @@ public class DocumentControllerTest {
         assertThat(response.getStatus(), is(SC_OK));
         assertThat(response.getContentAsString(), is("hello"));
         assertThat(response.getContentType(), is("aaa/bbb"));
+        assertThat(response.getHeader("Content-Disposition"), is("inline; filename=\"hello.txt\""));
     }
 
     @Test
