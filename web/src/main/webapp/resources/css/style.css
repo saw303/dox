@@ -350,7 +350,7 @@ nav ul {
 }
 
 nav li {
-    float: left;
+    display: inline;
 }
 
 nav a {
