@@ -32,7 +32,7 @@
         <c:forEach var="doc" items="${documents}">
             <tr onclick="window.open('<c:url value="/document/${doc.id}"/>')">
                 <td title="${doc.hash}">${doc.id}</td>
-                <td><img src="<c:url value="/resources/img/file-extensions/pdf.png"/>" alt="${doc.mimeType}"
+                <td><img src="<c:url value="/resources/img/file-extensions/${doc.mimeType.split('/')[1].substring(0,3)}.png"/>" alt="${doc.mimeType}"
                          title="${doc.mimeType}"
                          width="32" height="32"/></td>
                 <td>${doc.pageCount}</td>
