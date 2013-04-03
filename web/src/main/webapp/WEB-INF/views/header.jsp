@@ -19,7 +19,7 @@
 
 <h1><spring:message code="application.header"/></h1>
 <sec:authorize access="isAuthenticated()">
-    <div>User: <sec:authentication property="principal.username" htmlEscape="true"/></div>
+    <div><spring:message code="user" htmlEscape="true"/>: <sec:authentication property="principal.username" htmlEscape="true"/></div>
     <nav>
         <ul>
             <li><a href="<c:url value="/"/>"><spring:message code="nav.home" htmlEscape="true"/></a></li>
