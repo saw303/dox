@@ -6,7 +6,7 @@
   ~ you may not use this file except in compliance with the License.
   ~ You may obtain a copy of the License at
   ~
-  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~          http://www.apache.org/licenses/LICENSE-2.0
   ~
   ~ Unless required by applicable law or agreed to in writing, software
   ~ distributed under the License is distributed on an "AS IS" BASIS,
@@ -36,10 +36,11 @@
     <import resource="classpath*:applicationContext-jpa.xml"/>
     <import resource="classpath:applicationContext-security.xml"/>
 
-    <context:property-placeholder location="classpath*:application.properties" ignore-resource-not-found="false" ignore-unresolvable="false" order="1"/>
+    <context:property-placeholder location="classpath*:application.properties" ignore-resource-not-found="false"
+                                  ignore-unresolvable="false" order="1"/>
     <context:component-scan base-package="ch.silviowangler.dox"/>
 
-    <bean id="appVersion" class="ch.silviowangler.dox.DoxVersion" scope="singleton" c:version="${app.version}" />
+    <bean id="appVersion" class="ch.silviowangler.dox.DoxVersion" scope="singleton" c:version="${app.version}"/>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 

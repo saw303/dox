@@ -8,7 +8,7 @@
   ~ you may not use this file except in compliance with the License.
   ~ You may obtain a copy of the License at
   ~
-  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~          http://www.apache.org/licenses/LICENSE-2.0
   ~
   ~ Unless required by applicable law or agreed to in writing, software
   ~ distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,7 +19,8 @@
 
 <h1><spring:message code="application.header"/></h1>
 <sec:authorize access="isAuthenticated()">
-    <div><spring:message code="user" htmlEscape="true"/>: <sec:authentication property="principal.username" htmlEscape="true"/></div>
+    <div><spring:message code="user" htmlEscape="true"/>: <sec:authentication property="principal.username"
+                                                                              htmlEscape="true"/></div>
     <nav>
         <ul>
             <li><a href="<c:url value="/"/>"><spring:message code="nav.home" htmlEscape="true"/></a></li>

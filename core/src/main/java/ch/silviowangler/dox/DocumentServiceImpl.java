@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -376,7 +376,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     private Map<String, Object> toEntityMap(final Map<TranslatableKey, Object> indices) {
         Map<String, Object> entityMap = Maps.newHashMapWithExpectedSize(indices.size());
 
-        for(TranslatableKey key : indices.keySet()) {
+        for (TranslatableKey key : indices.keySet()) {
             entityMap.put(key.getKey(), indices.get(key));
         }
         return entityMap;

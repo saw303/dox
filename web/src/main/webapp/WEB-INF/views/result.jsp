@@ -8,7 +8,7 @@
   ~ you may not use this file except in compliance with the License.
   ~ You may obtain a copy of the License at
   ~
-  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~          http://www.apache.org/licenses/LICENSE-2.0
   ~
   ~ Unless required by applicable law or agreed to in writing, software
   ~ distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,9 +32,11 @@
         <c:forEach var="doc" items="${documents}">
             <tr onclick="window.open('<c:url value="/document/${doc.id}"/>')">
                 <td title="${doc.hash}">${doc.id}</td>
-                <td><img src="<c:url value="/resources/img/file-extensions/${doc.mimeType.split('/')[1].substring(0,3)}.png"/>" alt="${doc.mimeType}"
-                         title="${doc.mimeType}"
-                         width="32" height="32"/></td>
+                <td><img
+                        src="<c:url value="/resources/img/file-extensions/${doc.mimeType.split('/')[1].substring(0,3)}.png"/>"
+                        alt="${doc.mimeType}"
+                        title="${doc.mimeType}"
+                        width="32" height="32"/></td>
                 <td>${doc.pageCount}</td>
                 <td>${doc.fileName}</td>
                 <td><dox:listAttributes documentReference="${doc}"/></td>
