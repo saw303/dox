@@ -52,6 +52,8 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static ch.silviowangler.dox.domain.AttributeDataType.*;
+import static ch.silviowangler.dox.domain.DomainUtils.containsWildcardCharacters;
+import static ch.silviowangler.dox.domain.DomainUtils.replaceWildcardCharacters;
 import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
 import static org.springframework.transaction.annotation.Propagation.REQUIRED;
 import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
@@ -126,10 +128,11 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
         List<Document> documents;
 
-        if (DomainUtils.containsWildcardCharacters(queryString)) {
-            documents = indexMapEntryRepository.findByValueLike(DomainUtils.replaceWildcardCharacters(queryString).toUpperCase());
+        if (containsWildcardCharacters(queryString)) {
+            String value = replaceWildcardCharacters(queryString);
+            documents = indexMapEntryRepository.findByValueLike(value.toUpperCase(), value);
         } else {
-            documents = indexMapEntryRepository.findByValue(queryString.toUpperCase());
+            documents = indexMapEntryRepository.findByValue(queryString.toUpperCase(), queryString);
         }
 
         Set<DocumentReference> documentReferences = new HashSet<>(documents.size());

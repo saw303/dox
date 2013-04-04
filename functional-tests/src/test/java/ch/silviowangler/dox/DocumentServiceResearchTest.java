@@ -17,18 +17,21 @@
 package ch.silviowangler.dox;
 
 import ch.silviowangler.dox.api.*;
-import org.apache.commons.io.FileUtils;
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
-import static org.hamcrest.core.Is.is;
+import static org.apache.commons.io.FileUtils.readFileToByteArray;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 /**
@@ -41,19 +44,21 @@ import static org.junit.Assert.*;
 public class DocumentServiceResearchTest extends AbstractTest {
 
     public static final TranslatableKey COMPANY = new TranslatableKey("company");
+    private static final String SWISSCOM = "Swisscom";
+    private static final String SUNRISE = "Sunrise";
 
     @Before
     public void init() throws ValidationException, DocumentDuplicationException, IOException, DocumentNotFoundException, DocumentClassNotFoundException {
 
         Map<TranslatableKey, Object> indexes = newHashMapWithExpectedSize(3);
-        indexes.put(COMPANY, "Sunrise");
+        indexes.put(COMPANY, SUNRISE);
         indexes.put(new TranslatableKey("invoiceDate"), "01.12.2009");
         indexes.put(new TranslatableKey("invoiceAmount"), "100.5");
 
         importFile("file-1.txt", "This is a test content", "INVOICE", indexes);
 
         indexes = newHashMapWithExpectedSize(3);
-        indexes.put(COMPANY, "Swisscom");
+        indexes.put(COMPANY, SWISSCOM);
         indexes.put(new TranslatableKey("invoiceDate"), "02.12.2009");
         indexes.put(new TranslatableKey("invoiceAmount"), "1200.99");
 
@@ -65,7 +70,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
     private DocumentReference importFile(final String fileName, final String content, final String docClassShortName, final Map<TranslatableKey, Object> indices) throws ValidationException, DocumentDuplicationException, IOException, DocumentNotFoundException, DocumentClassNotFoundException {
         File textFile01 = createTestFile(fileName, content);
-        PhysicalDocument doc = new PhysicalDocument(new DocumentClass(docClassShortName), FileUtils.readFileToByteArray(textFile01), indices, fileName);
+        PhysicalDocument doc = new PhysicalDocument(new DocumentClass(docClassShortName), readFileToByteArray(textFile01), indices, fileName);
         try {
             DocumentReference documentReference = documentService.importDocument(doc);
             logger.debug("File '{}' received id {}", fileName, documentReference.getId());
@@ -80,7 +85,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
     public void findSwisscomInvoice() throws DocumentClassNotFoundException {
 
         Map<TranslatableKey, Object> queryParams = newHashMapWithExpectedSize(1);
-        final String companyName = "Swisscom";
+        final String companyName = SWISSCOM;
         queryParams.put(COMPANY, companyName);
 
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryParams, "INVOICE");
@@ -97,7 +102,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
     public void findSunriseInvoice() throws DocumentClassNotFoundException {
 
         Map<TranslatableKey, Object> queryParams = newHashMapWithExpectedSize(1);
-        final String companyName = "Sunrise";
+        final String companyName = SUNRISE;
         queryParams.put(COMPANY, companyName);
 
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryParams, "INVOICE");
@@ -150,7 +155,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         assertNotNull(documentReferences);
         assertEquals(1, documentReferences.size());
-        assertEquals("Sunrise", documentReferences.iterator().next().getIndices().get(COMPANY));
+        assertEquals(SUNRISE, documentReferences.iterator().next().getIndices().get(COMPANY));
     }
 
     @Test
@@ -163,7 +168,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         assertNotNull(documentReferences);
         assertEquals(1, documentReferences.size());
-        assertEquals("Sunrise", documentReferences.iterator().next().getIndices().get(COMPANY));
+        assertEquals(SUNRISE, documentReferences.iterator().next().getIndices().get(COMPANY));
     }
 
     @Test
@@ -176,17 +181,17 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         assertNotNull(documentReferences);
         assertEquals(1, documentReferences.size());
-        assertEquals("Sunrise", documentReferences.iterator().next().getIndices().get(COMPANY));
+        assertEquals(SUNRISE, documentReferences.iterator().next().getIndices().get(COMPANY));
     }
 
     @Test
     public void findBySingleStringReferringToIndexCompany() {
 
-        Set<DocumentReference> documentReferences = documentService.findDocumentReferences("Sunrise");
+        Set<DocumentReference> documentReferences = documentService.findDocumentReferences(SUNRISE);
 
         assertNotNull(documentReferences);
         assertEquals(1, documentReferences.size());
-        assertEquals("Sunrise", documentReferences.iterator().next().getIndices().get(COMPANY));
+        assertEquals(SUNRISE, documentReferences.iterator().next().getIndices().get(COMPANY));
     }
 
     @Test
@@ -196,7 +201,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         assertNotNull(documentReferences);
         assertEquals(1, documentReferences.size());
-        assertEquals("Sunrise", documentReferences.iterator().next().getIndices().get(COMPANY));
+        assertEquals(SUNRISE, documentReferences.iterator().next().getIndices().get(COMPANY));
     }
 
     @Test
@@ -206,7 +211,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         assertNotNull(documentReferences);
         assertEquals(1, documentReferences.size());
-        assertEquals("Sunrise", documentReferences.iterator().next().getIndices().get(COMPANY));
+        assertEquals(SUNRISE, documentReferences.iterator().next().getIndices().get(COMPANY));
     }
 
     @Test
@@ -216,7 +221,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         assertNotNull(documentReferences);
         assertEquals(1, documentReferences.size());
-        assertEquals("Sunrise", documentReferences.iterator().next().getIndices().get(COMPANY));
+        assertEquals(SUNRISE, documentReferences.iterator().next().getIndices().get(COMPANY));
     }
 
     @Test
@@ -226,7 +231,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         assertNotNull(documentReferences);
         assertEquals(1, documentReferences.size());
-        assertEquals("Swisscom", documentReferences.iterator().next().getIndices().get(COMPANY));
+        assertEquals(SWISSCOM, documentReferences.iterator().next().getIndices().get(COMPANY));
     }
 
     @Test
@@ -260,6 +265,30 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         assertNotNull(documentReferences);
         assertEquals(1, documentReferences.size());
-        assertEquals("Sunrise", documentReferences.iterator().next().getIndices().get(COMPANY));
+        assertEquals(SUNRISE, documentReferences.iterator().next().getIndices().get(COMPANY));
+    }
+
+    @Test
+    public void findByFileName() {
+
+        Set<DocumentReference> documentReferences = documentService.findDocumentReferences("file-1.txt");
+
+        assertThat(documentReferences, is(not(nullValue())));
+        assertThat(documentReferences.size(), CoreMatchers.is(1));
+        assertEquals(SUNRISE, documentReferences.iterator().next().getIndices().get(COMPANY));
+        assertEquals(BigDecimal.valueOf(100.5), documentReferences.iterator().next().getIndices().get(new TranslatableKey("invoiceAmount")));
+    }
+
+    @Test
+    public void findByAnotherFileName() {
+
+        ArrayList<Set<DocumentReference>> results = newArrayList(documentService.findDocumentReferences("file-2.txt"), documentService.findDocumentReferences("file-2.*t"));
+
+        for (Set<DocumentReference> documentReferences : results) {
+            assertThat(documentReferences, is(not(nullValue())));
+            assertThat(documentReferences.size(), CoreMatchers.is(1));
+            assertEquals(SWISSCOM, documentReferences.iterator().next().getIndices().get(COMPANY));
+            assertEquals(BigDecimal.valueOf(1200.99), documentReferences.iterator().next().getIndices().get(new TranslatableKey("invoiceAmount")));
+        }
     }
 }

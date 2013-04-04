@@ -18,6 +18,7 @@ package ch.silviowangler.dox.domain;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -30,11 +31,11 @@ import java.util.List;
  */
 public interface IndexMapEntryRepository extends CrudRepository<IndexMapEntry, Long> {
 
-    @Query("select distinct i.document from IndexMapEntry i where stringRepresentation = ?")
-    List<Document> findByValue(String upperCaseValue);
+    @Query("select distinct i.document from IndexMapEntry i where stringRepresentation = :upperCaseValue or i.document.originalFilename = :originalValue")
+    List<Document> findByValue(@Param("upperCaseValue") String upperCaseValue, @Param("originalValue") String originalValue);
 
-    @Query("select distinct i.document from IndexMapEntry i where stringRepresentation like ?")
-    List<Document> findByValueLike(String upperCaseValue);
+    @Query("select distinct i.document from IndexMapEntry i where stringRepresentation like :upperCaseValue or i.document.originalFilename like :originalValue")
+    List<Document> findByValueLike(@Param("upperCaseValue") String upperCaseValue, @Param("originalValue") String originalValue);
 
     List<IndexMapEntry> findByDocument(Document document);
 }

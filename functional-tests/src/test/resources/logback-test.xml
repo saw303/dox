@@ -31,6 +31,7 @@
     <logger name="org.springframework.security.access.vote" level="DEBUG"/>
     <logger name="org.springframework.data" level="ERROR"/>
     <logger name="org.hibernate" level="ERROR"/>
+    <logger name="org.hibernate.SQL" level="DEBUG"/>
     <logger name="org.apache.commons" level="ERROR"/>
     <logger name="ch.silviowangler.dox" level="DEBUG"/>
     <logger name="ch.silviowangler.dox.export" level="TRACE"/>
