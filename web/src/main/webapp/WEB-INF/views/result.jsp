@@ -18,7 +18,7 @@
   --%>
 
 <div>
-    <table id="resultTable">
+    <%--<table id="resultTable">
         <thead>
         <tr>
             <th scope="col"><spring:message code="document.id" htmlEscape="true"/></th>
@@ -43,5 +43,15 @@
             </tr>
         </c:forEach>
         </tbody>
-    </table>
+    </table>--%>
+
+    <c:forEach var="doc" items="${documents}">
+        <div style="background: url('<c:url value="/resources/img/file-extensions/${doc.mimeType.split('/')[1].substring(0,3)}.png"/>') left top no-repeat; background-size: 32px; border: 1px solid; border-radius: 5px; margin-bottom: 5px;">
+        <h4 onclick="window.open('<c:url value="/document/${doc.id}"/>')" style="text-align: left; padding: 1px 0 0 35px; margin: 2px 0 0 0">${doc.fileName}</h4>
+        <h5 style="text-align: left; padding-left: 35px; margin: 0">${doc.pageCount} Seite(n) / Dateiname: ${doc.fileName}</h5>
+            <div>
+                <dox:listAttributes documentReference="${doc}"/>
+            </div>
+        </div>
+    </c:forEach>
 </div>
