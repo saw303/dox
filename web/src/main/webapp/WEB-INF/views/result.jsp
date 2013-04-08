@@ -18,39 +18,19 @@
   --%>
 
 <div>
-    <%--<table id="resultTable">
-        <thead>
-        <tr>
-            <th scope="col"><spring:message code="document.id" htmlEscape="true"/></th>
-            <th scope="col"><spring:message code="document.mimeType" htmlEscape="true"/></th>
-            <th scope="col"><spring:message code="document.pageCount" htmlEscape="true"/></th>
-            <th scope="col"><spring:message code="document.fileName" htmlEscape="true"/></th>
-            <th scope="col"><spring:message code="document.indices" htmlEscape="true"/></th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach var="doc" items="${documents}">
-            <tr onclick="window.open('<c:url value="/document/${doc.id}"/>')">
-                <td title="${doc.hash}">${doc.id}</td>
-                <td><img
-                        src="<c:url value="/resources/img/file-extensions/${doc.mimeType.split('/')[1].substring(0,3)}.png"/>"
-                        alt="${doc.mimeType}"
-                        title="${doc.mimeType}"
-                        width="32" height="32"/></td>
-                <td>${doc.pageCount}</td>
-                <td>${doc.fileName}</td>
-                <td><dox:listAttributes documentReference="${doc}"/></td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>--%>
-
     <c:forEach var="doc" items="${documents}">
-        <div style="background: url('<c:url value="/resources/img/file-extensions/${doc.mimeType.split('/')[1].substring(0,3)}.png"/>') left top no-repeat; background-size: 32px; border: 1px solid; border-radius: 5px; margin-bottom: 5px;">
-        <h4 onclick="window.open('<c:url value="/document/${doc.id}"/>')" style="text-align: left; padding: 1px 0 0 35px; margin: 2px 0 0 0">${doc.fileName}</h4>
-        <h5 style="text-align: left; padding-left: 35px; margin: 0">${doc.pageCount} Seite(n) / Dateiname: ${doc.fileName}</h5>
+        <div style="background: url('<c:url
+                value="/resources/img/file-extensions/${doc.mimeType.split('/')[1].substring(0,3)}.png"/>') left top no-repeat; background-size: 32px; border: 1px solid; border-radius: 5px; margin-bottom: 5px;">
             <div>
-                <dox:listAttributes documentReference="${doc}"/>
+                <h4 onclick="window.open('<c:url value="/document/${doc.id}"/>')"
+                     style="text-align: left; padding: 1px 0 0 35px; margin: 2px 0 0 0">${doc.fileName}</h4>
+                <h5 style="text-align: left; padding-left: 35px; margin: 0; font-style: italic">${doc.pageCount} <spring:message code="pages"/> /
+                    <spring:message code="filename"/>: ${doc.fileName}</h5>
+            </div>
+            <div style="text-align: left;font-size: 12px; padding-left: 35px;">
+                <c:forEach var="key" items="${doc.getIndices().keySet()}">
+                    ${key.getTranslation()}: ${doc.getIndices().get(key)}
+                </c:forEach>
             </div>
         </div>
     </c:forEach>

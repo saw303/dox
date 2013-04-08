@@ -64,7 +64,6 @@ public class DocumentAttributeListTag extends TagSupport {
                     if (value instanceof DateTime) {
                         DateFormat f = getDateInstance(DateFormat.MEDIUM, pageContext.getRequest().getLocale());
                         value = f.format(((DateTime) value).toDate());
-                        /*value = ((DateTime)value).toString("dd.MM.yyyy", pageContext.getRequest().getLocale());*/
                     }
 
                     sb.append(" = ").append(value);
