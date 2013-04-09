@@ -18,7 +18,10 @@
 
 <div id="query">
     <form action="<c:url value="/query.html"/>" method="post">
-        <input id="q" name="q" value="" tabindex="1"/>
-        <button type="submit" tabindex="2" accesskey="S"><spring:message code="query.start.button"/></button>
+        <p>
+            <input id="q" name="q" value="" tabindex="1"/>
+            <button type="submit" tabindex="2" accesskey="S"><spring:message code="query.start.button"/></button>
+        </p>
+        <p><input type="checkbox" name="wildcard" id="wildcard" checked="checked"/><spring:message code="document.research.wildcard.label"/></p>
     </form>
 </div>

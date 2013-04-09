@@ -27,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.verify;
 
 /**
  * @author Silvio Wangler
@@ -45,14 +46,48 @@ public class HomeControllerTest {
 
     @Test
     public void testViewName() {
-        ModelAndView modelAndView = controller.query("a silly modelAndView");
+        final String expectedQueryString = "a silly modelAndView";
+        ModelAndView modelAndView = controller.query(expectedQueryString, false);
 
         assertThat(modelAndView.getViewName(), is("result.definition"));
         assertTrue(modelAndView.getModelMap().containsKey("documents"));
         assertTrue(modelAndView.getModelMap().containsKey("query"));
-        assertThat(modelAndView.getModelMap().get("query").toString(), is("a silly modelAndView"));
+        assertThat(modelAndView.getModelMap().get("query").toString(), is(expectedQueryString));
         assertThat(modelAndView.getModelMap().size(), is(2));
+
+        verify(documentService).findDocumentReferences(expectedQueryString);
     }
 
+    @Test
+    public void testWildcard() {
+        final String queryStringSentByUser = "a silly modelAndView";
+        final String expectedQueryString = "*" + queryStringSentByUser + "*";
 
+        ModelAndView modelAndView = controller.query(queryStringSentByUser, true);
+
+        assertThat(modelAndView.getViewName(), is("result.definition"));
+        assertTrue(modelAndView.getModelMap().containsKey("documents"));
+        assertTrue(modelAndView.getModelMap().containsKey("query"));
+
+        assertThat(modelAndView.getModelMap().get("query").toString(), is(expectedQueryString));
+        assertThat(modelAndView.getModelMap().size(), is(2));
+
+        verify(documentService).findDocumentReferences(expectedQueryString);
+    }
+
+    @Test
+    public void testWildcardOnlyIfNoWildcardAreAlreadyInTheQuery() {
+        final String queryStringSentByUser = "a s?lly model*View";
+
+        ModelAndView modelAndView = controller.query(queryStringSentByUser, true);
+
+        assertThat(modelAndView.getViewName(), is("result.definition"));
+        assertTrue(modelAndView.getModelMap().containsKey("documents"));
+        assertTrue(modelAndView.getModelMap().containsKey("query"));
+
+        assertThat(modelAndView.getModelMap().get("query").toString(), is(queryStringSentByUser));
+        assertThat(modelAndView.getModelMap().size(), is(2));
+
+        verify(documentService).findDocumentReferences(queryStringSentByUser);
+    }
 }

@@ -18,6 +18,8 @@ package ch.silviowangler.dox.web;
 
 import ch.silviowangler.dox.api.DocumentReference;
 import ch.silviowangler.dox.api.DocumentService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,12 +44,27 @@ public class HomeController {
 
     @Autowired
     private DocumentService documentService;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @RequestMapping(method = RequestMethod.POST, value = "query.html")
-    public ModelAndView query(@RequestParam("q") String queryString) {
+    public ModelAndView query(@RequestParam("q") String queryString, @RequestParam("wildcard") boolean useWildcard) {
+
+        final boolean hasWildcard = containsWildcard(queryString);
+
+        logger.trace("Received query request '{}'. Contains wildcards? {}", queryString, hasWildcard);
+
+        if (useWildcard && !hasWildcard) {
+            logger.debug("Going to overwrite query string '{}' because wildcard searching is activated", queryString);
+            queryString = "*" + queryString + "*";
+            logger.debug("Using wildcard search '{}'", queryString);
+        }
 
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryString);
         Map<String, Object> model = of("documents", documentReferences, "query", queryString);
         return new ModelAndView("result.definition", model);
+    }
+
+    private boolean containsWildcard(final String queryString) {
+        return queryString.contains("*") || queryString.contains("?");
     }
 }
