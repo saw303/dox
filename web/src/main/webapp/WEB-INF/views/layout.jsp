@@ -54,7 +54,7 @@
     </footer>
 </div>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="js/libs/boilerplate/jquery-1.7.2.min.js"><\/script>')</script>
 
 <script type="text/javascript" language="javascript" src="js/libs/datatables/media/js/jquery.dataTables.js"></script>
@@ -69,16 +69,8 @@
         });
     });
 
-    if ($("#resultTable").length) {
-        $('#resultTable').dataTable({
-            "bPaginate": false,
-            "bLengthChange": false,
-            "bFilter": false,
-            "bSort": false,
-            "bInfo": false,
-            "bAutoWidth": false
-        });
-    }
+    $("#username").focus();
+    $("#q").focus();
 </script>
 
 </body>
