@@ -61,9 +61,15 @@ public class AutomaticTranslatorAdvice {
 
             for (String propertyName : translateProperties.value()) {
                 logger.trace("About to inspect property {} of class {}", propertyName, className);
-                Object candidateToTranslate = new PropertyDescriptor(propertyName, retVal.getClass()).getReadMethod().invoke(retVal);
-                logger.trace("Property {} is class {}", propertyName, candidateToTranslate.getClass().getName());
-                translateWhenPossible(candidateToTranslate);
+                Object propertyValue = new PropertyDescriptor(propertyName, retVal.getClass()).getReadMethod().invoke(retVal);
+
+                if (propertyValue != null) {
+                    logger.trace("Property {} is class {}", propertyName, propertyValue.getClass().getName());
+                    translateWhenPossible(propertyValue);
+                }
+                else {
+                    logger.trace("Property {} has null value", propertyName);
+                }
             }
         }
         logger.debug("Return value is {}", retVal);
