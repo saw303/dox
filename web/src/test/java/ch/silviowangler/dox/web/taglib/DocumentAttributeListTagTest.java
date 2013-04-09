@@ -37,11 +37,11 @@ import org.springframework.web.servlet.support.RequestContext;
 import javax.servlet.ServletContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.Tag;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
 
+import static javax.servlet.jsp.tagext.Tag.SKIP_BODY;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -89,7 +89,7 @@ public class DocumentAttributeListTagTest {
 
     @Test
     public void emptyListShouldResultInEmptyOutput() throws JspException, IOException {
-        assertEquals(Tag.SKIP_BODY, tag.doStartTag());
+        assertEquals(SKIP_BODY, tag.doStartTag());
         assertEquals("", ((MockHttpServletResponse) pageContext.getResponse()).getContentAsString());
     }
 
@@ -98,7 +98,7 @@ public class DocumentAttributeListTagTest {
 
         indices.put(new TranslatableKey("wicked", "Name"), "Hello");
 
-        assertEquals(Tag.SKIP_BODY, tag.doStartTag());
+        assertEquals(SKIP_BODY, tag.doStartTag());
         assertEquals("<ul><li>Name = Hello</li></ul>" + newLine, ((MockHttpServletResponse) pageContext.getResponse()).getContentAsString());
     }
 
@@ -107,7 +107,7 @@ public class DocumentAttributeListTagTest {
 
         indices.put(A_PROP, "Computer");
         indices.put(new TranslatableKey("test", "Lisa"), "Fellow");
-        assertEquals(Tag.SKIP_BODY, tag.doStartTag());
+        assertEquals(SKIP_BODY, tag.doStartTag());
         assertEquals("<ul><li>Name = Computer</li><li>Lisa = Fellow</li></ul>" + newLine, ((MockHttpServletResponse) pageContext.getResponse()).getContentAsString());
     }
 
@@ -115,7 +115,7 @@ public class DocumentAttributeListTagTest {
     public void jodaTimeDateTimeShouldBeFormattedAccordingTheCurrentLocale() throws JspException, IOException {
 
         indices.put(A_PROP, new DateTime(2010, 11, 01, 0, 0));
-        assertEquals(Tag.SKIP_BODY, tag.doStartTag());
+        assertEquals(SKIP_BODY, tag.doStartTag());
         assertEquals("<ul><li>Name = 01.11.2010</li></ul>" + newLine, ((MockHttpServletResponse) pageContext.getResponse()).getContentAsString());
     }
 
@@ -126,7 +126,7 @@ public class DocumentAttributeListTagTest {
 
         indices.put(A_PROP, new DateTime(2010, 11, 01, 0, 0));
 
-        assertEquals(Tag.SKIP_BODY, tag.doStartTag());
+        assertEquals(SKIP_BODY, tag.doStartTag());
         assertEquals("<ul><li>Name = 1-Nov-2010</li></ul>" + newLine, ((MockHttpServletResponse) pageContext.getResponse()).getContentAsString());
     }
 
@@ -137,7 +137,7 @@ public class DocumentAttributeListTagTest {
 
         indices.put(A_PROP, new DateTime(2010, 11, 01, 0, 0));
 
-        assertEquals(Tag.SKIP_BODY, tag.doStartTag());
+        assertEquals(SKIP_BODY, tag.doStartTag());
         assertEquals("<ul><li>Name = 01-Nov-2010</li></ul>" + newLine, ((MockHttpServletResponse) pageContext.getResponse()).getContentAsString());
     }
 }

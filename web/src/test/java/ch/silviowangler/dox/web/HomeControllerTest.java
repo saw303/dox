@@ -49,7 +49,9 @@ public class HomeControllerTest {
 
         assertThat(modelAndView.getViewName(), is("result.definition"));
         assertTrue(modelAndView.getModelMap().containsKey("documents"));
-        assertThat(modelAndView.getModelMap().size(), is(1));
+        assertTrue(modelAndView.getModelMap().containsKey("query"));
+        assertThat(modelAndView.getModelMap().get("query").toString(), is("a silly modelAndView"));
+        assertThat(modelAndView.getModelMap().size(), is(2));
     }
 
 

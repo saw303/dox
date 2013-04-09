@@ -17,9 +17,9 @@
   --%>
 
 <div>
-    <p><spring:message code="document.import.duplicate" htmlEscape="true"/></p>
+    <p><spring:message code="document.import.duplicate"/></p>
 
-    <p><spring:message code="document.id" htmlEscape="true"/>: ${docId}</p>
+    <p><spring:message code="document.id"/>: ${docId}</p>
 
-    <p><spring:message code="document.hashCode" htmlEscape="true"/>: ${docHash}</p>
+    <p><spring:message code="document.hashCode"/>: ${docHash}</p>
 </div>

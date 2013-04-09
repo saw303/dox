@@ -363,6 +363,17 @@ nav a:hover {
     background-color: #ffff00;
 }
 
+.attributeListing {
+    text-align: left;
+    font-size: 12px;
+    padding-left: 35px;
+}
+
+.highlight {
+    background-color: #ffff00;
+    font-weight: bold;
+}
+
 /*
 =============================================================
 Form upload

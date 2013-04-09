@@ -48,7 +48,6 @@ public class DocumentAttributeListTag extends TagSupport {
     @Override
     public int doStartTag() throws JspException {
 
-
         try {
 
             if (!documentReference.getIndices().isEmpty()) {

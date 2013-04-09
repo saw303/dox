@@ -18,6 +18,9 @@
   --%>
 
 <div>
+    <c:if test="${documents.isEmpty()}">
+        <spring:message code="document.research.no.result" arguments="${query}"/>
+    </c:if>
     <c:forEach var="doc" items="${documents}">
         <div style="background: url('<c:url
                 value="/resources/img/file-extensions/${doc.mimeType.split('/')[1].substring(0,3)}.png"/>') left top no-repeat; background-size: 32px; border: 1px solid; border-radius: 5px; margin-bottom: 5px;">
@@ -28,12 +31,7 @@
                     <spring:message code="pages"/> /
                     <spring:message code="filename"/>: ${doc.fileName}</h5>
             </div>
-            <div style="text-align: left;font-size: 12px; padding-left: 35px;">
-                <c:forEach var="key" items="${doc.getIndices().keySet()}">
-                    ${key.getTranslation()}: <span
-                        style="background-color: #ffff00; font-weight: bold;">${doc.getIndices().get(key)}</span>
-                </c:forEach>
-            </div>
+            <dox:attributeListing documentReference="${doc}" query="${query}"/>
         </div>
     </c:forEach>
 </div>

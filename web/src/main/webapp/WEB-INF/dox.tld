@@ -28,7 +28,7 @@
     <!-- Invoke 'Generate' action to add tags or functions -->
 
     <tag>
-        <name>listAttributes</name>
+        <name>attibuteList</name>
         <tag-class>ch.silviowangler.dox.web.taglib.DocumentAttributeListTag</tag-class>
         <body-content>empty</body-content>
         <attribute>
@@ -36,6 +36,24 @@
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
             <type>ch.silviowangler.dox.api.DocumentReference</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>attributeListing</name>
+        <tag-class>ch.silviowangler.dox.web.taglib.DocumentAttributeListingTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>documentReference</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>ch.silviowangler.dox.api.DocumentReference</type>
+        </attribute>
+        <attribute>
+            <name>query</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
         </attribute>
     </tag>
 </taglib>

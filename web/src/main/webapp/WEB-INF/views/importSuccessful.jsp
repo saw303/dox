@@ -47,7 +47,7 @@
         </tr>
         <tr>
             <th><spring:message code="document.indices"/>:</th>
-            <td><dox:listAttributes documentReference="${doc}"/></td>
+            <td><dox:attibuteList documentReference="${doc}"/></td>
         </tr>
         </tbody>
     </table>
