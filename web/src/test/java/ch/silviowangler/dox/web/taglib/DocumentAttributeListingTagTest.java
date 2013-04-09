@@ -112,6 +112,15 @@ public class DocumentAttributeListingTagTest {
     }
 
     @Test
+    public void singleThatDoesMatchQueryButIgnoresCase() throws UnsupportedEncodingException, JspException {
+        indices.put(new TranslatableKey("wicked", "Name"), "Hello");
+        tag.setQuery("hello");
+
+        assertEquals(SKIP_BODY, tag.doStartTag());
+        assertEquals("<div class=\"attributeListing\">Name:&nbsp;<span class=\"highlight\">Hello</span></div>" + newLine, ((MockHttpServletResponse) pageContext.getResponse()).getContentAsString());
+    }
+
+    @Test
     public void singleThatDoesMatchQueryWithWildcard() throws UnsupportedEncodingException, JspException {
         indices.put(new TranslatableKey("wicked", "Name"), "Hello");
         tag.setQuery("*ello");

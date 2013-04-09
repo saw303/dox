@@ -93,7 +93,7 @@ public class DocumentAttributeListingTag extends TagSupport {
                 boolean doesMatch = false;
 
                 for (String fragment : fragments) {
-                    if (fragment.length() > 0) doesMatch = value.contains(fragment);
+                    if (fragment.length() > 0) doesMatch = value.toLowerCase().contains(fragment.toLowerCase());
                     if (doesMatch) break;
                 }
                 if (afterFirst) sb.append("&nbsp;");
