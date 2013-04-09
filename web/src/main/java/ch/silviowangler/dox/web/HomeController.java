@@ -47,7 +47,7 @@ public class HomeController {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @RequestMapping(method = RequestMethod.POST, value = "query.html")
-    public ModelAndView query(@RequestParam("q") String queryString, @RequestParam("wildcard") boolean useWildcard) {
+    public ModelAndView query(@RequestParam("q") String queryString, @RequestParam(value = "wildcard", defaultValue = "0", required = false) boolean useWildcard) {
 
         final boolean hasWildcard = containsWildcard(queryString);
 

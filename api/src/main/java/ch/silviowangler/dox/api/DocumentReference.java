@@ -25,7 +25,7 @@ import java.util.Map;
  * @author Silvio Wangler
  * @since 0.1
  */
-@TranslateProperties(value = {"indices"})
+@TranslateProperties(value = {"indices", "documentClass"})
 public class DocumentReference implements Serializable {
 
     private String hash;

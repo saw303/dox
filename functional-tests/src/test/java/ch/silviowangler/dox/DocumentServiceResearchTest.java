@@ -275,8 +275,12 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         assertThat(documentReferences, is(not(nullValue())));
         assertThat(documentReferences.size(), CoreMatchers.is(1));
-        assertEquals(SUNRISE, documentReferences.iterator().next().getIndices().get(COMPANY));
-        assertEquals(BigDecimal.valueOf(100.5), documentReferences.iterator().next().getIndices().get(new TranslatableKey("invoiceAmount")));
+        final DocumentReference doc = documentReferences.iterator().next();
+
+        assertEquals(SUNRISE, doc.getIndices().get(COMPANY));
+        assertEquals(BigDecimal.valueOf(100.5), doc.getIndices().get(new TranslatableKey("invoiceAmount")));
+        assertThat(doc.getDocumentClass().getShortName(), is("INVOICE"));
+        assertThat(doc.getDocumentClass().getTranslation(), is("Rechnung"));
     }
 
     @Test
