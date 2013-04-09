@@ -50,16 +50,17 @@ public class HomeController {
     public ModelAndView query(@RequestParam("q") String queryString, @RequestParam(value = "wildcard", defaultValue = "0", required = false) boolean useWildcard) {
 
         final boolean hasWildcard = containsWildcard(queryString);
+        String queryStringCopy = queryString;
 
         logger.trace("Received query request '{}'. Contains wildcards? {}", queryString, hasWildcard);
 
         if (useWildcard && !hasWildcard) {
             logger.debug("Going to overwrite query string '{}' because wildcard searching is activated", queryString);
-            queryString = "*" + queryString + "*";
-            logger.debug("Using wildcard search '{}'", queryString);
+            queryStringCopy = "*" + queryString + "*";
+            logger.debug("Using wildcard search '{}'", queryStringCopy);
         }
 
-        Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryString);
+        Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryStringCopy);
         Map<String, Object> model = of("documents", documentReferences, "query", queryString);
         return new ModelAndView("result.definition", model);
     }
