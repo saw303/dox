@@ -280,7 +280,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
         assertEquals(SUNRISE, doc.getIndices().get(COMPANY));
         assertEquals(BigDecimal.valueOf(100.5), doc.getIndices().get(new TranslatableKey("invoiceAmount")));
         assertThat(doc.getDocumentClass().getShortName(), is("INVOICE"));
-        assertThat(doc.getDocumentClass().getTranslation(), is("Rechnung"));
+        assertThat(doc.getDocumentClass().getTranslation(), is(notNullValue()));
     }
 
     @Test
