@@ -26,7 +26,7 @@
 <html class="no-js" lang="de"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=9,chrome=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
     <title><spring:message code="application.html.title"/></title>
     <meta name="description" content="">
@@ -34,11 +34,11 @@
 
     <meta name="viewport" content="width=device-width">
 
+    <link href='http://fonts.googleapis.com/css?family=Playball|Montserrat:700,400' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>"/>
-    <link rel="stylesheet" href="<c:url value="/js/libs/datatables/media/css/jquery.dataTables.css"/>"/>
 
     <link type="text/plain" rel="author" href="humans.txt"/>
-    <script src="<c:url value="/js/libs/boilerplate/modernizr-2.5.3.min.js"/>"></script>
+    <script src="<c:url value="/js/libs/boilerplate/modernizr-2.6.2.min.js"/>"></script>
 </head>
 <body>
 
@@ -55,10 +55,7 @@
 </div>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="js/libs/boilerplate/jquery-1.7.2.min.js"><\/script>')</script>
-
-<script type="text/javascript" language="javascript" src="js/libs/datatables/media/js/jquery.dataTables.js"></script>
-
+<script>window.jQuery || document.write('<script src="js/libs/boilerplate/jquery-1.9.1.min.js"><\/script>')</script>
 <script type="text/javascript">
     $(document).ready(function () {
         $("#docClass").change(function (event) {

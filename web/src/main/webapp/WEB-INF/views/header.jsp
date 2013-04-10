@@ -17,7 +17,8 @@
   ~ limitations under the License.
   --%>
 
-<h1><spring:message code="application.header"/></h1>
+<h1 style="font-family: 'Montserrat', sans-serif; font-size: 100px; font-weight: bold; margin: 0">-&nbsp;<spring:message code="application.header"/>&nbsp;-</h1>
+<h2 style="font-family: 'Playball', cursive; font-size: 36px; margin: 0 0 20px 0;"><spring:message code="application.subheader"/></h2>
 <sec:authorize access="isAuthenticated()">
     <div><spring:message code="user" htmlEscape="true"/>: <sec:authentication property="principal.username"
                                                                               htmlEscape="true"/></div>
