@@ -19,14 +19,14 @@
 <div>
     <form action="<c:url value="/login/verify"/>" method="post">
         <div>
-            <label for="username"><spring:message code="login.username" htmlEscape="true"/></label>
-            <input type="text" maxlength="25" required="true" name="username" id="username"/>
+            <input type="text" maxlength="25" required="true" name="username" id="username"
+                   placeholder="<spring:message code="login.username" htmlEscape="true"/>"/>
         </div>
         <div>
-            <label for="pwd"><spring:message code="login.password" htmlEscape="true"/></label>
-            <input type="password" required="true" name="pwd" id="pwd"/>
+            <input type="password" required="true" name="pwd" id="pwd"
+                   placeholder="<spring:message code="login.password" htmlEscape="true"/>"/>
         </div>
-        <div>
+        <div style="margin-top: 10px;">
             <input type="submit" value="<spring:message code="login.submit" htmlEscape="true"/>"/>
         </div>
     </form>
