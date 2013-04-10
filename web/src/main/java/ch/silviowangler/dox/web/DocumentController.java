@@ -20,9 +20,13 @@ import ch.silviowangler.dox.api.DocumentNotFoundException;
 import ch.silviowangler.dox.api.DocumentNotInStoreException;
 import ch.silviowangler.dox.api.DocumentService;
 import ch.silviowangler.dox.api.PhysicalDocument;
+import ch.silviowangler.dox.api.stats.StatisticsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +36,7 @@ import java.io.IOException;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 /**
  * @author Silvio Wangler
@@ -45,6 +50,9 @@ public class DocumentController {
 
     @Autowired
     private DocumentService documentService;
+    @Autowired
+    private StatisticsService statisticsService;
+
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @RequestMapping(method = GET, value = "/document/{id}")
@@ -63,5 +71,16 @@ public class DocumentController {
             logger.error("Could not write document to output stream", e);
             response.setStatus(SC_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @RequestMapping(method = PUT, value = "/document/registerClick/{id}")
+    public void registerClick(@PathVariable("id") Long id, HttpServletResponse response) {
+
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String username = (authentication != null) ? ((User) authentication.getPrincipal()).getUsername() : "anonymous";
+
+        statisticsService.registerDocumentReferenceClick(String.valueOf(id), username);
+        response.setStatus(SC_OK);
     }
 }

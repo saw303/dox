@@ -66,6 +66,14 @@
         });
     });
 
+    $('#documentList').delegate('h4', 'click', function() {
+        //alert('index ' + $(this).attr('id') + ' was clicked');
+        $.ajax({
+            url: '<c:url value="/document/registerClick/"/>' + $(this).attr('id'),
+            type: 'PUT'
+        });
+    });
+
     $("#username").focus();
     $("#q").focus();
 </script>

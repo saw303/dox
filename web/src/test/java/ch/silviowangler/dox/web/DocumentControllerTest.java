@@ -17,17 +17,25 @@
 package ch.silviowangler.dox.web;
 
 import ch.silviowangler.dox.api.*;
+import ch.silviowangler.dox.api.stats.StatisticsService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Collection;
 
+import static com.google.common.collect.Sets.newHashSet;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -45,6 +53,8 @@ public class DocumentControllerTest {
 
     @Mock
     private DocumentService documentService;
+    @Mock
+    private StatisticsService statisticsService;
     @InjectMocks
     private DocumentController controller = new DocumentController();
 
@@ -95,5 +105,64 @@ public class DocumentControllerTest {
         controller.getDocument(expectedDocumentId, response);
 
         verify(response).setStatus(SC_INTERNAL_SERVER_ERROR);
+    }
+
+    @Test
+    public void registerDocumentReferenceClick() {
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        controller.registerClick(1L, response);
+        verify(statisticsService).registerDocumentReferenceClick("1", "anonymous");
+        verify(statisticsService, never()).registerLinkClick(anyString(), anyString());
+        verify(response).setStatus(SC_OK);
+    }
+
+    @Test
+    public void registerDocumentReferenceClickWithLoggedOnUser() {
+
+        SecurityContextHolder.getContext().setAuthentication(new Authentication() {
+            @Override
+            public Collection<? extends GrantedAuthority> getAuthorities() {
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public Object getCredentials() {
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public Object getDetails() {
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public Object getPrincipal() {
+                Collection<SimpleGrantedAuthority> authorities = newHashSet();
+                return new User("saw303", "", authorities);
+            }
+
+            @Override
+            public boolean isAuthenticated() {
+                return false;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public String getName() {
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+        });
+
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        controller.registerClick(1L, response);
+        verify(statisticsService).registerDocumentReferenceClick("1", "saw303");
+        verify(statisticsService, never()).registerLinkClick(anyString(), anyString());
+        verify(response).setStatus(SC_OK);
+
+        SecurityContextHolder.clearContext();
     }
 }

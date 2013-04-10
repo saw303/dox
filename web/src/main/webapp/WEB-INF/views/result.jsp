@@ -17,7 +17,7 @@
   ~ limitations under the License.
   --%>
 
-<div>
+<div id="documentList">
     <c:if test="${documents.isEmpty()}">
         <spring:message code="document.research.no.result" arguments="${query}"/>
     </c:if>
@@ -25,7 +25,7 @@
         <div style="background: url('<c:url
                 value="/resources/img/file-extensions/${doc.mimeType.split('/')[1].substring(0,3)}.png"/>') left top no-repeat; background-size: 32px; border: 1px solid; border-radius: 5px; margin-bottom: 5px;">
             <div>
-                <h4 onclick="window.open('<c:url value="/document/${doc.id}"/>')"
+                <h4 id="${doc.id}" onclick="window.open('<c:url value="/document/${doc.id}"/>')"
                     style="text-align: left; padding: 1px 0 0 35px; margin: 2px 0 0 0">${doc.fileName}</h4>
                 <h5 style="text-align: left; padding-left: 35px; margin: 0; font-style: italic"><spring:message code="document.import.label.document.class"/>: ${doc.documentClass.getTranslation()} / ${doc.pageCount}
                     <spring:message code="pages"/> /
