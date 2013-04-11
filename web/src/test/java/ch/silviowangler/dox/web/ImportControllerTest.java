@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,9 +20,6 @@ import ch.silviowangler.dox.api.*;
 import ch.silviowangler.dox.web.util.DeviceMock;
 import ch.silviowangler.dox.web.util.TemplateEngine;
 import ch.silviowangler.dox.web.util.TemplateEngineImpl;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -30,17 +27,12 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.context.MessageSource;
-import org.springframework.mobile.device.Device;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.TreeSet;
 
-import static ch.silviowangler.dox.api.AttributeDataType.DATE;
-import static ch.silviowangler.dox.api.AttributeDataType.INTEGER;
-import static ch.silviowangler.dox.api.AttributeDataType.STRING;
+import static ch.silviowangler.dox.api.AttributeDataType.*;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
 import static com.google.common.collect.Sets.newTreeSet;
