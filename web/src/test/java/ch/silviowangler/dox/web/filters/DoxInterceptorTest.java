@@ -17,6 +17,7 @@
 package ch.silviowangler.dox.web.filters;
 
 import ch.silviowangler.dox.DoxVersion;
+import ch.silviowangler.dox.api.DocumentService;
 import ch.silviowangler.dox.api.VersionService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,16 +35,18 @@ import static org.mockito.Mockito.when;
  * @since 0.2
  */
 @RunWith(MockitoJUnitRunner.class)
-public class VersionInterceptorTest {
+public class DoxInterceptorTest {
 
     @InjectMocks
-    private VersionInterceptor versionInterceptor = new VersionInterceptor();
+    private DoxInterceptor doxInterceptor = new DoxInterceptor();
     @Mock
     private VersionService versionService;
+    @Mock
+    private DocumentService documentService;
 
     @Test
     public void testPreHandle() throws Exception {
-        assertThat(versionInterceptor.preHandle(null, null, null), is(true));
+        assertThat(doxInterceptor.preHandle(null, null, null), is(true));
     }
 
     @Test
@@ -53,17 +56,19 @@ public class VersionInterceptorTest {
 
         final String expectedVersion = "1.1";
         when(versionService.fetchVersion()).thenReturn(new DoxVersion(expectedVersion));
+        when(documentService.retrieveDocumentReferenceCount()).thenReturn(88L);
 
-        versionInterceptor.postHandle(null, null, null, modelAndView);
+        doxInterceptor.postHandle(null, null, null, modelAndView);
 
-        assertThat(modelAndView.getModel().size(), is(1));
+        assertThat(modelAndView.getModel().size(), is(2));
         assertThat(modelAndView.getModel().containsKey("version"), is(true));
         assertThat(modelAndView.getModel().get("version").toString(), is(expectedVersion));
-
+        assertThat(modelAndView.getModel().containsKey("documentCount"), is(true));
+        assertThat(modelAndView.getModel().get("documentCount").toString(), is("88"));
     }
 
     @Test
     public void testAfterCompletion() throws Exception {
-        versionInterceptor.afterCompletion(null, null, null, null);
+        doxInterceptor.afterCompletion(null, null, null, null);
     }
 }

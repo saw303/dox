@@ -16,24 +16,39 @@
 
 package ch.silviowangler.dox.web.filters;
 
+import ch.silviowangler.dox.api.DocumentService;
 import ch.silviowangler.dox.api.VersionService;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static org.springframework.util.Assert.notNull;
+
 /**
  * @author Silvio Wangler
  * @since 0.2
  */
-public class VersionInterceptor implements HandlerInterceptor {
+public class DoxInterceptor implements HandlerInterceptor, InitializingBean {
 
 
     private VersionService versionService;
+    private DocumentService documentService;
 
     public void setVersionService(VersionService versionService) {
         this.versionService = versionService;
+    }
+
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        notNull(versionService, "Version service must not be null");
+        notNull(documentService, "Document service must not be null");
     }
 
     @Override
@@ -44,6 +59,7 @@ public class VersionInterceptor implements HandlerInterceptor {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         modelAndView.getModel().put("version", versionService.fetchVersion().getVersion());
+        modelAndView.getModel().put("documentCount", documentService.retrieveDocumentReferenceCount());
     }
 
     @Override

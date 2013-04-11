@@ -101,4 +101,10 @@ public interface DocumentService {
      * @return all document references within the DOX repository
      */
     Set<DocumentReference> retrieveAllDocumentReferences();
+
+    /**
+     * Retrieves the current amount of document references managed by DOX
+     * @return the amount of document references
+     */
+    long retrieveDocumentReferenceCount();
 }

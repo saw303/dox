@@ -46,8 +46,9 @@
         <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" p:paramName="lang"/>
         <!-- Detects device types (normal, tablet or mobile device) -->
         <bean class="org.springframework.mobile.device.DeviceResolverHandlerInterceptor"/>
-        <bean class="ch.silviowangler.dox.web.filters.VersionInterceptor">
+        <bean class="ch.silviowangler.dox.web.filters.DoxInterceptor">
             <property name="versionService" ref="versionService"/>
+            <property name="documentService" ref="documentService"/>
         </bean>
     </mvc:interceptors>
 

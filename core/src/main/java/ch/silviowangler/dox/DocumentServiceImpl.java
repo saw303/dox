@@ -41,6 +41,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,6 +70,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     private static final String DD_MM_YYYY = "dd.MM.yyyy";
     private static final String YYYY_MM_DD = "yyyy-MM-dd";
+    public static final String CACHE_DOCUMENT_COUNT = "documentCount";
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
@@ -94,6 +97,13 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         isTrue(archiveDirectory.canRead(), "Archive store must be readable ['" + this.archiveDirectory + "']");
         isTrue(archiveDirectory.canWrite(), "Archive store must be writable ['" + this.archiveDirectory + "']");
         notEmpty(mimeTypes, "No mime types have been set");
+    }
+
+    @Override
+    @Cacheable(CACHE_DOCUMENT_COUNT)
+    @Transactional(propagation = SUPPORTS, readOnly = true)
+    public long retrieveDocumentReferenceCount() {
+        return documentRepository.count();
     }
 
     @Override
@@ -212,6 +222,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     @Override
+    @CacheEvict(value = CACHE_DOCUMENT_COUNT, allEntries=true)
     @Transactional(propagation = REQUIRED, readOnly = false)
     public DocumentReference importDocument(PhysicalDocument physicalDocumentApi) throws ValidationException, DocumentDuplicationException, DocumentClassNotFoundException {
 
