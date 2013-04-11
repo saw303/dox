@@ -68,6 +68,12 @@ public class DoxInterceptorTest {
     }
 
     @Test
+    public void testPostHandleWithNoModelAndViewShouldNotFail() throws Exception {
+
+        doxInterceptor.postHandle(null, null, null, null);
+    }
+
+    @Test
     public void testAfterCompletion() throws Exception {
         doxInterceptor.afterCompletion(null, null, null, null);
     }

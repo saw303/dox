@@ -3,10 +3,10 @@
 
 
 /* TEAM */
-  <your title>: Silvio Wangler
-  Site: silviowangler.ch
+  Project lead: Silvio Wangler
+  Site: www.silviowangler.ch
   Twitter: saw303
-  Location: Wallisellen, Switzerland
+  Location: Opfikon, Switzerland
 
 /* THANKS */
   Names (& URL):

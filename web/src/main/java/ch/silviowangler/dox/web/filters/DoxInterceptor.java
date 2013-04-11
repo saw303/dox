@@ -58,8 +58,14 @@ public class DoxInterceptor implements HandlerInterceptor, InitializingBean {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        modelAndView.getModel().put("version", versionService.fetchVersion().getVersion());
-        modelAndView.getModel().put("documentCount", documentService.retrieveDocumentReferenceCount());
+        if (modelExists(modelAndView)) {
+            modelAndView.getModel().put("version", versionService.fetchVersion().getVersion());
+            modelAndView.getModel().put("documentCount", documentService.retrieveDocumentReferenceCount());
+        }
+    }
+
+    private boolean modelExists(ModelAndView modelAndView) {
+        return modelAndView != null && modelAndView.getModel() != null;
     }
 
     @Override
