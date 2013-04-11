@@ -318,6 +318,19 @@ header a {
     padding: 0.25em 0.5em
 }
 
+header h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 100px;
+    font-weight: bold;
+    margin: 0;
+}
+
+header h2 {
+    font-family: 'Playball', cursive;
+    font-size: 36px;
+    margin: 0 0 20px 0;
+}
+
 header a:hover {
     background: #ccc;
     border: 0;
@@ -473,6 +486,14 @@ Smart phones (Android / iPhone)
 
     #fileUpload {
         width: 80%;
+    }
+
+    header h1 {
+        font-size: 60px;
+    }
+
+    header h2 {
+        font-size: 18px;
     }
 }
 
