@@ -46,6 +46,9 @@
         <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" p:paramName="lang"/>
         <!-- Detects device types (normal, tablet or mobile device) -->
         <bean class="org.springframework.mobile.device.DeviceResolverHandlerInterceptor"/>
+        <bean class="ch.silviowangler.dox.web.filters.VersionInterceptor">
+            <property name="versionService" ref="versionService"/>
+        </bean>
     </mvc:interceptors>
 
     <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"
