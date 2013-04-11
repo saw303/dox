@@ -1,4 +1,5 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%--
   ~ Copyright 2012 - 2013 Silvio Wangler (silvio.wangler@gmail.com)
   ~
@@ -15,5 +16,8 @@
   ~ limitations under the License.
   --%>
 
-<p><spring:message code="application.footer" arguments="<%=new java.util.Date()%>"/> - <spring:message code="version" arguments="${version}"/></p>
-<p style="font-size: 10px;"><spring:message code="footer.document.count" arguments="${documentCount}"/></p>
+<p><spring:message code="application.footer" arguments="<%=new java.util.Date()%>"/> - <spring:message code="version"
+                                                                                                       arguments="${version}"/></p>
+<sec:authorize access="isAuthenticated()">
+    <p style="font-size: 10px;"><spring:message code="footer.document.count" arguments="${documentCount}"/></p>
+</sec:authorize>
