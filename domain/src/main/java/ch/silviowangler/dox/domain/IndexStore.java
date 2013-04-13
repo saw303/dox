@@ -111,6 +111,37 @@ public class IndexStore extends AbstractPersistable<Long> {
     private DateTime D_10;
 
     @Column
+    @Type(type = "ch.silviowangler.dox.domain.hibernate.AmountOfMoneyType")
+    private AmountOfMoney C_01;
+    @Column
+    @Type(type = "ch.silviowangler.dox.domain.hibernate.AmountOfMoneyType")
+    private AmountOfMoney C_02;
+    @Column
+    @Type(type = "ch.silviowangler.dox.domain.hibernate.AmountOfMoneyType")
+    private AmountOfMoney C_03;
+    @Column
+    @Type(type = "ch.silviowangler.dox.domain.hibernate.AmountOfMoneyType")
+    private AmountOfMoney C_04;
+    @Column
+    @Type(type = "ch.silviowangler.dox.domain.hibernate.AmountOfMoneyType")
+    private AmountOfMoney C_05;
+    @Column
+    @Type(type = "ch.silviowangler.dox.domain.hibernate.AmountOfMoneyType")
+    private AmountOfMoney C_06;
+    @Column
+    @Type(type = "ch.silviowangler.dox.domain.hibernate.AmountOfMoneyType")
+    private AmountOfMoney C_07;
+    @Column
+    @Type(type = "ch.silviowangler.dox.domain.hibernate.AmountOfMoneyType")
+    private AmountOfMoney C_08;
+    @Column
+    @Type(type = "ch.silviowangler.dox.domain.hibernate.AmountOfMoneyType")
+    private AmountOfMoney C_09;
+    @Column
+    @Type(type = "ch.silviowangler.dox.domain.hibernate.AmountOfMoneyType")
+    private AmountOfMoney C_10;
+
+    @Column
     private Long L_01;
     @Column
     private Long L_02;
@@ -560,61 +591,151 @@ public class IndexStore extends AbstractPersistable<Long> {
         this.document = document;
     }
 
+    public AmountOfMoney getC_01() {
+        return C_01;
+    }
+
+    public void setC_01(AmountOfMoney c_01) {
+        C_01 = c_01;
+    }
+
+    public AmountOfMoney getC_02() {
+        return C_02;
+    }
+
+    public void setC_02(AmountOfMoney c_02) {
+        C_02 = c_02;
+    }
+
+    public AmountOfMoney getC_03() {
+        return C_03;
+    }
+
+    public void setC_03(AmountOfMoney c_03) {
+        C_03 = c_03;
+    }
+
+    public AmountOfMoney getC_04() {
+        return C_04;
+    }
+
+    public void setC_04(AmountOfMoney c_04) {
+        C_04 = c_04;
+    }
+
+    public AmountOfMoney getC_05() {
+        return C_05;
+    }
+
+    public void setC_05(AmountOfMoney c_05) {
+        C_05 = c_05;
+    }
+
+    public AmountOfMoney getC_06() {
+        return C_06;
+    }
+
+    public void setC_06(AmountOfMoney c_06) {
+        C_06 = c_06;
+    }
+
+    public AmountOfMoney getC_07() {
+        return C_07;
+    }
+
+    public void setC_07(AmountOfMoney c_07) {
+        C_07 = c_07;
+    }
+
+    public AmountOfMoney getC_08() {
+        return C_08;
+    }
+
+    public void setC_08(AmountOfMoney c_08) {
+        C_08 = c_08;
+    }
+
+    public AmountOfMoney getC_09() {
+        return C_09;
+    }
+
+    public void setC_09(AmountOfMoney c_09) {
+        C_09 = c_09;
+    }
+
+    public AmountOfMoney getC_10() {
+        return C_10;
+    }
+
+    public void setC_10(AmountOfMoney c_10) {
+        C_10 = c_10;
+    }
+
     @Override
     public String toString() {
-        return "IndexStore{" +
-                "id='" + super.getId() + '\'' +
-                "document id='" + getDocument().getId() + '\'' +
-                "S_01='" + S_01 + '\'' +
-                ", S_02='" + S_02 + '\'' +
-                ", S_03='" + S_03 + '\'' +
-                ", S_04='" + S_04 + '\'' +
-                ", S_05='" + S_05 + '\'' +
-                ", S_06='" + S_06 + '\'' +
-                ", S_07='" + S_07 + '\'' +
-                ", S_08='" + S_08 + '\'' +
-                ", S_09='" + S_09 + '\'' +
-                ", S_10='" + S_10 + '\'' +
-                ", S_11='" + S_11 + '\'' +
-                ", S_12='" + S_12 + '\'' +
-                ", S_13='" + S_13 + '\'' +
-                ", S_14='" + S_14 + '\'' +
-                ", S_15='" + S_15 + '\'' +
-                ", S_16='" + S_16 + '\'' +
-                ", S_17='" + S_17 + '\'' +
-                ", S_18='" + S_18 + '\'' +
-                ", S_19='" + S_19 + '\'' +
-                ", S_20='" + S_20 + '\'' +
-                ", D_01=" + D_01 +
-                ", D_02=" + D_02 +
-                ", D_03=" + D_03 +
-                ", D_04=" + D_04 +
-                ", D_05=" + D_05 +
-                ", D_06=" + D_06 +
-                ", D_07=" + D_07 +
-                ", D_08=" + D_08 +
-                ", D_09=" + D_09 +
-                ", D_10=" + D_10 +
-                ", L_01=" + L_01 +
-                ", L_02=" + L_02 +
-                ", L_03=" + L_03 +
-                ", L_04=" + L_04 +
-                ", L_05=" + L_05 +
-                ", L_06=" + L_06 +
-                ", L_07=" + L_07 +
-                ", L_08=" + L_08 +
-                ", L_09=" + L_09 +
-                ", L_10=" + L_10 +
-                ", F_01=" + F_01 +
-                ", F_02=" + F_02 +
-                ", F_03=" + F_03 +
-                ", F_04=" + F_04 +
-                ", F_05=" + F_05 +
-                ", F_06=" + F_06 +
-                ", F_07=" + F_07 +
-                ", F_08=" + F_08 +
-                ", F_09=" + F_09 +
-                ", F_10=" + F_10 +
-                '}';
+        final StringBuilder sb = new StringBuilder("IndexStore{");
+        sb.append("document=").append(document);
+        sb.append(", S_01='").append(S_01).append('\'');
+        sb.append(", S_02='").append(S_02).append('\'');
+        sb.append(", S_03='").append(S_03).append('\'');
+        sb.append(", S_04='").append(S_04).append('\'');
+        sb.append(", S_05='").append(S_05).append('\'');
+        sb.append(", S_06='").append(S_06).append('\'');
+        sb.append(", S_07='").append(S_07).append('\'');
+        sb.append(", S_08='").append(S_08).append('\'');
+        sb.append(", S_09='").append(S_09).append('\'');
+        sb.append(", S_10='").append(S_10).append('\'');
+        sb.append(", S_11='").append(S_11).append('\'');
+        sb.append(", S_12='").append(S_12).append('\'');
+        sb.append(", S_13='").append(S_13).append('\'');
+        sb.append(", S_14='").append(S_14).append('\'');
+        sb.append(", S_15='").append(S_15).append('\'');
+        sb.append(", S_16='").append(S_16).append('\'');
+        sb.append(", S_17='").append(S_17).append('\'');
+        sb.append(", S_18='").append(S_18).append('\'');
+        sb.append(", S_19='").append(S_19).append('\'');
+        sb.append(", S_20='").append(S_20).append('\'');
+        sb.append(", D_01=").append(D_01);
+        sb.append(", D_02=").append(D_02);
+        sb.append(", D_03=").append(D_03);
+        sb.append(", D_04=").append(D_04);
+        sb.append(", D_05=").append(D_05);
+        sb.append(", D_06=").append(D_06);
+        sb.append(", D_07=").append(D_07);
+        sb.append(", D_08=").append(D_08);
+        sb.append(", D_09=").append(D_09);
+        sb.append(", D_10=").append(D_10);
+        sb.append(", C_01=").append(C_01);
+        sb.append(", C_02=").append(C_02);
+        sb.append(", C_03=").append(C_03);
+        sb.append(", C_04=").append(C_04);
+        sb.append(", C_05=").append(C_05);
+        sb.append(", C_06=").append(C_06);
+        sb.append(", C_07=").append(C_07);
+        sb.append(", C_08=").append(C_08);
+        sb.append(", C_09=").append(C_09);
+        sb.append(", C_10=").append(C_10);
+        sb.append(", L_01=").append(L_01);
+        sb.append(", L_02=").append(L_02);
+        sb.append(", L_03=").append(L_03);
+        sb.append(", L_04=").append(L_04);
+        sb.append(", L_05=").append(L_05);
+        sb.append(", L_06=").append(L_06);
+        sb.append(", L_07=").append(L_07);
+        sb.append(", L_08=").append(L_08);
+        sb.append(", L_09=").append(L_09);
+        sb.append(", L_10=").append(L_10);
+        sb.append(", F_01=").append(F_01);
+        sb.append(", F_02=").append(F_02);
+        sb.append(", F_03=").append(F_03);
+        sb.append(", F_04=").append(F_04);
+        sb.append(", F_05=").append(F_05);
+        sb.append(", F_06=").append(F_06);
+        sb.append(", F_07=").append(F_07);
+        sb.append(", F_08=").append(F_08);
+        sb.append(", F_09=").append(F_09);
+        sb.append(", F_10=").append(F_10);
+        sb.append('}');
+        return sb.toString();
     }
 }

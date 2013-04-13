@@ -23,5 +23,5 @@ import java.io.Serializable;
  * @since 0.1
  */
 public enum AttributeDataType implements Serializable {
-    STRING, LONG, DOUBLE, INTEGER, SHORT, BOOLEAN, DATE;
+    STRING, LONG, DOUBLE, INTEGER, SHORT, BOOLEAN, DATE, CURRENCY;
 }

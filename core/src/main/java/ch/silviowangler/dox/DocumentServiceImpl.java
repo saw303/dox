@@ -18,9 +18,9 @@ package ch.silviowangler.dox;
 
 import ch.silviowangler.dox.api.*;
 import ch.silviowangler.dox.api.Domain;
+import ch.silviowangler.dox.domain.*;
 import ch.silviowangler.dox.domain.Attribute;
 import ch.silviowangler.dox.domain.AttributeDataType;
-import ch.silviowangler.dox.domain.*;
 import ch.silviowangler.dox.domain.DocumentClass;
 import ch.silviowangler.dox.domain.Range;
 import com.google.common.collect.Maps;
@@ -222,7 +222,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     @Override
-    @CacheEvict(value = CACHE_DOCUMENT_COUNT, allEntries=true)
+    @CacheEvict(value = CACHE_DOCUMENT_COUNT, allEntries = true)
     @Transactional(propagation = REQUIRED, readOnly = false)
     public DocumentReference importDocument(PhysicalDocument physicalDocumentApi) throws ValidationException, DocumentDuplicationException, DocumentClassNotFoundException {
 
@@ -442,7 +442,11 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             return BigDecimal.valueOf(Long.parseLong(String.valueOf(valueToConvert)));
         } else if (DOUBLE.equals(desiredDataType) && valueToConvert instanceof Long) {
             return BigDecimal.valueOf((Long) valueToConvert);
+        } else if (CURRENCY.equals(desiredDataType) && valueToConvert instanceof Money) {
+            Money money = (Money) valueToConvert;
+            return new AmountOfMoney(money.getCurrency(), money.getAmount());
         }
+
         logger.error("Unable to convert data type '{}' and value '{}' (class: '{}')", new Object[]{desiredDataType, valueToConvert, valueToConvert.getClass().getCanonicalName()});
         throw new IllegalArgumentException("Unable to convert data type " + desiredDataType + " and value " + valueToConvert + "(Class: '" + valueToConvert.getClass().getCanonicalName() + "')");
     }
@@ -464,6 +468,8 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             return currentType.isAssignableFrom(String.class);
         } else if (desiredDataType == DOUBLE) {
             return currentType.isAssignableFrom(BigDecimal.class);
+        } else if (desiredDataType == CURRENCY) {
+            return currentType.isAssignableFrom(AmountOfMoney.class);
         } else {
             logger.error("Unknown data type '{}'", desiredDataType);
             throw new IllegalArgumentException("Unknown data type " + desiredDataType);
@@ -561,7 +567,15 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
         for (Attribute attribute : attributes) {
             try {
-                indices.put(new TranslatableKey(attribute.getShortName()), PropertyUtils.getProperty(indexStore, attribute.getMappingColumn().toLowerCase()));
+                final Object propertyValue = PropertyUtils.getProperty(indexStore, attribute.getMappingColumn().toLowerCase());
+
+                if (attribute.getDataType() == CURRENCY) {
+                    AmountOfMoney amountOfMoney = (AmountOfMoney) propertyValue;
+                    indices.put(new TranslatableKey(attribute.getShortName()), (amountOfMoney == null) ? null : new Money(amountOfMoney.getCurrency(), amountOfMoney.getAmount()));
+                } else {
+                    indices.put(new TranslatableKey(attribute.getShortName()), propertyValue);
+                }
+
             } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 logger.error("Error setting property '{}'", attribute.getShortName(), e);
             }
