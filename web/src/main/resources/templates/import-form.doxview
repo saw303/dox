@@ -13,7 +13,7 @@ else if(attribute.dataType == ch.silviowangler.dox.api.AttributeDataType.STRING)
     if (attribute.containsDomain()) {
         print "<datalist id=\"list-${attribute.shortName}\">"
         attribute.domain.values.each { domainValue ->
-            print "<option value=\"${domainValue}\"/>"
+            print "<option value=\"${org.springframework.web.util.HtmlUtils.htmlEscape(domainValue)}\"/>"
         }
         println "</datalist>"
         print "<input name=\"${attribute.shortName}\" list=\"list-${attribute.shortName}\""
