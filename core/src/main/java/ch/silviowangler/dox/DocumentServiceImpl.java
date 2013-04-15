@@ -442,6 +442,9 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             return BigDecimal.valueOf(Long.parseLong(String.valueOf(valueToConvert)));
         } else if (DOUBLE.equals(desiredDataType) && valueToConvert instanceof Long) {
             return BigDecimal.valueOf((Long) valueToConvert);
+        } else if (CURRENCY.equals(desiredDataType) && valueToConvert instanceof String) {
+            String value = (String) valueToConvert;
+            return new AmountOfMoney(value);
         } else if (CURRENCY.equals(desiredDataType) && valueToConvert instanceof Money) {
             Money money = (Money) valueToConvert;
             return new AmountOfMoney(money.getCurrency(), money.getAmount());

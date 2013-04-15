@@ -52,10 +52,9 @@ public class Money implements Serializable {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Money{");
-        sb.append("currency=").append(currency);
-        sb.append(", amount=").append(amount);
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder();
+        sb.append(currency);
+        sb.append(" ").append(amount);
         return sb.toString();
     }
 }

@@ -198,6 +198,26 @@ public class DocumentServiceTest extends AbstractTest {
 
     }
 
+    @Test
+    public void importCurrencyAmountAsText() throws DocumentClassNotFoundException, DocumentDuplicationException, ValidationException, IOException {
+
+        File singlePagePdf = loadFile("document-1p.pdf");
+
+        Map<TranslatableKey, Object> indexes = newHashMapWithExpectedSize(1);
+        indexes.put(COMPANY, "Sunrise");
+        indexes.put(MONEY, "CHF 1235.50");
+        indexes.put(INVOICE_AMOUNT, 12350L);
+        indexes.put(INVOICE_DATE, new Date());
+
+        PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
+        final DocumentReference documentReference = documentService.importDocument(doc);
+
+        final Money money = (Money) documentReference.getIndices().get(MONEY);
+        assertThat(money, is(not(nullValue())));
+        assertThat(money.getCurrency().getCurrencyCode(), is("CHF"));
+        assertThat(money.getAmount().toPlainString(), is("1235.50"));
+    }
+
     @Test(expected = ValidationException.class)
     public void importSinglePagePdfMissingAnIndexKeyThatIsMandatory() throws IOException, ValidationException, DocumentDuplicationException, DocumentClassNotFoundException {
 

@@ -16,8 +16,14 @@
 
 package ch.silviowangler.dox.domain;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.math.BigDecimal;
 import java.util.Currency;
+
+import static org.springframework.util.Assert.hasText;
+import static org.springframework.util.Assert.notNull;
 
 /**
  * @author Silvio Wangler
@@ -28,12 +34,31 @@ public class AmountOfMoney {
     private Currency currency;
     private BigDecimal amount;
 
+    private static final Logger logger = LoggerFactory.getLogger(AmountOfMoney.class);
+
     public AmountOfMoney() {
     }
 
     public AmountOfMoney(Currency currency, BigDecimal amount) {
         this.currency = currency;
         this.amount = amount;
+    }
+
+    public AmountOfMoney(String value) {
+        notNull(value, "Value must not be null");
+        hasText(value, "Value must not be blank");
+
+        logger.trace("Value is '{}'", value);
+        final String trimmedValue = value.trim();
+        logger.trace("Trimmed value is '{}'", trimmedValue);
+        final String clearedWhitespaces = trimmedValue.replaceAll(" +", " ");
+        logger.trace("Cleared value is '{}'", trimmedValue);
+        String[] args = clearedWhitespaces.split(" ");
+
+        logger.trace("Arg currency {}, arg amount {}", args[0], args[1]);
+
+        this.currency = Currency.getInstance(args[0]);
+        this.amount = new BigDecimal(args[1]);
     }
 
     public Currency getCurrency() {

@@ -26,10 +26,17 @@ else if(attribute.dataType == ch.silviowangler.dox.api.AttributeDataType.STRING)
         println " />"
     }
 }
-else if([ch.silviowangler.dox.api.AttributeDataType.DOUBLE, ch.silviowangler.dox.api.AttributeDataType.LONG, ch.silviowangler.dox.api.AttributeDataType.SHORT, ch.silviowangler.dox.api.AttributeDataType.INTEGER].contains(attribute.dataType)) {
-    print "<input name=\"${attribute.shortName}\" type=\"number\" min=\"0\" step=\"any\""
-    if (!attribute.isOptional()) print " required"
-    println " />"
+else if([ch.silviowangler.dox.api.AttributeDataType.DOUBLE, ch.silviowangler.dox.api.AttributeDataType.LONG, ch.silviowangler.dox.api.AttributeDataType.SHORT, ch.silviowangler.dox.api.AttributeDataType.INTEGER, ch.silviowangler.dox.api.AttributeDataType.CURRENCY].contains(attribute.dataType)) {
+    if(attribute.dataType == ch.silviowangler.dox.api.AttributeDataType.CURRENCY) {
+        print "<input name=\"${attribute.shortName}\" type=\"text\" value=\"CHF \""
+        if (!attribute.isOptional()) print " required"
+        println " />"
+    }
+    else {
+        print "<input name=\"${attribute.shortName}\" type=\"number\" min=\"0\" step=\"any\""
+        if (!attribute.isOptional()) print " required"
+        println " />"
+    }
 }
 }%><input name="file" type="file" required/>
 <button type="submit" id="importDocBtn">Senden</button>

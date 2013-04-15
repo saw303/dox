@@ -51,6 +51,7 @@ dependencies {
     compile("org.springframework.data:spring-data-jpa:${ext.springDataVersion}") {
         exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
     }
+    testRuntime "ch.qos.logback:logback-classic:${ext.logbackVersion}"
 }
 
 sourceSets {

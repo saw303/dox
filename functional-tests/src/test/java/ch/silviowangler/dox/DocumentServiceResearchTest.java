@@ -284,6 +284,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void findByAnotherFileName() {
 
         List<Set<DocumentReference>> results = newArrayList(
