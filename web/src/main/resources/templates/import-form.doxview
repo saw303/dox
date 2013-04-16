@@ -30,7 +30,7 @@ else if([ch.silviowangler.dox.api.AttributeDataType.DOUBLE, ch.silviowangler.dox
     if(attribute.dataType == ch.silviowangler.dox.api.AttributeDataType.CURRENCY) {
         print "<input name=\"${attribute.shortName}\" type=\"text\" value=\"CHF \""
         if (!attribute.isOptional()) print " required"
-        println " />"
+        println " pattern=\"\\D{3} [-+]?[0-9]*[.,]?[0-9]+\" />"
     }
     else {
         print "<input name=\"${attribute.shortName}\" type=\"number\" min=\"0\" step=\"any\""
