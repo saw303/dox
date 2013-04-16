@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import static com.google.common.net.HttpHeaders.CONTENT_DISPOSITION;
+
 /**
  * @author Silvio Wangler
  * @since 0.1
@@ -57,7 +59,8 @@ public class RepositoryController {
             InputStream in = new FileInputStream(zipFile);
 
             response.setContentType(this.mimeTypes.getProperty("zip"));
-            response.addHeader("Content-Disposition", "attachment; filename=dox-repository.zip");
+
+            response.addHeader(CONTENT_DISPOSITION, "attachment; filename=dox-repository.zip");
 
             byte[] buffer = new byte[1024];
             int bytes;
