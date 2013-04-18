@@ -18,7 +18,6 @@ package ch.silviowangler.dox.web;
 
 import ch.silviowangler.dox.api.*;
 import ch.silviowangler.dox.web.util.TemplateEngine;
-import com.google.common.collect.ImmutableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -39,6 +38,7 @@ import java.io.IOException;
 import java.util.*;
 
 import static ch.silviowangler.dox.api.AttributeDataType.*;
+import static com.google.common.collect.ImmutableList.copyOf;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Sets.newHashSet;
@@ -109,7 +109,7 @@ public class ImportController implements MessageSourceAware, InitializingBean {
 
         if (!attributes.isEmpty()) {
             binding.put("docclass", documentClassShortName);
-            binding.put("attributes", ImmutableList.copyOf(attributes));
+            binding.put("attributes", copyOf(attributes));
             html = templateEngine.render("templates/import-form.doxview", binding);
         } else {
             final String message = htmlEscape(messageSource.getMessage("document.import.no.attributes", new Object[]{documentClassShortName}, locale));

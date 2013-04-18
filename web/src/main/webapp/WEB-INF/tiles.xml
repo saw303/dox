@@ -51,4 +51,8 @@
     <definition name="import.failure" extends="base.definition">
         <put-attribute name="body" value="/WEB-INF/views/importFailure.jsp"/>
     </definition>
+
+    <definition name="edit.doc" extends="base.definition">
+        <put-attribute name="body" value="/WEB-INF/views/edit.jsp"/>
+    </definition>
 </tiles-definitions>

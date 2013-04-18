@@ -16,10 +16,7 @@
 
 package ch.silviowangler.dox.web;
 
-import ch.silviowangler.dox.api.DocumentNotFoundException;
-import ch.silviowangler.dox.api.DocumentNotInStoreException;
-import ch.silviowangler.dox.api.DocumentService;
-import ch.silviowangler.dox.api.PhysicalDocument;
+import ch.silviowangler.dox.api.*;
 import ch.silviowangler.dox.api.stats.StatisticsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +27,13 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.SortedSet;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -71,6 +72,31 @@ public class DocumentController {
             logger.error("Could not write document to output stream", e);
             response.setStatus(SC_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @RequestMapping(method = GET, value = "/document/edit/{id}")
+    public ModelAndView editDocument(@PathVariable("id") Long id) {
+
+        ModelAndView modelAndView = new ModelAndView("edit.doc", new HashMap<String, Object>());
+
+        try {
+            final DocumentReference documentReference = documentService.findDocumentReference(id);
+            final SortedSet<Attribute> attributes = documentService.findAttributes(new DocumentClass(documentReference.getDocumentClass().getShortName()));
+
+            Map<String, Attribute> attributeMap = new HashMap<>(attributes.size());
+
+            for(Attribute attribute : attributes) {
+                attributeMap.put(attribute.getShortName(), attribute);
+            }
+
+            modelAndView.getModel().put("doc", documentReference);
+            modelAndView.getModel().put("attributes", attributeMap);
+
+        } catch (DocumentNotFoundException | DocumentClassNotFoundException e) {
+            logger.error("No such document", e);
+        }
+        return modelAndView;
+
     }
 
     @RequestMapping(method = PUT, value = "/document/registerClick/{id}")
