@@ -16,4 +16,5 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   --%>
-<dox:editAttributeForm documentReference="${doc}" attributes="${attributes}" buttonLabel="Import" formLabel="xxx.html"/>
+<dox:editAttributeForm documentReference="${doc}" attributes="${attributes}" buttonLabel="&Auml;ndern"
+                       formLabel="/document/edit/${doc.id}"/>

@@ -29,14 +29,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.SortedSet;
 
 import static javax.servlet.http.HttpServletResponse.*;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
  * @author Silvio Wangler
@@ -89,7 +89,35 @@ public class DocumentController {
             logger.error("No such document", e);
         }
         return modelAndView;
+    }
 
+    @RequestMapping(method = POST, value = "/document/edit/{id}")
+    public ModelAndView editDocument(@PathVariable("id") Long id, HttpServletRequest request) {
+
+        ModelAndView modelAndView = new ModelAndView("import.successful");
+
+        try {
+            DocumentReference documentReference = documentService.findDocumentReference(id);
+
+            boolean didChangeValue = false;
+            for (TranslatableKey key : documentReference.getIndices().keySet()) {
+                final String parameter = request.getParameter(key.getKey());
+
+                if (parameter != null) {
+                    didChangeValue = true;
+                    documentReference.getIndices().put(key, parameter);
+                }
+            }
+
+            if (didChangeValue) {
+                documentReference = documentService.updateIndices(documentReference);
+            }
+            modelAndView.getModel().put("doc", documentReference);
+
+        } catch (DocumentNotFoundException e) {
+            logger.error("Cannot update document", e);
+        }
+        return modelAndView;
     }
 
     @RequestMapping(method = PUT, value = "/document/registerClick/{id}")
