@@ -20,6 +20,7 @@ import ch.silviowangler.dox.api.*;
 import ch.silviowangler.dox.web.util.DeviceMock;
 import ch.silviowangler.dox.web.util.TemplateEngine;
 import ch.silviowangler.dox.web.util.TemplateEngineImpl;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -57,6 +58,11 @@ public class ImportControllerTest {
     private MessageSource messageSource;
     @Spy
     private TemplateEngine templateEngine = new TemplateEngineImpl();
+
+    @Before
+    public void setupMocks() {
+        when(messageSource.getMessage("button.import.document", null, GERMAN)).thenReturn("Senden");
+    }
 
     @Test
     @SuppressWarnings("unchecked")
@@ -139,7 +145,7 @@ public class ImportControllerTest {
 
         String html = controller.getAttributeForm(docclass, GERMAN, new DeviceMock());
 
-        assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr1\">null: <span class=\"required\">*</span></label>\n<input name=\"attr1\" type=\"text\" required />\n<input name=\"file\" type=\"file\" required/>\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
+        assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr1\">null: <span class=\"required\">*</span></label>\n<input name=\"attr1\" type=\"text\" required />\n<input name=\"file\" type=\"file\" required/>\n\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
 
     }
 
@@ -152,7 +158,7 @@ public class ImportControllerTest {
 
         String html = controller.getAttributeForm(docclass, GERMAN, new DeviceMock());
 
-        assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr1\">null:</label>\n<input name=\"attr1\" type=\"text\" />\n<input name=\"file\" type=\"file\" required/>\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
+        assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr1\">null:</label>\n<input name=\"attr1\" type=\"text\" />\n<input name=\"file\" type=\"file\" required/>\n\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
     }
 
     @Test
@@ -167,7 +173,7 @@ public class ImportControllerTest {
 
         String html = controller.getAttributeForm(docclass, GERMAN, new DeviceMock());
 
-        assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr1\">null: <span class=\"required\">*</span></label>\n<datalist id=\"list-attr1\"><option value=\"A\"/><option value=\"B\"/></datalist>\n<input name=\"attr1\" list=\"list-attr1\" required />\n<input name=\"file\" type=\"file\" required/>\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
+        assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr1\">null: <span class=\"required\">*</span></label>\n<datalist id=\"list-attr1\"><option value=\"A\"/><option value=\"B\"/></datalist>\n<input name=\"attr1\" list=\"list-attr1\" required />\n<input name=\"file\" type=\"file\" required/>\n\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
     }
 
     @Test
@@ -182,7 +188,7 @@ public class ImportControllerTest {
 
         String html = controller.getAttributeForm(docclass, GERMAN, new DeviceMock());
 
-        assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr1\">null:</label>\n<datalist id=\"list-attr1\"><option value=\"A\"/><option value=\"B\"/></datalist>\n<input name=\"attr1\" list=\"list-attr1\" />\n<input name=\"file\" type=\"file\" required/>\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
+        assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr1\">null:</label>\n<datalist id=\"list-attr1\"><option value=\"A\"/><option value=\"B\"/></datalist>\n<input name=\"attr1\" list=\"list-attr1\" />\n<input name=\"file\" type=\"file\" required/>\n\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
     }
 
     @Test
@@ -194,7 +200,7 @@ public class ImportControllerTest {
 
         String html = controller.getAttributeForm(docclass, GERMAN, new DeviceMock());
 
-        assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr2\">null: <span class=\"required\">*</span></label>\n<input name=\"attr2\" type=\"number\" min=\"0\" step=\"any\" required />\n<input name=\"file\" type=\"file\" required/>\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
+        assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr2\">null: <span class=\"required\">*</span></label>\n<input name=\"attr2\" type=\"number\" min=\"0\" step=\"any\" required />\n<input name=\"file\" type=\"file\" required/>\n\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
     }
 
     @Test
@@ -206,7 +212,7 @@ public class ImportControllerTest {
 
         String html = controller.getAttributeForm(docclass, GERMAN, new DeviceMock());
 
-        assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr2\">null:</label>\n<input name=\"attr2\" type=\"number\" min=\"0\" step=\"any\" />\n<input name=\"file\" type=\"file\" required/>\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
+        assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr2\">null:</label>\n<input name=\"attr2\" type=\"number\" min=\"0\" step=\"any\" />\n<input name=\"file\" type=\"file\" required/>\n\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
     }
 
     @Test
@@ -218,7 +224,7 @@ public class ImportControllerTest {
 
         String html = controller.getAttributeForm(docclass, GERMAN, new DeviceMock());
 
-        assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr3\">null: <span class=\"required\">*</span></label>\n<input name=\"attr3\" type=\"date\" required />\n<input name=\"file\" type=\"file\" required/>\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
+        assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr3\">null: <span class=\"required\">*</span></label>\n<input name=\"attr3\" type=\"date\" required />\n<input name=\"file\" type=\"file\" required/>\n\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
     }
 
     @Test
@@ -230,6 +236,6 @@ public class ImportControllerTest {
 
         String html = controller.getAttributeForm(docclass, GERMAN, new DeviceMock());
 
-        assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr3\">null:</label>\n<input name=\"attr3\" type=\"date\" />\n<input name=\"file\" type=\"file\" required/>\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
+        assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr3\">null:</label>\n<input name=\"attr3\" type=\"date\" />\n<input name=\"file\" type=\"file\" required/>\n\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
     }
 }

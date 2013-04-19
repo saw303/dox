@@ -32,7 +32,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.SortedSet;
 
 import static javax.servlet.http.HttpServletResponse.*;
@@ -83,14 +82,8 @@ public class DocumentController {
             final DocumentReference documentReference = documentService.findDocumentReference(id);
             final SortedSet<Attribute> attributes = documentService.findAttributes(new DocumentClass(documentReference.getDocumentClass().getShortName()));
 
-            Map<String, Attribute> attributeMap = new HashMap<>(attributes.size());
-
-            for(Attribute attribute : attributes) {
-                attributeMap.put(attribute.getShortName(), attribute);
-            }
-
             modelAndView.getModel().put("doc", documentReference);
-            modelAndView.getModel().put("attributes", attributeMap);
+            modelAndView.getModel().put("attributes", attributes);
 
         } catch (DocumentNotFoundException | DocumentClassNotFoundException e) {
             logger.error("No such document", e);

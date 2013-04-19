@@ -1,4 +1,5 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib uri="/WEB-INF/dox.tld" prefix="dox" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%--
   ~ Copyright 2012 - 2013 Silvio Wangler (silvio.wangler@gmail.com)
@@ -15,22 +16,4 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   --%>
-<form method="POST">
-
-    <c:forEach var="index" items="${doc.indices.keySet()}">
-
-       <p>
-           <label for="${index.key}">${index.translation}:</label>
-
-           ${attributes.get(index.key).dataType}
-
-           <c:if test="${attributes.get(index.key).dataType.name().equals('DATE')}">
-            <input name="${index.key}" type="date" ${attributes.get(index.key).isOptional()? "" : "required"} value="${doc.indices.get(index)}"/>
-           </c:if>
-           <c:if test="${attributes.get(index.key).dataType.name().equals('STRING')}">
-               <input name="${index.key}" type="text" ${attributes.get(index.key).isOptional()? "" : "required"} value="${doc.indices.get(index)}"/>
-           </c:if>
-       </p>
-    </c:forEach>
-    <button type="submit" id="importDocBtn"><spring:message code="button.modify.document"/></button>
-</form>
+<dox:editAttributeForm documentReference="${doc}" attributes="${attributes}" buttonLabel="Import" formLabel="xxx.html"/>

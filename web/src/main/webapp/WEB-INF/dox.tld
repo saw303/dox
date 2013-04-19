@@ -56,4 +56,34 @@
             <type>java.lang.String</type>
         </attribute>
     </tag>
+
+    <tag>
+        <name>editAttributeForm</name>
+        <tag-class>ch.silviowangler.dox.web.taglib.DocumentEditAttributeFormTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>documentReference</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>ch.silviowangler.dox.api.DocumentReference</type>
+        </attribute>
+        <attribute>
+            <name>attributes</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.util.SortedSet</type>
+        </attribute>
+        <attribute>
+            <name>buttonLabel</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>formLabel</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
 </taglib>

@@ -37,7 +37,6 @@ import org.springframework.web.servlet.ModelAndView;
 import java.io.IOException;
 import java.util.*;
 
-import static ch.silviowangler.dox.api.AttributeDataType.*;
 import static com.google.common.collect.ImmutableList.copyOf;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
@@ -107,6 +106,10 @@ public class ImportController implements MessageSourceAware, InitializingBean {
         String html;
         Map<String, Object> binding = new HashMap<>();
 
+        binding.put("hasDoc", false);
+        binding.put("buttonLabel", messageSource.getMessage("button.import.document", null, locale));
+        binding.put("formUrl", "performImport.html");
+
         if (!attributes.isEmpty()) {
             binding.put("docclass", documentClassShortName);
             binding.put("attributes", copyOf(attributes));
@@ -159,23 +162,5 @@ public class ImportController implements MessageSourceAware, InitializingBean {
             model.put("docHash", e.getHash());
             return new ModelAndView("import.duplicate.document", model);
         }
-    }
-
-    private String getInputType(AttributeDataType dataType) {
-        if (AttributeDataType.DATE.equals(dataType)) return "date";
-        else if (isNumeric(dataType)) return "number";
-        return "text";
-    }
-
-    private boolean isNumeric(AttributeDataType dataType) {
-        return isNaturalNumber(dataType) || isFloatPointNumber(dataType);
-    }
-
-    private boolean isFloatPointNumber(AttributeDataType dataType) {
-        return DOUBLE.equals(dataType);
-    }
-
-    private boolean isNaturalNumber(AttributeDataType dataType) {
-        return newArrayList(LONG, SHORT, INTEGER).contains(dataType);
     }
 }
