@@ -54,8 +54,8 @@
     </footer>
 </div>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="js/libs/boilerplate/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="//code.jquery.com/jquery-2.0.0.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/libs/boilerplate/jquery-2.0.0.min.js"><\/script>')</script>
 <script type="text/javascript">
     $(document).ready(function () {
         $("#docClass").change(function (event) {
@@ -66,7 +66,7 @@
         });
     });
 
-    $('#documentList').delegate('h4', 'click', function() {
+    $('#documentList').delegate('h4', 'click', function () {
         //alert('index ' + $(this).attr('id') + ' was clicked');
         $.ajax({
             url: '<c:url value="/document/registerClick/"/>' + $(this).attr('id'),
