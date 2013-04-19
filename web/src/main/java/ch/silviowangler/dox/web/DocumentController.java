@@ -32,6 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.SortedSet;
 
@@ -101,11 +102,11 @@ public class DocumentController {
 
             boolean didChangeValue = false;
             for (TranslatableKey key : documentReference.getIndices().keySet()) {
-                final String parameter = request.getParameter(key.getKey());
+                final String paramValue = request.getParameter(key.getKey());
 
-                if (parameter != null) {
+                if (paramValue != null) {
                     didChangeValue = true;
-                    documentReference.getIndices().put(key, parameter);
+                    documentReference.getIndices().put(key, new String(paramValue.getBytes("iso-8859-1"), "utf-8"));
                 }
             }
 
@@ -114,7 +115,7 @@ public class DocumentController {
             }
             modelAndView.getModel().put("doc", documentReference);
 
-        } catch (DocumentNotFoundException e) {
+        } catch (DocumentNotFoundException | UnsupportedEncodingException e) {
             logger.error("Cannot update document", e);
         }
         return modelAndView;
