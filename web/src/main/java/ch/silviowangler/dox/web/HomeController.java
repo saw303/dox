@@ -18,19 +18,23 @@ package ch.silviowangler.dox.web;
 
 import ch.silviowangler.dox.api.DocumentReference;
 import ch.silviowangler.dox.api.DocumentService;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.collect.ImmutableMap.of;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * @author Silvio Wangler
@@ -46,7 +50,7 @@ public class HomeController {
     private DocumentService documentService;
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @RequestMapping(method = RequestMethod.POST, value = "query.html")
+    @RequestMapping(method = POST, value = "query.html")
     public ModelAndView query(@RequestParam("q") String queryString, @RequestParam(value = "wildcard", defaultValue = "0", required = false) boolean useWildcard) {
 
         final boolean hasWildcard = containsWildcard(queryString);
@@ -62,6 +66,20 @@ public class HomeController {
 
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryStringCopy);
         Map<String, Object> model = of("documents", documentReferences, "query", queryString);
+        return new ModelAndView("result.definition", model);
+    }
+
+    @RequestMapping(method = GET, value = "advanced.html")
+    public ModelAndView prepareAdvancedQuery() {
+        ModelAndView modelAndView = new ModelAndView("advanced.query.definition");
+        modelAndView.getModel().put("documentClasses", documentService.findDocumentClasses());
+        return modelAndView;
+    }
+
+    @RequestMapping(method = POST, value = "advanced.html")
+    public ModelAndView advancedQuery() {
+
+        ImmutableMap<String, Serializable> model = of("documents", Lists.newArrayList(), "query", "custom");
         return new ModelAndView("result.definition", model);
     }
 
