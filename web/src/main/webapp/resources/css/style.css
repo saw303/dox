@@ -67,6 +67,7 @@ body {
 
 a {
     color: #00e;
+    text-decoration: none;
 }
 
 a:visited {
@@ -369,7 +370,6 @@ nav li {
 nav a {
     font-size: 1em;
     color: #609;
-    text-decoration: none;
 }
 
 nav a:hover {
