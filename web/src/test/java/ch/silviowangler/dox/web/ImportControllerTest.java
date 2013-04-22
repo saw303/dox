@@ -20,6 +20,7 @@ import ch.silviowangler.dox.api.*;
 import ch.silviowangler.dox.web.util.DeviceMock;
 import ch.silviowangler.dox.web.util.TemplateEngine;
 import ch.silviowangler.dox.web.util.TemplateEngineImpl;
+import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +29,8 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.context.MessageSource;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -41,6 +44,8 @@ import static java.util.Locale.GERMAN;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -58,6 +63,8 @@ public class ImportControllerTest {
     private MessageSource messageSource;
     @Spy
     private TemplateEngine templateEngine = new TemplateEngineImpl();
+    @Mock
+    private WebRequest request;
 
     @Before
     public void setupMocks() {
@@ -237,5 +244,21 @@ public class ImportControllerTest {
         String html = controller.getAttributeForm(docclass, GERMAN, new DeviceMock());
 
         assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"performImport.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr3\">null:</label>\n<input name=\"attr3\" type=\"date\" />\n<input name=\"file\" type=\"file\" required/>\n\n<button type=\"submit\" id=\"importDocBtn\">Senden</button>\n</form>"));
+    }
+
+    @Test
+    public void importDocument() throws DocumentClassNotFoundException, DocumentDuplicationException, ValidationException {
+
+        when(request.getParameterNames()).thenReturn(Lists.asList("a", new String[] { "b", "c" }).iterator());
+        when(request.getParameter("a")).thenReturn("A");
+        when(request.getParameter("b")).thenReturn("B");
+        when(request.getParameter("c")).thenReturn("C");
+
+        final ModelAndView modelAndView = controller.importDocument(new MockMultipartFile("test.pdf", "this is just a test".getBytes()), request);
+
+        assertThat(modelAndView.getViewName(), is("import.successful"));
+        assertThat(modelAndView.getModel().size(), is(1));
+
+        verify(documentService).importDocument(any(PhysicalDocument.class));
     }
 }

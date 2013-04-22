@@ -20,25 +20,31 @@ import ch.silviowangler.dox.api.*;
 import ch.silviowangler.dox.api.stats.StatisticsService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
+import static ch.silviowangler.dox.web.DocumentReferenceBuilder.newDocumentReference;
 import static com.google.common.collect.Sets.newHashSet;
 import static javax.servlet.http.HttpServletResponse.*;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
 
 /**
@@ -164,5 +170,127 @@ public class DocumentControllerTest {
         verify(response).setStatus(SC_OK);
 
         SecurityContextHolder.clearContext();
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void edit() throws Exception {
+
+        final DocumentClass documentClass = new DocumentClass("hello");
+        final DocumentReference documentReference = newDocumentReference("hello.txt").withDocumentClass(documentClass).build();
+
+        when(documentService.findDocumentReference(1L)).thenReturn(documentReference);
+        SortedSet<Attribute> attributes = new TreeSet<>();
+        attributes.add(new Attribute("a", false, AttributeDataType.CURRENCY));
+        attributes.add(new Attribute("b", false, AttributeDataType.STRING));
+        when(documentService.findAttributes(documentClass)).thenReturn(attributes);
+
+        final ModelAndView modelAndView = controller.editDocument(1L);
+
+        assertThat(modelAndView.getViewName(), is("edit.doc"));
+        assertThat(modelAndView.getModel().size(), is(2));
+        assertThat(modelAndView.getModel().containsKey("doc"), is(true));
+        assertThat((DocumentReference) modelAndView.getModel().get("doc"), is(documentReference));
+        assertThat(modelAndView.getModel().containsKey("attributes"), is(true));
+        assertThat(((SortedSet<Attribute>) modelAndView.getModel().get("attributes")).size(), is(2));
+
+        InOrder order = inOrder(documentService);
+        order.verify(documentService).findDocumentReference(1L);
+        order.verify(documentService).findAttributes(documentReference.getDocumentClass());
+        order.verifyNoMoreInteractions();
+    }
+
+    @Test
+    public void editWhenThrowsException() throws Exception {
+
+        when(documentService.findDocumentReference(1L)).thenThrow(new DocumentNotFoundException(1L));
+
+        final ModelAndView modelAndView = controller.editDocument(1L);
+
+        assertThat(modelAndView.getViewName(), is("edit.doc"));
+        assertThat(modelAndView.getModel().isEmpty(), is(true));
+    }
+
+    @Test
+    public void editDocumentWhenThrowsException() throws Exception {
+
+        when(documentService.findDocumentReference(1L)).thenThrow(new DocumentNotFoundException(1L));
+
+        final ModelAndView modelAndView = controller.editDocument(1L, new MockHttpServletRequest());
+
+        assertThat(modelAndView.getViewName(), is("modification.doc.failed"));
+        assertThat(modelAndView.getModel().isEmpty(), is(true));
+    }
+
+    @Test
+    public void editDocument() throws DocumentNotFoundException {
+
+        final DocumentReference documentReference = newDocumentReference("hello.txt").withDocumentClass("test").build();
+
+        when(documentService.findDocumentReference(1L)).thenReturn(documentReference);
+
+        final ModelAndView modelAndView = controller.editDocument(1L, new MockHttpServletRequest());
+
+        assertThat(modelAndView.getViewName(), is("import.successful"));
+        assertThat(modelAndView.getModel().size(), is(1));
+        assertThat(modelAndView.getModel().containsKey("doc"), is(true));
+        assertThat((DocumentReference) modelAndView.getModel().get("doc"), is(documentReference));
+
+        InOrder order = inOrder(documentService);
+
+        order.verify(documentService).findDocumentReference(1L);
+        order.verifyNoMoreInteractions();
+    }
+
+    @Test
+    public void editDocumentWithParams() throws DocumentNotFoundException {
+
+        final DocumentReference documentReference = newDocumentReference("hello.txt").withDocumentClass("test").withIndex("name", "Silvio").build();
+
+        when(documentService.findDocumentReference(1L)).thenReturn(documentReference);
+        when(documentService.updateIndices(documentReference)).thenReturn(documentReference);
+
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setParameter("name", "Wangler");
+        final ModelAndView modelAndView = controller.editDocument(1L, request);
+
+        assertThat(modelAndView.getViewName(), is("import.successful"));
+        assertThat(modelAndView.getModel().size(), is(1));
+        assertThat(modelAndView.getModel().containsKey("doc"), is(true));
+        final DocumentReference doc = (DocumentReference) modelAndView.getModel().get("doc");
+        assertThat(doc, is(documentReference));
+        assertThat(doc.getIndices().get(new TranslatableKey("name")).toString(), is("Wangler"));
+
+        InOrder order = inOrder(documentService);
+
+        order.verify(documentService).findDocumentReference(1L);
+        order.verify(documentService).updateIndices(documentReference);
+        order.verifyNoMoreInteractions();
+    }
+
+    @Test
+    public void editDocumentWithParams2() throws DocumentNotFoundException {
+
+        final DocumentReference documentReference = newDocumentReference("hello.txt").withDocumentClass("test").withIndex("name", "Wangler").build();
+
+        when(documentService.findDocumentReference(1L)).thenReturn(documentReference);
+        when(documentService.updateIndices(documentReference)).thenReturn(documentReference);
+
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setParameter("firstname", "Silvio");
+        final ModelAndView modelAndView = controller.editDocument(1L, request);
+
+        assertThat(modelAndView.getViewName(), is("import.successful"));
+        assertThat(modelAndView.getModel().size(), is(1));
+        assertThat(modelAndView.getModel().containsKey("doc"), is(true));
+        final DocumentReference doc = (DocumentReference) modelAndView.getModel().get("doc");
+        assertThat(doc, is(documentReference));
+        assertThat(doc.getIndices().get(new TranslatableKey("name")).toString(), is("Wangler"));
+
+        InOrder order = inOrder(documentService);
+
+        order.verify(documentService).findDocumentReference(1L);
+        order.verify(documentService, never()).updateIndices(documentReference);
+        order.verifyNoMoreInteractions();
     }
 }

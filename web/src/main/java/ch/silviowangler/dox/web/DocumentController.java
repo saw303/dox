@@ -81,7 +81,7 @@ public class DocumentController {
 
         try {
             final DocumentReference documentReference = documentService.findDocumentReference(id);
-            final SortedSet<Attribute> attributes = documentService.findAttributes(new DocumentClass(documentReference.getDocumentClass().getShortName()));
+            final SortedSet<Attribute> attributes = documentService.findAttributes(documentReference.getDocumentClass());
 
             modelAndView.getModel().put("doc", documentReference);
             modelAndView.getModel().put("attributes", attributes);
@@ -116,6 +116,7 @@ public class DocumentController {
             modelAndView.getModel().put("doc", documentReference);
 
         } catch (DocumentNotFoundException | UnsupportedEncodingException e) {
+            modelAndView.setViewName("modification.doc.failed");
             logger.error("Cannot update document", e);
         }
         return modelAndView;
