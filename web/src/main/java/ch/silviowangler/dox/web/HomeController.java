@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.Serializable;
@@ -68,8 +69,9 @@ public class HomeController {
         return new ModelAndView("result.definition", model);
     }
 
-    @RequestMapping(method = POST, value = "advanced.html")
-    public ModelAndView advancedQuery() {
+
+    @RequestMapping(method = POST, value = "extendedQuery.html")
+    public ModelAndView advancedQuery(WebRequest request) {
 
         ImmutableMap<String, Serializable> model = of("documents", Lists.newArrayList(), "query", "custom");
         return new ModelAndView("result.definition", model);

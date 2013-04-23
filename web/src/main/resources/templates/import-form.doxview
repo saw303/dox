@@ -6,7 +6,7 @@ if (!attribute.isOptional()) print " <span class=\"required\">*</span>"
 println "</label>"
 if(attribute.dataType == ch.silviowangler.dox.api.AttributeDataType.DATE) {
     print "<input name=\"${attribute.shortName}\" type=\"date\""
-    if (!attribute.isOptional()) print " required"
+    if (!attribute.isOptional() && !isAdvancedQuery) print " required"
     if (hasDoc) print " value=\"${org.joda.time.format.DateTimeFormat.forPattern("yyyy-MM-dd").print(doc.indices[new ch.silviowangler.dox.api.TranslatableKey(attribute.shortName)])}\""
     println " />"
 }
@@ -18,13 +18,13 @@ else if(attribute.dataType == ch.silviowangler.dox.api.AttributeDataType.STRING)
         }
         println "</datalist>"
         print "<input name=\"${attribute.shortName}\" list=\"list-${attribute.shortName}\""
-        if (!attribute.isOptional()) print " required"
+        if (!attribute.isOptional()  && !isAdvancedQuery) print " required"
         if (hasDoc) print " value=\"${doc.indices[new ch.silviowangler.dox.api.TranslatableKey(attribute.shortName)]}\""
         println " />"
     }
     else {
         print "<input name=\"${attribute.shortName}\" type=\"text\""
-        if (!attribute.isOptional()) print " required"
+        if (!attribute.isOptional() && !isAdvancedQuery) print " required"
         if (hasDoc) print " value=\"${doc.indices[new ch.silviowangler.dox.api.TranslatableKey(attribute.shortName)]}\""
         println " />"
     }
@@ -32,20 +32,20 @@ else if(attribute.dataType == ch.silviowangler.dox.api.AttributeDataType.STRING)
 else if([ch.silviowangler.dox.api.AttributeDataType.DOUBLE, ch.silviowangler.dox.api.AttributeDataType.LONG, ch.silviowangler.dox.api.AttributeDataType.SHORT, ch.silviowangler.dox.api.AttributeDataType.INTEGER, ch.silviowangler.dox.api.AttributeDataType.CURRENCY].contains(attribute.dataType)) {
     if(attribute.dataType == ch.silviowangler.dox.api.AttributeDataType.CURRENCY) {
         print "<input name=\"${attribute.shortName}\" type=\"text\""
-        if (!attribute.isOptional()) print " required"
+        if (!attribute.isOptional() && !isAdvancedQuery) print " required"
         if (hasDoc) print " value=\"${doc.indices[new ch.silviowangler.dox.api.TranslatableKey(attribute.shortName)]}\""
         if (!hasDoc) print " value=\"CHF \""
         println " pattern=\"\\D{3} [-+]?[0-9]*[.,]?[0-9]+\" />"
     }
     else {
         print "<input name=\"${attribute.shortName}\" type=\"number\" min=\"0\" step=\"any\""
-        if (!attribute.isOptional()) print " required"
+        if (!attribute.isOptional() && !isAdvancedQuery) print " required"
         if (hasDoc) print " value=\"${doc.indices[new ch.silviowangler.dox.api.TranslatableKey(attribute.shortName)]}\""
         println " />"
     }
 }
 }
-if (!hasDoc) {
+if (!hasDoc && !isAdvancedQuery) {
     println "<input name=\"file\" type=\"file\" required/>"
 }%>
 <button type="submit" id="importDocBtn">${buttonLabel}</button>

@@ -73,7 +73,7 @@ public class ImportController implements MessageSourceAware, InitializingBean {
         notNull(this.messageSource, "Message source must not be null");
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "import.html")
+    @RequestMapping(method = RequestMethod.GET, value = "showForm.html")
     public ModelAndView query(Locale locale, @RequestParam(value = "advancedQuery", defaultValue = "0", required = false) boolean isAdvancedQuery) {
         Map<String, Object> model = newHashMap();
         ArrayList<DocumentClass> documentClasses = newArrayList(documentService.findDocumentClasses());
@@ -108,13 +108,15 @@ public class ImportController implements MessageSourceAware, InitializingBean {
         Map<String, Object> binding = new HashMap<>();
 
         binding.put("hasDoc", false);
+        binding.put("isAdvancedQuery", isAdvancedQuery);
 
         if (isAdvancedQuery) {
             binding.put("buttonLabel", messageSource.getMessage("query.start.button", null, locale));
+            binding.put("formUrl", "extendedQuery.html");
         } else {
             binding.put("buttonLabel", messageSource.getMessage("button.import.document", null, locale));
+            binding.put("formUrl", "performImport.html");
         }
-        binding.put("formUrl", "performImport.html");
 
         if (!attributes.isEmpty()) {
             binding.put("docclass", documentClassShortName);

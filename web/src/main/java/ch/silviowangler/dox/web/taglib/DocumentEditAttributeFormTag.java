@@ -72,6 +72,7 @@ public class DocumentEditAttributeFormTag extends TagSupport {
             binding.put("hasDoc", true);
             binding.put("buttonLabel", buttonLabel);
             binding.put("formUrl", formLabel);
+            binding.put("isAdvancedQuery", false);
 
             String htmlForm = templateEngine.render("templates/import-form.doxview", binding);
             out.println(htmlForm);
