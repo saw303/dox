@@ -23,8 +23,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -55,7 +57,8 @@ public class DocumentRepositoryCustomImpl implements DocumentRepositoryCustom {
 
         CriteriaQuery<Document> select = query.select(document);
 
-        select.where(cb.equal(document.get("documentClass"), documentClass));
+        List<Predicate> criterias = new ArrayList<>();
+        criterias.add(cb.equal(document.get("documentClass"), documentClass));
 
         for (String key : indices.keySet()) {
             Object value = indices.get(key);
@@ -69,30 +72,31 @@ public class DocumentRepositoryCustomImpl implements DocumentRepositoryCustom {
                     if (containsWildcardCharacters(castedStringValue)) {
                         final String wildcardValue = replaceWildcardCharacters(castedStringValue);
                         logger.debug("Like on '{}' using value '{}'", attribute.getMappingColumn(), wildcardValue);
-                        select.where(cb.like(document.join("indexStore").<String>get(attribute.getMappingColumn()), wildcardValue));
+                        criterias.add(cb.and(cb.like(document.join("indexStore").<String>get(attribute.getMappingColumn()), wildcardValue)));
                     } else {
-                        select.where(cb.and(cb.equal(document.join("indexStore").<String>get(attribute.getMappingColumn()), castedStringValue)));
+                        criterias.add(cb.and(cb.equal(document.join("indexStore").<String>get(attribute.getMappingColumn()), castedStringValue)));
                     }
                 } else if (AttributeDataType.DOUBLE.equals(attribute.getDataType())) {
                     logger.debug("Setting attribute '{}' with value '{}' (data type: {})", new Object[]{attribute.getShortName(), value, value.getClass().getCanonicalName()});
 
                     if (value instanceof Range) {
                         Range<BigDecimal> range = (Range<BigDecimal>) value;
-                        select.where(cb.between(
+                        criterias.add(cb.and(cb.between(
                                 document.join("indexStore").<BigDecimal>get(attribute.getMappingColumn()),
                                 range.getFrom(),
-                                range.getTo()));
+                                range.getTo())));
                     } else {
-                        select.where(cb.equal(document.join("indexStore").<String>get(attribute.getMappingColumn()), value));
+                        criterias.add(cb.and(cb.equal(document.join("indexStore").<String>get(attribute.getMappingColumn()), value)));
                     }
                 }
             } else {
                 logger.warn("Ignoring key '{}' since it is no global attribute", key);
             }
         }
+        select.where(criterias.toArray(new Predicate[]{}));
 
         final List<Document> resultList = em.createQuery(query).getResultList();
-        logger.info("Found {} index stores", resultList.size());
+        logger.info("Found {} documents in index store", resultList.size());
         return resultList;
     }
 }

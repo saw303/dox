@@ -20,6 +20,7 @@ import ch.silviowangler.dox.api.*;
 import com.google.common.collect.Maps;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -45,6 +46,7 @@ import static org.junit.Assert.*;
 public class DocumentServiceResearchTest extends AbstractTest {
 
     public static final TranslatableKey COMPANY = new TranslatableKey("company");
+    public static final TranslatableKey TITLE = new TranslatableKey("title");
     private static final String SWISSCOM = "Swisscom";
     private static final String SUNRISE = "Sunrise";
 
@@ -67,7 +69,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         indexes = newHashMapWithExpectedSize(2);
         indexes.put(COMPANY, SUNRISE);
-        indexes.put(new TranslatableKey("title"), "This is a title");
+        indexes.put(TITLE, "This is a title");
         importFile("file-3.txt", "tiny content", "CONTRACTS", indexes);
 
         loginAsRoot();
@@ -196,7 +198,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences(SUNRISE);
 
         assertNotNull(documentReferences);
-        assertEquals(1, documentReferences.size());
+        assertEquals(2, documentReferences.size());
         assertEquals(SUNRISE, documentReferences.iterator().next().getIndices().get(COMPANY));
     }
 
@@ -206,7 +208,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences("sunrise");
 
         assertNotNull(documentReferences);
-        assertEquals(1, documentReferences.size());
+        assertEquals(2, documentReferences.size());
         assertEquals(SUNRISE, documentReferences.iterator().next().getIndices().get(COMPANY));
     }
 
@@ -216,7 +218,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences("sUnRiSE");
 
         assertNotNull(documentReferences);
-        assertEquals(1, documentReferences.size());
+        assertEquals(2, documentReferences.size());
         assertEquals(SUNRISE, documentReferences.iterator().next().getIndices().get(COMPANY));
     }
 
@@ -246,7 +248,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences("S*");
 
         assertNotNull(documentReferences);
-        assertEquals(2, documentReferences.size());
+        assertEquals(3, documentReferences.size());
         for (DocumentReference documentReference : documentReferences) {
             assertTrue(((String) documentReference.getIndices().get(COMPANY)).matches("(Swisscom|Sunrise)"));
         }
@@ -258,7 +260,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences("*");
 
         assertNotNull(documentReferences);
-        assertEquals(2, documentReferences.size());
+        assertEquals(3, documentReferences.size());
         for (DocumentReference documentReference : documentReferences) {
             assertTrue(((String) documentReference.getIndices().get(COMPANY)).matches("(Swisscom|Sunrise)"));
         }
@@ -270,7 +272,7 @@ public class DocumentServiceResearchTest extends AbstractTest {
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences("?unrise");
 
         assertNotNull(documentReferences);
-        assertEquals(1, documentReferences.size());
+        assertEquals(2, documentReferences.size());
         assertEquals(SUNRISE, documentReferences.iterator().next().getIndices().get(COMPANY));
     }
 
@@ -316,6 +318,19 @@ public class DocumentServiceResearchTest extends AbstractTest {
 
         assertThat(documentReferences.size(), is(1));
         assertThat(documentReferences.iterator().next().getDocumentClass().getShortName(), is("CONTRACTS"));
+    }
 
+    @Test
+    @Ignore
+    public void testMakeSureItRespectsTheDocumentClass2() throws Exception {
+
+        Map<TranslatableKey, Object> index = Maps.newHashMap();
+        index.put(COMPANY, SUNRISE);
+        index.put(TITLE, "tiny content");
+
+        final Set<DocumentReference> documentReferences = documentService.findDocumentReferences(index, "CONTRACTS");
+
+        assertThat(documentReferences.size(), is(1));
+        assertThat(documentReferences.iterator().next().getDocumentClass().getShortName(), is("CONTRACTS"));
     }
 }
