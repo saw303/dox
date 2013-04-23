@@ -47,13 +47,15 @@ public class DocumentRepositoryCustomImpl implements DocumentRepositoryCustom {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Document> findDocuments(Map<String, Object> indices, Map<String, Attribute> attributes) {
+    public List<Document> findDocuments(Map<String, Object> indices, Map<String, Attribute> attributes, DocumentClass documentClass) {
 
-        final CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-        CriteriaQuery<Document> query = criteriaBuilder.createQuery(Document.class);
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Document> query = cb.createQuery(Document.class);
         Root<Document> document = query.from(Document.class);
 
         CriteriaQuery<Document> select = query.select(document);
+
+        select.where(cb.equal(document.get("documentClass"), documentClass));
 
         for (String key : indices.keySet()) {
             Object value = indices.get(key);
@@ -67,21 +69,21 @@ public class DocumentRepositoryCustomImpl implements DocumentRepositoryCustom {
                     if (containsWildcardCharacters(castedStringValue)) {
                         final String wildcardValue = replaceWildcardCharacters(castedStringValue);
                         logger.debug("Like on '{}' using value '{}'", attribute.getMappingColumn(), wildcardValue);
-                        select.where(criteriaBuilder.like(document.join("indexStore").<String>get(attribute.getMappingColumn()), wildcardValue));
+                        select.where(cb.like(document.join("indexStore").<String>get(attribute.getMappingColumn()), wildcardValue));
                     } else {
-                        select.where(criteriaBuilder.equal(document.join("indexStore").<String>get(attribute.getMappingColumn()), castedStringValue));
+                        select.where(cb.and(cb.equal(document.join("indexStore").<String>get(attribute.getMappingColumn()), castedStringValue)));
                     }
                 } else if (AttributeDataType.DOUBLE.equals(attribute.getDataType())) {
                     logger.debug("Setting attribute '{}' with value '{}' (data type: {})", new Object[]{attribute.getShortName(), value, value.getClass().getCanonicalName()});
 
                     if (value instanceof Range) {
                         Range<BigDecimal> range = (Range<BigDecimal>) value;
-                        select.where(criteriaBuilder.between(
+                        select.where(cb.between(
                                 document.join("indexStore").<BigDecimal>get(attribute.getMappingColumn()),
                                 range.getFrom(),
                                 range.getTo()));
                     } else {
-                        select.where(criteriaBuilder.equal(document.join("indexStore").<String>get(attribute.getMappingColumn()), value));
+                        select.where(cb.equal(document.join("indexStore").<String>get(attribute.getMappingColumn()), value));
                     }
                 }
             } else {

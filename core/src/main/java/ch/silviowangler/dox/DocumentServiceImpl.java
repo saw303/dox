@@ -165,7 +165,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         DocumentClass documentClass = findDocumentClass(documentClassShortName);
         List<Attribute> attributes = attributeRepository.findAttributesForDocumentClass(documentClass);
 
-        List<Document> documents = documentRepository.findDocuments(toEntityMap(fixDataTypesOfIndices(queryParams, attributes)), toAttributeMap(attributes));
+        List<Document> documents = documentRepository.findDocuments(toEntityMap(fixDataTypesOfIndices(queryParams, attributes)), toAttributeMap(attributes), documentClass);
 
         HashSet<DocumentReference> documentReferences = new HashSet<>(documents.size());
         for (Document document : documents) {

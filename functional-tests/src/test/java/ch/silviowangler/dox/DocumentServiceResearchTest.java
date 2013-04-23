@@ -17,6 +17,7 @@
 package ch.silviowangler.dox;
 
 import ch.silviowangler.dox.api.*;
+import com.google.common.collect.Maps;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,6 +64,11 @@ public class DocumentServiceResearchTest extends AbstractTest {
         indexes.put(new TranslatableKey("invoiceAmount"), "1200.99");
 
         importFile("file-2.txt", "This is a test content that contains more text", "INVOICE", indexes);
+
+        indexes = newHashMapWithExpectedSize(2);
+        indexes.put(COMPANY, SUNRISE);
+        indexes.put(new TranslatableKey("title"), "This is a title");
+        importFile("file-3.txt", "tiny content", "CONTRACTS", indexes);
 
         loginAsRoot();
     }
@@ -298,5 +304,18 @@ public class DocumentServiceResearchTest extends AbstractTest {
             assertEquals(SWISSCOM, documentReferences.iterator().next().getIndices().get(COMPANY));
             assertEquals(BigDecimal.valueOf(1200.99), documentReferences.iterator().next().getIndices().get(new TranslatableKey("invoiceAmount")));
         }
+    }
+
+    @Test
+    public void testMakeSureItRespectsTheDocumentClass() throws Exception {
+
+        Map<TranslatableKey, Object> index = Maps.newHashMap();
+        index.put(COMPANY, SUNRISE);
+
+        final Set<DocumentReference> documentReferences = documentService.findDocumentReferences(index, "CONTRACTS");
+
+        assertThat(documentReferences.size(), is(1));
+        assertThat(documentReferences.iterator().next().getDocumentClass().getShortName(), is("CONTRACTS"));
+
     }
 }
