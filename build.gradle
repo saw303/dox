@@ -28,7 +28,7 @@ allprojects {
     apply plugin: 'idea'
     apply plugin: 'project-report'
     apply plugin: 'versions'
-    apply from: 'https://raw.github.com/brunodecarvalho/gradle-plugins/master/jacoco-multiproject-aggregator.gradle'
+    apply from: "${project.rootDir}/jacoco-multiproject-aggregator.gradle"
 
     configurations {
         all*.exclude group: 'commons-logging', module: 'commons-logging'
