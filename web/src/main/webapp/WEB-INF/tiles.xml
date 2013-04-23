@@ -40,10 +40,6 @@
         <put-attribute name="body" value="/WEB-INF/views/import.jsp"/>
     </definition>
 
-    <definition name="advanced.query.definition" extends="base.definition">
-        <put-attribute name="body" value="/WEB-INF/views/import.jsp"/>
-    </definition>
-
     <definition name="import.duplicate.document" extends="base.definition">
         <put-attribute name="body" value="/WEB-INF/views/duplicateDocument.jsp"/>
     </definition>

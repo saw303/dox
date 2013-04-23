@@ -23,7 +23,7 @@
             <button type="submit" tabindex="2" accesskey="S"><spring:message code="query.start.button"/></button>
         </p>
         <p><input type="checkbox" name="wildcard" id="wildcard" checked="checked" value="1"/><spring:message
-                code="document.research.wildcard.label"/> | <a href="/advanced.html"><spring:message
+                code="document.research.wildcard.label"/> | <a href="/import.html?advancedQuery=1"><spring:message
                 code="document.research.advanced.search"/></a></p>
     </form>
 </div>

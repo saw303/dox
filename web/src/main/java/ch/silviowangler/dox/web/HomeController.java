@@ -33,7 +33,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.collect.ImmutableMap.of;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
@@ -67,13 +66,6 @@ public class HomeController {
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryStringCopy);
         Map<String, Object> model = of("documents", documentReferences, "query", queryString);
         return new ModelAndView("result.definition", model);
-    }
-
-    @RequestMapping(method = GET, value = "advanced.html")
-    public ModelAndView prepareAdvancedQuery() {
-        ModelAndView modelAndView = new ModelAndView("advanced.query.definition");
-        modelAndView.getModel().put("documentClasses", documentService.findDocumentClasses());
-        return modelAndView;
     }
 
     @RequestMapping(method = POST, value = "advanced.html")

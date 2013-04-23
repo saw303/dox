@@ -61,7 +61,8 @@
         $("#docClass").change(function (event) {
             $("#docClassAttributes").load("<c:url value="/ajax/attributes"/>",
                     {
-                        documentClassShortName: this.value
+                        documentClassShortName: this.value,
+                        advancedQuery: ${advancedQuery != null ? advancedQuery : false}
                     });
         });
     });

@@ -74,7 +74,7 @@ public class ImportController implements MessageSourceAware, InitializingBean {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "import.html")
-    public ModelAndView query(Locale locale) {
+    public ModelAndView query(Locale locale, @RequestParam(value = "advancedQuery", defaultValue = "0", required = false) boolean isAdvancedQuery) {
         Map<String, Object> model = newHashMap();
         ArrayList<DocumentClass> documentClasses = newArrayList(documentService.findDocumentClasses());
         Collections.sort(documentClasses, new Comparator<DocumentClass>() {
@@ -85,12 +85,13 @@ public class ImportController implements MessageSourceAware, InitializingBean {
         });
         model.put("documentClasses", documentClasses);
         model.put("defaultMessage", messageSource.getMessage("document.import.choose.document.class", null, locale));
+        model.put("advancedQuery", isAdvancedQuery);
         return new ModelAndView("import.definition", model);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/ajax/attributes")
     @ResponseBody
-    public String getAttributeForm(@RequestParam(DOCUMENT_CLASS_SHORT_NAME) String documentClassShortName, Locale locale, Device device) {
+    public String getAttributeForm(@RequestParam(DOCUMENT_CLASS_SHORT_NAME) String documentClassShortName, Locale locale, Device device, @RequestParam("advancedQuery") boolean isAdvancedQuery) {
 
         logger.debug("Normal device: {}, mobile device: {}, tablet device: {}", new Object[]{device.isNormal(), device.isMobile(), device.isTablet()});
         logger.debug("About to generate form for document class '{}'", documentClassShortName);
@@ -107,7 +108,12 @@ public class ImportController implements MessageSourceAware, InitializingBean {
         Map<String, Object> binding = new HashMap<>();
 
         binding.put("hasDoc", false);
-        binding.put("buttonLabel", messageSource.getMessage("button.import.document", null, locale));
+
+        if (isAdvancedQuery) {
+            binding.put("buttonLabel", messageSource.getMessage("query.start.button", null, locale));
+        } else {
+            binding.put("buttonLabel", messageSource.getMessage("button.import.document", null, locale));
+        }
         binding.put("formUrl", "performImport.html");
 
         if (!attributes.isEmpty()) {
