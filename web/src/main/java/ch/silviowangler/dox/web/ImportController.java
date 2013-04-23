@@ -37,6 +37,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.io.IOException;
 import java.util.*;
 
+import static ch.silviowangler.dox.web.WebConstants.DOCUMENT_CLASS_SHORT_NAME;
 import static com.google.common.collect.ImmutableList.copyOf;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
@@ -54,7 +55,7 @@ import static org.springframework.web.util.HtmlUtils.htmlEscape;
 @Controller
 public class ImportController implements MessageSourceAware, InitializingBean {
 
-    private static final String DOCUMENT_CLASS_SHORT_NAME = "documentClassShortName";
+
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired

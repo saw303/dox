@@ -16,10 +16,11 @@
 
 package ch.silviowangler.dox.web;
 
+import ch.silviowangler.dox.api.DocumentClassNotFoundException;
 import ch.silviowangler.dox.api.DocumentReference;
 import ch.silviowangler.dox.api.DocumentService;
+import ch.silviowangler.dox.api.TranslatableKey;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +30,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.Serializable;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import static ch.silviowangler.dox.web.WebConstants.DOCUMENT_CLASS_SHORT_NAME;
 import static com.google.common.collect.ImmutableMap.of;
+import static com.google.common.collect.Maps.newHashMap;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
@@ -69,12 +72,29 @@ public class HomeController {
         return new ModelAndView("result.definition", model);
     }
 
-
     @RequestMapping(method = POST, value = "extendedQuery.html")
-    public ModelAndView advancedQuery(WebRequest request) {
+    public ModelAndView advancedQuery(@RequestParam(DOCUMENT_CLASS_SHORT_NAME) String documentClassShortName, WebRequest request) {
 
-        ImmutableMap<String, Serializable> model = of("documents", Lists.newArrayList(), "query", "custom");
-        return new ModelAndView("result.definition", model);
+        try {
+
+            Map<TranslatableKey, Object> indices = newHashMap();
+
+            final Iterator<String> iterator = request.getParameterNames();
+
+            while (iterator.hasNext()) {
+                final String parameterName = iterator.next();
+                if (!DOCUMENT_CLASS_SHORT_NAME.equals(parameterName)) {
+                    indices.put(new TranslatableKey(parameterName), request.getParameter(parameterName));
+                }
+            }
+
+            final Set<DocumentReference> documentReferences = documentService.findDocumentReferences(indices, documentClassShortName);
+            ImmutableMap<String, Object> model = of("documents", documentReferences, "query", "custom");
+            return new ModelAndView("result.definition", model);
+        } catch (DocumentClassNotFoundException e) {
+            logger.error("Illegal document class short name {}", documentClassShortName, e);
+            return new ModelAndView("result.definition");
+        }
     }
 
     private boolean containsWildcard(final String queryString) {
