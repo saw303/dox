@@ -675,7 +675,7 @@ public class IndexStore extends AbstractPersistable<Long> {
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
-                .add("document", document)
+                .add("document", document.getId())
                 .add("S_01", S_01)
                 .add("S_02", S_02)
                 .add("S_03", S_03)

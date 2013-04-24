@@ -110,7 +110,6 @@ public class Attribute extends AbstractPersistable<Long> {
                 .add("optional", optional)
                 .add("dataType", dataType)
                 .add("domain", domain)
-                .add("documentClasses", documentClasses)
                 .add("mappingColumn", mappingColumn)
                 .add("updateable", updateable)
                 .toString();
