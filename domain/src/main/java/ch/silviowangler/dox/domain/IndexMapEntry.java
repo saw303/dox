@@ -16,6 +16,7 @@
 
 package ch.silviowangler.dox.domain;
 
+import com.google.common.base.Objects;
 import org.hibernate.annotations.Index;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
@@ -72,5 +73,14 @@ public class IndexMapEntry extends AbstractPersistable<Long> {
 
     public void setDocument(Document document) {
         this.document = document;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("attributeName", attributeName)
+                .add("stringRepresentation", stringRepresentation)
+                .add("document", document)
+                .toString();
     }
 }

@@ -16,6 +16,7 @@
 
 package ch.silviowangler.dox.domain;
 
+import com.google.common.base.Objects;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
@@ -100,5 +101,18 @@ public class Attribute extends AbstractPersistable<Long> {
 
     public void setMappingColumn(String mappingColumn) {
         this.mappingColumn = mappingColumn;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("shortName", shortName)
+                .add("optional", optional)
+                .add("dataType", dataType)
+                .add("domain", domain)
+                .add("documentClasses", documentClasses)
+                .add("mappingColumn", mappingColumn)
+                .add("updateable", updateable)
+                .toString();
     }
 }

@@ -16,6 +16,7 @@
 
 package ch.silviowangler.dox.domain;
 
+import com.google.common.base.Objects;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 import org.springframework.data.jpa.domain.AbstractPersistable;
@@ -673,69 +674,68 @@ public class IndexStore extends AbstractPersistable<Long> {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("IndexStore{");
-        sb.append("document=").append(document);
-        sb.append(", S_01='").append(S_01).append('\'');
-        sb.append(", S_02='").append(S_02).append('\'');
-        sb.append(", S_03='").append(S_03).append('\'');
-        sb.append(", S_04='").append(S_04).append('\'');
-        sb.append(", S_05='").append(S_05).append('\'');
-        sb.append(", S_06='").append(S_06).append('\'');
-        sb.append(", S_07='").append(S_07).append('\'');
-        sb.append(", S_08='").append(S_08).append('\'');
-        sb.append(", S_09='").append(S_09).append('\'');
-        sb.append(", S_10='").append(S_10).append('\'');
-        sb.append(", S_11='").append(S_11).append('\'');
-        sb.append(", S_12='").append(S_12).append('\'');
-        sb.append(", S_13='").append(S_13).append('\'');
-        sb.append(", S_14='").append(S_14).append('\'');
-        sb.append(", S_15='").append(S_15).append('\'');
-        sb.append(", S_16='").append(S_16).append('\'');
-        sb.append(", S_17='").append(S_17).append('\'');
-        sb.append(", S_18='").append(S_18).append('\'');
-        sb.append(", S_19='").append(S_19).append('\'');
-        sb.append(", S_20='").append(S_20).append('\'');
-        sb.append(", D_01=").append(D_01);
-        sb.append(", D_02=").append(D_02);
-        sb.append(", D_03=").append(D_03);
-        sb.append(", D_04=").append(D_04);
-        sb.append(", D_05=").append(D_05);
-        sb.append(", D_06=").append(D_06);
-        sb.append(", D_07=").append(D_07);
-        sb.append(", D_08=").append(D_08);
-        sb.append(", D_09=").append(D_09);
-        sb.append(", D_10=").append(D_10);
-        sb.append(", C_01=").append(C_01);
-        sb.append(", C_02=").append(C_02);
-        sb.append(", C_03=").append(C_03);
-        sb.append(", C_04=").append(C_04);
-        sb.append(", C_05=").append(C_05);
-        sb.append(", C_06=").append(C_06);
-        sb.append(", C_07=").append(C_07);
-        sb.append(", C_08=").append(C_08);
-        sb.append(", C_09=").append(C_09);
-        sb.append(", C_10=").append(C_10);
-        sb.append(", L_01=").append(L_01);
-        sb.append(", L_02=").append(L_02);
-        sb.append(", L_03=").append(L_03);
-        sb.append(", L_04=").append(L_04);
-        sb.append(", L_05=").append(L_05);
-        sb.append(", L_06=").append(L_06);
-        sb.append(", L_07=").append(L_07);
-        sb.append(", L_08=").append(L_08);
-        sb.append(", L_09=").append(L_09);
-        sb.append(", L_10=").append(L_10);
-        sb.append(", F_01=").append(F_01);
-        sb.append(", F_02=").append(F_02);
-        sb.append(", F_03=").append(F_03);
-        sb.append(", F_04=").append(F_04);
-        sb.append(", F_05=").append(F_05);
-        sb.append(", F_06=").append(F_06);
-        sb.append(", F_07=").append(F_07);
-        sb.append(", F_08=").append(F_08);
-        sb.append(", F_09=").append(F_09);
-        sb.append(", F_10=").append(F_10);
-        sb.append('}');
-        return sb.toString();
+        return Objects.toStringHelper(this)
+                .add("document", document)
+                .add("S_01", S_01)
+                .add("S_02", S_02)
+                .add("S_03", S_03)
+                .add("S_04", S_04)
+                .add("S_05", S_05)
+                .add("S_06", S_06)
+                .add("S_07", S_07)
+                .add("S_08", S_08)
+                .add("S_09", S_09)
+                .add("S_10", S_10)
+                .add("S_11", S_11)
+                .add("S_12", S_12)
+                .add("S_13", S_13)
+                .add("S_14", S_14)
+                .add("S_15", S_15)
+                .add("S_16", S_16)
+                .add("S_17", S_17)
+                .add("S_18", S_18)
+                .add("S_19", S_19)
+                .add("S_20", S_20)
+                .add("D_01", D_01)
+                .add("D_02", D_02)
+                .add("D_03", D_03)
+                .add("D_04", D_04)
+                .add("D_05", D_05)
+                .add("D_06", D_06)
+                .add("D_07", D_07)
+                .add("D_08", D_08)
+                .add("D_09", D_09)
+                .add("D_10", D_10)
+                .add("C_01", C_01)
+                .add("C_02", C_02)
+                .add("C_03", C_03)
+                .add("C_04", C_04)
+                .add("C_05", C_05)
+                .add("C_06", C_06)
+                .add("C_07", C_07)
+                .add("C_08", C_08)
+                .add("C_09", C_09)
+                .add("C_10", C_10)
+                .add("L_01", L_01)
+                .add("L_02", L_02)
+                .add("L_03", L_03)
+                .add("L_04", L_04)
+                .add("L_05", L_05)
+                .add("L_06", L_06)
+                .add("L_07", L_07)
+                .add("L_08", L_08)
+                .add("L_09", L_09)
+                .add("L_10", L_10)
+                .add("F_01", F_01)
+                .add("F_02", F_02)
+                .add("F_03", F_03)
+                .add("F_04", F_04)
+                .add("F_05", F_05)
+                .add("F_06", F_06)
+                .add("F_07", F_07)
+                .add("F_08", F_08)
+                .add("F_09", F_09)
+                .add("F_10", F_10)
+                .toString();
     }
 }

@@ -16,6 +16,7 @@
 
 package ch.silviowangler.dox.domain;
 
+import com.google.common.base.Objects;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 import org.springframework.data.jpa.domain.AbstractPersistable;
@@ -117,5 +118,19 @@ public class Document extends AbstractPersistable<Long> {
 
     public void setCreationDate(DateTime creationDate) {
         this.creationDate = creationDate;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("hash", hash)
+                .add("documentClass", documentClass)
+                .add("pageCount", pageCount)
+                .add("mimeType", mimeType)
+                .add("originalFilename", originalFilename)
+                .add("indexStore", indexStore)
+                .add("creationDate", creationDate)
+                .add("indexMapEntries", indexMapEntries)
+                .toString();
     }
 }

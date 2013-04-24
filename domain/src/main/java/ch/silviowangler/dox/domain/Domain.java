@@ -16,6 +16,7 @@
 
 package ch.silviowangler.dox.domain;
 
+import com.google.common.base.Objects;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
 import org.springframework.data.jpa.domain.AbstractPersistable;
@@ -65,5 +66,14 @@ public class Domain extends AbstractPersistable<Long> {
 
     public void setStrict(boolean strict) {
         this.strict = strict;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("shortName", shortName)
+                .add("values", values)
+                .add("strict", strict)
+                .toString();
     }
 }

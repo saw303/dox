@@ -18,6 +18,8 @@
 
 
 
+
+
 import org.hibernate.cfg.Environment
 import org.hibernate.tool.hbm2ddl.SchemaExport
 
@@ -47,7 +49,8 @@ buildscript {
 dependencies {
     compile "org.hibernate:hibernate-core:${ext.hibernateVersion}",
             "org.hibernate:hibernate-entitymanager:${ext.hibernateVersion}",
-            "joda-time:joda-time:${ext.jodaTimeVersion}"
+            "joda-time:joda-time:${ext.jodaTimeVersion}",
+            "com.google.guava:guava:${ext.guavaVersion}"
     compile("org.springframework.data:spring-data-jpa:${ext.springDataVersion}") {
         exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
     }

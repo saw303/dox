@@ -16,6 +16,7 @@
 
 package ch.silviowangler.dox.domain;
 
+import com.google.common.base.Objects;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Column;
@@ -72,5 +73,14 @@ public class Translation extends AbstractPersistable<Long> {
 
     public void setLocale(Locale locale) {
         this.locale = locale;
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("key", key)
+                .add("locale", locale)
+                .add("languageSpecificTranslation", languageSpecificTranslation)
+                .toString();
     }
 }

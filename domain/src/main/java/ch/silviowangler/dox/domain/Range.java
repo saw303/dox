@@ -16,6 +16,8 @@
 
 package ch.silviowangler.dox.domain;
 
+import com.google.common.base.Objects;
+
 import java.io.Serializable;
 
 /**
@@ -50,9 +52,9 @@ public class Range<T> implements Serializable {
 
     @Override
     public String toString() {
-        return "Range{" +
-                "from=" + from +
-                ", to=" + to +
-                '}';
+        return Objects.toStringHelper(this)
+                .add("from", from)
+                .add("to", to)
+                .toString();
     }
 }

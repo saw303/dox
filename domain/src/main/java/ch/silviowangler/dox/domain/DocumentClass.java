@@ -24,6 +24,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.util.Set;
 
+import static com.google.common.base.Objects.toStringHelper;
+
 /**
  * @author Silvio Wangler
  * @since 0.1
@@ -51,5 +53,13 @@ public class DocumentClass extends AbstractPersistable<Long> {
 
     public void setAttributes(Set<Attribute> attributes) {
         this.attributes = attributes;
+    }
+
+    @Override
+    public String toString() {
+        return toStringHelper(this)
+                .add("shortName", shortName)
+                .add("attributes", attributes)
+                .toString();
     }
 }
