@@ -20,7 +20,6 @@ import ch.silviowangler.dox.api.*;
 import com.google.common.collect.Maps;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -321,12 +320,24 @@ public class DocumentServiceResearchTest extends AbstractTest {
     }
 
     @Test
-    @Ignore
     public void testMakeSureItRespectsTheDocumentClass2() throws Exception {
 
         Map<TranslatableKey, Object> index = Maps.newHashMap();
         index.put(COMPANY, SUNRISE);
-        index.put(TITLE, "tiny content");
+        index.put(TITLE, "This is a title");
+
+        final Set<DocumentReference> documentReferences = documentService.findDocumentReferences(index, "CONTRACTS");
+
+        assertThat(documentReferences.size(), is(1));
+        assertThat(documentReferences.iterator().next().getDocumentClass().getShortName(), is("CONTRACTS"));
+    }
+
+    @Test
+    public void testMakeSureItRespectsTheDocumentClass3() throws Exception {
+
+        Map<TranslatableKey, Object> index = Maps.newHashMap();
+        index.put(COMPANY, SUNRISE);
+        index.put(TITLE, "*title");
 
         final Set<DocumentReference> documentReferences = documentService.findDocumentReferences(index, "CONTRACTS");
 
