@@ -35,6 +35,7 @@ import java.net.URL;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
+import static org.apache.commons.io.FileUtils.readFileToByteArray;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -97,6 +98,19 @@ public abstract class AbstractTest extends AbstractTransactionalJUnit4SpringCont
         File singlePagePdf = loadFile(fileName);
         PhysicalDocument doc = new PhysicalDocument(new DocumentClass(documentClassShortName), FileUtils.readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
         return documentService.importDocument(doc);
+    }
+
+    protected DocumentReference importFile(final String fileName, final String content, final String docClassShortName, final Map<TranslatableKey, Object> indices) throws ValidationException, DocumentDuplicationException, IOException, DocumentNotFoundException, DocumentClassNotFoundException {
+        File textFile01 = createTestFile(fileName, content);
+        PhysicalDocument doc = new PhysicalDocument(new DocumentClass(docClassShortName), readFileToByteArray(textFile01), indices, fileName);
+        try {
+            DocumentReference documentReference = documentService.importDocument(doc);
+            logger.debug("File '{}' received id {}", fileName, documentReference.getId());
+            return documentReference;
+
+        } catch (DocumentDuplicationException e) {
+            return documentService.findDocumentReference(e.getDocumentId());
+        }
     }
 
     @After

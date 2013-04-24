@@ -22,7 +22,6 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
@@ -31,7 +30,6 @@ import java.util.Set;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
-import static org.apache.commons.io.FileUtils.readFileToByteArray;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
@@ -72,20 +70,6 @@ public class DocumentServiceResearchTest extends AbstractTest {
         importFile("file-3.txt", "tiny content", "CONTRACTS", indexes);
 
         loginAsRoot();
-    }
-
-
-    private DocumentReference importFile(final String fileName, final String content, final String docClassShortName, final Map<TranslatableKey, Object> indices) throws ValidationException, DocumentDuplicationException, IOException, DocumentNotFoundException, DocumentClassNotFoundException {
-        File textFile01 = createTestFile(fileName, content);
-        PhysicalDocument doc = new PhysicalDocument(new DocumentClass(docClassShortName), readFileToByteArray(textFile01), indices, fileName);
-        try {
-            DocumentReference documentReference = documentService.importDocument(doc);
-            logger.debug("File '{}' received id {}", fileName, documentReference.getId());
-            return documentReference;
-
-        } catch (DocumentDuplicationException e) {
-            return documentService.findDocumentReference(e.getDocumentId());
-        }
     }
 
     @Test
