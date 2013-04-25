@@ -62,7 +62,7 @@ public class DoxInterceptorTest {
 
         assertThat(modelAndView.getModel().size(), is(2));
         assertThat(modelAndView.getModel().containsKey("version"), is(true));
-        assertThat(modelAndView.getModel().get("version").toString(), is(expectedVersion));
+        assertThat(((DoxVersion) modelAndView.getModel().get("version")).getVersion(), is(expectedVersion));
         assertThat(modelAndView.getModel().containsKey("documentCount"), is(true));
         assertThat(modelAndView.getModel().get("documentCount").toString(), is("88"));
     }

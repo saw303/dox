@@ -16,6 +16,10 @@
 
 package ch.silviowangler.dox;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.io.Serializable;
 
 /**
@@ -32,5 +36,31 @@ public class DoxVersion implements Serializable {
 
     public String getVersion() {
         return version;
+    }
+
+    public String formatVersion() {
+
+        if (this.version.contains("-")) {
+
+            String[] tokens = this.version.split("-");
+
+            if (tokens.length == 3) {
+
+                DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyyMMddHHmmss");
+
+                DateTime dateTime = dateTimeFormatter.parseDateTime(tokens[tokens.length - 1]);
+
+                StringBuilder sb = new StringBuilder(tokens[0]);
+                sb.append("-").append(tokens[1]).append(" (").append(dateTime.toString("dd.MM.yyyy HH:mm:ss")).append(")");
+
+                return sb.toString();
+            }
+        }
+
+        if ("@dox.app.version@".equals(this.version)) {
+            return "<development mode>";
+        }
+
+        return "invalid";
     }
 }

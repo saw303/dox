@@ -133,7 +133,8 @@ subprojects {
 project(':api') {
     displayName = 'API module'
     dependencies {
-        compile "com.google.guava:guava:${ext.guavaVersion}"
+        compile "com.google.guava:guava:${ext.guavaVersion}",
+                "joda-time:joda-time:${ext.jodaTimeVersion}"
     }
 }
 

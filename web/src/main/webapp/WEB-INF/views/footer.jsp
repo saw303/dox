@@ -17,7 +17,7 @@
   --%>
 
 <p><spring:message code="application.footer" arguments="<%=new java.util.Date()%>"/> - <spring:message code="version"
-                                                                                                       arguments="${version}"/></p>
+                                                                                                       arguments="${version.formatVersion()}"/></p>
 <sec:authorize access="isAuthenticated()">
     <p style="font-size: 10px;"><spring:message code="footer.document.count" arguments="${documentCount}"/></p>
 </sec:authorize>
