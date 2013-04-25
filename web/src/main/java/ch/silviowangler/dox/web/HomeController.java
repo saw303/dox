@@ -84,7 +84,11 @@ public class HomeController {
             while (iterator.hasNext()) {
                 final String parameterName = iterator.next();
                 if (!DOCUMENT_CLASS_SHORT_NAME.equals(parameterName)) {
-                    indices.put(new TranslatableKey(parameterName), request.getParameter(parameterName));
+                    String value = request.getParameter(parameterName);
+
+                    if (value.length() > 0) {
+                        indices.put(new TranslatableKey(parameterName), value);
+                    }
                 }
             }
 
