@@ -296,4 +296,22 @@ public class ImportControllerTest {
 
         verify(documentService).importDocument(any(PhysicalDocument.class));
     }
+
+    @Test
+    public void importDocumentValidationException() throws DocumentClassNotFoundException, DocumentDuplicationException, ValidationException {
+
+        when(request.getParameterNames()).thenReturn(Lists.asList("a", new String[]{"b", "c"}).iterator());
+        when(request.getParameter("a")).thenReturn("A");
+        when(request.getParameter("b")).thenReturn("B");
+        when(request.getParameter("c")).thenReturn("C");
+        when(documentService.importDocument(any(PhysicalDocument.class))).thenThrow(new ValidationException("bla"));
+
+        final ModelAndView modelAndView = controller.importDocument(new MockMultipartFile("test.pdf", "this is just a test".getBytes()), request);
+
+        assertThat(modelAndView.getViewName(), is("import.failure"));
+        assertThat(modelAndView.getModel().size(), is(1));
+        assertThat(((Exception) modelAndView.getModel().get("exception")).getMessage(), is("bla"));
+
+        verify(documentService).importDocument(any(PhysicalDocument.class));
+    }
 }
