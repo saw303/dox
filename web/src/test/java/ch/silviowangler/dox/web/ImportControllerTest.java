@@ -251,6 +251,18 @@ public class ImportControllerTest {
     }
 
     @Test
+    public void verifyHtmlForOptionalDateAttribute2() throws DocumentClassNotFoundException {
+
+        final String docclass = "docclass";
+        when(documentService.findAttributes(new DocumentClass(docclass))).thenReturn(newTreeSet(newArrayList(new Attribute("attr3", true, DATE))));
+        when(messageSource.getMessage("query.start.button", null, GERMAN)).thenReturn("Go for it");
+
+        String html = controller.getAttributeForm(docclass, GERMAN, new DeviceMock(), true);
+
+        assertThat(html, is("<form id=\"fileUpload\" method=\"POST\" action=\"extendedQuery.html\" enctype=\"multipart/form-data\">\n<input name=\"documentClassShortName\" type=\"hidden\" value=\"docclass\"/>\n<label for=\"attr3\">null:</label>\n<input name=\"attr3\" type=\"date\" />\n\n<button type=\"submit\" id=\"importDocBtn\">Go for it</button>\n</form>"));
+    }
+
+    @Test
     public void importDocument() throws DocumentClassNotFoundException, DocumentDuplicationException, ValidationException {
 
         when(request.getParameterNames()).thenReturn(Lists.asList("a", new String[]{"b", "c"}).iterator());
@@ -262,6 +274,25 @@ public class ImportControllerTest {
 
         assertThat(modelAndView.getViewName(), is("import.successful"));
         assertThat(modelAndView.getModel().size(), is(1));
+
+        verify(documentService).importDocument(any(PhysicalDocument.class));
+    }
+
+    @Test
+    public void importDocumentDuplicateDocument() throws DocumentClassNotFoundException, DocumentDuplicationException, ValidationException {
+
+        when(request.getParameterNames()).thenReturn(Lists.asList("a", new String[]{"b", "c"}).iterator());
+        when(request.getParameter("a")).thenReturn("A");
+        when(request.getParameter("b")).thenReturn("B");
+        when(request.getParameter("c")).thenReturn("C");
+        when(documentService.importDocument(any(PhysicalDocument.class))).thenThrow(new DocumentDuplicationException(1L, "hash"));
+
+        final ModelAndView modelAndView = controller.importDocument(new MockMultipartFile("test.pdf", "this is just a test".getBytes()), request);
+
+        assertThat(modelAndView.getViewName(), is("import.duplicate.document"));
+        assertThat(modelAndView.getModel().size(), is(2));
+        assertThat(modelAndView.getModel().get("docId").toString(), is("1"));
+        assertThat(modelAndView.getModel().get("docHash").toString(), is("hash"));
 
         verify(documentService).importDocument(any(PhysicalDocument.class));
     }
