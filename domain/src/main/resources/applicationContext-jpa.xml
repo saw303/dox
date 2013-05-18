@@ -20,6 +20,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.0.xsd">
 
     <bean id="documentRepositoryImpl" class="ch.silviowangler.dox.domain.DocumentRepositoryCustomImpl"/>
+    <bean id="clickStatsRepositoryCustomImpl" class="ch.silviowangler.dox.domain.stats.ClickStatsRepositoryCustomImpl"/>
 
     <jpa:repositories base-package="ch.silviowangler.dox.domain"/>
 </beans>

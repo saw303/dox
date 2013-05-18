@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ch.silviowangler.dox.api.stats;
+package ch.silviowangler.dox.domain.stats;
 
 import java.util.List;
 
@@ -22,14 +22,7 @@ import java.util.List;
  * @author Silvio Wangler
  * @since 0.2
  */
-public interface StatisticsService {
-    Long fetchDocumentReferenceClicksCount();
+public interface ClickStatsRepositoryCustom {
 
-    Long fetchLinkClicksCount();
-
-    void registerDocumentReferenceClick(String documentReferenceId, String username);
-
-    void registerLinkClick(String link, String username);
-
-    List<DocumentReferenceClickStats> fetchDocumentReferenceClickStats();
+    List<DocumentReferenceClickStats> fetchDocumentReferenceClickStatistics();
 }
