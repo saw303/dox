@@ -20,7 +20,7 @@ import ch.silviowangler.dox.api.stats.DocumentReferenceClickStats;
 import ch.silviowangler.dox.api.stats.StatisticsService;
 import ch.silviowangler.dox.domain.stats.ClickStats;
 import ch.silviowangler.dox.domain.stats.ClickStatsRepository;
-import ch.silviowangler.dox.domain.stats.ClickStatsRepositoryCustom;
+import ch.silviowangler.dox.domain.stats.ReferenceType;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,8 +41,6 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Autowired
     private ClickStatsRepository clickStatsRepository;
-    @Autowired
-    private ClickStatsRepositoryCustom clickStatsRepositoryCustom;
 
     @Override
     @Transactional(readOnly = true, propagation = SUPPORTS)
@@ -74,11 +72,11 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Transactional(readOnly = true, propagation = SUPPORTS)
     public List<DocumentReferenceClickStats> fetchDocumentReferenceClickStats() {
 
-        final List<ch.silviowangler.dox.domain.stats.DocumentReferenceClickStats> documentReferenceClickStatses = clickStatsRepositoryCustom.fetchDocumentReferenceClickStatistics();
-        List<DocumentReferenceClickStats> result = Lists.newArrayListWithCapacity(documentReferenceClickStatses.size());
+        final List<Object[]> documentReferenceClickStats = clickStatsRepository.fetchDocumentReferenceClickStatistics(ReferenceType.DOCUMENT_REFERENCE);
+        List<DocumentReferenceClickStats> result = Lists.newArrayListWithCapacity(documentReferenceClickStats.size());
 
-        for (ch.silviowangler.dox.domain.stats.DocumentReferenceClickStats stats : documentReferenceClickStatses) {
-            result.add(new DocumentReferenceClickStats(stats.getDocumentReference(), stats.getCount()));
+        for (Object[] stats : documentReferenceClickStats) {
+            result.add(new DocumentReferenceClickStats((String) stats[1], ((Number) stats[0]).longValue()));
         }
         return result;
     }
