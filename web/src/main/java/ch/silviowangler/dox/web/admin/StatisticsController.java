@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
@@ -44,6 +46,16 @@ public class StatisticsController {
     public
     @ResponseBody
     List<DocumentReferenceClickStats> showDocumentReferenceStats() {
-        return statisticsService.fetchDocumentReferenceClickStats();
+
+        List<DocumentReferenceClickStats> stats = statisticsService.fetchDocumentReferenceClickStats();
+
+        Collections.sort(stats, new Comparator<DocumentReferenceClickStats>() {
+            @Override
+            public int compare(DocumentReferenceClickStats o1, DocumentReferenceClickStats o2) {
+                return Long.valueOf(o2.getCount()).compareTo(o1.getCount());
+            }
+        });
+
+        return stats;
     }
 }
