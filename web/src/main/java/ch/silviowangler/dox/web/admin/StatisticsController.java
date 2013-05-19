@@ -16,7 +16,18 @@
 
 package ch.silviowangler.dox.web.admin;
 
+import ch.silviowangler.dox.api.stats.DocumentReferenceClickStats;
+import ch.silviowangler.dox.api.stats.StatisticsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+import java.util.List;
+
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
  * @author Silvio Wangler
@@ -24,4 +35,15 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 public class StatisticsController {
+
+    @Autowired
+    private StatisticsService statisticsService;
+
+    @RequestMapping(value = "/admin/stats/documentReferences", method = GET)
+    @ResponseStatus(OK)
+    public
+    @ResponseBody
+    List<DocumentReferenceClickStats> showDocumentReferenceStats() {
+        return statisticsService.fetchDocumentReferenceClickStats();
+    }
 }

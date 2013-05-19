@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -32,6 +31,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import static com.google.common.net.HttpHeaders.CONTENT_DISPOSITION;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
  * @author Silvio Wangler
@@ -50,7 +50,7 @@ public class RepositoryController {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @RequestMapping(method = RequestMethod.GET, value = "/admin/export")
+    @RequestMapping(method = GET, value = "/admin/export")
     public void getDocument(HttpServletResponse response) {
 
         try {
