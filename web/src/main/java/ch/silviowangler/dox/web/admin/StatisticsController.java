@@ -43,9 +43,7 @@ public class StatisticsController {
 
     @RequestMapping(value = "/admin/stats/documentReferences", method = GET)
     @ResponseStatus(OK)
-    public
-    @ResponseBody
-    List<DocumentReferenceClickStats> showDocumentReferenceStats() {
+    public @ResponseBody List<DocumentReferenceClickStats> showDocumentReferenceStats() {
 
         List<DocumentReferenceClickStats> stats = statisticsService.fetchDocumentReferenceClickStats();
 
