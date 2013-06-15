@@ -5,3 +5,5 @@ jdk:
 
 env:
     - DOX_STORE=~
+
+before_script: gradle -version
