@@ -5,7 +5,3 @@ jdk:
 
 env:
     - DOX_STORE=~
-
-before_script: chmod +x gradlew
-
-script: ./gradlew
