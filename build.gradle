@@ -16,8 +16,6 @@
 
 
 
-
-
 buildscript {
     repositories {
         mavenCentral()
@@ -242,4 +240,8 @@ idea.project {
         def gradleSettings = node.appendNode('component', [name: 'GradleSettings'])
         gradleSettings.appendNode('option', [name: 'SDK_HOME', value: gradle.gradleHomeDir]) n
     }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.6'
 }
