@@ -37,6 +37,14 @@ public class VersionServiceTest extends AbstractTest {
         final String version = versionService.fetchVersion().getVersion();
 
         assumeTrue("Test only works in Gradle", !version.startsWith("@") && !version.endsWith("@"));
-        assertTrue("Version does not match " + version, version.matches("0.2-SNAPSHOT-\\d{14}"));
+
+        // make sure release builds don't break this test
+        if (version.contains("SNAPSHOT")) {
+            assertTrue("Version does not match " + version, version.matches("0.2-SNAPSHOT-\\d{14}"));
+        } else {
+            assertTrue("Version does not match " + version, version.matches("0.2-\\d{14}"));
+        }
+
+
     }
 }

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -49,6 +49,13 @@ public class DoxVersionTest {
 
         this.doxVersion = new DoxVersion("0.2-SNAPSHOT-20140831010959");
         assertThat(this.doxVersion.formatVersion(), is("0.2-SNAPSHOT (31.08.2014 01:09:59)"));
+    }
+
+    @Test
+    public void testReleaseFormatDate() throws Exception {
+
+        this.doxVersion = new DoxVersion("0.2-20180831010959");
+        assertThat(this.doxVersion.formatVersion(), is("0.2 (31.08.2018 01:09:59)"));
     }
 
     @Test
