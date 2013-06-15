@@ -16,6 +16,8 @@
 
 
 
+
+
 buildscript {
     repositories {
         mavenCentral()
@@ -30,7 +32,7 @@ allprojects {
     apply plugin: 'idea'
     apply plugin: 'project-report'
     apply plugin: 'versions'
-    apply plugin: 'jacoco'
+//    apply plugin: 'jacoco'
 
     configurations {
         all*.exclude group: 'commons-logging', module: 'commons-logging'
