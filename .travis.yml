@@ -5,3 +5,7 @@ jdk:
 
 env:
     - DOX_STORE=~
+
+before_script:
+    - curl -s get.gvmtool.net | bash
+
