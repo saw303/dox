@@ -18,6 +18,8 @@
 
 
 
+
+
 buildscript {
     repositories {
         mavenCentral()
@@ -48,7 +50,7 @@ allprojects {
     }
 
     group = 'ch.silviowangler.dox'
-    version = '0.2-SNAPSHOT'
+    version = '0.2'
 
     project.ext {
         springVersion = '3.2.2.RELEASE'
