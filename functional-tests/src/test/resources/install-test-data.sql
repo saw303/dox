@@ -55,3 +55,10 @@ INSERT INTO DOX_TRANSLATIONS (TRS_KEY, TRS_TXT, TRS_LOC) VALUES ('Domain:strictd
 INSERT INTO DOX_TRANSLATIONS (TRS_KEY, TRS_TXT, TRS_LOC) VALUES ('Attribute:strictcompany', 'Fixierte Testdomain', 'de');
 INSERT INTO DOX_TRANSLATIONS (TRS_KEY, TRS_TXT, TRS_LOC) VALUES ('Attribute:money', 'Geldbetrag', 'de');
 INSERT INTO DOX_TRANSLATIONS (TRS_KEY, TRS_TXT, TRS_LOC) VALUES ('Attribute:money', 'Amount of Money', 'en');
+
+INSERT INTO DOX_CLICK_STATS (reference, referenceType, timestamp, username) VALUES ('3', 'DOCUMENT_REFERENCE', '2011-02-01', 'a user');
+INSERT INTO DOX_CLICK_STATS (reference, referenceType, timestamp, username) VALUES ('3', 'DOCUMENT_REFERENCE', '2011-03-01', 'a user');
+INSERT INTO DOX_CLICK_STATS (reference, referenceType, timestamp, username) VALUES ('3', 'DOCUMENT_REFERENCE', '2011-04-01', 'a user');
+INSERT INTO DOX_CLICK_STATS (reference, referenceType, timestamp, username) VALUES ('4', 'DOCUMENT_REFERENCE', '2011-04-01', 'a user');
+INSERT INTO DOX_CLICK_STATS (reference, referenceType, timestamp, username) VALUES ('4', 'DOCUMENT_REFERENCE', '2011-04-01', 'a user');
+INSERT INTO DOX_CLICK_STATS (reference, referenceType, timestamp, username) VALUES ('5', 'DOCUMENT_REFERENCE', '2011-04-01', 'a user');
