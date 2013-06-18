@@ -14,9 +14,3 @@ before_install:
 - export GRADLE_HOME=$PWD/gradle-1.6
 - export PATH=$GRADLE_HOME/bin:$PATH
 - gradle -version
-
-after_script:
-
-- ls -l $TRAVIS_TEST_RESULT
-- cd $TRAVIS_TEST_RESULT
-- pwd
