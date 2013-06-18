@@ -13,7 +13,4 @@ before_install:
 - unzip gradle-1.6-bin.zip
 - export GRADLE_HOME=$PWD/gradle-1.6
 - export PATH=$PATH:$GRADLE_HOME/bin
-
-before_script:
-
 - gradle -version
