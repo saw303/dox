@@ -40,11 +40,9 @@ public class VersionServiceTest extends AbstractTest {
 
         // make sure release builds don't break this test
         if (version.contains("SNAPSHOT")) {
-            assertTrue("Version does not match " + version, version.matches("0.2-SNAPSHOT-\\d{14}"));
+            assertTrue("Version does not match " + version, version.matches("0.3-SNAPSHOT-\\d{14}"));
         } else {
-            assertTrue("Version does not match " + version, version.matches("0.2-\\d{14}"));
+            assertTrue("Version does not match " + version, version.matches("0.3-\\d{14}"));
         }
-
-
     }
 }
