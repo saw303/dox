@@ -67,13 +67,6 @@
         });
     });
 
-    $('#documentList').delegate('h4', 'click', function () {
-        $.ajax({
-            url: '<c:url value="/document/registerClick/"/>' + $(this).attr('id'),
-            type: 'PUT'
-        });
-    });
-
     $("#username").focus();
     $("#q").focus();
 </script>

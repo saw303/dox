@@ -37,7 +37,8 @@ import java.util.HashMap;
 import java.util.SortedSet;
 
 import static javax.servlet.http.HttpServletResponse.*;
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * @author Silvio Wangler
@@ -60,6 +61,11 @@ public class DocumentController {
     public void getDocument(@PathVariable("id") Long id, HttpServletResponse response) {
         try {
             PhysicalDocument document = documentService.findPhysicalDocument(id);
+
+            final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = (authentication != null) ? ((User) authentication.getPrincipal()).getUsername() : "anonymous";
+            statisticsService.registerDocumentReferenceClick(String.valueOf(id), username);
+
             response.setStatus(SC_OK);
             response.addHeader("Content-Type", document.getMimeType());
             response.addHeader("Content-Disposition", "inline; filename=\"" + document.getFileName() + "\"");
@@ -120,16 +126,5 @@ public class DocumentController {
             logger.error("Cannot update document", e);
         }
         return modelAndView;
-    }
-
-    @RequestMapping(method = PUT, value = "/document/registerClick/{id}")
-    public void registerClick(@PathVariable("id") Long id, HttpServletResponse response) {
-
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        String username = (authentication != null) ? ((User) authentication.getPrincipal()).getUsername() : "anonymous";
-
-        statisticsService.registerDocumentReferenceClick(String.valueOf(id), username);
-        response.setStatus(SC_OK);
     }
 }

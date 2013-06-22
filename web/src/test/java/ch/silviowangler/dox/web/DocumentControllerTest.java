@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,22 +26,15 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import static ch.silviowangler.dox.web.DocumentReferenceBuilder.newDocumentReference;
-import static com.google.common.collect.Sets.newHashSet;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -111,65 +104,6 @@ public class DocumentControllerTest {
         controller.getDocument(expectedDocumentId, response);
 
         verify(response).setStatus(SC_INTERNAL_SERVER_ERROR);
-    }
-
-    @Test
-    public void registerDocumentReferenceClick() {
-        HttpServletResponse response = mock(HttpServletResponse.class);
-        controller.registerClick(1L, response);
-        verify(statisticsService).registerDocumentReferenceClick("1", "anonymous");
-        verify(statisticsService, never()).registerLinkClick(anyString(), anyString());
-        verify(response).setStatus(SC_OK);
-    }
-
-    @Test
-    public void registerDocumentReferenceClickWithLoggedOnUser() {
-
-        SecurityContextHolder.getContext().setAuthentication(new Authentication() {
-            @Override
-            public Collection<? extends GrantedAuthority> getAuthorities() {
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public Object getCredentials() {
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public Object getDetails() {
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public Object getPrincipal() {
-                Collection<SimpleGrantedAuthority> authorities = newHashSet();
-                return new User("saw303", "", authorities);
-            }
-
-            @Override
-            public boolean isAuthenticated() {
-                return false;  //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public String getName() {
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
-            }
-        });
-
-        HttpServletResponse response = mock(HttpServletResponse.class);
-        controller.registerClick(1L, response);
-        verify(statisticsService).registerDocumentReferenceClick("1", "saw303");
-        verify(statisticsService, never()).registerLinkClick(anyString(), anyString());
-        verify(response).setStatus(SC_OK);
-
-        SecurityContextHolder.clearContext();
     }
 
     @Test
