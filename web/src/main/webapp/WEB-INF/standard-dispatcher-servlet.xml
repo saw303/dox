@@ -33,11 +33,12 @@
           class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
         <property name="favorPathExtension" value="true"/>
         <property name="ignoreAcceptHeader" value="true"/>
-        <property name="defaultContentType" value="application/json"/>
+        <property name="defaultContentType" value="text/html"/>
         <property name="useJaf" value="false"/>
 
         <property name="mediaTypes">
             <map>
+                <entry key="html" value="text/html"/>
                 <entry key="json" value="application/json"/>
                 <entry key="xml" value="application/xml"/>
             </map>
