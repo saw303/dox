@@ -66,7 +66,6 @@
                     });
         });
     });
-
     $("#username").focus();
     $("#q").focus();
 </script>
