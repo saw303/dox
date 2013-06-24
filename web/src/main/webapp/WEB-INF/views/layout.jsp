@@ -54,8 +54,8 @@
     </footer>
 </div>
 
-<script src="//code.jquery.com/jquery-2.0.0.min.js"></script>
-<script>window.jQuery || document.write('<script src="js/libs/boilerplate/jquery-2.0.0.min.js"><\/script>')</script>
+<script src="//code.jquery.com/jquery-2.0.2.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/libs/boilerplate/jquery-2.0.2.min.js"><\/script>')</script>
 <script type="text/javascript">
     $(document).ready(function () {
         $("#docClass").change(function (event) {
