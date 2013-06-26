@@ -50,6 +50,8 @@ public class DocumentServiceResearchTest extends AbstractTest {
     @Before
     public void init() throws ValidationException, DocumentDuplicationException, IOException, DocumentNotFoundException, DocumentClassNotFoundException {
 
+        loginAsRoot();
+
         Map<TranslatableKey, Object> indexes = newHashMapWithExpectedSize(3);
         indexes.put(COMPANY, SUNRISE);
         indexes.put(new TranslatableKey("invoiceDate"), "01.12.2009");

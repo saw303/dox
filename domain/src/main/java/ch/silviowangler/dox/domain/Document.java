@@ -49,12 +49,14 @@ public class Document extends AbstractPersistable<Long> {
     private DateTime creationDate = DateTime.now();
     @OneToMany(mappedBy = "document")
     private Set<IndexMapEntry> indexMapEntries;
+    @Column(nullable = false, length = 25)
+    private String userReference;
 
     public Document() {
         super();
     }
 
-    public Document(String hash, DocumentClass documentClass, Integer pageCount, String mimeType, String originalFilename, IndexStore indexStore) {
+    public Document(String hash, DocumentClass documentClass, Integer pageCount, String mimeType, String originalFilename, IndexStore indexStore, String userReference) {
         super();
         this.hash = hash;
         this.documentClass = documentClass;
@@ -62,6 +64,7 @@ public class Document extends AbstractPersistable<Long> {
         this.mimeType = mimeType;
         this.originalFilename = originalFilename;
         this.indexStore = indexStore;
+        this.userReference = userReference;
     }
 
     public String getHash() {
@@ -120,6 +123,14 @@ public class Document extends AbstractPersistable<Long> {
         this.creationDate = creationDate;
     }
 
+    public String getUserReference() {
+        return userReference;
+    }
+
+    public void setUserReference(String userReference) {
+        this.userReference = userReference;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -131,6 +142,7 @@ public class Document extends AbstractPersistable<Long> {
                 .add("indexStore", indexStore)
                 .add("creationDate", creationDate)
                 .add("indexMapEntries", indexMapEntries)
+                .add("userReference", userReference)
                 .toString();
     }
 }

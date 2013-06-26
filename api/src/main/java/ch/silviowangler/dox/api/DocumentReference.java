@@ -21,6 +21,8 @@ import com.google.common.collect.Maps;
 import java.io.Serializable;
 import java.util.Map;
 
+import static com.google.common.base.Objects.toStringHelper;
+
 /**
  * @author Silvio Wangler
  * @since 0.1
@@ -35,6 +37,7 @@ public class DocumentReference implements Serializable {
     private DocumentClass documentClass;
     private Map<TranslatableKey, Object> indices = Maps.newHashMap();
     private String fileName;
+    private String userReference;
 
     public DocumentReference(String fileName) {
         this.fileName = fileName;
@@ -45,6 +48,10 @@ public class DocumentReference implements Serializable {
     }
 
     public DocumentReference(String hash, Long id, int pageCount, String mimeType, DocumentClass documentClass, Map<TranslatableKey, Object> indices, String fileName) {
+        this(hash, id, pageCount, mimeType, documentClass, indices, fileName, null);
+    }
+
+    public DocumentReference(String hash, Long id, int pageCount, String mimeType, DocumentClass documentClass, Map<TranslatableKey, Object> indices, String fileName, String userName) {
         this.hash = hash;
         this.id = id;
         this.pageCount = pageCount;
@@ -52,6 +59,7 @@ public class DocumentReference implements Serializable {
         this.documentClass = documentClass;
         this.indices = indices;
         this.fileName = fileName;
+        this.userReference = userName;
     }
 
     public String getHash() {
@@ -110,17 +118,26 @@ public class DocumentReference implements Serializable {
         this.fileName = fileName;
     }
 
+    public String getUserReference() {
+        return userReference;
+    }
+
+    public void setUserReference(String userReference) {
+        this.userReference = userReference;
+    }
+
     @Override
     public String toString() {
-        return "DocumentReference{" +
-                "hash='" + hash + '\'' +
-                ", id=" + id +
-                ", pageCount=" + pageCount +
-                ", mimeType='" + mimeType + '\'' +
-                ", documentClass=" + documentClass +
-                ", indices=" + indices +
-                ", fileName='" + fileName + '\'' +
-                '}';
+        return toStringHelper(this)
+                .add("hash", hash)
+                .add("id", id)
+                .add("pageCount", pageCount)
+                .add("mimeType", mimeType)
+                .add("documentClass", documentClass)
+                .add("indices", indices)
+                .add("fileName", fileName)
+                .add("userReference", userReference)
+                .toString();
     }
 
     @Override

@@ -20,6 +20,7 @@ import ch.silviowangler.dox.AbstractTest;
 import ch.silviowangler.dox.api.DocumentClassNotFoundException;
 import ch.silviowangler.dox.api.DocumentDuplicationException;
 import ch.silviowangler.dox.api.ValidationException;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -33,6 +34,11 @@ public class DoxExporterTest extends AbstractTest {
 
     @Autowired
     private DoxExporter doxExporter;
+
+    @Before
+    public void setUp() throws Exception {
+        loginAsRoot();
+    }
 
     @Test
     public void hello() throws IOException, DocumentClassNotFoundException, DocumentDuplicationException, ValidationException {

@@ -50,6 +50,7 @@ public class DocumentServiceTest extends AbstractTest {
     @Before
     public void init() {
         this.documentClass = new DocumentClass("INVOICE");
+        loginAsRoot();
     }
 
     @Test
@@ -120,6 +121,7 @@ public class DocumentServiceTest extends AbstractTest {
         assertTrue("Is not org.joda.time.DateTime. It's " + documentReference.getIndices().get(INVOICE_DATE).getClass().getCanonicalName(), documentReference.getIndices().get(INVOICE_DATE) instanceof DateTime);
         assertTrue(documentReference.getIndices().containsKey(INVOICE_AMOUNT));
         assertEquals(new BigDecimal("50.00"), documentReference.getIndices().get(INVOICE_AMOUNT));
+        assertThat(documentReference.getUserReference(), is("root_test"));
 
         DocumentReference documentReferenceFromDatabase = documentService.findDocumentReference(documentReference.getId());
 

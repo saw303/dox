@@ -44,6 +44,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -108,6 +110,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     @Override
     @Transactional(propagation = SUPPORTS, readOnly = true)
+    @PreAuthorize("hasRole('ROLE_USER')")
     public SortedSet<ch.silviowangler.dox.api.Attribute> findAttributes(ch.silviowangler.dox.api.DocumentClass documentClass) throws DocumentClassNotFoundException {
 
         DocumentClass docClass = findDocumentClass(documentClass.getShortName());
@@ -117,6 +120,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     @Override
     @Transactional(propagation = SUPPORTS, readOnly = true)
+    @PreAuthorize("hasRole('ROLE_USER')")
     public Set<ch.silviowangler.dox.api.DocumentClass> findDocumentClasses() {
 
         Set<ch.silviowangler.dox.api.DocumentClass> result = new HashSet<>();
@@ -132,6 +136,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     @Override
     @Transactional(propagation = SUPPORTS, readOnly = true)
+    @PreAuthorize("hasRole('ROLE_USER')")
     public Set<DocumentReference> findDocumentReferences(String queryString) {
 
         logger.debug("About to find document references for query string '{}'", queryString);
@@ -177,6 +182,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     @Override
     @Transactional(propagation = SUPPORTS, readOnly = true)
+    @PreAuthorize("hasRole('ROLE_USER')")
     public PhysicalDocument findPhysicalDocument(Long id) throws DocumentNotFoundException, DocumentNotInStoreException {
 
         DocumentReference doc = findDocumentReference(id);
@@ -205,6 +211,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     @Override
     @Transactional(propagation = SUPPORTS, readOnly = true)
+    @PreAuthorize("hasRole('ROLE_USER')")
     public DocumentReference findDocumentReference(Long id) throws DocumentNotFoundException {
         logger.info("About to find document by using id {}", id);
 
@@ -224,6 +231,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     @Override
     @CacheEvict(value = CACHE_DOCUMENT_COUNT, allEntries = true)
     @Transactional(propagation = REQUIRED, readOnly = false)
+    @PreAuthorize("hasRole('ROLE_USER')")
     public DocumentReference importDocument(PhysicalDocument physicalDocumentApi) throws ValidationException, DocumentDuplicationException, DocumentClassNotFoundException {
 
         final String documentClassShortName = physicalDocumentApi.getDocumentClass().getShortName();
@@ -264,7 +272,10 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
         IndexStore indexStore = new IndexStore();
         updateIndices(physicalDocumentApi, indexStore);
-        Document document = new Document(hash, documentClassEntity, numberOfPages, mimeType, physicalDocumentApi.getFileName(), indexStore);
+
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Document document = new Document(hash, documentClassEntity, numberOfPages, mimeType, physicalDocumentApi.getFileName(), indexStore, user.getUsername());
         indexStore.setDocument(document);
         document = documentRepository.save(document);
         indexStoreRepository.save(indexStore);
@@ -283,6 +294,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     @Override
     @Transactional(propagation = REQUIRED, readOnly = false)
+    @PreAuthorize("hasRole('ROLE_USER')")
     public DocumentReference updateIndices(DocumentReference reference) throws DocumentNotFoundException {
 
         DocumentReference documentReferenceApi = findDocumentReference(reference.getId());
@@ -306,6 +318,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     @Override
     @Transactional(propagation = SUPPORTS, readOnly = true)
+    @PreAuthorize("hasRole('ROLE_USER')")
     public Set<DocumentReference> retrieveAllDocumentReferences() {
         logger.info("Retrieving all document references from repository");
         Iterable<Document> documents = documentRepository.findAll();
@@ -561,7 +574,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
                 document.getMimeType(),
                 toDocumentClassApi(document.getDocumentClass()),
                 toIndexMap(document.getIndexStore(), attributeRepository.findAttributesForDocumentClass(document.getDocumentClass())),
-                document.getOriginalFilename());
+                document.getOriginalFilename(), document.getUserReference());
     }
 
     private Map<TranslatableKey, Object> toIndexMap(IndexStore indexStore, List<Attribute> attributes) {
