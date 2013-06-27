@@ -75,6 +75,14 @@ public interface DocumentService {
      */
     Set<DocumentReference> findDocumentReferences(String queryString);
 
+    /**
+     * Retrieves for the current user only
+     * @param queryString
+     * @return
+     * @since 0.3
+     */
+    Set<DocumentReference> findDocumentReferencesForCurrentUser(String queryString);
+
     Set<DocumentClass> findDocumentClasses();
 
     /**

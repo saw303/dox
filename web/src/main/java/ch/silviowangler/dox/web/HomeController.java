@@ -54,7 +54,7 @@ public class HomeController {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @RequestMapping(method = POST, value = "query.html")
-    public ModelAndView query(@RequestParam("q") String queryString, @RequestParam(value = "wildcard", defaultValue = "0", required = false) boolean useWildcard) {
+    public ModelAndView query(@RequestParam("q") String queryString, @RequestParam(value = "wildcard", defaultValue = "0", required = false) boolean useWildcard, @RequestParam(value = "userOnly", defaultValue = "0", required = false) boolean forCurrentUserOnly) {
 
         final boolean hasWildcard = containsWildcard(queryString);
         String queryStringCopy = queryString;
@@ -67,7 +67,14 @@ public class HomeController {
             logger.debug("Using wildcard search '{}'", queryStringCopy);
         }
 
-        Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryStringCopy);
+        Set<DocumentReference> documentReferences;
+        if (forCurrentUserOnly) {
+            documentReferences = documentService.findDocumentReferencesForCurrentUser(queryStringCopy);
+        }
+        else {
+            documentReferences = documentService.findDocumentReferences(queryStringCopy);
+        }
+
         Map<String, Object> model = of("documents", documentReferences, "query", queryString);
         return new ModelAndView("result.definition", model);
     }

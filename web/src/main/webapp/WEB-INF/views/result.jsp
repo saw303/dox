@@ -34,7 +34,7 @@
                         code="document.import.label.document.class"/>: ${doc.documentClass.getTranslation()}
                     / ${doc.pageCount}
                     <spring:message code="pages"/> /
-                    <spring:message code="document.hashCode"/>: ${doc.hash}</h5>
+                    <spring:message code="document.hashCode"/>: ${doc.hash}, <spring:message code="document.userReference"/>: ${doc.userReference}</h5>
             </div>
             <dox:attributeListing documentReference="${doc}" query="${query}"/>
         </div>
