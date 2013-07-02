@@ -32,6 +32,7 @@
                 <li><a href="<c:url value="/admin/export"/>"><spring:message code="nav.export" htmlEscape="true"/></a>
                 </li>
             </sec:authorize>
+            <li><a href="<c:url value="/settings.html"/>"><spring:message code="nav.settings" htmlEscape="true"/></a></li>
             <li><a href="<c:url value="/logout"/>"><spring:message code="nav.logout" htmlEscape="true"/></a></li>
         </ul>
     </nav>

@@ -55,4 +55,8 @@
     <definition name="edit.doc" extends="base.definition">
         <put-attribute name="body" value="/WEB-INF/views/edit.jsp"/>
     </definition>
+
+    <definition name="settings" extends="base.definition">
+        <put-attribute name="body" value="/WEB-INF/views/settings.jsp"/>
+    </definition>
 </tiles-definitions>
