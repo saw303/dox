@@ -12,5 +12,15 @@
 </head>
 <body>
 
+
+<h1>Einstellungen</h1>
+<section>
+    <ul>
+        <li>Passwort ändern</li>
+        <li>"Ungefähre Suche" immer an?</li>
+        <li>"Nur eigene Dokument suchen" immer an?</li>
+    </ul>
+</section>
+
 </body>
 </html>
