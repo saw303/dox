@@ -17,8 +17,8 @@
 <section>
     <ul>
         <li>Passwort ändern</li>
-        <li>"Ungefähre Suche" immer an?</li>
-        <li>"Nur eigene Dokument suchen" immer an?</li>
+        <li>"Ungefähre Suche" immer an? <input type="checkbox" name="wsq" value="1"/></li>
+        <li>"Nur eigene Dokument suchen" immer an? <input type="checkbox" name="odq" value="1"/></li>
     </ul>
 </section>
 
