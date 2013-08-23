@@ -13,9 +13,9 @@ import java.io.Serializable;
 @MappedSuperclass
 public abstract class Setting extends AbstractPersistable<Long> implements Serializable {
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "SET_KEY")
     private String key;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "SET_VAL")
     private String value;
 
     public String getKey() {

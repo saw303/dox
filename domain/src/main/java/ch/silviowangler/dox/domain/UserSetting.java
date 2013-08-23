@@ -13,7 +13,7 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(name = "DOX_USER_SETTINGS", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"user_id", "key"})
+        @UniqueConstraint(columnNames = {"user_id", "SET_KEY"})
 })
 public class UserSetting extends Setting {
 
