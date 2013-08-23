@@ -34,7 +34,7 @@ public class Document extends AbstractPersistable<Long> {
 
     @Column(unique = true, nullable = false, length = 64)
     private String hash;
-    @OneToOne
+    @ManyToOne(optional = false)
     private DocumentClass documentClass;
     @Column(nullable = false)
     private Integer pageCount = -1;
