@@ -467,6 +467,14 @@ Form upload
     content: '';
 }
 
+#settingsList {
+    list-style-type: none;
+}
+
+#settingsList li {
+    display: inline;
+}
+
 /* =============================================================================
 Media Queries
 ========================================================================== */

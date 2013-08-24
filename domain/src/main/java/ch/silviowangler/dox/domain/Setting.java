@@ -8,10 +8,18 @@ import java.io.Serializable;
 
 /**
  * @author Silvio Wangler
- * @since 0.2
+ * @since 0.3
  */
 @MappedSuperclass
 public abstract class Setting extends AbstractPersistable<Long> implements Serializable {
+
+    protected Setting() {
+    }
+
+    protected Setting(String key, String value) {
+        this.key = key;
+        this.value = value;
+    }
 
     @Column(nullable = false, name = "SET_KEY")
     private String key;

@@ -9,13 +9,21 @@ import javax.persistence.UniqueConstraint;
 
 /**
  * @author Silvio Wangler
- * @since 0.2
+ * @since 0.3
  */
 @Entity
 @Table(name = "DOX_USER_SETTINGS", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"user_id", "SET_KEY"})
 })
 public class UserSetting extends Setting {
+
+    public UserSetting() {
+    }
+
+    public UserSetting(String key, String value, DoxUser user) {
+        super(key, value);
+        this.user = user;
+    }
 
     @ManyToOne(optional = false)
     private DoxUser user;

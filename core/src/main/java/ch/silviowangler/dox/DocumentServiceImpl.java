@@ -23,7 +23,6 @@ import ch.silviowangler.dox.domain.Attribute;
 import ch.silviowangler.dox.domain.AttributeDataType;
 import ch.silviowangler.dox.domain.DocumentClass;
 import ch.silviowangler.dox.domain.Range;
-import ch.silviowangler.dox.domain.security.DoxUser;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.itextpdf.text.io.RandomAccessSource;
@@ -162,13 +161,11 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             } else {
                 documents = indexMapEntryRepository.findByValue(queryString.toUpperCase(), queryString);
             }
-        }
-        else {
+        } else {
             if (containsWildcardCharacters(queryString)) {
                 String value = replaceWildcardCharacters(queryString);
                 documents = indexMapEntryRepository.findByValueLikeAndUserReference(value.toUpperCase(), value, username);
-            }
-            else {
+            } else {
                 documents = indexMapEntryRepository.findByValueAndUserReference(queryString.toUpperCase(), queryString, username);
             }
         }
