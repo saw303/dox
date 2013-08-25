@@ -479,6 +479,25 @@ Form upload
 Media Queries
 ========================================================================== */
 
+@media only screen and (max-width: 800px) {
+    body {
+        width: 100%;
+    }
+
+    #q {
+        width: 80%;
+    }
+
+    #fileUpload {
+        width: 80%;
+    }
+
+    /* make sure the document properties are wrapped around for smaller viewports */
+    #documentList h5 {
+        word-wrap: break-word;
+    }
+}
+
 /*
 Smart phones (Android / iPhone)
 */
@@ -502,6 +521,11 @@ Smart phones (Android / iPhone)
 
     header h2 {
         font-size: 18px;
+    }
+
+    /* make sure the document properties are wrapped around for smaller viewports */
+    #documentList h5 {
+        word-wrap: break-word;
     }
 }
 
