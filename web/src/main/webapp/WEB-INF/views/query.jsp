@@ -22,9 +22,14 @@
             <input id="q" name="q" value="" tabindex="1"/>
             <button type="submit" tabindex="2" accesskey="S"><spring:message code="query.start.button"/></button>
         </p>
-        <p><input type="checkbox" name="wildcard" id="wildcard" checked="checked" value="1" tabindex="3"/><spring:message
-                code="document.research.wildcard.label"/> | <input type="checkbox" name="userOnly" id="userOnly" value="1" tabindex="4"/><spring:message
-                code="document.research.only.my.docs.label"/> |<a href="/showForm.html?advancedQuery=1" tabindex="5"><spring:message
+        <p><input type="checkbox" name="wildcard" id="wildcard"
+                  <c:if test="${wq == '1'}">checked="checked"</c:if> value="1" tabindex="3"/><spring:message
+                code="document.research.wildcard.label"/> | <input type="checkbox"
+                                                                   <c:if test="${fomd == '1'}">checked="checked"</c:if>
+                                                                   name="userOnly" id="userOnly" value="1"
+                                                                   tabindex="4"/><spring:message
+                code="document.research.only.my.docs.label"/> |<a href="/showForm.html?advancedQuery=1"
+                                                                  tabindex="5"><spring:message
                 code="document.research.advanced.search"/></a></p>
     </form>
 </div>

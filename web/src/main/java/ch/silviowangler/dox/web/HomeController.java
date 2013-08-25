@@ -20,7 +20,9 @@ import ch.silviowangler.dox.api.DocumentClassNotFoundException;
 import ch.silviowangler.dox.api.DocumentReference;
 import ch.silviowangler.dox.api.DocumentService;
 import ch.silviowangler.dox.api.TranslatableKey;
+import ch.silviowangler.dox.api.settings.SettingsService;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +36,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import static ch.silviowangler.dox.api.settings.SettingsConstants.SETTING_FIND_ONLY_MY_DOCUMENTS;
+import static ch.silviowangler.dox.api.settings.SettingsConstants.SETTING_WILDCARD_QUERY;
 import static ch.silviowangler.dox.web.WebConstants.DOCUMENT_CLASS_SHORT_NAME;
 import static com.google.common.collect.ImmutableMap.of;
 import static com.google.common.collect.Maps.newHashMap;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
@@ -51,7 +56,24 @@ public class HomeController {
 
     @Autowired
     private DocumentService documentService;
+    @Autowired
+    private SettingsService settingsService;
+
     private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    @RequestMapping(method = GET, value = "/")
+    public ModelAndView homeScreen() {
+
+        final Map<String, String> userSettings = settingsService.findUserSettings();
+
+        Map<String, Object> model = Maps.newHashMapWithExpectedSize(userSettings.size());
+
+        model.put("wq", userSettings.containsKey(SETTING_WILDCARD_QUERY) ? userSettings.get(SETTING_WILDCARD_QUERY) : "1");
+        model.put("fomd", userSettings.containsKey(SETTING_FIND_ONLY_MY_DOCUMENTS) ? userSettings.get(SETTING_FIND_ONLY_MY_DOCUMENTS) : "0");
+
+
+        return new ModelAndView("base.definition", model);
+    }
 
     @RequestMapping(method = POST, value = "query.html")
     public ModelAndView query(@RequestParam("q") String queryString, @RequestParam(value = "wildcard", defaultValue = "0", required = false) boolean useWildcard, @RequestParam(value = "userOnly", defaultValue = "0", required = false) boolean forCurrentUserOnly) {
@@ -70,8 +92,7 @@ public class HomeController {
         Set<DocumentReference> documentReferences;
         if (forCurrentUserOnly) {
             documentReferences = documentService.findDocumentReferencesForCurrentUser(queryStringCopy);
-        }
-        else {
+        } else {
             documentReferences = documentService.findDocumentReferences(queryStringCopy);
         }
 
