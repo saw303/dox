@@ -1,7 +1,7 @@
 DOX - A Web based Document Management System
 ============================================
 
-[![Build Status](https://travis-ci.org/saw303/dox.png?branch=master)](https://travis-ci.org/saw303/dox)
+[![Build Status](https://travis-ci.org/saw303/dox.png)](https://travis-ci.org/saw303/dox)
 
 Source & Issue Tracker
 ---
