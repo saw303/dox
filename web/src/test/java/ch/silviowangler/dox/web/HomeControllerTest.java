@@ -17,18 +17,23 @@
 package ch.silviowangler.dox.web;
 
 import ch.silviowangler.dox.api.DocumentService;
+import ch.silviowangler.dox.api.settings.SettingsConstants;
+import ch.silviowangler.dox.api.settings.SettingsService;
+import com.google.common.collect.Maps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Map;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Silvio Wangler
@@ -42,6 +47,8 @@ public class HomeControllerTest {
 
     @Mock
     private DocumentService documentService;
+    @Mock
+    private SettingsService settingsService;
     @InjectMocks
     private HomeController controller = new HomeController();
 
@@ -128,5 +135,51 @@ public class HomeControllerTest {
 
         verify(documentService).findDocumentReferencesForCurrentUser("*" + queryStringSentByUser + "*");
         verify(documentService, never()).findDocumentReferences(queryStringSentByUser);
+    }
+
+    @Test
+    public void homeScreenModelMustContainTwoDefaultSettings() {
+
+        final ModelAndView modelAndView = controller.homeScreen();
+
+        assertThat(modelAndView.getViewName(), is("base.definition"));
+
+        assertHomeScreenModel(modelAndView.getModelMap(), "0", "1");
+    }
+
+    @Test
+    public void homeScreenModelMustContainTwoDefaultSettings2() {
+
+        Map<String, String> userSettings = Maps.newHashMap();
+        userSettings.put(SettingsConstants.SETTING_FIND_ONLY_MY_DOCUMENTS, "1");
+
+        when(settingsService.findUserSettings()).thenReturn(userSettings);
+
+        final ModelAndView modelAndView = controller.homeScreen();
+
+        assertThat(modelAndView.getViewName(), is("base.definition"));
+
+        assertHomeScreenModel(modelAndView.getModelMap(), "1", "1");
+    }
+
+    @Test
+    public void homeScreenModelMustContainTwoDefaultSettings3() {
+
+        Map<String, String> userSettings = Maps.newHashMap();
+        userSettings.put(SettingsConstants.SETTING_WILDCARD_QUERY, "0");
+
+        when(settingsService.findUserSettings()).thenReturn(userSettings);
+
+        final ModelAndView modelAndView = controller.homeScreen();
+
+        assertThat(modelAndView.getViewName(), is("base.definition"));
+
+        assertHomeScreenModel(modelAndView.getModelMap(), "0", "0");
+    }
+
+    private void assertHomeScreenModel(ModelMap model, String fomd, String wq) {
+        assertThat(model.size(), is(2));
+        assertThat("Unexpected fomd value", (String) model.get("fomd"), is(fomd));
+        assertThat("Unexpected wq value", (String) model.get("wq"), is(wq));
     }
 }
