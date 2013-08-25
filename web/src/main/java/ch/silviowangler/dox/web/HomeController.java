@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -62,7 +63,7 @@ public class HomeController {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @RequestMapping(method = GET, value = "/")
-    public ModelAndView homeScreen() {
+    public ModelAndView homeScreen(@RequestParam(value = "q", defaultValue = "", required = false) String query) {
 
         final Map<String, String> userSettings = settingsService.findUserSettings();
 
@@ -70,7 +71,7 @@ public class HomeController {
 
         model.put("wq", userSettings.containsKey(SETTING_WILDCARD_QUERY) ? userSettings.get(SETTING_WILDCARD_QUERY) : "1");
         model.put("fomd", userSettings.containsKey(SETTING_FIND_ONLY_MY_DOCUMENTS) ? userSettings.get(SETTING_FIND_ONLY_MY_DOCUMENTS) : "0");
-
+        model.put("query", HtmlUtils.htmlUnescape(query));
 
         return new ModelAndView("base.definition", model);
     }

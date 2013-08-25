@@ -1,3 +1,4 @@
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@taglib uri="/WEB-INF/dox.tld" prefix="dox" %>
@@ -17,6 +18,13 @@
   ~ limitations under the License.
   --%>
 
+<div>
+    <c:url value="/" var="url">
+        <c:param name="q" value="${query}"/>
+    </c:url>
+    <p><a href="${url}"><spring:message code="documentlist.modify.query"/></a></p>
+</div>
+
 <div id="documentList">
     <c:if test="${documents.isEmpty()}">
         <spring:message code="document.research.no.result" arguments="${query}"/>
@@ -34,7 +42,8 @@
                         code="document.import.label.document.class"/>: ${doc.documentClass.getTranslation()}
                     / ${doc.pageCount}
                     <spring:message code="pages"/> /
-                    <spring:message code="document.hashCode"/>: ${doc.hash}, <spring:message code="document.userReference"/>: ${doc.userReference}</h5>
+                    <spring:message code="document.hashCode"/>: ${doc.hash}, <spring:message
+                            code="document.userReference"/>: ${doc.userReference}</h5>
             </div>
             <dox:attributeListing documentReference="${doc}" query="${query}"/>
         </div>

@@ -140,7 +140,7 @@ public class HomeControllerTest {
     @Test
     public void homeScreenModelMustContainTwoDefaultSettings() {
 
-        final ModelAndView modelAndView = controller.homeScreen();
+        final ModelAndView modelAndView = controller.homeScreen("");
 
         assertThat(modelAndView.getViewName(), is("base.definition"));
 
@@ -155,7 +155,7 @@ public class HomeControllerTest {
 
         when(settingsService.findUserSettings()).thenReturn(userSettings);
 
-        final ModelAndView modelAndView = controller.homeScreen();
+        final ModelAndView modelAndView = controller.homeScreen("");
 
         assertThat(modelAndView.getViewName(), is("base.definition"));
 
@@ -170,7 +170,7 @@ public class HomeControllerTest {
 
         when(settingsService.findUserSettings()).thenReturn(userSettings);
 
-        final ModelAndView modelAndView = controller.homeScreen();
+        final ModelAndView modelAndView = controller.homeScreen("");
 
         assertThat(modelAndView.getViewName(), is("base.definition"));
 
@@ -178,8 +178,9 @@ public class HomeControllerTest {
     }
 
     private void assertHomeScreenModel(ModelMap model, String fomd, String wq) {
-        assertThat(model.size(), is(2));
+        assertThat(model.size(), is(3));
         assertThat("Unexpected fomd value", (String) model.get("fomd"), is(fomd));
         assertThat("Unexpected wq value", (String) model.get("wq"), is(wq));
+        assertThat((String) model.get("query"), is(""));
     }
 }
