@@ -119,6 +119,8 @@ subprojects {
                     'Specification-Version': project.version
             )
         }
+
+        baseName = "dox-${baseName}"
     }
 
     processResources {
