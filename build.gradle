@@ -144,6 +144,7 @@ project(':api') {
 
 project(':core') {
     displayName = 'Core module'
+
     dependencies {
         compile project(':api'), project(':domain'), project(':inexport'),
                 "org.springframework:spring-context:${ext.springVersion}",
@@ -167,6 +168,25 @@ project(':core') {
                 "com.google.guava:guava:${ext.guavaVersion}"
         testRuntime "com.h2database:h2:${ext.h2Version}"
     }
+
+    test {
+        exclude '**/*IntegrationTest.class'
+        reports.html.destination = file("${reports.html.destination}/unit2")
+        reports.junitXml.destination = file("${reports.junitXml.destination}/unit2")
+    }
+
+    task integrationTest(type: Test) {
+        include '**/*IntegrationTest.class'
+        reports.html.destination = file("${reports.html.destination}/integration")
+        reports.junitXml.destination = file("${reports.junitXml.destination}/integration")
+    }
+
+    jacocoTestReport {
+        executionData = files('build/jacoco/integrationTest.exec', 'build/jacoco/test.exec')
+        additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
+    }
+
+    check.dependsOn integrationTest
 }
 
 project(':web') {
