@@ -162,19 +162,10 @@ project(':core') {
                 "ch.qos.logback:logback-classic:${ext.logbackVersion}",
                 "org.springframework.security:spring-security-config:${ext.springSecurityVersion}",
                 'org.aspectj:aspectjweaver:1.7.3' // need this version because 1.6.x is buggy with Spring 3.x (http://goo.gl/73Pwi)
-    }
-}
-
-project(':functional-tests') {
-    displayName = 'Functional test module'
-
-    dependencies {
-        testCompile project(':core'),
-                "org.springframework:spring-test:${ext.springVersion}",
+        testCompile "org.springframework:spring-test:${ext.springVersion}",
                 "commons-io:commons-io:${ext.commonsIOVersion}",
                 "com.google.guava:guava:${ext.guavaVersion}"
-        runtime "ch.qos.logback:logback-classic:${ext.logbackVersion}",
-                "com.h2database:h2:${ext.h2Version}"
+        testRuntime "com.h2database:h2:${ext.h2Version}"
     }
 }
 

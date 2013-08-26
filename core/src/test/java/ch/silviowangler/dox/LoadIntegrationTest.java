@@ -34,7 +34,7 @@ import static org.junit.Assert.assertTrue;
  * @author Silvio Wangler
  * @since 0.2
  */
-public class LoadTest extends AbstractTest {
+public class LoadIntegrationTest extends AbstractIntegrationTest {
 
 
     final int totalAmountOfFiles = 200;

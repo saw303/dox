@@ -16,7 +16,7 @@
 
 package ch.silviowangler.dox.stats;
 
-import ch.silviowangler.dox.AbstractTest;
+import ch.silviowangler.dox.AbstractIntegrationTest;
 import ch.silviowangler.dox.api.stats.DocumentReferenceClickStats;
 import ch.silviowangler.dox.api.stats.StatisticsService;
 import org.junit.Test;
@@ -31,7 +31,7 @@ import static org.junit.Assert.*;
  * @author Silvio Wangler
  * @since 0.2
  */
-public class StatisticsServiceTest extends AbstractTest {
+public class StatisticsServiceIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
     private StatisticsService statisticsService;

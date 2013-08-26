@@ -16,7 +16,7 @@
 
 package ch.silviowangler.dox.export;
 
-import ch.silviowangler.dox.AbstractTest;
+import ch.silviowangler.dox.AbstractIntegrationTest;
 import ch.silviowangler.dox.api.DocumentClassNotFoundException;
 import ch.silviowangler.dox.api.DocumentDuplicationException;
 import ch.silviowangler.dox.api.ValidationException;
@@ -30,7 +30,7 @@ import java.io.IOException;
  * @author Silvio Wangler
  * @since 0.1
  */
-public class DoxExporterTest extends AbstractTest {
+public class DoxExporterIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
     private DoxExporter doxExporter;

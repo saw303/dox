@@ -35,7 +35,7 @@ import static org.junit.Assert.assertThat;
  * @author Silvio Wangler
  * @since 0.1
  */
-public class TranslationServiceImplTest extends AbstractTest {
+public class TranslationServiceImplIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
     private TranslationService translationService;

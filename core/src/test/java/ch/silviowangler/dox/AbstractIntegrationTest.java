@@ -45,7 +45,7 @@ import static org.junit.Assert.assertTrue;
  */
 @ContextConfiguration("classpath:applicationContext-test.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
-public abstract class AbstractTest extends AbstractTransactionalJUnit4SpringContextTests {
+public abstract class AbstractIntegrationTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 

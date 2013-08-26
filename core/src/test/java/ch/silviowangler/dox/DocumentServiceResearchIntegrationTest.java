@@ -40,7 +40,7 @@ import static org.junit.Assert.*;
  *        Date: 11.07.12 12:28
  *        </div>
  */
-public class DocumentServiceResearchTest extends AbstractTest {
+public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationTest {
 
     public static final TranslatableKey COMPANY = new TranslatableKey("company");
     public static final TranslatableKey TITLE = new TranslatableKey("title");

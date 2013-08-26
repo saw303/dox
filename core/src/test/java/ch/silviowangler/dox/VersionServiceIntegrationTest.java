@@ -27,7 +27,7 @@ import static org.junit.Assume.assumeTrue;
  * @author Silvio Wangler
  * @since 0.2
  */
-public class VersionServiceTest extends AbstractTest {
+public class VersionServiceIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
     private VersionService versionService;
