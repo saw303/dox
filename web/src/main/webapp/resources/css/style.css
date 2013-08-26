@@ -475,6 +475,20 @@ Form upload
     display: inline;
 }
 
+#importSuccessWrapper table {
+    /* center table */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#importSuccessWrapper th, td {
+    text-align: left;
+}
+
+#importSuccessWrapper tr {
+    border-bottom: 1px darkslategray dotted;
+}
+
 /* =============================================================================
 Media Queries
 ========================================================================== */

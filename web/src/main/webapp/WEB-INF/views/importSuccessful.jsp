@@ -17,7 +17,7 @@
   ~ limitations under the License.
   --%>
 
-<div>
+<div id="importSuccessWrapper">
     <p><spring:message code="document.import.success.message"/></p>
 
     <p>
@@ -25,7 +25,7 @@
         <tbody>
         <tr>
             <th><spring:message code="document.id"/>:</th>
-            <td>${doc.id}</td>
+            <td><a href="<c:url value="/document/${doc.id}"/>" target="_blank">${doc.id}</a></td>
         </tr>
         <tr>
             <th><spring:message code="document.pageCount"/>:</th>
