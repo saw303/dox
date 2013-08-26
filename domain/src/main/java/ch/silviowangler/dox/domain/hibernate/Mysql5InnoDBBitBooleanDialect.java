@@ -25,6 +25,7 @@ import java.sql.Types;
  * @since 0.1
  *        <p/>
  *        Workaround due to an issue https://hibernate.onjira.com/browse/HHH-6935
+ *        Can possibly removed using Hibernate 4.3.x    
  */
 public class Mysql5InnoDBBitBooleanDialect extends MySQL5InnoDBDialect {
 
