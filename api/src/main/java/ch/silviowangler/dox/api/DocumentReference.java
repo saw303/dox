@@ -22,6 +22,8 @@ import com.google.common.collect.Maps;
 import java.io.Serializable;
 import java.util.Map;
 
+import static ch.silviowangler.dox.util.FileUtils.humanReadableByteCount;
+
 /**
  * @author Silvio Wangler
  * @since 0.1
@@ -133,6 +135,10 @@ public class DocumentReference implements Serializable {
 
     public void setFileSize(long fileSize) {
         this.fileSize = fileSize;
+    }
+
+    public String humanReadableFileSize() {
+        return humanReadableByteCount(this.fileSize, true);
     }
 
     @Override

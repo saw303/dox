@@ -43,7 +43,8 @@
                     / ${doc.pageCount}
                     <spring:message code="pages"/> /
                     <spring:message code="document.hashCode"/>: ${doc.hash}, <spring:message
-                            code="document.userReference"/>: ${doc.userReference}</h5>
+                            code="document.userReference"/>: ${doc.userReference} / <spring:message
+                            code="document.filesize"/>: ${doc.humanReadableFileSize()}</h5>
             </div>
             <dox:attributeListing documentReference="${doc}" query="${query}"/>
         </div>
