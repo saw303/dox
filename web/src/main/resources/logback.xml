@@ -38,6 +38,7 @@
     <logger name="org.apache.commons" level="ERROR"/>
     <logger name="com.googlecode.flyway" level="INFO"/>
     <logger name="ch.silviowangler.dox" level="DEBUG"/>
+    <logger name="ch.silviowangler.dox.jobs" level="TRACE"/>
 
     <root level="ERROR">
         <appender-ref ref="STDOUT"/>

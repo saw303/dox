@@ -19,10 +19,15 @@ package ch.silviowangler.dox.repository;
 import ch.silviowangler.dox.domain.Document;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
+
 /**
  * @author Silvio Wangler
  * @since 0.1
  */
 public interface DocumentRepository extends CrudRepository<Document, Long>, DocumentRepositoryCustom {
+
     Document findByHash(String hash);
+
+    List<Document> findByFileSize(long fileSize);
 }

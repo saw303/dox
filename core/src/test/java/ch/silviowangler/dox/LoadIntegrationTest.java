@@ -37,7 +37,8 @@ import static org.junit.Assert.assertTrue;
 public class LoadIntegrationTest extends AbstractIntegrationTest {
 
 
-    final int totalAmountOfFiles = 200;
+    private static final int TOTAL_AMOUNT_OF_FILES = 200;
+    private static final int TOTAL_AMOUNT_OF_TIME_IN_MILLIS = 1000;
 
     @Before
     public void setUp() throws Exception {
@@ -48,7 +49,7 @@ public class LoadIntegrationTest extends AbstractIntegrationTest {
 
         Map<String, SortedSet<Attribute>> cache = new HashMap<>();
 
-        for (int i = 1; i <= totalAmountOfFiles; i++) {
+        for (int i = 1; i <= TOTAL_AMOUNT_OF_FILES; i++) {
 
             Map<TranslatableKey, Object> indices = new HashMap<>();
 
@@ -116,11 +117,12 @@ public class LoadIntegrationTest extends AbstractIntegrationTest {
         Set<DocumentReference> invoices = documentService.findDocumentReferences(indices, "INVOICE");
         stopWatch.stop();
 
+        assertTrue("This test may take only " + TOTAL_AMOUNT_OF_TIME_IN_MILLIS + " ms but took this time " + stopWatch.getLastTaskTimeMillis() + " ms", stopWatch.getTotalTimeMillis() <= TOTAL_AMOUNT_OF_TIME_IN_MILLIS);
+
         for (DocumentReference documentReference : invoices) {
             String value = documentReference.getIndices().get(company).toString();
             assertTrue("Value is wrong: " + value, value.matches("(3|3\\d)"));
         }
         assertThat(invoices.size(), is(11));
-        assertTrue("Too much time " + stopWatch.getLastTaskTimeMillis() + " ms", stopWatch.getTotalTimeMillis() <= 1000);
     }
 }
