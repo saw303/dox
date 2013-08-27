@@ -2,9 +2,9 @@ package ch.silviowangler.dox.settings;
 
 import ch.silviowangler.dox.api.settings.SettingsService;
 import ch.silviowangler.dox.domain.UserSetting;
-import ch.silviowangler.dox.domain.UserSettingRepository;
 import ch.silviowangler.dox.domain.security.DoxUser;
-import ch.silviowangler.dox.domain.security.DoxUserRepository;
+import ch.silviowangler.dox.repository.UserSettingRepository;
+import ch.silviowangler.dox.repository.security.DoxUserRepository;
 import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,8 +14,17 @@
  * limitations under the License.
  */
 
-include 'api'
-include 'domain'
-include 'inexport'
-include 'core'
-include 'web'
+package ch.silviowangler.dox.repository;
+
+import ch.silviowangler.dox.domain.IndexStore;
+import org.springframework.data.repository.CrudRepository;
+
+/**
+ * @author Silvio Wangler
+ * @since 0.1
+ *        <div>
+ *        Date: 09.07.12 08:25
+ *        </div>
+ */
+public interface IndexStoreRepository extends CrudRepository<IndexStore, Long> {
+}

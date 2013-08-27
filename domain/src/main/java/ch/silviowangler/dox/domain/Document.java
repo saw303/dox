@@ -45,12 +45,14 @@ public class Document extends AbstractPersistable<Long> {
     @OneToOne(optional = true)
     private IndexStore indexStore;
     @Column(nullable = false)
-    @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
+    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
     private DateTime creationDate = DateTime.now();
     @OneToMany(mappedBy = "document")
     private Set<IndexMapEntry> indexMapEntries;
     @Column(nullable = false, length = 25)
     private String userReference;
+    @Column(nullable = false)
+    private long fileSize = -1L;
 
     public Document() {
         super();
@@ -131,6 +133,14 @@ public class Document extends AbstractPersistable<Long> {
         this.userReference = userReference;
     }
 
+    public long getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(long fileSize) {
+        this.fileSize = fileSize;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -143,6 +153,7 @@ public class Document extends AbstractPersistable<Long> {
                 .add("creationDate", creationDate)
                 .add("indexMapEntries", indexMapEntries)
                 .add("userReference", userReference)
+                .add("fileSize", fileSize)
                 .toString();
     }
 }

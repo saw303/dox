@@ -19,7 +19,7 @@ package ch.silviowangler.dox;
 import ch.silviowangler.dox.api.NoTranslationFoundException;
 import ch.silviowangler.dox.api.TranslationService;
 import ch.silviowangler.dox.domain.Translation;
-import ch.silviowangler.dox.domain.TranslationRepository;
+import ch.silviowangler.dox.repository.TranslationRepository;
 import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

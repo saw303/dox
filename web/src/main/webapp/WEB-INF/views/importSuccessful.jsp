@@ -46,6 +46,10 @@
             <td>${doc.fileName}</td>
         </tr>
         <tr>
+            <th><spring:message code="document.filesize"/>:</th>
+            <td>${doc.humanReadableFileSize()}</td>
+        </tr>
+        <tr>
             <th><spring:message code="document.indices"/>:</th>
             <td><dox:attibuteList documentReference="${doc}"/></td>
         </tr>

@@ -16,12 +16,13 @@
 
 package ch.silviowangler.dox.api;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
 
 import java.io.Serializable;
 import java.util.Map;
 
-import static com.google.common.base.Objects.toStringHelper;
+import static ch.silviowangler.dox.util.FileUtils.humanReadableByteCount;
 
 /**
  * @author Silvio Wangler
@@ -38,6 +39,7 @@ public class DocumentReference implements Serializable {
     private Map<TranslatableKey, Object> indices = Maps.newHashMap();
     private String fileName;
     private String userReference;
+    private long fileSize;
 
     public DocumentReference(String fileName) {
         this.fileName = fileName;
@@ -48,10 +50,10 @@ public class DocumentReference implements Serializable {
     }
 
     public DocumentReference(String hash, Long id, int pageCount, String mimeType, DocumentClass documentClass, Map<TranslatableKey, Object> indices, String fileName) {
-        this(hash, id, pageCount, mimeType, documentClass, indices, fileName, null);
+        this(hash, id, pageCount, mimeType, documentClass, indices, fileName, null, -1L);
     }
 
-    public DocumentReference(String hash, Long id, int pageCount, String mimeType, DocumentClass documentClass, Map<TranslatableKey, Object> indices, String fileName, String userName) {
+    public DocumentReference(String hash, Long id, int pageCount, String mimeType, DocumentClass documentClass, Map<TranslatableKey, Object> indices, String fileName, String userName, long fileSize) {
         this.hash = hash;
         this.id = id;
         this.pageCount = pageCount;
@@ -60,6 +62,7 @@ public class DocumentReference implements Serializable {
         this.indices = indices;
         this.fileName = fileName;
         this.userReference = userName;
+        this.fileSize = fileSize;
     }
 
     public String getHash() {
@@ -126,9 +129,21 @@ public class DocumentReference implements Serializable {
         this.userReference = userReference;
     }
 
+    public long getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(long fileSize) {
+        this.fileSize = fileSize;
+    }
+
+    public String humanReadableFileSize() {
+        return humanReadableByteCount(this.fileSize, true);
+    }
+
     @Override
     public String toString() {
-        return toStringHelper(this)
+        return Objects.toStringHelper(this)
                 .add("hash", hash)
                 .add("id", id)
                 .add("pageCount", pageCount)
@@ -137,6 +152,7 @@ public class DocumentReference implements Serializable {
                 .add("indices", indices)
                 .add("fileName", fileName)
                 .add("userReference", userReference)
+                .add("fileSize", fileSize)
                 .toString();
     }
 

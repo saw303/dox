@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *          http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,8 +14,21 @@
  * limitations under the License.
  */
 
-include 'api'
-include 'domain'
-include 'inexport'
-include 'core'
-include 'web'
+package ch.silviowangler.dox.repository;
+
+import ch.silviowangler.dox.domain.Translation;
+import org.springframework.data.repository.CrudRepository;
+
+import java.util.List;
+import java.util.Locale;
+
+/**
+ * @author Silvio Wangler
+ * @since 0.1
+ */
+public interface TranslationRepository extends CrudRepository<Translation, Long> {
+
+    List<Translation> findByKey(String key);
+
+    Translation findByKeyAndLocale(String key, Locale locale);
+}

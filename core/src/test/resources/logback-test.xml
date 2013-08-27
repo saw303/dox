@@ -28,11 +28,16 @@
     <logger name="org.springframework" level="ERROR"/>
     <logger name="org.springframework.jdbc" level="ERROR"/>
     <logger name="org.springframework.jdbc.datasource.init" level="ERROR"/>
+    <logger name="org.springframework.security.access.vote" level="DEBUG"/>
     <logger name="org.springframework.data" level="ERROR"/>
     <logger name="org.hibernate" level="ERROR"/>
-    <logger name="ch.silviowangler.dox" level="DEBUG"/>
+    <logger name="org.hibernate.SQL" level="INFO"/>
+    <logger name="org.hibernate.type" level="ERROR"/>
+    <logger name="org.apache.commons" level="ERROR"/>
+    <logger name="ch.silviowangler.dox" level="INFO"/>
+    <logger name="ch.silviowangler.dox.export" level="TRACE"/>
 
-    <root level="debug">
+    <root level="ERROR">
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

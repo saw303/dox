@@ -41,7 +41,7 @@ public class ClickStats extends AbstractPersistable<Long> {
     @Enumerated(STRING)
     private ReferenceType referenceType;
     @Column(nullable = false)
-    @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
+    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
     private DateTime timestamp = DateTime.now();
     @Column(nullable = false)
     private String username;

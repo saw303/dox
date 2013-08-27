@@ -104,7 +104,8 @@ subprojects {
         compile "org.slf4j:slf4j-api:${ext.slf4jVersion}"
         testCompile "junit:junit:${ext.junitVersion}",
                 "org.mockito:mockito-core:${ext.mockitoVersion}",
-                'org.hamcrest:hamcrest-core:1.3'
+                'org.hamcrest:hamcrest-core:1.3',
+                'org.hamcrest:hamcrest-library:1.3'
     }
 
     jar {
@@ -144,6 +145,7 @@ project(':api') {
 
 project(':core') {
     displayName = 'Core module'
+
     dependencies {
         compile project(':api'), project(':domain'), project(':inexport'),
                 "org.springframework:spring-context:${ext.springVersion}",
@@ -162,20 +164,30 @@ project(':core') {
                 "ch.qos.logback:logback-classic:${ext.logbackVersion}",
                 "org.springframework.security:spring-security-config:${ext.springSecurityVersion}",
                 'org.aspectj:aspectjweaver:1.7.3' // need this version because 1.6.x is buggy with Spring 3.x (http://goo.gl/73Pwi)
-    }
-}
-
-project(':functional-tests') {
-    displayName = 'Functional test module'
-
-    dependencies {
-        testCompile project(':core'),
-                "org.springframework:spring-test:${ext.springVersion}",
+        testCompile "org.springframework:spring-test:${ext.springVersion}",
                 "commons-io:commons-io:${ext.commonsIOVersion}",
                 "com.google.guava:guava:${ext.guavaVersion}"
-        runtime "ch.qos.logback:logback-classic:${ext.logbackVersion}",
-                "com.h2database:h2:${ext.h2Version}"
+        testRuntime "com.h2database:h2:${ext.h2Version}"
     }
+
+    test {
+        exclude '**/*IntegrationTest.class'
+        reports.html.destination = file("${reports.html.destination}/unit2")
+        reports.junitXml.destination = file("${reports.junitXml.destination}/unit2")
+    }
+
+    task integrationTest(type: Test) {
+        include '**/*IntegrationTest.class'
+        reports.html.destination = file("${reports.html.destination}/integration")
+        reports.junitXml.destination = file("${reports.junitXml.destination}/integration")
+    }
+
+    jacocoTestReport {
+        executionData = files('build/jacoco/integrationTest.exec', 'build/jacoco/test.exec')
+        additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
+    }
+
+    check.dependsOn integrationTest
 }
 
 project(':web') {
