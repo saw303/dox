@@ -17,8 +17,8 @@
 package ch.silviowangler.dox.security;
 
 import ch.silviowangler.dox.domain.security.DoxUser;
-import ch.silviowangler.dox.domain.security.DoxUserRepository;
 import ch.silviowangler.dox.domain.security.Role;
+import ch.silviowangler.dox.repository.security.DoxUserRepository;
 import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

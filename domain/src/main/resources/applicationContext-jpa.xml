@@ -19,7 +19,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.0.xsd">
 
-    <bean id="documentRepositoryImpl" class="ch.silviowangler.dox.domain.DocumentRepositoryCustomImpl"/>
+    <bean id="documentRepositoryImpl" class="ch.silviowangler.dox.repository.DocumentRepositoryCustomImpl"/>
 
-    <jpa:repositories base-package="ch.silviowangler.dox.domain"/>
+    <jpa:repositories base-package="ch.silviowangler.dox.repository"/>
 </beans>

@@ -16,10 +16,10 @@
 
 package ch.silviowangler.dox;
 
-import ch.silviowangler.dox.domain.AttributeRepository;
-import ch.silviowangler.dox.domain.DocumentClassRepository;
 import ch.silviowangler.dox.domain.Translation;
-import ch.silviowangler.dox.domain.TranslationRepository;
+import ch.silviowangler.dox.repository.AttributeRepository;
+import ch.silviowangler.dox.repository.DocumentClassRepository;
+import ch.silviowangler.dox.repository.TranslationRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

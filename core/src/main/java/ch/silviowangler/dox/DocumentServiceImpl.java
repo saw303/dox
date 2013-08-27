@@ -23,6 +23,7 @@ import ch.silviowangler.dox.domain.Attribute;
 import ch.silviowangler.dox.domain.AttributeDataType;
 import ch.silviowangler.dox.domain.DocumentClass;
 import ch.silviowangler.dox.domain.Range;
+import ch.silviowangler.dox.repository.*;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.itextpdf.text.io.RandomAccessSource;

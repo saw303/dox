@@ -14,15 +14,22 @@
  * limitations under the License.
  */
 
-package ch.silviowangler.dox.domain;
+package ch.silviowangler.dox.hibernate;
 
-import org.springframework.data.repository.CrudRepository;
+import org.hibernate.dialect.MySQL5InnoDBDialect;
+
+import java.sql.Types;
 
 /**
  * @author Silvio Wangler
  * @since 0.1
+ *        <p/>
+ *        Workaround due to an issue https://hibernate.onjira.com/browse/HHH-6935
  */
-public interface DocumentClassRepository extends CrudRepository<DocumentClass, Long> {
+public class Mysql5InnoDBBitBooleanDialect extends MySQL5InnoDBDialect {
 
-    DocumentClass findByShortName(String shortName);
+    public Mysql5InnoDBBitBooleanDialect() {
+        super();
+        registerColumnType(Types.BOOLEAN, "bit");
+    }
 }

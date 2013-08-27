@@ -17,7 +17,7 @@
 package ch.silviowangler.dox;
 
 import ch.silviowangler.dox.api.DocumentService;
-import ch.silviowangler.dox.domain.DocumentRepository;
+import ch.silviowangler.dox.repository.DocumentRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

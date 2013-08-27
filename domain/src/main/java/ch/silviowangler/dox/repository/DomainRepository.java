@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 
-package ch.silviowangler.dox.domain;
+package ch.silviowangler.dox.repository;
 
+import ch.silviowangler.dox.domain.Domain;
 import org.springframework.data.repository.CrudRepository;
-
-import java.util.List;
-import java.util.Locale;
 
 /**
  * @author Silvio Wangler
  * @since 0.1
  */
-public interface TranslationRepository extends CrudRepository<Translation, Long> {
-
-    List<Translation> findByKey(String key);
-
-    Translation findByKeyAndLocale(String key, Locale locale);
+public interface DomainRepository extends CrudRepository<Domain, Long> {
+    Domain findByShortName(String domainName);
 }

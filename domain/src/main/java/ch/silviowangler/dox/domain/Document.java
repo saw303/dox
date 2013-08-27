@@ -45,7 +45,7 @@ public class Document extends AbstractPersistable<Long> {
     @OneToOne(optional = true)
     private IndexStore indexStore;
     @Column(nullable = false)
-    @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
+    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
     private DateTime creationDate = DateTime.now();
     @OneToMany(mappedBy = "document")
     private Set<IndexMapEntry> indexMapEntries;

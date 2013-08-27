@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ch.silviowangler.dox.domain.hibernate;
+package ch.silviowangler.dox.hibernate;
 
 import ch.silviowangler.dox.domain.AmountOfMoney;
 import org.hibernate.HibernateException;

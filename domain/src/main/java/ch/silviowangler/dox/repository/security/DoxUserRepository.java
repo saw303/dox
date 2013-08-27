@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package ch.silviowangler.dox.domain.security;
+package ch.silviowangler.dox.repository.security;
 
+import ch.silviowangler.dox.domain.security.DoxUser;
 import org.springframework.data.repository.CrudRepository;
 
 /**
  * @author Silvio Wangler
  * @since 0.1
  */
-public interface RoleRepository extends CrudRepository<Role, Long> {
+public interface DoxUserRepository extends CrudRepository<DoxUser, Long> {
+
+    DoxUser findByUsername(String username);
 }

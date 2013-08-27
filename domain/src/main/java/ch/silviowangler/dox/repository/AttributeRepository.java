@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package ch.silviowangler.dox.domain;
+package ch.silviowangler.dox.repository;
 
+import ch.silviowangler.dox.domain.Attribute;
+import ch.silviowangler.dox.domain.DocumentClass;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -32,7 +34,7 @@ public interface AttributeRepository extends CrudRepository<Attribute, Long> {
      * every document class within DOX.
      *
      * @return all global attribute
-     * @see DocumentClass
+     * @see ch.silviowangler.dox.domain.DocumentClass
      */
     @Query("from Attribute a where a.documentClasses IS EMPTY")
     List<Attribute> findGlobalAttributes();

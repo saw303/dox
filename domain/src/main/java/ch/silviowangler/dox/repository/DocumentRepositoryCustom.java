@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-package ch.silviowangler.dox.domain.hibernate;
+package ch.silviowangler.dox.repository;
 
-import org.hibernate.dialect.MySQL5InnoDBDialect;
+import ch.silviowangler.dox.domain.Attribute;
+import ch.silviowangler.dox.domain.Document;
+import ch.silviowangler.dox.domain.DocumentClass;
 
-import java.sql.Types;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Silvio Wangler
  * @since 0.1
- *        <p/>
- *        Workaround due to an issue https://hibernate.onjira.com/browse/HHH-6935
+ *        <div>
+ *        Date: 11.07.12 13:07
+ *        </div>
  */
-public class Mysql5InnoDBBitBooleanDialect extends MySQL5InnoDBDialect {
+public interface DocumentRepositoryCustom {
 
-    public Mysql5InnoDBBitBooleanDialect() {
-        super();
-        registerColumnType(Types.BOOLEAN, "bit");
-    }
+    List<Document> findDocuments(Map<String, Object> indices, Map<String, Attribute> attributes, DocumentClass documentClass);
 }

@@ -17,9 +17,9 @@
 package ch.silviowangler.dox.security;
 
 import ch.silviowangler.dox.domain.security.DoxUser;
-import ch.silviowangler.dox.domain.security.DoxUserRepository;
 import ch.silviowangler.dox.domain.security.GrantedAuthority;
 import ch.silviowangler.dox.domain.security.Role;
+import ch.silviowangler.dox.repository.security.DoxUserRepository;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

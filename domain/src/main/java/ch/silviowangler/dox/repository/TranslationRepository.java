@@ -14,13 +14,21 @@
  * limitations under the License.
  */
 
-package ch.silviowangler.dox.domain.security;
+package ch.silviowangler.dox.repository;
 
+import ch.silviowangler.dox.domain.Translation;
 import org.springframework.data.repository.CrudRepository;
+
+import java.util.List;
+import java.util.Locale;
 
 /**
  * @author Silvio Wangler
  * @since 0.1
  */
-public interface GrantedAuthorityRepository extends CrudRepository<GrantedAuthority, Long> {
+public interface TranslationRepository extends CrudRepository<Translation, Long> {
+
+    List<Translation> findByKey(String key);
+
+    Translation findByKeyAndLocale(String key, Locale locale);
 }

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package ch.silviowangler.dox.domain;
+package ch.silviowangler.dox.repository.security;
 
+import ch.silviowangler.dox.domain.security.Role;
 import org.springframework.data.repository.CrudRepository;
 
 /**
  * @author Silvio Wangler
  * @since 0.1
  */
-public interface DocumentRepository extends CrudRepository<Document, Long>, DocumentRepositoryCustom {
-    Document findByHash(String hash);
+public interface RoleRepository extends CrudRepository<Role, Long> {
 }

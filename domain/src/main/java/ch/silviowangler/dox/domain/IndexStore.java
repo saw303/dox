@@ -81,65 +81,65 @@ public class IndexStore extends AbstractPersistable<Long> {
     private String S_20;
 
     @Column
-    @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
+    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
     private DateTime D_01;
     @Column
-    @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
+    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
     private DateTime D_02;
     @Column
-    @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
+    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
     private DateTime D_03;
     @Column
-    @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
+    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
     private DateTime D_04;
     @Column
-    @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
+    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
     private DateTime D_05;
     @Column
-    @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
+    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
     private DateTime D_06;
     @Column
-    @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
+    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
     private DateTime D_07;
     @Column
-    @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
+    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
     private DateTime D_08;
     @Column
-    @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
+    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
     private DateTime D_09;
     @Column
-    @Type(type = "ch.silviowangler.dox.domain.hibernate.PersistentDateTime")
+    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
     private DateTime D_10;
 
     @Column
-    @Type(type = "ch.silviowangler.dox.domain.hibernate.AmountOfMoneyType")
+    @Type(type = "ch.silviowangler.dox.hibernate.AmountOfMoneyType")
     private AmountOfMoney C_01;
     @Column
-    @Type(type = "ch.silviowangler.dox.domain.hibernate.AmountOfMoneyType")
+    @Type(type = "ch.silviowangler.dox.hibernate.AmountOfMoneyType")
     private AmountOfMoney C_02;
     @Column
-    @Type(type = "ch.silviowangler.dox.domain.hibernate.AmountOfMoneyType")
+    @Type(type = "ch.silviowangler.dox.hibernate.AmountOfMoneyType")
     private AmountOfMoney C_03;
     @Column
-    @Type(type = "ch.silviowangler.dox.domain.hibernate.AmountOfMoneyType")
+    @Type(type = "ch.silviowangler.dox.hibernate.AmountOfMoneyType")
     private AmountOfMoney C_04;
     @Column
-    @Type(type = "ch.silviowangler.dox.domain.hibernate.AmountOfMoneyType")
+    @Type(type = "ch.silviowangler.dox.hibernate.AmountOfMoneyType")
     private AmountOfMoney C_05;
     @Column
-    @Type(type = "ch.silviowangler.dox.domain.hibernate.AmountOfMoneyType")
+    @Type(type = "ch.silviowangler.dox.hibernate.AmountOfMoneyType")
     private AmountOfMoney C_06;
     @Column
-    @Type(type = "ch.silviowangler.dox.domain.hibernate.AmountOfMoneyType")
+    @Type(type = "ch.silviowangler.dox.hibernate.AmountOfMoneyType")
     private AmountOfMoney C_07;
     @Column
-    @Type(type = "ch.silviowangler.dox.domain.hibernate.AmountOfMoneyType")
+    @Type(type = "ch.silviowangler.dox.hibernate.AmountOfMoneyType")
     private AmountOfMoney C_08;
     @Column
-    @Type(type = "ch.silviowangler.dox.domain.hibernate.AmountOfMoneyType")
+    @Type(type = "ch.silviowangler.dox.hibernate.AmountOfMoneyType")
     private AmountOfMoney C_09;
     @Column
-    @Type(type = "ch.silviowangler.dox.domain.hibernate.AmountOfMoneyType")
+    @Type(type = "ch.silviowangler.dox.hibernate.AmountOfMoneyType")
     private AmountOfMoney C_10;
 
     @Column

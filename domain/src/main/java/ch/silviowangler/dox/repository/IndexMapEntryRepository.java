@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package ch.silviowangler.dox.domain;
+package ch.silviowangler.dox.repository;
 
+import ch.silviowangler.dox.domain.Document;
+import ch.silviowangler.dox.domain.IndexMapEntry;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

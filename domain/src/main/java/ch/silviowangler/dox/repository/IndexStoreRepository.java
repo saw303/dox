@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package ch.silviowangler.dox.domain;
+package ch.silviowangler.dox.repository;
 
+import ch.silviowangler.dox.domain.IndexStore;
 import org.springframework.data.repository.CrudRepository;
 
 /**

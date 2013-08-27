@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package ch.silviowangler.dox.domain;
+package ch.silviowangler.dox.repository;
 
+import ch.silviowangler.dox.domain.DocumentClass;
 import org.springframework.data.repository.CrudRepository;
 
 /**
  * @author Silvio Wangler
  * @since 0.1
  */
-public interface DomainRepository extends CrudRepository<Domain, Long> {
-    Domain findByShortName(String domainName);
+public interface DocumentClassRepository extends CrudRepository<DocumentClass, Long> {
+
+    DocumentClass findByShortName(String shortName);
 }

@@ -1,5 +1,6 @@
-package ch.silviowangler.dox.domain;
+package ch.silviowangler.dox.repository;
 
+import ch.silviowangler.dox.domain.UserSetting;
 import ch.silviowangler.dox.domain.security.DoxUser;
 import org.springframework.data.repository.CrudRepository;
 

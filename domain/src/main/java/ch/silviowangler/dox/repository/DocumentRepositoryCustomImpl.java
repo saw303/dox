@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package ch.silviowangler.dox.domain;
+package ch.silviowangler.dox.repository;
 
+import ch.silviowangler.dox.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
