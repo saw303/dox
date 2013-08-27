@@ -122,6 +122,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         assertTrue(documentReference.getIndices().containsKey(INVOICE_AMOUNT));
         assertEquals(new BigDecimal("50.00"), documentReference.getIndices().get(INVOICE_AMOUNT));
         assertThat(documentReference.getUserReference(), is("root_test"));
+        assertThat(documentReference.getFileSize(), is(100524L));
 
         DocumentReference documentReferenceFromDatabase = documentService.findDocumentReference(documentReference.getId());
 

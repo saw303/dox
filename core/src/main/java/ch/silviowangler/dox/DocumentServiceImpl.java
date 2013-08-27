@@ -54,6 +54,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
 import java.util.*;
 
 import static ch.silviowangler.dox.domain.AttributeDataType.*;
@@ -298,6 +299,8 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
         Document document = new Document(hash, documentClassEntity, numberOfPages, mimeType, physicalDocumentApi.getFileName(), indexStore, user.getUsername());
         indexStore.setDocument(document);
+
+
         document = documentRepository.save(document);
         indexStoreRepository.save(indexStore);
 
@@ -308,6 +311,14 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             FileUtils.writeByteArrayToFile(target, physicalDocumentApi.getContent());
         } catch (IOException e) {
             logger.error("Unable to write content to store", e);
+        }
+
+        try {
+            final long size = Files.size(target.toPath());
+            document.setFileSize(size);
+            document = documentRepository.save(document);
+        } catch (IOException e) {
+            logger.error("Unable to calculate file size of file {}", target.getAbsolutePath(), e);
         }
         DocumentReference docRef = toDocumentReference(document);
         return docRef;
@@ -595,7 +606,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
                 document.getMimeType(),
                 toDocumentClassApi(document.getDocumentClass()),
                 toIndexMap(document.getIndexStore(), attributeRepository.findAttributesForDocumentClass(document.getDocumentClass())),
-                document.getOriginalFilename(), document.getUserReference());
+                document.getOriginalFilename(), document.getUserReference(), document.getFileSize());
     }
 
     private Map<TranslatableKey, Object> toIndexMap(IndexStore indexStore, List<Attribute> attributes) {
