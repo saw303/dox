@@ -87,4 +87,24 @@ public class DoxUser extends AbstractPersistable<Long> {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DoxUser)) return false;
+        if (!super.equals(o)) return false;
+
+        DoxUser doxUser = (DoxUser) o;
+
+        if (username != null ? !username.equals(doxUser.username) : doxUser.username != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (username != null ? username.hashCode() : 0);
+        return result;
+    }
 }

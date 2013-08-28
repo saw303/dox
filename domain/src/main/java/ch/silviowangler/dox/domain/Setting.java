@@ -41,4 +41,26 @@ public abstract class Setting extends AbstractPersistable<Long> implements Seria
     public void setValue(String value) {
         this.value = value;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Setting setting = (Setting) o;
+
+        if (key != null ? !key.equals(setting.key) : setting.key != null) return false;
+        if (value != null ? !value.equals(setting.value) : setting.value != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (key != null ? key.hashCode() : 0);
+        result = 31 * result + (value != null ? value.hashCode() : 0);
+        return result;
+    }
 }
