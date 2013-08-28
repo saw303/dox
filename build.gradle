@@ -183,7 +183,10 @@ project(':core') {
     }
 
     jacocoTestReport {
-        executionData = files('build/jacoco/integrationTest.exec', 'build/jacoco/test.exec')
+
+        if (file("${buildDir}/jacoco/integrationTest.exec").exists()) {
+            executionData = files("${buildDir}/jacoco/integrationTest.exec", "${buildDir}/jacoco/test.exec")
+        }
         additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
     }
 
