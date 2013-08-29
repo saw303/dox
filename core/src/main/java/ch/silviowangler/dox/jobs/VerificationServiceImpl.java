@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.List;
 
+import static ch.silviowangler.dox.jobs.Source.DATABASE;
+import static ch.silviowangler.dox.jobs.Source.STORE;
 import static com.google.common.collect.Lists.newArrayList;
 
 /**
@@ -37,24 +39,44 @@ public class VerificationServiceImpl implements VerificationService {
     @Transactional(readOnly = true)
     public List<MissingDocument> verifyDocumentStore() {
 
+        logger.info("Starting to verify document store and database");
+
         List<MissingDocument> missingDocuments = newArrayList();
 
         final List<DocumentKeyHash> documentKeyHashes = documentRepository.findAllKeys();
+        logger.debug("Found {} document within the database", documentKeyHashes.size());
 
         final File[] files = archiveDirectory.listFiles(new FileFilter() {
             @Override
             public boolean accept(File pathname) {
-                return pathname.getName().length() == 64;
+                final boolean result = pathname.getName().length() == 64;
+                logger.trace("Accepting file {}? {}", pathname.getAbsolutePath(), result);
+                return result;
             }
         });
 
+        logger.debug("Found {} files in the document store", files.length);
+
         for (DocumentKeyHash documentKeyHash : documentKeyHashes) {
+
+            logger.trace("Processing database document {} with id {}", documentKeyHash.getHash(), documentKeyHash.getId());
 
             final File file = new File(this.archiveDirectory, documentKeyHash.getHash());
             if (!file.exists()) {
-                missingDocuments.add(new MissingDocumentInStore(documentKeyHash.getHash(), file.toPath()));
+                logger.warn("Database reference to document '{}' does not exist. Verify document store please", file.getAbsolutePath());
+                missingDocuments.add(new MissingDocument(documentKeyHash.getHash(), STORE));
             }
         }
+
+        for (File file : files) {
+            if (documentRepository.findByHash(file.getName()) == null) {
+                logger.warn("Document in document store '{}' does not exist in the database. Verify document store please", file.getAbsolutePath());
+                missingDocuments.add(new MissingDocument(file.getName(), DATABASE));
+            }
+        }
+
+        logger.info("Done verifying document store and database. Found {} missing documents", missingDocuments.size());
+
         return missingDocuments;
     }
 }

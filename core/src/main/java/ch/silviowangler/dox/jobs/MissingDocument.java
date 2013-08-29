@@ -8,11 +8,13 @@ import java.io.Serializable;
  * @author Silvio Wangler
  * @since 0.3
  */
-public abstract class MissingDocument implements Serializable {
+public class MissingDocument implements Serializable {
     private String hash;
+    private Source source;
 
-    protected MissingDocument(String hash) {
+    public MissingDocument(String hash, Source source) {
         this.hash = hash;
+        this.source = source;
     }
 
     public String getHash() {
@@ -23,10 +25,23 @@ public abstract class MissingDocument implements Serializable {
         this.hash = hash;
     }
 
+    public Source getSource() {
+        return source;
+    }
+
+    public void setSource(Source source) {
+        this.source = source;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
                 .add("hash", hash)
+                .add("source", source)
                 .toString();
     }
+}
+
+enum Source {
+    DATABASE, STORE;
 }
