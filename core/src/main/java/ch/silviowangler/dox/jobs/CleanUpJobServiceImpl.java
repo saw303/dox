@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +31,7 @@ public class CleanUpJobServiceImpl implements CleanUpJobService {
     private final Logger logger = LoggerFactory.getLogger(CleanUpJobServiceImpl.class);
 
     @Scheduled(initialDelayString = "${job.initial.delay}", fixedRateString = "${job.collect.file.size}")
+    @Transactional
     public void collectFileSizeOnDocumentsThatHaveNotBeenAssignedYet() {
 
         logger.info("Starting file size correction job");
