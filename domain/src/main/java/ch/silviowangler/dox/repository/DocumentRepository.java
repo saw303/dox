@@ -17,6 +17,7 @@
 package ch.silviowangler.dox.repository;
 
 import ch.silviowangler.dox.domain.Document;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -30,4 +31,7 @@ public interface DocumentRepository extends CrudRepository<Document, Long>, Docu
     Document findByHash(String hash);
 
     List<Document> findByFileSize(long fileSize);
+
+    @Query("select new ch.silviowangler.dox.repository.DocumentKeyHash(d.id, d.hash) from Document d")
+    List<DocumentKeyHash> findAllKeys();
 }
