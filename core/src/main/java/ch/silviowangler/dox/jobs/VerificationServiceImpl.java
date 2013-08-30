@@ -1,5 +1,7 @@
 package ch.silviowangler.dox.jobs;
 
+import ch.silviowangler.dox.api.MissingDocument;
+import ch.silviowangler.dox.api.VerificationService;
 import ch.silviowangler.dox.repository.DocumentKeyHash;
 import ch.silviowangler.dox.repository.DocumentRepository;
 import org.slf4j.Logger;
@@ -13,8 +15,8 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.List;
 
-import static ch.silviowangler.dox.jobs.Source.DATABASE;
-import static ch.silviowangler.dox.jobs.Source.STORE;
+import static ch.silviowangler.dox.api.Source.DATABASE;
+import static ch.silviowangler.dox.api.Source.STORE;
 import static com.google.common.collect.Lists.newArrayList;
 
 /**

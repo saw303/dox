@@ -1,5 +1,7 @@
 package ch.silviowangler.dox.jobs;
 
+import ch.silviowangler.dox.api.MissingDocument;
+import ch.silviowangler.dox.api.Source;
 import ch.silviowangler.dox.domain.Document;
 import ch.silviowangler.dox.repository.DocumentKeyHash;
 import ch.silviowangler.dox.repository.DocumentRepository;

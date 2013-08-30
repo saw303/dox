@@ -1,4 +1,4 @@
-package ch.silviowangler.dox.jobs;
+package ch.silviowangler.dox.api;
 
 import java.util.List;
 

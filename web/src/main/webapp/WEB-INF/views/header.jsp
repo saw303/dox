@@ -21,19 +21,20 @@
 
 <h2><spring:message code="application.subheader"/></h2>
 <sec:authorize access="isAuthenticated()">
-    <div><spring:message code="user" htmlEscape="true"/>: <sec:authentication property="principal.username"
-                                                                              htmlEscape="true"/></div>
+    <div><spring:message code="user"/>: <sec:authentication property="principal.username"
+            /></div>
     <nav>
         <ul>
-            <li><a href="<c:url value="/"/>"><spring:message code="nav.home" htmlEscape="true"/></a></li>
+            <li><a href="<c:url value="/"/>"><spring:message code="nav.home"/></a></li>
             <li><a href="<c:url value="/showForm.html"/>"><spring:message code="nav.add.new.document"
-                                                                        htmlEscape="true"/></a></li>
+                    /></a></li>
             <sec:authorize access="hasRole('ROLE_ADMIN')">
-                <li><a href="<c:url value="/admin/export"/>"><spring:message code="nav.export" htmlEscape="true"/></a>
+                <li><a href="<c:url value="/admin/export"/>"><spring:message code="nav.export"/></a>
                 </li>
             </sec:authorize>
-            <li><a href="<c:url value="/settings.html"/>"><spring:message code="nav.settings" htmlEscape="true"/></a></li>
-            <li><a href="<c:url value="/logout"/>"><spring:message code="nav.logout" htmlEscape="true"/></a></li>
+            <li><a href="<c:url value="/settings.html"/>"><spring:message code="nav.settings"/></a></li>
+            <li><a href="<c:url value="/maintenance"/>"><spring:message code="nav.maintenance"/></a></li>
+            <li><a href="<c:url value="/logout"/>"><spring:message code="nav.logout"/></a></li>
         </ul>
     </nav>
 </sec:authorize>

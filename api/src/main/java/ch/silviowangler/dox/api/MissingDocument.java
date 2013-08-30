@@ -1,4 +1,4 @@
-package ch.silviowangler.dox.jobs;
+package ch.silviowangler.dox.api;
 
 import com.google.common.base.Objects;
 
@@ -40,8 +40,4 @@ public class MissingDocument implements Serializable {
                 .add("source", source)
                 .toString();
     }
-}
-
-enum Source {
-    DATABASE, STORE;
 }
