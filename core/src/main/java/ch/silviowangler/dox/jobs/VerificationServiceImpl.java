@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.util.List;
 
 import static ch.silviowangler.dox.api.Source.DATABASE;
@@ -48,14 +47,7 @@ public class VerificationServiceImpl implements VerificationService {
         final List<DocumentKeyHash> documentKeyHashes = documentRepository.findAllKeys();
         logger.debug("Found {} document within the database", documentKeyHashes.size());
 
-        final File[] files = archiveDirectory.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                final boolean result = pathname.getName().length() == 64;
-                logger.trace("Accepting file {}? {}", pathname.getAbsolutePath(), result);
-                return result;
-            }
-        });
+        final File[] files = archiveDirectory.listFiles(new DoxDocumentFileFilter());
 
         logger.debug("Found {} files in the document store", files.length);
 
