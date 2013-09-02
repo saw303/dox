@@ -18,24 +18,33 @@ package ch.silviowangler.dox.web;
 
 import ch.silviowangler.dox.api.*;
 import ch.silviowangler.dox.api.stats.StatisticsService;
+import eu.bitwalker.useragentutils.Browser;
+import eu.bitwalker.useragentutils.Version;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.SortedSet;
 
+import static eu.bitwalker.useragentutils.Browser.*;
+import static java.lang.Integer.valueOf;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -54,8 +63,60 @@ public class DocumentController {
     private DocumentService documentService;
     @Autowired
     private StatisticsService statisticsService;
+    @Value("#{systemEnvironment['DOX_STORE']}")
+    private File archiveDirectory;
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    @RequestMapping(method = GET, value = "/document/{hash}.thumbnail")
+    public void getDocument(@PathVariable("hash") String hash, HttpServletResponse response, @RequestHeader("User-Agent") String userAgent) {
+
+        File thumbnailsDir = new File(this.archiveDirectory, "thumbnails");
+
+        final Browser browser = parseUserAgentString(userAgent);
+
+        File webp = new File(thumbnailsDir, hash + ".webp");
+        File jpg = new File(thumbnailsDir, hash + ".jpg");
+
+        if (isWebpSupportedBrowser(userAgent, browser) && webp.exists()) {
+            response.setStatus(SC_OK);
+            response.addHeader("Content-Type", "image/webp");
+            response.addHeader("Content-Disposition", "inline; filename=\"" + webp.getName() + "\"");
+
+            try {
+                IOUtils.copy(new FileInputStream(webp), response.getOutputStream());
+                response.getOutputStream().flush();
+            } catch (IOException e) {
+                logger.error("Unable to write thumbnail for hash {} to output stream", hash, e);
+            }
+        } else if (jpg.exists()) {
+            response.setStatus(SC_OK);
+            response.addHeader("Content-Type", "image/jpeg");
+            response.addHeader("Content-Disposition", "inline; filename=\"" + jpg.getName() + "\"");
+
+            try {
+                IOUtils.copy(new FileInputStream(jpg), response.getOutputStream());
+                response.getOutputStream().flush();
+            } catch (IOException e) {
+                logger.error("Unable to write thumbnail for hash {} to output stream", hash, e);
+            }
+        } else {
+            response.setStatus(SC_NOT_FOUND);
+        }
+    }
+
+    private boolean isWebpSupportedBrowser(String userAgent, Browser browser) {
+        return isChromeWithWebpSupport(userAgent, browser) || isOperaWithWebpSupport(userAgent, browser);
+    }
+
+    private boolean isChromeWithWebpSupport(String userAgent, Browser browser) {
+        return browser.getGroup() == CHROME && valueOf(browser.getVersion(userAgent).getMajorVersion()) >= 9;
+    }
+
+    private boolean isOperaWithWebpSupport(String userAgent, Browser browser) {
+        final Version version = browser.getVersion(userAgent);
+        return browser.getGroup() == OPERA && valueOf(version.getMajorVersion()) >= 11;
+    }
 
     @RequestMapping(method = GET, value = "/document/{id}")
     public void getDocument(@PathVariable("id") Long id, HttpServletResponse response) {
