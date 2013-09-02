@@ -69,6 +69,8 @@ public class ThumbnailJobServiceImpl implements ThumbnailJobService, Initializin
                 args.put("target", jpg.getAbsolutePath());
                 CommandLine cmd = new CommandLine("convert");
                 cmd.addArgument("-flatten");
+                cmd.addArgument("-thumbnail");
+                cmd.addArgument("200x");
                 cmd.addArgument("${source}[0]");
                 cmd.addArgument("${target}");
                 cmd.setSubstitutionMap(args);
@@ -83,6 +85,29 @@ public class ThumbnailJobServiceImpl implements ThumbnailJobService, Initializin
 
                 } catch (IOException e) {
                     logger.error("Unable to create JPEG from {}", doxDocument.getAbsolutePath(), e);
+                }
+            }
+
+            if (!webp.exists() && jpg.exists()) {
+                Map<String, String> args = newHashMap();
+                args.put("source", jpg.getAbsolutePath());
+                args.put("target", webp.getAbsolutePath());
+                CommandLine cmd = new CommandLine("cwebp");
+                cmd.addArgument("${source}");
+                cmd.addArgument("-o");
+                cmd.addArgument("${target}");
+                cmd.setSubstitutionMap(args);
+
+                try {
+                    logger.trace("About to execute command {}", cmd.toString());
+                    final int exitValue = executor.execute(cmd);
+
+                    if (exitValue != 0) {
+                        logger.error("Unable to convert JPEG file {} to WebP. Exit code = {}", jpg.getAbsolutePath(), exitValue);
+                    }
+
+                } catch (IOException e) {
+                    logger.error("Unable to create WebP from {}", jpg.getAbsolutePath(), e);
                 }
             }
         }
