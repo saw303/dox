@@ -28,6 +28,10 @@
             <td><a href="<c:url value="/document/${doc.id}"/>" target="_blank">${doc.id}</a></td>
         </tr>
         <tr>
+            <th><spring:message code="document.hashCode"/>:</th>
+            <td>${doc.hash}</td>
+        </tr>
+        <tr>
             <th><spring:message code="document.pageCount"/>:</th>
             <td>${doc.pageCount}</td>
         </tr>
