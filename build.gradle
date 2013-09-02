@@ -38,8 +38,9 @@ allprojects {
     repositories {
         mavenCentral()
         maven {
-            url 'https://repository.jboss.org/nexus/content/groups/public'
             url 'http://repo.springsource.org/libs-milestone'
+            artifactUrls 'https://repository.jboss.org/nexus/content/groups/public'
+            artifactUrls 'http://raw.github.com/HaraldWalker/user-agent-utils/mvn-repo/'
         }
     }
 
@@ -219,6 +220,7 @@ project(':web') {
         compile "org.springframework.mobile:spring-mobile-device:${ext.springMobileVersion}"
         compile "com.google.guava:guava:${ext.guavaVersion}"
         compile "joda-time:joda-time:${ext.jodaTimeVersion}"
+        compile "bitwalker:UserAgentUtils:1.9"
         runtime "org.apache.tiles:tiles-core:${ext.tilesVersion}"
         runtime "org.apache.tiles:tiles-servlet:${ext.tilesVersion}"
         runtime "org.apache.tiles:tiles-jsp:${ext.tilesVersion}"
