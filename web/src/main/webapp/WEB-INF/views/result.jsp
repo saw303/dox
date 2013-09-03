@@ -38,8 +38,11 @@
                         code="document.research.result.edit"/></a></div>
                 <h4 id="${doc.id}" onclick="window.open('<c:url value="/document/${doc.id}"/>')"
                     style="text-align: left; padding: 1px 0 0 35px; margin: 2px 0 0 0">${doc.fileName}</h4>
-                <img src="<c:url value="/document/${doc.hash}.thumbnail"/>"
-                     style="display: block; float: right; margin: 10px"/>
+                <c:if test="${thumbnail.get(doc.hash) == true}">
+                    <img src="<c:url value="/document/${doc.hash}.thumbnail"/>"
+                         style="display: block; float: right; margin: 10px"
+                         onclick="window.open('<c:url value="/document/${doc.id}"/>')"/>
+                </c:if>
                 <h5 style="text-align: left; padding-left: 35px; margin: 0; font-style: italic"><spring:message
                         code="document.import.label.document.class"/>: ${doc.documentClass.getTranslation()}
                     / ${doc.pageCount}

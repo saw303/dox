@@ -22,10 +22,10 @@ import ch.silviowangler.dox.api.DocumentService;
 import ch.silviowangler.dox.api.TranslatableKey;
 import ch.silviowangler.dox.api.settings.SettingsService;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,6 +33,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.HtmlUtils;
 
+import java.io.File;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -42,6 +43,7 @@ import static ch.silviowangler.dox.api.settings.SettingsConstants.SETTING_WILDCA
 import static ch.silviowangler.dox.web.WebConstants.DOCUMENT_CLASS_SHORT_NAME;
 import static com.google.common.collect.ImmutableMap.of;
 import static com.google.common.collect.Maps.newHashMap;
+import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -59,6 +61,8 @@ public class HomeController {
     private DocumentService documentService;
     @Autowired
     private SettingsService settingsService;
+    @Value("#{systemEnvironment['DOX_STORE']}")
+    private File archiveDirectory;
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -67,7 +71,7 @@ public class HomeController {
 
         final Map<String, String> userSettings = settingsService.findUserSettings();
 
-        Map<String, Object> model = Maps.newHashMapWithExpectedSize(userSettings.size());
+        Map<String, Object> model = newHashMapWithExpectedSize(userSettings.size());
 
         model.put("wq", userSettings.containsKey(SETTING_WILDCARD_QUERY) ? userSettings.get(SETTING_WILDCARD_QUERY) : "1");
         model.put("fomd", userSettings.containsKey(SETTING_FIND_ONLY_MY_DOCUMENTS) ? userSettings.get(SETTING_FIND_ONLY_MY_DOCUMENTS) : "0");
@@ -97,7 +101,13 @@ public class HomeController {
             documentReferences = documentService.findDocumentReferences(queryStringCopy);
         }
 
-        Map<String, Object> model = of("documents", documentReferences, "query", queryString);
+        Map<String, Boolean> thumbnailMap = newHashMapWithExpectedSize(documentReferences.size());
+
+        for (DocumentReference documentReference : documentReferences) {
+            thumbnailMap.put(documentReference.getHash(), new File(new File(this.archiveDirectory, "thumbnails"), documentReference.getHash() + ".jpg").exists());
+        }
+
+        Map<String, Object> model = of("documents", documentReferences, "query", queryString, "thumbnail", thumbnailMap);
         return new ModelAndView("result.definition", model);
     }
 
