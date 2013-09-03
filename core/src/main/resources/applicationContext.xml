@@ -42,12 +42,13 @@
                                   ignore-unresolvable="false" order="1"/>
     <context:component-scan base-package="ch.silviowangler.dox"/>
 
-    <cache:annotation-driven />
+    <cache:annotation-driven/>
 
     <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
         <property name="caches">
             <set>
-                <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" p:name="#{T(ch.silviowangler.dox.DocumentServiceImpl).CACHE_DOCUMENT_COUNT}"/>
+                <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"
+                      p:name="#{T(ch.silviowangler.dox.DocumentServiceImpl).CACHE_DOCUMENT_COUNT}"/>
             </set>
         </property>
     </bean>
@@ -59,6 +60,8 @@
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
+
+    <bean id="executor" class="org.apache.commons.exec.DefaultExecutor"/>
 
     <util:properties id="mimeTypes" location="classpath:mimeTypes.properties"/>
 

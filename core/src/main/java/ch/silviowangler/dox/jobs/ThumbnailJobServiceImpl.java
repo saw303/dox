@@ -1,11 +1,12 @@
 package ch.silviowangler.dox.jobs;
 
 import org.apache.commons.exec.CommandLine;
-import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.Executor;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -28,11 +29,16 @@ public class ThumbnailJobServiceImpl implements ThumbnailJobService, Initializin
     @Value("#{systemEnvironment['DOX_STORE']}")
     private File archiveDirectory;
 
+    @Autowired
+    private Executor executor;
+
     private File thumbnailDirectory;
 
     private Logger logger = LoggerFactory.getLogger(ThumbnailJobServiceImpl.class);
 
     public void afterPropertiesSet() throws Exception {
+
+        notNull(this.executor, "Executor must not be null");
 
         notNull(this.archiveDirectory, "DOX document store is not set");
 
@@ -51,8 +57,6 @@ public class ThumbnailJobServiceImpl implements ThumbnailJobService, Initializin
         final File[] doxDocuments = archiveDirectory.listFiles(new DoxDocumentFileFilter());
 
         logger.debug("Found {} files to possibly generate thumbnails", doxDocuments.length);
-
-        DefaultExecutor executor = new DefaultExecutor();
 
         for (File doxDocument : doxDocuments) {
 
