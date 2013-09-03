@@ -45,10 +45,12 @@ public class ThumbnailJobServiceImpl implements ThumbnailJobService, Initializin
     }
 
     @Override
-    @Scheduled(initialDelayString = "10000", fixedRateString = "30000")
+    @Scheduled(initialDelayString = "${job.initial.delay}", fixedRateString = "${job.thumbnail.generation}")
     public void createThumbnails() {
 
         final File[] doxDocuments = archiveDirectory.listFiles(new DoxDocumentFileFilter());
+
+        logger.debug("Found {} files to possibly generate thumbnails", doxDocuments.length);
 
         DefaultExecutor executor = new DefaultExecutor();
 
@@ -64,6 +66,8 @@ public class ThumbnailJobServiceImpl implements ThumbnailJobService, Initializin
             }
 
             if (!jpg.exists()) {
+                logger.debug("No JPEG thumbnail exists. Trying to generate {}", jpg.getAbsolutePath());
+
                 Map<String, String> args = newHashMap();
                 args.put("source", doxDocument.getAbsolutePath());
                 args.put("target", jpg.getAbsolutePath());
@@ -89,6 +93,8 @@ public class ThumbnailJobServiceImpl implements ThumbnailJobService, Initializin
             }
 
             if (!webp.exists() && jpg.exists()) {
+                logger.debug("No WebP thumbnail exists. Trying to generate {}", webp.getAbsolutePath());
+
                 Map<String, String> args = newHashMap();
                 args.put("source", jpg.getAbsolutePath());
                 args.put("target", webp.getAbsolutePath());
