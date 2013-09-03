@@ -121,6 +121,6 @@ public class ThumbnailJobServiceImpl implements ThumbnailJobService, Initializin
                 }
             }
         }
-
+        logger.info("Done generating thumbnails");
     }
 }
