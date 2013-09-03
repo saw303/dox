@@ -58,18 +58,20 @@ public class HomeControllerTest {
         ModelAndView modelAndView = controller.query(expectedQueryString, false, false);
 
         assertThat(modelAndView.getViewName(), is("result.definition"));
-        assertModelKeys(modelAndView);
+        assertModel(modelAndView);
         assertThat(modelAndView.getModelMap().get("query").toString(), is(expectedQueryString));
-        assertThat(modelAndView.getModelMap().size(), is(3));
+
 
         verify(documentService).findDocumentReferences(expectedQueryString);
         verify(documentService, never()).findDocumentReferencesForCurrentUser(expectedQueryString);
     }
 
-    private void assertModelKeys(ModelAndView modelAndView) {
+    private void assertModel(ModelAndView modelAndView) {
         assertTrue(modelAndView.getModelMap().containsKey("documents"));
         assertTrue(modelAndView.getModelMap().containsKey("query"));
         assertTrue(modelAndView.getModelMap().containsKey("thumbnail"));
+        assertThat(modelAndView.getModelMap().size(), is(3));
+        assertThat(modelAndView.getViewName(), is("result.definition"));
     }
 
     @Test
@@ -79,11 +81,9 @@ public class HomeControllerTest {
 
         ModelAndView modelAndView = controller.query(queryStringSentByUser, true, false);
 
-        assertThat(modelAndView.getViewName(), is("result.definition"));
-        assertModelKeys(modelAndView);
+        assertModel(modelAndView);
 
         assertThat(modelAndView.getModelMap().get("query").toString(), is(queryStringSentByUser));
-        assertThat(modelAndView.getModelMap().size(), is(3));
 
         verify(documentService).findDocumentReferences(expectedQueryString);
         verify(documentService, never()).findDocumentReferencesForCurrentUser(queryStringSentByUser);
@@ -95,11 +95,9 @@ public class HomeControllerTest {
 
         ModelAndView modelAndView = controller.query(queryStringSentByUser, true, false);
 
-        assertThat(modelAndView.getViewName(), is("result.definition"));
-        assertModelKeys(modelAndView);
+        assertModel(modelAndView);
 
         assertThat(modelAndView.getModelMap().get("query").toString(), is(queryStringSentByUser));
-        assertThat(modelAndView.getModelMap().size(), is(3));
 
         verify(documentService).findDocumentReferences(queryStringSentByUser);
         verify(documentService, never()).findDocumentReferencesForCurrentUser(queryStringSentByUser);
@@ -111,11 +109,9 @@ public class HomeControllerTest {
 
         ModelAndView modelAndView = controller.query(queryStringSentByUser, false, true);
 
-        assertThat(modelAndView.getViewName(), is("result.definition"));
-        assertModelKeys(modelAndView);
+        assertModel(modelAndView);
 
         assertThat(modelAndView.getModelMap().get("query").toString(), is(queryStringSentByUser));
-        assertThat(modelAndView.getModelMap().size(), is(3));
 
         verify(documentService).findDocumentReferencesForCurrentUser(queryStringSentByUser);
         verify(documentService, never()).findDocumentReferences(queryStringSentByUser);
@@ -128,11 +124,8 @@ public class HomeControllerTest {
 
         ModelAndView modelAndView = controller.query(queryStringSentByUser, true, true);
 
-        assertThat(modelAndView.getViewName(), is("result.definition"));
-        assertModelKeys(modelAndView);
-
+        assertModel(modelAndView);
         assertThat(modelAndView.getModelMap().get("query").toString(), is(queryStringSentByUser));
-        assertThat(modelAndView.getModelMap().size(), is(3));
 
         verify(documentService).findDocumentReferencesForCurrentUser("*" + queryStringSentByUser + "*");
         verify(documentService, never()).findDocumentReferences(queryStringSentByUser);
