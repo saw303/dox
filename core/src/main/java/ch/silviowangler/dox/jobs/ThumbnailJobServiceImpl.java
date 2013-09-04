@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StopWatch;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,6 +54,9 @@ public class ThumbnailJobServiceImpl implements ThumbnailJobService, Initializin
     @Override
     @Scheduled(initialDelayString = "${job.initial.delay}", fixedRateString = "${job.thumbnail.generation}")
     public void createThumbnails() {
+
+        StopWatch stopWatch = new StopWatch(this.getClass().getSimpleName());
+        stopWatch.start();
 
         final File[] doxDocuments = archiveDirectory.listFiles(new DoxDocumentFileFilter());
 
@@ -121,6 +125,7 @@ public class ThumbnailJobServiceImpl implements ThumbnailJobService, Initializin
                 }
             }
         }
-        logger.info("Done generating thumbnails");
+        stopWatch.stop();
+        logger.info("Done generating thumbnails. It took me {} seconds", stopWatch.getTotalTimeSeconds());
     }
 }
