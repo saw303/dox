@@ -32,7 +32,7 @@
     <c:forEach var="doc" items="${documents}">
         <c:if test="${thumbnail.get(doc.hash) == true}">
             <div style="background: url('<c:url
-                    value="/resources/img/file-extensions/${doc.mimeType.split('/')[1].substring(0,3)}.png"/>') left top no-repeat; border: 1px solid; border-radius: 5px; margin-bottom: 10px; overflow: auto; box-shadow:5px 5px 5px #999999;">
+                    value="/resources/img/file-extensions/${doc.mimeType.split('/')[1].substring(0,3)}.png"/>') left top no-repeat; border: 1px solid; border-radius: 5px; margin-bottom: 10px; overflow: auto; box-shadow:5px 5px 5px #999999; background-color: #F5DEB3;">
                 <div style="margin-left: 25%;">
                     <div style="float:right;vertical-align: top;margin-right: 10px;font-size: 10px;"><a
                             href="<c:url value="/document/edit/${doc.id}"/>"><spring:message
@@ -40,7 +40,7 @@
 
                     <c:if test="${thumbnail.get(doc.hash) == true}">
                         <img src="<c:url value="/document/${doc.hash}.thumbnail"/>"
-                             style="display: block; float: right; margin: 10px; padding-top: 25px;"
+                             style="display: block; float: right; margin: 25px; box-shadow: 5px 5px 5px #999999;"
                              onclick="window.open('<c:url value="/document/${doc.id}"/>')"/>
                     </c:if>
                     <h2 id="${doc.id}" onclick="window.open('<c:url value="/document/${doc.id}"/>')"
@@ -61,7 +61,7 @@
         </c:if>
         <c:if test="${thumbnail.get(doc.hash) == false}">
             <div style="background: url('<c:url
-                    value="/resources/img/file-extensions/${doc.mimeType.split('/')[1].substring(0,3)}.png"/>') left top no-repeat; background-size: 32px; border: 1px solid; border-radius: 5px; margin-bottom: 10px; overflow: auto; box-shadow:5px 5px 5px #999999;">
+                    value="/resources/img/file-extensions/${doc.mimeType.split('/')[1].substring(0,3)}.png"/>') left top no-repeat; background-size: 32px; border: 1px solid; border-radius: 5px; margin-bottom: 10px; overflow: auto; box-shadow:5px 5px 5px #999999; background-color: #F5DEB3;">
                 <div>
                     <div style="float:right;vertical-align: top;margin-right: 10px;font-size: 10px;"><a
                             href="<c:url value="/document/edit/${doc.id}"/>"><spring:message
