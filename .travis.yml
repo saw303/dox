@@ -5,6 +5,8 @@ jdk:
 
 env:
     - DOX_STORE=~
+    - mkdir ~/thumbnails
+    - chmod 777 ~/thumbnails
 
 before_install:
 
