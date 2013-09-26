@@ -183,7 +183,20 @@ project(':core') {
         include '**/*IntegrationTest.class'
         reports.html.destination = file("${reports.html.destination}/integration")
         reports.junitXml.destination = file("${reports.junitXml.destination}/integration")
+
+        doFirst {
+            def thumbnailDir = new File(System.getenv('DOX_STORE'), 'thumbnails')
+
+            final thumbnailDirExists = thumbnailDir.exists()
+            logger.info("File ${thumbnailDir.absolutePath} exists? ${thumbnailDirExists}")
+
+            if (!thumbnailDirExists) {
+                assert thumbnailDir.mkdir()
+            }
+        }
     }
+
+
 
     jacocoTestReport {
 
