@@ -19,7 +19,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.3'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.4'
     }
 }
 
@@ -243,6 +243,7 @@ project(':web') {
         runtime 'org.codehaus.jackson:jackson-mapper-asl:1.9.12'
         runtime "org.springframework:spring-oxm:${ext.springVersion}"
         runtime "com.thoughtworks.xstream:xstream:${ext.xstreamVersion}"
+        runtime 'joda-time:joda-time-jsptags:1.1.1'
         providedRuntime "com.h2database:h2:${ext.h2Version}"
         providedRuntime "mysql:mysql-connector-java:${ext.mysqlVersion}"
         providedCompile 'javax.servlet.jsp:jsp-api:2.1'
