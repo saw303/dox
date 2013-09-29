@@ -180,7 +180,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
     @Test
     public void findBySingleStringReferringToIndexCompany() {
 
-        Set<DocumentReference> documentReferences = documentService.findDocumentReferences(SUNRISE);
+        List<DocumentReference> documentReferences = documentService.findDocumentReferences(SUNRISE);
 
         assertNotNull(documentReferences);
         assertEquals(2, documentReferences.size());
@@ -190,7 +190,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
     @Test
     public void findBySingleStringReferringToIndexCompanyUsingLowercaseString() {
 
-        Set<DocumentReference> documentReferences = documentService.findDocumentReferences("sunrise");
+        List<DocumentReference> documentReferences = documentService.findDocumentReferences("sunrise");
 
         assertNotNull(documentReferences);
         assertEquals(2, documentReferences.size());
@@ -200,7 +200,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
     @Test
     public void findBySingleStringReferringToIndexCompanyUsingFunnyFormattedString() {
 
-        Set<DocumentReference> documentReferences = documentService.findDocumentReferences("sUnRiSE");
+        List<DocumentReference> documentReferences = documentService.findDocumentReferences("sUnRiSE");
 
         assertNotNull(documentReferences);
         assertEquals(2, documentReferences.size());
@@ -210,7 +210,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
     @Test
     public void findBySingleStringReferringToInvoiceAmount() {
 
-        Set<DocumentReference> documentReferences = documentService.findDocumentReferences("100.5");
+        List<DocumentReference> documentReferences = documentService.findDocumentReferences("100.5");
 
         assertNotNull(documentReferences);
         assertEquals(1, documentReferences.size());
@@ -220,7 +220,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
     @Test
     public void findBySingleStringReferringToCompany() {
 
-        Set<DocumentReference> documentReferences = documentService.findDocumentReferences("02.12.2009");
+        List<DocumentReference> documentReferences = documentService.findDocumentReferences("02.12.2009");
 
         assertNotNull(documentReferences);
         assertEquals(1, documentReferences.size());
@@ -230,7 +230,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
     @Test
     public void findBySingleStringReferringToIndexCompanyUsingStringThatContainsWildcard() {
 
-        Set<DocumentReference> documentReferences = documentService.findDocumentReferences("S*");
+        List<DocumentReference> documentReferences = documentService.findDocumentReferences("S*");
 
         assertNotNull(documentReferences);
         assertEquals(3, documentReferences.size());
@@ -242,7 +242,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
     @Test
     public void findBySingleStringReferringToAllProperties() {
 
-        Set<DocumentReference> documentReferences = documentService.findDocumentReferences("*");
+        List<DocumentReference> documentReferences = documentService.findDocumentReferences("*");
 
         assertNotNull(documentReferences);
         assertEquals(3, documentReferences.size());
@@ -254,7 +254,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
     @Test
     public void findBySingleStringReferringToIndexCompanyUsingStringThatContainsWildcards() {
 
-        Set<DocumentReference> documentReferences = documentService.findDocumentReferences("?unrise");
+        List<DocumentReference> documentReferences = documentService.findDocumentReferences("?unrise");
 
         assertNotNull(documentReferences);
         assertEquals(2, documentReferences.size());
@@ -264,7 +264,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
     @Test
     public void findByFileName() {
 
-        Set<DocumentReference> documentReferences = documentService.findDocumentReferences("file-1.txt");
+        List<DocumentReference> documentReferences = documentService.findDocumentReferences("file-1.txt");
 
         assertThat(documentReferences, is(not(nullValue())));
         assertThat(documentReferences.size(), CoreMatchers.is(1));
@@ -280,16 +280,16 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
     @SuppressWarnings("unchecked")
     public void findByAnotherFileName() {
 
-        List<Set<DocumentReference>> results = newArrayList(
+        List<List<DocumentReference>> results = newArrayList(
                 documentService.findDocumentReferences("file-2.txt"),
                 documentService.findDocumentReferences("file-2.*t")
         );
 
-        for (Set<DocumentReference> documentReferences : results) {
+        for (List<DocumentReference> documentReferences : results) {
             assertThat(documentReferences, is(not(nullValue())));
             assertThat(documentReferences.size(), CoreMatchers.is(1));
-            assertEquals(SWISSCOM, documentReferences.iterator().next().getIndices().get(COMPANY));
-            assertEquals(BigDecimal.valueOf(1200.99), documentReferences.iterator().next().getIndices().get(new TranslatableKey("invoiceAmount")));
+            assertEquals(SWISSCOM, documentReferences.get(0).getIndices().get(COMPANY));
+            assertEquals(BigDecimal.valueOf(1200.99), documentReferences.get(0).getIndices().get(new TranslatableKey("invoiceAmount")));
         }
     }
 

@@ -16,6 +16,7 @@
 
 package ch.silviowangler.dox.api;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
@@ -73,15 +74,16 @@ public interface DocumentService {
      * @param queryString a simple query string (e.g. a keyword 'taxes' or a date '01.12.2012')
      * @return all documents that are holding this keyword as a part of an index
      */
-    Set<DocumentReference> findDocumentReferences(String queryString);
+    List<DocumentReference> findDocumentReferences(String queryString);
 
     /**
      * Retrieves for the current user only
+     *
      * @param queryString
      * @return
      * @since 0.3
      */
-    Set<DocumentReference> findDocumentReferencesForCurrentUser(String queryString);
+    List<DocumentReference> findDocumentReferencesForCurrentUser(String queryString);
 
     Set<DocumentClass> findDocumentClasses();
 
@@ -112,6 +114,7 @@ public interface DocumentService {
 
     /**
      * Retrieves the current amount of document references managed by DOX
+     *
      * @return the amount of document references
      */
     long retrieveDocumentReferenceCount();

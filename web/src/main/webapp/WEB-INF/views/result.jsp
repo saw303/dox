@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@taglib uri="/WEB-INF/dox.tld" prefix="dox" %>
+<%@taglib prefix="joda" uri="http://www.joda.org/joda/time/tags" %>
 <%--
   ~ Copyright 2012 - 2013 Silvio Wangler (silvio.wangler@gmail.com)
   ~
@@ -53,6 +54,7 @@
                         <li title="${doc.hash}"><spring:message code="document.hashCode"/>: ${doc.hash.substring(0, 30)}...</li>
                         <li><spring:message code="document.userReference"/>: ${doc.userReference} </li>
                         <li><spring:message code="document.filesize"/>: ${doc.humanReadableFileSize()}</li>
+                        <li>creation date: <joda:format value="${doc.creationDate}" pattern="dd.MM.yyyy HH:mm:ss"/></li>
                     </ul>
                     <dox:attributeListing documentReference="${doc}" query="${query}"/>
                 </div>
@@ -74,7 +76,8 @@
                         <spring:message code="pages"/> /
                         <spring:message code="document.hashCode"/>: ${doc.hash}, <spring:message
                                 code="document.userReference"/>: ${doc.userReference} / <spring:message
-                                code="document.filesize"/>: ${doc.humanReadableFileSize()}</h5>
+                                code="document.filesize"/>: ${doc.humanReadableFileSize()} / creation date: <joda:format
+                                value="${doc.creationDate}" pattern="dd.MM.yyyy HH:mm:ss"/></h5>
                 </div>
                 <dox:attributeListing documentReference="${doc}" query="${query}"/>
             </div>

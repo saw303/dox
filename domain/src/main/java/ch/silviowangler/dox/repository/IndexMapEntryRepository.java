@@ -33,16 +33,16 @@ import java.util.List;
  */
 public interface IndexMapEntryRepository extends CrudRepository<IndexMapEntry, Long> {
 
-    @Query("select distinct i.document from IndexMapEntry i where stringRepresentation = :upperCaseValue or i.document.originalFilename = :originalValue")
+    @Query("select distinct d from IndexMapEntry i, Document d where i.document = d and (i.stringRepresentation = :upperCaseValue or i.document.originalFilename = :originalValue) order by d.creationDate desc")
     List<Document> findByValue(@Param("upperCaseValue") String upperCaseValue, @Param("originalValue") String originalValue);
 
-    @Query("select distinct i.document from IndexMapEntry i where stringRepresentation like %?1 or i.document.originalFilename like %?2")
+    @Query("select distinct d from IndexMapEntry i, Document d where i.document = d and (i.stringRepresentation like %?1 or i.document.originalFilename like %?2) order by d.creationDate desc")
     List<Document> findByValueLike(String upperCaseValue, String originalValue);
 
-    @Query("select distinct i.document from IndexMapEntry i where (stringRepresentation = :upperCaseValue or i.document.originalFilename = :originalValue) and i.document.userReference = :userReference")
+    @Query("select distinct d from IndexMapEntry i, Document d where i.document = d and (i.stringRepresentation = :upperCaseValue or i.document.originalFilename = :originalValue) and i.document.userReference = :userReference  order by d.creationDate desc")
     List<Document> findByValueAndUserReference(@Param("upperCaseValue") String upperCaseValue, @Param("originalValue") String originalValue, @Param("userReference") String userReference);
 
-    @Query("select distinct i.document from IndexMapEntry i where (stringRepresentation like %?1 or i.document.originalFilename like %?2) and i.document.userReference = ?3")
+    @Query("select distinct d from IndexMapEntry i, Document d where i.document = d and (i.stringRepresentation like %?1 or i.document.originalFilename like %?2) and i.document.userReference = ?3  order by d.creationDate desc")
     List<Document> findByValueLikeAndUserReference(String upperCaseValue, String originalValue, String userReference);
 
     List<IndexMapEntry> findByDocument(Document document);

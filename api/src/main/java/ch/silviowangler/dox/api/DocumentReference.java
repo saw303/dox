@@ -18,6 +18,7 @@ package ch.silviowangler.dox.api;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Maps;
+import org.joda.time.DateTime;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -40,6 +41,7 @@ public class DocumentReference implements Serializable {
     private String fileName;
     private String userReference;
     private long fileSize;
+    private DateTime creationDate;
 
     public DocumentReference(String fileName) {
         this.fileName = fileName;
@@ -141,6 +143,14 @@ public class DocumentReference implements Serializable {
         return humanReadableByteCount(this.fileSize, true);
     }
 
+    public DateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(DateTime creationDate) {
+        this.creationDate = creationDate;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
@@ -153,6 +163,7 @@ public class DocumentReference implements Serializable {
                 .add("fileName", fileName)
                 .add("userReference", userReference)
                 .add("fileSize", fileSize)
+                .add("creationDate", creationDate)
                 .toString();
     }
 

@@ -60,6 +60,7 @@ import java.util.*;
 import static ch.silviowangler.dox.domain.AttributeDataType.*;
 import static ch.silviowangler.dox.domain.DomainUtils.containsWildcardCharacters;
 import static ch.silviowangler.dox.domain.DomainUtils.replaceWildcardCharacters;
+import static com.google.common.collect.Lists.newArrayListWithCapacity;
 import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
 import static org.springframework.transaction.annotation.Propagation.REQUIRED;
 import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
@@ -139,19 +140,19 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     @Override
     @Transactional(propagation = SUPPORTS, readOnly = true)
     @PreAuthorize("hasRole('ROLE_USER')")
-    public Set<DocumentReference> findDocumentReferences(String queryString) {
+    public List<DocumentReference> findDocumentReferences(String queryString) {
         return findDocumentReferencesInternal(queryString, null);
     }
 
     @Override
     @Transactional(propagation = SUPPORTS, readOnly = true)
     @PreAuthorize("hasRole('ROLE_USER')")
-    public Set<DocumentReference> findDocumentReferencesForCurrentUser(String queryString) {
+    public List<DocumentReference> findDocumentReferencesForCurrentUser(String queryString) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return findDocumentReferencesInternal(queryString, user.getUsername());
     }
 
-    private Set<DocumentReference> findDocumentReferencesInternal(String queryString, String username) {
+    private List<DocumentReference> findDocumentReferencesInternal(String queryString, String username) {
         logger.debug("About to find document references for query string '{}'", queryString);
 
         List<Document> documents;
@@ -172,7 +173,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             }
         }
 
-        Set<DocumentReference> documentReferences = new HashSet<>(documents.size());
+        List<DocumentReference> documentReferences = newArrayListWithCapacity(documents.size());
 
         logger.info("Found {} documents for query string '{}'", documents.size(), queryString);
 
@@ -600,13 +601,17 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     private DocumentReference toDocumentReference(Document document) {
-        return new DocumentReference(document.getHash(),
+        final DocumentReference documentReference = new DocumentReference(document.getHash(),
                 document.getId(),
                 document.getPageCount(),
                 document.getMimeType(),
                 toDocumentClassApi(document.getDocumentClass()),
                 toIndexMap(document.getIndexStore(), attributeRepository.findAttributesForDocumentClass(document.getDocumentClass())),
                 document.getOriginalFilename(), document.getUserReference(), document.getFileSize());
+
+        documentReference.setCreationDate(document.getCreationDate());
+
+        return documentReference;
     }
 
     private Map<TranslatableKey, Object> toIndexMap(IndexStore indexStore, List<Attribute> attributes) {

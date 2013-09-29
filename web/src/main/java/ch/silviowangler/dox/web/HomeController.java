@@ -35,6 +35,7 @@ import org.springframework.web.util.HtmlUtils;
 
 import java.io.File;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -94,7 +95,7 @@ public class HomeController {
             logger.debug("Using wildcard search '{}'", queryStringCopy);
         }
 
-        Set<DocumentReference> documentReferences;
+        List<DocumentReference> documentReferences;
         if (forCurrentUserOnly) {
             documentReferences = documentService.findDocumentReferencesForCurrentUser(queryStringCopy);
         } else {
