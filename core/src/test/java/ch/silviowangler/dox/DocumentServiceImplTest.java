@@ -17,17 +17,30 @@
 package ch.silviowangler.dox;
 
 import ch.silviowangler.dox.api.DocumentService;
+import ch.silviowangler.dox.domain.Document;
+import ch.silviowangler.dox.domain.IndexStore;
 import ch.silviowangler.dox.repository.DocumentRepository;
+import ch.silviowangler.dox.repository.IndexStoreRepository;
+import com.google.common.collect.Sets;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+
+import java.util.Collection;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Silvio Wangler
@@ -40,6 +53,15 @@ public class DocumentServiceImplTest {
     private DocumentService documentService = new DocumentServiceImpl();
     @Mock
     private DocumentRepository documentRepository;
+    @Mock
+    private IndexStoreRepository indexStoreRepository;
+    @Mock
+    Authentication authentication;
+
+    @After
+    public void tearDown() throws Exception {
+        SecurityContextHolder.clearContext();
+    }
 
     @Test
     public void testRetrieveDocumentReferenceCount() throws Exception {
@@ -47,5 +69,70 @@ public class DocumentServiceImplTest {
         when(documentRepository.count()).thenReturn(99L);
         assertThat(documentService.retrieveDocumentReferenceCount(), is(99L));
         verify(documentRepository).count();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testDeleteDocumentUsingNullId() throws Exception {
+        documentService.deleteDocument(null);
+    }
+
+    @Test
+    public void testDeleteDocument() throws Exception {
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        Collection<SimpleGrantedAuthority> authorities = Sets.newHashSet();
+        when(authentication.getPrincipal()).thenReturn(new User("saw303", "", authorities));
+
+        Document document = new Document();
+        document.setIndexStore(new IndexStore());
+
+        document.setUserReference("saw303");
+
+        final long documentId = 1L;
+
+        when(documentRepository.findOne(documentId)).thenReturn(document);
+        InOrder order = inOrder(documentRepository, indexStoreRepository);
+
+        documentService.deleteDocument(documentId);
+
+        order.verify(documentRepository).findOne(documentId);
+        order.verify(indexStoreRepository).delete(Matchers.<IndexStore>any());
+        order.verify(documentRepository).delete(documentId);
+
+        order.verifyNoMoreInteractions();
+    }
+
+    @Test(expected = AccessDeniedException.class)
+    public void testDeleteDocumentThatDoesNotBelongToTheCurrentUser() throws Exception {
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        Collection<SimpleGrantedAuthority> authorities = Sets.newHashSet();
+        when(authentication.getPrincipal()).thenReturn(new User("guschti", "", authorities));
+
+        Document document = new Document();
+        document.setIndexStore(new IndexStore());
+
+        document.setUserReference("saw303");
+
+        final long documentId = 1L;
+
+        when(documentRepository.findOne(documentId)).thenReturn(document);
+        documentService.deleteDocument(documentId);
+    }
+
+    @Test
+    public void testDeleteDocumentThatDoesNotExist() throws Exception {
+
+        final long documentId = 1L;
+
+        when(documentRepository.findOne(documentId)).thenReturn(null);
+
+        documentService.deleteDocument(documentId);
+
+        InOrder order = inOrder(documentRepository, indexStoreRepository);
+        order.verify(documentRepository).findOne(documentId);
+        order.verifyNoMoreInteractions();
     }
 }

@@ -188,4 +188,11 @@ public class DocumentController {
         }
         return modelAndView;
     }
+
+    @RequestMapping(method = GET, value = "/document/delete/{id}")
+    public ModelAndView deleteDocument(@PathVariable("id") Long id) {
+        documentService.deleteDocument(id);
+
+        return new ModelAndView("redirect:/");
+    }
 }

@@ -44,6 +44,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -105,6 +106,37 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     @Override
+    @Transactional
+    public void deleteDocument(Long id) {
+
+        logger.info("About delete document reference with id {}", id);
+
+        notNull(id, "id must not be null");
+
+        Document document = documentRepository.findOne(id);
+
+        if (document != null) {
+
+            User user = getPrincipal();
+
+            if (!user.getUsername().equals(document.getUserReference())) {
+                logger.warn("User '{}' tries to delete document with id {} but it belongs to user '{}' and can therefore no be deleted by that user", new Object[]{user.getUsername(), document.getId(), document.getUserReference()});
+                throw new AccessDeniedException("Document " + document.getId() + " is not owned by you. You can only delete your own documents");
+            }
+
+            indexStoreRepository.delete(document.getIndexStore());
+            document.setIndexStore(null);
+            documentRepository.delete(id);
+
+            logger.info("Document reference {} successfully deleted", id);
+        }
+    }
+
+    private User getPrincipal() {
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    @Override
     @Cacheable(CACHE_DOCUMENT_COUNT)
     @Transactional(propagation = SUPPORTS, readOnly = true)
     public long retrieveDocumentReferenceCount() {
@@ -148,7 +180,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     @Transactional(propagation = SUPPORTS, readOnly = true)
     @PreAuthorize("hasRole('ROLE_USER')")
     public List<DocumentReference> findDocumentReferencesForCurrentUser(String queryString) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = getPrincipal();
         return findDocumentReferencesInternal(queryString, user.getUsername());
     }
 
@@ -296,7 +328,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         IndexStore indexStore = new IndexStore();
         updateIndices(physicalDocumentApi, indexStore);
 
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = getPrincipal();
 
         Document document = new Document(hash, documentClassEntity, numberOfPages, mimeType, physicalDocumentApi.getFileName(), indexStore, user.getUsername());
         indexStore.setDocument(document);

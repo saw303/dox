@@ -52,6 +52,8 @@ public class AutomaticTranslatorAdvice {
 
     public void addTranslationIfNeeded(Object retVal) throws Throwable {
 
+        if (retVal == null) return;
+
         translateWhenPossible(retVal);
 
         TranslateProperties translateProperties = retVal.getClass().getAnnotation(TranslateProperties.class);
@@ -66,8 +68,7 @@ public class AutomaticTranslatorAdvice {
                 if (propertyValue != null) {
                     logger.trace("Property {} is class {}", propertyName, propertyValue.getClass().getName());
                     translateWhenPossible(propertyValue);
-                }
-                else {
+                } else {
                     logger.trace("Property {} has null value", propertyName);
                 }
             }

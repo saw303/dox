@@ -42,12 +42,12 @@ public class Document extends AbstractPersistable<Long> {
     private String mimeType;
     @Column(nullable = false, length = 255)
     private String originalFilename;
-    @OneToOne(optional = true)
+    @OneToOne(optional = true, orphanRemoval = true)
     private IndexStore indexStore;
     @Column(nullable = false)
     @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
     private DateTime creationDate = DateTime.now();
-    @OneToMany(mappedBy = "document")
+    @OneToMany(mappedBy = "document", orphanRemoval = true)
     private Set<IndexMapEntry> indexMapEntries;
     @Column(nullable = false, length = 25)
     private String userReference;

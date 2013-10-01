@@ -118,4 +118,12 @@ public interface DocumentService {
      * @return the amount of document references
      */
     long retrieveDocumentReferenceCount();
+
+    /**
+     * Deletes a document
+     *
+     * @param id the ID of the document you wish to delete
+     * @throws IllegalArgumentException if id is null
+     */
+    void deleteDocument(Long id);
 }
