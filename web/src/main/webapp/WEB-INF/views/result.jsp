@@ -47,7 +47,7 @@
                              onclick="window.open('<c:url value="/document/${doc.id}"/>')"/>
                     </c:if>
                     <h2 id="${doc.id}" onclick="window.open('<c:url value="/document/${doc.id}"/>')"
-                        style="text-align: left; padding: 30px 0 0 35px; margin: 2px 0 0 0">${doc.fileName}</h2>
+                        style="text-align: left; padding: 30px 0 0 35px; margin: 2px 0 0 0; overflow: hidden;">${doc.fileName}</h2>
 
                     <ul style="list-style: none; text-align: left; font-size: 0.8em; padding-left: 35px;">
                         <li><spring:message
