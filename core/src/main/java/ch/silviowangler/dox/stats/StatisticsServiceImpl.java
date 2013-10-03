@@ -23,6 +23,7 @@ import ch.silviowangler.dox.domain.stats.ReferenceType;
 import ch.silviowangler.dox.repository.stats.ClickStatsRepository;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,18 +45,21 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     @Transactional(readOnly = true, propagation = SUPPORTS)
+    @PreAuthorize("hasRole('ROLE_USER')")
     public Long fetchDocumentReferenceClicksCount() {
         return clickStatsRepository.countDocumentReferenceClicks();
     }
 
     @Override
     @Transactional(readOnly = true, propagation = SUPPORTS)
+    @PreAuthorize("hasRole('ROLE_USER')")
     public Long fetchLinkClicksCount() {
         return clickStatsRepository.countLinkClicks();
     }
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('ROLE_USER')")
     public void registerDocumentReferenceClick(String documentReferenceId, String username) {
         ClickStats stats = new ClickStats(documentReferenceId, DOCUMENT_REFERENCE, username);
         clickStatsRepository.save(stats);
@@ -63,6 +67,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('ROLE_USER')")
     public void registerLinkClick(String link, String username) {
         ClickStats stats = new ClickStats(link, LINK, username);
         clickStatsRepository.save(stats);
@@ -70,6 +75,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     @Transactional(readOnly = true, propagation = SUPPORTS)
+    @PreAuthorize("hasRole('ROLE_USER')")
     public List<DocumentReferenceClickStats> fetchDocumentReferenceClickStats() {
 
         final List<Object[]> documentReferenceClickStats = clickStatsRepository.fetchDocumentReferenceClickStatistics(ReferenceType.DOCUMENT_REFERENCE);

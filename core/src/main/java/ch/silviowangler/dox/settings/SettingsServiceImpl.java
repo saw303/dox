@@ -7,6 +7,7 @@ import ch.silviowangler.dox.repository.UserSettingRepository;
 import ch.silviowangler.dox.repository.security.DoxUserRepository;
 import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class SettingsServiceImpl implements SettingsService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('ROLE_USER')")
     public void createOrUpdateSetting(String key, String value) {
 
         DoxUser doxUser = getDoxUser();
@@ -52,6 +54,7 @@ public class SettingsServiceImpl implements SettingsService {
 
     @Override
     @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('ROLE_USER')")
     public Map<String, String> findUserSettings() {
 
         final List<UserSetting> userSettings = userSettingRepository.findByUser(getDoxUser());
