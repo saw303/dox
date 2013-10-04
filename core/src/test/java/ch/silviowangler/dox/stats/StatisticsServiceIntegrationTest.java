@@ -19,6 +19,7 @@ package ch.silviowangler.dox.stats;
 import ch.silviowangler.dox.AbstractIntegrationTest;
 import ch.silviowangler.dox.api.stats.DocumentReferenceClickStats;
 import ch.silviowangler.dox.api.stats.StatisticsService;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -35,6 +36,11 @@ public class StatisticsServiceIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
     private StatisticsService statisticsService;
+
+    @Before
+    public void setUp() throws Exception {
+        loginAsRoot();
+    }
 
     @Test
     public void storeClick() {
