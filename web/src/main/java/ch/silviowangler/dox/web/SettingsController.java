@@ -64,7 +64,7 @@ public class SettingsController {
         List<Setting> settings = Lists.newArrayListWithCapacity(model.size());
 
         for (String key : model.keySet()) {
-            settings.add(new Setting(key, model.get(key)));
+            settings.add(new Setting(key, model.get(key), "not yet implemented"));
         }
 
         return settings;

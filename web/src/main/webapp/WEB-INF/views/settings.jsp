@@ -10,8 +10,12 @@
 
 
 <h1><spring:message code="settings.title"/></h1>
-<section>
+<section ng-controller="SettingsController">
     <ul id="settingsList">
+        <li ng-repeat="setting in settings">
+            {{setting.description}} <input type="checkbox" name="{{setting.key}}" ng-model="setting.value"/>
+        </li>
+
         <li><spring:message code="settings.wildcard.always.on"/>
             <form method="post" action="/updateSetting.html"><input type="hidden" name="setting"
                                                                     value="<%=SettingsConstants.SETTING_WILDCARD_QUERY%>"/>

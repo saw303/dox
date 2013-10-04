@@ -12,15 +12,17 @@ public class Setting implements Serializable {
 
     private String key;
     private String value;
+    private String description;
 
 
     public Setting() {
         super();
     }
 
-    public Setting(String key, String value) {
+    public Setting(String key, String value, String description) {
         this.key = key;
         this.value = value;
+        this.description = description;
     }
 
     public String getKey() {
@@ -39,11 +41,20 @@ public class Setting implements Serializable {
         this.value = value;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
                 .add("key", key)
                 .add("value", value)
+                .add("description", description)
                 .toString();
     }
 
