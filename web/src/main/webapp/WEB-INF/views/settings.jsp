@@ -15,7 +15,7 @@
             {{setting.description}} <input type="checkbox" name="{{setting.key}}" ng-model="setting.value"/>
         </li>
     </ul>
-    <button><spring:message code="settings.button.label"/></button>
+    <button ng-click="save()"><spring:message code="settings.button.label"/></button>
 </section>
 </body>
 </html>

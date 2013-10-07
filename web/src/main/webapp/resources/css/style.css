@@ -471,10 +471,6 @@ Form upload
     list-style-type: none;
 }
 
-#settingsList li {
-    display: inline;
-}
-
 #importSuccessWrapper table {
     /* center table */
     margin-left: auto;

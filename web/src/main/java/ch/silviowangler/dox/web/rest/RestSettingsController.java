@@ -3,10 +3,13 @@ package ch.silviowangler.dox.web.rest;
 import ch.silviowangler.dox.api.settings.Setting;
 import ch.silviowangler.dox.api.settings.SettingsService;
 import com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
@@ -18,6 +21,7 @@ import static ch.silviowangler.dox.api.settings.SettingsConstants.SETTING_FIND_O
 import static ch.silviowangler.dox.api.settings.SettingsConstants.SETTING_WILDCARD_QUERY;
 import static com.google.common.collect.Maps.newHashMap;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * @author Silvio Wangler
@@ -31,6 +35,8 @@ public class RestSettingsController implements MessageSourceAware {
     private SettingsService settingsService;
 
     private MessageSource messageSource;
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public void setMessageSource(MessageSource messageSource) {
@@ -59,5 +65,12 @@ public class RestSettingsController implements MessageSourceAware {
         }
 
         return settings;
+    }
+
+    @RequestMapping(method = POST)
+    public void saveSettings(@RequestBody List<Setting> settings) {
+
+        logger.debug("Received {} settings", settings.size());
+
     }
 }

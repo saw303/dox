@@ -38,8 +38,8 @@
     <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>"/>
 
     <link type="text/plain" rel="author" href="humans.txt"/>
-    <script src="<c:url value="/js/libs/angular-1.0.8/angular.js"/>"></script>
-    <script src="<c:url value="/js/libs/angular-1.0.8/angular-resource.js"/>"></script>
+    <script src="<c:url value="/js/libs/angular-1.2.0-rc.2/angular.js"/>"></script>
+    <script src="<c:url value="/js/libs/angular-1.2.0-rc.2/angular-resource.js"/>"></script>
     <script src="<c:url value="/js/dox/settings.js"/>"></script>
 </head>
 <body>

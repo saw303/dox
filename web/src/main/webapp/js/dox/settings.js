@@ -1,10 +1,13 @@
 angular.module("dox", ['ngResource'])
 
-    .controller('SettingsController', function ($scope, $resource) {
+    .controller('SettingsController', function ($scope, Settings) {
+        $scope.settings = Settings.query();
 
-        $scope.settings = [
-            {key: 'hello', value: true, description: 'Ich bin eine Beschreibung'},
-            {key: 'hullu', value: false, description: 'Und ich bin eine andere Beschreibung'}
-        ];
+        $scope.save = function () {
+            Settings.save();
+        };
+    })
 
+    .factory('Settings', function ($resource) {
+        return $resource('/api/v1/settings/:settingId', {settingId: '@id'});
     });
