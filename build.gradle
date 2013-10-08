@@ -49,7 +49,7 @@ allprojects {
 
     project.ext {
         springVersion = '3.2.4.RELEASE'
-        springMobileVersion = '1.1.0.M3'
+        springMobileVersion = '1.1.0.RELEASE'
         springDataVersion = '1.4.1.RELEASE'
         springSecurityVersion = '3.2.0.RC1'
         hibernateVersion = '4.2.6.Final'
