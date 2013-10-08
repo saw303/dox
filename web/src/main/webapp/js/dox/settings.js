@@ -1,10 +1,17 @@
-angular.module("dox", ['ngResource'])
+angular.module('dox', ['ngResource'])
 
     .controller('SettingsController', function ($scope, Settings) {
-        $scope.settings = Settings.query();
+        Settings.query(function (settings) {
+            $scope.settings = settings;
+            console.log('Retrieved ' + $scope.settings.length + ' settings for current user');
+        });
 
         $scope.save = function () {
-            Settings.save();
+
+            angular.forEach($scope.settings, function (value, key) {
+                console.log('About to save \'' + value.key + '\' and value \'' + value.value + '\'');
+                Settings.save(value);
+            });
         };
     })
 

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -68,9 +69,10 @@ public class RestSettingsController implements MessageSourceAware {
     }
 
     @RequestMapping(method = POST)
-    public void saveSettings(@RequestBody List<Setting> settings) {
+    public void saveSetting(@RequestBody Setting setting, HttpServletResponse response) {
 
-        logger.debug("Received {} settings", settings.size());
+        logger.debug("Received {} settings", setting);
 
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 }
