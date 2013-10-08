@@ -196,8 +196,6 @@ project(':core') {
         }
     }
 
-
-
     jacocoTestReport {
 
         if (file("${buildDir}/jacoco/integrationTest.exec").exists()) {
