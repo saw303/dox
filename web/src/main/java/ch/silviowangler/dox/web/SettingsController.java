@@ -4,7 +4,6 @@ import ch.silviowangler.dox.api.settings.SettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
@@ -13,7 +12,6 @@ import static ch.silviowangler.dox.api.settings.SettingsConstants.SETTING_FIND_O
 import static ch.silviowangler.dox.api.settings.SettingsConstants.SETTING_WILDCARD_QUERY;
 import static com.google.common.collect.Maps.newHashMap;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * @author Silvio Wangler
@@ -27,16 +25,6 @@ public class SettingsController {
 
     @RequestMapping(method = GET, value = "settings.html")
     ModelAndView displaySettings() {
-        Map<String, String> model = getModel();
-
-        return new ModelAndView("settings", model);
-    }
-
-    @RequestMapping(method = POST, value = "updateSetting.html")
-    ModelAndView updateSettings(@RequestParam("setting") String settingKey, @RequestParam(required = false, value = "v", defaultValue = "0") String value) {
-
-        settingsService.createOrUpdateSetting(settingKey, value);
-
         Map<String, String> model = getModel();
 
         return new ModelAndView("settings", model);

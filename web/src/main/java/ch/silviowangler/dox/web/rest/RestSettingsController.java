@@ -73,6 +73,14 @@ public class RestSettingsController implements MessageSourceAware {
 
         logger.debug("Received {} settings", setting);
 
+        if ("fomd".equals(setting.getKey())) {
+            settingsService.createOrUpdateSetting(SETTING_FIND_ONLY_MY_DOCUMENTS, setting.getValue());
+        } else if ("wq".equals(setting.getKey())) {
+            settingsService.createOrUpdateSetting(SETTING_WILDCARD_QUERY, setting.getValue());
+        } else {
+            logger.warn("Unknown key {}. Did not update any setting", setting.getKey());
+        }
+
         response.setStatus(HttpServletResponse.SC_OK);
     }
 }
