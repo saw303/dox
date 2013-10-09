@@ -10,7 +10,7 @@ angular.module('dox', ['ngResource'])
 
             angular.forEach($scope.settings, function (value, key) {
                 console.log('About to save \'' + value.key + '\' and value \'' + value.value + '\'');
-                Settings.save(value);
+                value.$save();
             });
         };
     })
