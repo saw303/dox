@@ -26,12 +26,22 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletResponse;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Properties;
 
 import static com.google.common.net.HttpHeaders.CONTENT_DISPOSITION;
+import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
 /**
  * @version 0.2
@@ -49,6 +59,10 @@ public class RepositoryControllerTest {
     private DoxExporter doxExporter;
     @Mock
     private Properties mimeTypes;
+    @Mock
+    private ServletOutputStream outputStream;
+    @Mock
+    private HttpServletResponse response;
 
     @Test
     public void testGetDocument() throws Exception {
@@ -62,6 +76,23 @@ public class RepositoryControllerTest {
 
         assertThat(response.getContentType(), is("my content type"));
         assertThat(response.containsHeader(CONTENT_DISPOSITION), is(true));
+    }
 
+    @Test
+    public void testGetDocument2() throws Exception {
+
+        final File file = folder.newFile("hello.txt");
+
+        InputStream in = new ByteArrayInputStream("hello".getBytes());
+        Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+        when(response.getOutputStream()).thenReturn(outputStream);
+        doThrow(new IOException()).when(outputStream).write(any(byte[].class), any(int.class), any(int.class));
+
+        when(doxExporter.export()).thenReturn(file);
+        when(mimeTypes.getProperty("zip")).thenReturn("my content type");
+
+        controller.getDocument(this.response);
+        verify(response).setStatus(SC_INTERNAL_SERVER_ERROR);
     }
 }

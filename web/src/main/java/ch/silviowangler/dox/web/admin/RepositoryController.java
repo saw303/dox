@@ -31,6 +31,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import static com.google.common.net.HttpHeaders.CONTENT_DISPOSITION;
+import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
@@ -69,6 +70,7 @@ public class RepositoryController {
             }
         } catch (IOException e) {
             logger.error("Unable to send dox repository export", e);
+            response.setStatus(SC_INTERNAL_SERVER_ERROR);
         }
     }
 }
