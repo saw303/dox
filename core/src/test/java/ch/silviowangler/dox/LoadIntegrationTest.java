@@ -117,7 +117,8 @@ public class LoadIntegrationTest extends AbstractIntegrationTest {
         Set<DocumentReference> invoices = documentService.findDocumentReferences(indices, "INVOICE");
         stopWatch.stop();
 
-        assertTrue("This test may take only " + TOTAL_AMOUNT_OF_TIME_IN_MILLIS + " ms but took this time " + stopWatch.getLastTaskTimeMillis() + " ms", stopWatch.getTotalTimeMillis() <= TOTAL_AMOUNT_OF_TIME_IN_MILLIS);
+        final long totalTimeMillis = stopWatch.getTotalTimeMillis();
+        assertTrue("This test may take only " + TOTAL_AMOUNT_OF_TIME_IN_MILLIS + " ms but took this time " + totalTimeMillis + " ms", totalTimeMillis <= TOTAL_AMOUNT_OF_TIME_IN_MILLIS);
 
         for (DocumentReference documentReference : invoices) {
             String value = documentReference.getIndices().get(company).toString();
