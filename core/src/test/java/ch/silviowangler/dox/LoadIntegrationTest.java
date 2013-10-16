@@ -38,7 +38,7 @@ public class LoadIntegrationTest extends AbstractIntegrationTest {
 
 
     private static final int TOTAL_AMOUNT_OF_FILES = 200;
-    private static final int TOTAL_AMOUNT_OF_TIME_IN_MILLIS = 1000;
+    private static final int TOTAL_AMOUNT_OF_TIME_IN_MILLIS = 1300;
 
     @Before
     public void setUp() throws Exception {
