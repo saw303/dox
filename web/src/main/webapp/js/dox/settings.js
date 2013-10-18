@@ -8,9 +8,9 @@ angular.module('dox', ['ngResource'])
 
         $scope.save = function () {
 
-            angular.forEach($scope.settings, function (value, key) {
-                console.log('About to save \'' + value.key + '\' and value \'' + value.value + '\'');
-                value.$save();
+            angular.forEach($scope.settings, function (setting, index) {
+                console.log('About to save \'%s\' and setting \'%s\'', setting.key, setting.value);
+                setting.$save();
             });
         };
     })
