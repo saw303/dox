@@ -27,7 +27,8 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>
             classpath:applicationContext-web.xml
-            classpath*:applicationContext-prod.xml
+            classpath*:applicationContext.xml
+            classpath*:applicationContext-scheduling.xml
         </param-value>
     </context-param>
     <context-param>
@@ -35,8 +36,8 @@
         <param-value>true</param-value>
     </context-param>
     <context-param>
-        <param-name>spring.profiles.active</param-name>
-        <param-value>prod</param-value>
+        <param-name>contextInitializerClasses</param-name>
+        <param-value>ch.silviowangler.dox.web.spring.ContextProfileInitializer</param-value>
     </context-param>
 
     <!-- Creates the Spring Container shared by all Servlets and Filters -->

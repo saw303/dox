@@ -21,6 +21,7 @@ import ch.silviowangler.dox.api.DocumentClass;
 import ch.silviowangler.dox.api.DocumentReference;
 import ch.silviowangler.dox.api.TranslatableKey;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.util.StopWatch;
 
@@ -104,6 +105,7 @@ public class LoadIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    @Ignore("Needs rework since it produces unreliable results")
     public void testQuery() throws Exception {
 
         StopWatch stopWatch = new StopWatch();
