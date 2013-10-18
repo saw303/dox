@@ -19,6 +19,8 @@ package ch.silviowangler.dox.web.util;
 import com.google.common.io.Resources;
 import groovy.lang.Writable;
 import groovy.text.SimpleTemplateEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -34,7 +36,8 @@ import static com.google.common.base.Charsets.UTF_8;
 @Component("templateEngine")
 public class TemplateEngineImpl implements TemplateEngine {
 
-    @Override
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
     public String render(String templateName, Map<String, Object> binding) {
 
         URL resource = Resources.getResource(templateName);
@@ -45,6 +48,7 @@ public class TemplateEngineImpl implements TemplateEngine {
 
             return writable.toString();
         } catch (IOException | ClassNotFoundException e) {
+            logger.error("Unable to render template {}. Returning empty string", templateName, e);
             return "";
         }
     }
