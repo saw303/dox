@@ -72,4 +72,47 @@
                                  returning="retVal"/>
         </aop:aspect>
     </aop:config>
+
+    <beans profile="prod">
+        <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+              depends-on="flyway">
+            <property name="dataSource" ref="dataSource"/>
+            <property name="packagesToScan" value="ch.silviowangler.dox.domain"/>
+            <property name="jpaVendorAdapter">
+                <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                    <property name="generateDdl" value="false"/>
+                    <property name="showSql" value="${show.sql}"/>
+                </bean>
+            </property>
+            <property name="jpaPropertyMap">
+                <props>
+                    <prop key="hibernate.hbm2ddl.auto">validate</prop>
+                    <prop key="hibernate.dialect">ch.silviowangler.dox.hibernate.Mysql5InnoDBBitBooleanDialect</prop>
+                </props>
+            </property>
+        </bean>
+
+        <bean id="flyway" class="com.googlecode.flyway.core.Flyway" init-method="migrate">
+            <property name="dataSource" ref="dataSource"/>
+        </bean>
+    </beans>
+
+    <beans profile="dev">
+        <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+            <property name="dataSource" ref="dataSource"/>
+            <property name="packagesToScan" value="ch.silviowangler.dox.domain"/>
+            <property name="jpaVendorAdapter">
+                <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                    <property name="generateDdl" value="false"/>
+                    <property name="showSql" value="${show.sql}"/>
+                </bean>
+            </property>
+            <property name="jpaPropertyMap">
+                <props>
+                    <prop key="hibernate.hbm2ddl.auto">validate</prop>
+                </props>
+            </property>
+        </bean>
+    </beans>
+
 </beans>
