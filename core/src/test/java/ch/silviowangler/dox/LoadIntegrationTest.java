@@ -21,6 +21,7 @@ import ch.silviowangler.dox.api.DocumentClass;
 import ch.silviowangler.dox.api.DocumentReference;
 import ch.silviowangler.dox.api.TranslatableKey;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.util.StopWatch;
 
@@ -104,6 +105,7 @@ public class LoadIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    @Ignore("Needs rework since it produces unreliable results")
     public void testQuery() throws Exception {
 
         StopWatch stopWatch = new StopWatch();
@@ -117,7 +119,8 @@ public class LoadIntegrationTest extends AbstractIntegrationTest {
         Set<DocumentReference> invoices = documentService.findDocumentReferences(indices, "INVOICE");
         stopWatch.stop();
 
-        assertTrue("This test may take only " + TOTAL_AMOUNT_OF_TIME_IN_MILLIS + " ms but took this time " + stopWatch.getLastTaskTimeMillis() + " ms", stopWatch.getTotalTimeMillis() <= TOTAL_AMOUNT_OF_TIME_IN_MILLIS);
+        final long totalTimeMillis = stopWatch.getTotalTimeMillis();
+        assertTrue("This test may take only " + TOTAL_AMOUNT_OF_TIME_IN_MILLIS + " ms but took this time " + totalTimeMillis + " ms", totalTimeMillis <= TOTAL_AMOUNT_OF_TIME_IN_MILLIS);
 
         for (DocumentReference documentReference : invoices) {
             String value = documentReference.getIndices().get(company).toString();

@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -45,6 +46,7 @@ import static org.junit.Assert.assertTrue;
  */
 @ContextConfiguration("classpath:applicationContext-test.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
+@ActiveProfiles("dev")
 public abstract class AbstractIntegrationTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
