@@ -14,7 +14,6 @@ public class Setting implements Serializable {
     private String value;
     private String description;
 
-
     public Setting() {
         super();
     }
