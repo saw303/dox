@@ -28,9 +28,9 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * @author Silvio Wangler
  * @since 0.3
  */
-@Controller
+@Controller("restSettingsController")
 @RequestMapping("/api/v1/settings")
-public class RestSettingsController implements MessageSourceAware {
+public class SettingsController implements MessageSourceAware {
 
     @Autowired
     private SettingsService settingsService;

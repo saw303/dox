@@ -30,7 +30,7 @@ import static org.mockito.Mockito.*;
  * @since 0.3
  */
 @RunWith(MockitoJUnitRunner.class)
-public class RestSettingsControllerTest {
+public class SettingsControllerTest {
 
     @Mock
     private SettingsService settingsService;
@@ -39,7 +39,7 @@ public class RestSettingsControllerTest {
     @Mock
     private MessageSource messageSource;
     @InjectMocks
-    private RestSettingsController controller = new RestSettingsController();
+    private SettingsController controller = new SettingsController();
 
 
     @Test

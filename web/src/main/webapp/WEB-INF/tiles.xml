@@ -20,7 +20,7 @@
         "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 
 <tiles-definitions>
-    <definition name="base.definition" template="/WEB-INF/views/layout.jsp">
+    <definition name="base.definition" template="/WEB-INF/views/layout-angularjs.jsp">
         <put-attribute name="header" value="/WEB-INF/views/header.jsp"/>
         <put-attribute name="body" value="/WEB-INF/views/query.jsp"/>
         <put-attribute name="footer" value="/WEB-INF/views/footer.jsp"/>

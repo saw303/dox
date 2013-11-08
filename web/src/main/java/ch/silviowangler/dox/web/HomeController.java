@@ -20,7 +20,6 @@ import ch.silviowangler.dox.api.DocumentClassNotFoundException;
 import ch.silviowangler.dox.api.DocumentReference;
 import ch.silviowangler.dox.api.DocumentService;
 import ch.silviowangler.dox.api.TranslatableKey;
-import ch.silviowangler.dox.api.settings.SettingsService;
 import com.google.common.collect.ImmutableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,12 +34,9 @@ import org.springframework.web.util.HtmlUtils;
 
 import java.io.File;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static ch.silviowangler.dox.api.settings.SettingsConstants.SETTING_FIND_ONLY_MY_DOCUMENTS;
-import static ch.silviowangler.dox.api.settings.SettingsConstants.SETTING_WILDCARD_QUERY;
 import static ch.silviowangler.dox.web.WebConstants.DOCUMENT_CLASS_SHORT_NAME;
 import static com.google.common.collect.ImmutableMap.of;
 import static com.google.common.collect.Maps.newHashMap;
@@ -60,8 +56,6 @@ public class HomeController {
 
     @Autowired
     private DocumentService documentService;
-    @Autowired
-    private SettingsService settingsService;
     @Value("#{systemEnvironment['DOX_STORE']}")
     private File archiveDirectory;
 
@@ -70,46 +64,10 @@ public class HomeController {
     @RequestMapping(method = GET, value = "/")
     public ModelAndView homeScreen(@RequestParam(value = "q", defaultValue = "", required = false) String query) {
 
-        final Map<String, String> userSettings = settingsService.findUserSettings();
-
-        Map<String, Object> model = newHashMapWithExpectedSize(userSettings.size());
-
-        model.put("wq", userSettings.containsKey(SETTING_WILDCARD_QUERY) ? userSettings.get(SETTING_WILDCARD_QUERY) : "1");
-        model.put("fomd", userSettings.containsKey(SETTING_FIND_ONLY_MY_DOCUMENTS) ? userSettings.get(SETTING_FIND_ONLY_MY_DOCUMENTS) : "0");
+        Map<String, Object> model = newHashMapWithExpectedSize(1);
         model.put("query", HtmlUtils.htmlUnescape(query));
 
         return new ModelAndView("base.definition", model);
-    }
-
-    @RequestMapping(method = POST, value = "query.html")
-    public ModelAndView query(@RequestParam("q") String queryString, @RequestParam(value = "wildcard", defaultValue = "0", required = false) boolean useWildcard, @RequestParam(value = "userOnly", defaultValue = "0", required = false) boolean forCurrentUserOnly) {
-
-        final boolean hasWildcard = containsWildcard(queryString);
-        String queryStringCopy = queryString;
-
-        logger.trace("Received query request '{}'. Contains wildcards? {}", queryString, hasWildcard);
-
-        if (useWildcard && !hasWildcard) {
-            logger.debug("Going to overwrite query string '{}' because wildcard searching is activated", queryString);
-            queryStringCopy = "*" + queryString + "*";
-            logger.debug("Using wildcard search '{}'", queryStringCopy);
-        }
-
-        List<DocumentReference> documentReferences;
-        if (forCurrentUserOnly) {
-            documentReferences = documentService.findDocumentReferencesForCurrentUser(queryStringCopy);
-        } else {
-            documentReferences = documentService.findDocumentReferences(queryStringCopy);
-        }
-
-        Map<String, Boolean> thumbnailMap = newHashMapWithExpectedSize(documentReferences.size());
-
-        for (DocumentReference documentReference : documentReferences) {
-            thumbnailMap.put(documentReference.getHash(), new File(new File(this.archiveDirectory, "thumbnails"), documentReference.getHash() + ".jpg").exists());
-        }
-
-        Map<String, Object> model = of("documents", documentReferences, "query", queryString, "thumbnail", thumbnailMap);
-        return new ModelAndView("result.definition", model);
     }
 
     @RequestMapping(method = POST, value = "extendedQuery.html")
@@ -139,9 +97,5 @@ public class HomeController {
             logger.error("Illegal document class short name {}", documentClassShortName, e);
             return new ModelAndView("result.definition");
         }
-    }
-
-    private boolean containsWildcard(final String queryString) {
-        return queryString.contains("*") || queryString.contains("?");
     }
 }

@@ -17,9 +17,6 @@
 package ch.silviowangler.dox.web;
 
 import ch.silviowangler.dox.api.DocumentService;
-import ch.silviowangler.dox.api.settings.SettingsConstants;
-import ch.silviowangler.dox.api.settings.SettingsService;
-import com.google.common.collect.Maps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -28,12 +25,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Map;
-
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
 
 /**
  * @author Silvio Wangler
@@ -47,89 +40,9 @@ public class HomeControllerTest {
 
     @Mock
     private DocumentService documentService;
-    @Mock
-    private SettingsService settingsService;
+
     @InjectMocks
     private HomeController controller = new HomeController();
-
-    @Test
-    public void testViewName() {
-        final String expectedQueryString = "a silly modelAndView";
-        ModelAndView modelAndView = controller.query(expectedQueryString, false, false);
-
-        assertThat(modelAndView.getViewName(), is("result.definition"));
-        assertModel(modelAndView);
-        assertThat(modelAndView.getModelMap().get("query").toString(), is(expectedQueryString));
-
-
-        verify(documentService).findDocumentReferences(expectedQueryString);
-        verify(documentService, never()).findDocumentReferencesForCurrentUser(expectedQueryString);
-    }
-
-    private void assertModel(ModelAndView modelAndView) {
-        assertTrue(modelAndView.getModelMap().containsKey("documents"));
-        assertTrue(modelAndView.getModelMap().containsKey("query"));
-        assertTrue(modelAndView.getModelMap().containsKey("thumbnail"));
-        assertThat(modelAndView.getModelMap().size(), is(3));
-        assertThat(modelAndView.getViewName(), is("result.definition"));
-    }
-
-    @Test
-    public void testWildcard() {
-        final String queryStringSentByUser = "a silly modelAndView";
-        final String expectedQueryString = "*" + queryStringSentByUser + "*";
-
-        ModelAndView modelAndView = controller.query(queryStringSentByUser, true, false);
-
-        assertModel(modelAndView);
-
-        assertThat(modelAndView.getModelMap().get("query").toString(), is(queryStringSentByUser));
-
-        verify(documentService).findDocumentReferences(expectedQueryString);
-        verify(documentService, never()).findDocumentReferencesForCurrentUser(queryStringSentByUser);
-    }
-
-    @Test
-    public void testWildcardOnlyIfNoWildcardAreAlreadyInTheQuery() {
-        final String queryStringSentByUser = "a s?lly model*View";
-
-        ModelAndView modelAndView = controller.query(queryStringSentByUser, true, false);
-
-        assertModel(modelAndView);
-
-        assertThat(modelAndView.getModelMap().get("query").toString(), is(queryStringSentByUser));
-
-        verify(documentService).findDocumentReferences(queryStringSentByUser);
-        verify(documentService, never()).findDocumentReferencesForCurrentUser(queryStringSentByUser);
-    }
-
-    @Test
-    public void queryForCurrentUserOnly() {
-        final String queryStringSentByUser = "this is not rocket science";
-
-        ModelAndView modelAndView = controller.query(queryStringSentByUser, false, true);
-
-        assertModel(modelAndView);
-
-        assertThat(modelAndView.getModelMap().get("query").toString(), is(queryStringSentByUser));
-
-        verify(documentService).findDocumentReferencesForCurrentUser(queryStringSentByUser);
-        verify(documentService, never()).findDocumentReferences(queryStringSentByUser);
-
-    }
-
-    @Test
-    public void queryForCurrentUserOnlyUsingWildcard() {
-        final String queryStringSentByUser = "this is not rocket science";
-
-        ModelAndView modelAndView = controller.query(queryStringSentByUser, true, true);
-
-        assertModel(modelAndView);
-        assertThat(modelAndView.getModelMap().get("query").toString(), is(queryStringSentByUser));
-
-        verify(documentService).findDocumentReferencesForCurrentUser("*" + queryStringSentByUser + "*");
-        verify(documentService, never()).findDocumentReferences(queryStringSentByUser);
-    }
 
     @Test
     public void homeScreenModelMustContainTwoDefaultSettings() {
@@ -138,43 +51,11 @@ public class HomeControllerTest {
 
         assertThat(modelAndView.getViewName(), is("base.definition"));
 
-        assertHomeScreenModel(modelAndView.getModelMap(), "0", "1");
+        assertHomeScreenModel(modelAndView.getModelMap());
     }
 
-    @Test
-    public void homeScreenModelMustContainTwoDefaultSettings2() {
-
-        Map<String, String> userSettings = Maps.newHashMap();
-        userSettings.put(SettingsConstants.SETTING_FIND_ONLY_MY_DOCUMENTS, "1");
-
-        when(settingsService.findUserSettings()).thenReturn(userSettings);
-
-        final ModelAndView modelAndView = controller.homeScreen("");
-
-        assertThat(modelAndView.getViewName(), is("base.definition"));
-
-        assertHomeScreenModel(modelAndView.getModelMap(), "1", "1");
-    }
-
-    @Test
-    public void homeScreenModelMustContainTwoDefaultSettings3() {
-
-        Map<String, String> userSettings = Maps.newHashMap();
-        userSettings.put(SettingsConstants.SETTING_WILDCARD_QUERY, "0");
-
-        when(settingsService.findUserSettings()).thenReturn(userSettings);
-
-        final ModelAndView modelAndView = controller.homeScreen("");
-
-        assertThat(modelAndView.getViewName(), is("base.definition"));
-
-        assertHomeScreenModel(modelAndView.getModelMap(), "0", "0");
-    }
-
-    private void assertHomeScreenModel(ModelMap model, String fomd, String wq) {
-        assertThat(model.size(), is(3));
-        assertThat("Unexpected fomd value", (String) model.get("fomd"), is(fomd));
-        assertThat("Unexpected wq value", (String) model.get("wq"), is(wq));
+    private void assertHomeScreenModel(ModelMap model) {
+        assertThat(model.size(), is(1));
         assertThat((String) model.get("query"), is(""));
     }
 }
