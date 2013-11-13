@@ -67,7 +67,7 @@ public class HomeController {
         Map<String, Object> model = newHashMapWithExpectedSize(1);
         model.put("query", HtmlUtils.htmlUnescape(query));
 
-        return new ModelAndView("base.definition", model);
+        return new ModelAndView("base.definition.angularjs", model);
     }
 
     @RequestMapping(method = POST, value = "extendedQuery.html")

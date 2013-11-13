@@ -16,10 +16,7 @@
 
 package ch.silviowangler.dox.api;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
+import java.util.*;
 
 /**
  * This is the general service when it comes to working with documents in DOX.
@@ -77,13 +74,32 @@ public interface DocumentService {
     List<DocumentReference> findDocumentReferences(String queryString);
 
     /**
+     * Finds document references and returns the indices map keys translated to the given locale and the map values formatted using the given locale
+     * @param queryString query params
+     * @param locale language / region setting to format/translate map key and value pairs
+     * @return see description above
+     * @since 0.3
+     */
+    List<DocumentReference> findDocumentReferences(String queryString, Locale locale);
+
+    /**
      * Retrieves for the current user only
      *
-     * @param queryString
-     * @return
+     * @param queryString query params
+     * @return all document references that match with the query
      * @since 0.3
      */
     List<DocumentReference> findDocumentReferencesForCurrentUser(String queryString);
+
+    /**
+     * Retrieves for the current user only
+     *
+     * @param queryString query params
+     * @param locale language / region setting to format/translate map key and value pairs
+     * @return all document references that match with the query
+     * @since 0.3
+     */
+    List<DocumentReference> findDocumentReferencesForCurrentUser(String queryString, Locale locale);
 
     Set<DocumentClass> findDocumentClasses();
 

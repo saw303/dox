@@ -55,5 +55,16 @@ angular.module('dox', ['ngResource'])
         $scope.isEmptyResult = function () {
             return $scope.documents.length == 0 && executed;
         }
+
+        $scope.deleteDocument = function(document, idx) {
+            var promise = $http.delete('/api/v1/document/' + document.id);
+
+            promise.then(function (response) {
+                $scope.documents.splice(idx, 1);
+                $log.info('Document %n successfully deleted', document.id);
+            }, function (response) {
+                $log.error('Something went wrong. Http status code %s', response.status);
+            });
+        }
     })
 ;

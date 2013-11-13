@@ -81,11 +81,6 @@ public class TranslatableKey extends AbstractTranslatable implements Serializabl
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("TranslatableKey");
-        sb.append("{key='").append(key).append('\'');
-        sb.append(", translation='").append(translation).append('\'');
-        sb.append('}');
-        return sb.toString();
+        return getTranslation();
     }
 }

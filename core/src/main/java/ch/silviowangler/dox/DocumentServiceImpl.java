@@ -56,6 +56,8 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static ch.silviowangler.dox.domain.AttributeDataType.*;
@@ -63,6 +65,7 @@ import static ch.silviowangler.dox.domain.DomainUtils.containsWildcardCharacters
 import static ch.silviowangler.dox.domain.DomainUtils.replaceWildcardCharacters;
 import static com.google.common.collect.Lists.newArrayListWithCapacity;
 import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
+import static java.text.DateFormat.MEDIUM;
 import static org.springframework.transaction.annotation.Propagation.REQUIRED;
 import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
 import static org.springframework.util.Assert.*;
@@ -95,6 +98,8 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     private Properties mimeTypes;
     @Autowired
     private IndexMapEntryRepository indexMapEntryRepository;
+    @Autowired
+    private TranslationService translationService;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -173,7 +178,14 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     @Transactional(propagation = SUPPORTS, readOnly = true)
     @PreAuthorize("hasRole('ROLE_USER')")
     public List<DocumentReference> findDocumentReferences(String queryString) {
-        return findDocumentReferencesInternal(queryString, null);
+        return findDocumentReferencesInternal(queryString, null, null);
+    }
+
+    @Override
+    @Transactional(propagation = SUPPORTS, readOnly = true)
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public List<DocumentReference> findDocumentReferences(String queryString, Locale locale) {
+        return findDocumentReferencesInternal(queryString, null, locale);
     }
 
     @Override
@@ -181,10 +193,18 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     @PreAuthorize("hasRole('ROLE_USER')")
     public List<DocumentReference> findDocumentReferencesForCurrentUser(String queryString) {
         User user = getPrincipal();
-        return findDocumentReferencesInternal(queryString, user.getUsername());
+        return findDocumentReferencesInternal(queryString, user.getUsername(), null);
     }
 
-    private List<DocumentReference> findDocumentReferencesInternal(String queryString, String username) {
+    @Override
+    @Transactional(propagation = SUPPORTS, readOnly = true)
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public List<DocumentReference> findDocumentReferencesForCurrentUser(String queryString, Locale locale) {
+        User user = getPrincipal();
+        return findDocumentReferencesInternal(queryString, user.getUsername(), locale);
+    }
+
+    private List<DocumentReference> findDocumentReferencesInternal(String queryString, String username, Locale locale) {
         logger.debug("About to find document references for query string '{}'", queryString);
 
         List<Document> documents;
@@ -211,7 +231,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
         for (Document document : documents) {
             logger.trace("Found document with id {}", document.getId());
-            documentReferences.add(toDocumentReference(document));
+            documentReferences.add(toDocumentReference(document, locale));
         }
         return documentReferences;
     }
@@ -230,7 +250,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         HashSet<DocumentReference> documentReferences = new HashSet<>(documents.size());
         for (Document document : documents) {
             logger.trace("Found document with id {}", document.getId());
-            documentReferences.add(toDocumentReference(document));
+            documentReferences.add(toDocumentReference(document, null));
         }
         return documentReferences;
     }
@@ -274,7 +294,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             logger.info("Found document for id {}", id);
             Document document = documentRepository.findOne(id);
 
-            DocumentReference documentReference = toDocumentReference(document);
+            DocumentReference documentReference = toDocumentReference(document, null);
 
             return documentReference;
         } else {
@@ -353,7 +373,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         } catch (IOException e) {
             logger.error("Unable to calculate file size of file {}", target.getAbsolutePath(), e);
         }
-        DocumentReference docRef = toDocumentReference(document);
+        DocumentReference docRef = toDocumentReference(document, null);
         return docRef;
     }
 
@@ -391,7 +411,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
         for (Document document : documents) {
             logger.debug("Processing document {}", document);
-            documentReferences.add(toDocumentReference(document));
+            documentReferences.add(toDocumentReference(document, null));
         }
         logger.info("Done retrieving all document references from repository. Fetched {} document references", documentReferences.size());
         return documentReferences;
@@ -632,13 +652,13 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         return documentRepository.exists(id);
     }
 
-    private DocumentReference toDocumentReference(Document document) {
+    private DocumentReference toDocumentReference(Document document, Locale locale) {
         final DocumentReference documentReference = new DocumentReference(document.getHash(),
                 document.getId(),
                 document.getPageCount(),
                 document.getMimeType(),
                 toDocumentClassApi(document.getDocumentClass()),
-                toIndexMap(document.getIndexStore(), attributeRepository.findAttributesForDocumentClass(document.getDocumentClass())),
+                toIndexMap(document.getIndexStore(), attributeRepository.findAttributesForDocumentClass(document.getDocumentClass()), locale),
                 document.getOriginalFilename(), document.getUserReference(), document.getFileSize());
 
         documentReference.setCreationDate(document.getCreationDate());
@@ -646,7 +666,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         return documentReference;
     }
 
-    private Map<TranslatableKey, Object> toIndexMap(IndexStore indexStore, List<Attribute> attributes) {
+    private Map<TranslatableKey, Object> toIndexMap(IndexStore indexStore, List<Attribute> attributes, Locale locale) {
 
         Map<TranslatableKey, Object> indices = newHashMapWithExpectedSize(attributes.size());
 
@@ -654,11 +674,21 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             try {
                 final Object propertyValue = PropertyUtils.getProperty(indexStore, attribute.getMappingColumn().toLowerCase());
 
+                final TranslatableKey key = new TranslatableKey(attribute.getShortName());
                 if (attribute.getDataType() == CURRENCY) {
                     AmountOfMoney amountOfMoney = (AmountOfMoney) propertyValue;
-                    indices.put(new TranslatableKey(attribute.getShortName()), (amountOfMoney == null) ? null : new Money(amountOfMoney.getCurrency(), amountOfMoney.getAmount()));
-                } else {
-                    indices.put(new TranslatableKey(attribute.getShortName()), propertyValue);
+                    if (locale == null) {
+                        indices.put(key, (amountOfMoney == null) ? null : new Money(amountOfMoney.getCurrency(), amountOfMoney.getAmount()));
+                    } else {
+                        indices.put(key, (amountOfMoney == null) ? null : amountOfMoney.getCurrency() + " " + amountOfMoney.getAmount());
+                    }
+                }
+                else if (attribute.getDataType() == DATE && locale != null) {
+                    DateFormat format = DateFormat.getDateInstance(MEDIUM, locale);
+                    indices.put(key, format.format(((DateTime)propertyValue).toDate()));
+                }
+                else {
+                    indices.put(key, propertyValue);
                 }
 
             } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {

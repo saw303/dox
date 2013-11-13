@@ -25,6 +25,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -46,6 +47,9 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
     public static final TranslatableKey TITLE = new TranslatableKey("title");
     private static final String SWISSCOM = "Swisscom";
     private static final String SUNRISE = "Sunrise";
+    public static final TranslatableKey INVOICE_AMOUNT = new TranslatableKey("invoiceAmount");
+    public static final TranslatableKey INVOICE_DATE = new TranslatableKey("invoiceDate");
+    public static final TranslatableKey MONEY = new TranslatableKey("money");
 
     @Before
     public void init() throws ValidationException, DocumentDuplicationException, IOException, DocumentNotFoundException, DocumentClassNotFoundException {
@@ -54,22 +58,27 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
 
         Map<TranslatableKey, Object> indexes = newHashMapWithExpectedSize(3);
         indexes.put(COMPANY, SUNRISE);
-        indexes.put(new TranslatableKey("invoiceDate"), "01.12.2009");
-        indexes.put(new TranslatableKey("invoiceAmount"), "100.5");
-
+        indexes.put(INVOICE_DATE, "01.12.2009");
+        indexes.put(INVOICE_AMOUNT, "100.5");
         importFile("file-1.txt", "This is a test content", "INVOICE", indexes);
 
         indexes = newHashMapWithExpectedSize(3);
         indexes.put(COMPANY, SWISSCOM);
-        indexes.put(new TranslatableKey("invoiceDate"), "02.12.2009");
-        indexes.put(new TranslatableKey("invoiceAmount"), "1200.99");
-
+        indexes.put(INVOICE_DATE, "02.12.2009");
+        indexes.put(INVOICE_AMOUNT, "1200.99");
         importFile("file-2.txt", "This is a test content that contains more text", "INVOICE", indexes);
 
         indexes = newHashMapWithExpectedSize(2);
         indexes.put(COMPANY, SUNRISE);
         indexes.put(TITLE, "This is a title");
         importFile("file-3.txt", "tiny content", "CONTRACTS", indexes);
+
+        indexes = newHashMapWithExpectedSize(3);
+        indexes.put(COMPANY, SWISSCOM);
+        indexes.put(INVOICE_DATE, "02.12.2009");
+        indexes.put(INVOICE_AMOUNT, "12.60");
+        indexes.put(MONEY, "CHF 12.50");
+        importFile("file-4.txt", "tiny content 2", "INVOICE", indexes);
 
         loginAsRoot();
     }
@@ -87,7 +96,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
 
         logger.debug("Found {}", documentReferences);
 
-        assertThat(documentReferences.size(), is(1));
+        assertThat(documentReferences.size(), is(2));
         assertThat((String) documentReferences.iterator().next().getIndices().get(COMPANY), is(companyName));
     }
 
@@ -115,7 +124,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryParams, "INVOICE");
 
         assertNotNull(documentReferences);
-        assertEquals(2, documentReferences.size());
+        assertEquals(3, documentReferences.size());
         for (DocumentReference documentReference : documentReferences) {
             assertTrue(((String) documentReference.getIndices().get(COMPANY)).matches("(Swisscom|Sunrise)"));
         }
@@ -131,7 +140,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryParams, "INVOICE");
 
         assertNotNull(documentReferences);
-        assertEquals(2, documentReferences.size());
+        assertEquals(3, documentReferences.size());
         for (DocumentReference documentReference : documentReferences) {
             assertTrue(((String) documentReference.getIndices().get(COMPANY)).matches("(Swisscom|Sunrise)"));
         }
@@ -155,7 +164,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
     public void findByExactInvoiceAmount() throws DocumentClassNotFoundException {
 
         Map<TranslatableKey, Object> queryParams = newHashMapWithExpectedSize(1);
-        queryParams.put(new TranslatableKey("invoiceAmount"), "100.50");
+        queryParams.put(INVOICE_AMOUNT, "100.50");
 
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryParams, "INVOICE");
 
@@ -168,7 +177,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
     public void findByRangeInvoiceAmount() throws DocumentClassNotFoundException {
 
         Map<TranslatableKey, Object> queryParams = newHashMapWithExpectedSize(1);
-        queryParams.put(new TranslatableKey("invoiceAmount"), new Range<>(new BigDecimal("100"), new BigDecimal("101")));
+        queryParams.put(INVOICE_AMOUNT, new Range<>(new BigDecimal("100"), new BigDecimal("101")));
 
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryParams, "INVOICE");
 
@@ -223,7 +232,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
         List<DocumentReference> documentReferences = documentService.findDocumentReferences("02.12.2009");
 
         assertNotNull(documentReferences);
-        assertEquals(1, documentReferences.size());
+        assertEquals(2, documentReferences.size());
         assertEquals(SWISSCOM, documentReferences.iterator().next().getIndices().get(COMPANY));
     }
 
@@ -233,7 +242,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
         List<DocumentReference> documentReferences = documentService.findDocumentReferences("S*");
 
         assertNotNull(documentReferences);
-        assertEquals(3, documentReferences.size());
+        assertEquals(4, documentReferences.size());
         for (DocumentReference documentReference : documentReferences) {
             assertTrue(((String) documentReference.getIndices().get(COMPANY)).matches("(Swisscom|Sunrise)"));
         }
@@ -245,7 +254,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
         List<DocumentReference> documentReferences = documentService.findDocumentReferences("*");
 
         assertNotNull(documentReferences);
-        assertEquals(3, documentReferences.size());
+        assertEquals(4, documentReferences.size());
         for (DocumentReference documentReference : documentReferences) {
             assertTrue(((String) documentReference.getIndices().get(COMPANY)).matches("(Swisscom|Sunrise)"));
         }
@@ -271,7 +280,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
         final DocumentReference doc = documentReferences.iterator().next();
 
         assertEquals(SUNRISE, doc.getIndices().get(COMPANY));
-        assertEquals(BigDecimal.valueOf(100.5), doc.getIndices().get(new TranslatableKey("invoiceAmount")));
+        assertEquals(BigDecimal.valueOf(100.5), doc.getIndices().get(INVOICE_AMOUNT));
         assertThat(doc.getDocumentClass().getShortName(), is("INVOICE"));
         assertThat(doc.getDocumentClass().getTranslation(), is(notNullValue()));
     }
@@ -289,7 +298,25 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
             assertThat(documentReferences, is(not(nullValue())));
             assertThat(documentReferences.size(), CoreMatchers.is(1));
             assertEquals(SWISSCOM, documentReferences.get(0).getIndices().get(COMPANY));
-            assertEquals(BigDecimal.valueOf(1200.99), documentReferences.get(0).getIndices().get(new TranslatableKey("invoiceAmount")));
+            assertEquals(BigDecimal.valueOf(1200.99), documentReferences.get(0).getIndices().get(INVOICE_AMOUNT));
+        }
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void findByAnotherFileNameAndMakeSureTheIndicesAreTranslatedForUseInUserInterface() {
+
+        List<List<DocumentReference>> results = newArrayList(
+                documentService.findDocumentReferences("file-4.txt", Locale.GERMAN),
+                documentService.findDocumentReferences("file-4.*t", Locale.GERMAN)
+        );
+
+        for (List<DocumentReference> documentReferences : results) {
+            assertThat(documentReferences, is(not(nullValue())));
+            assertThat(documentReferences.size(), CoreMatchers.is(1));
+            assertEquals(SWISSCOM, documentReferences.get(0).getIndices().get(COMPANY));
+            assertEquals("12.60", documentReferences.get(0).getIndices().get(INVOICE_AMOUNT).toString());
+            assertEquals("CHF 12.50", documentReferences.get(0).getIndices().get(MONEY));
         }
     }
 

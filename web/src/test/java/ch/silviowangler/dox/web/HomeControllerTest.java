@@ -49,7 +49,7 @@ public class HomeControllerTest {
 
         final ModelAndView modelAndView = controller.homeScreen("");
 
-        assertThat(modelAndView.getViewName(), is("base.definition"));
+        assertThat(modelAndView.getViewName(), is("base.definition.angularjs"));
 
         assertHomeScreenModel(modelAndView.getModelMap());
     }

@@ -21,7 +21,7 @@
 <div id="query" ng-controller="QueryController">
     <form>
         <p>
-            <input id="q" name="q" ng-model="query" tabindex="1"/>
+            <input id="q" name="q" ng-model="query" tabindex="1" placeholder="Nach was suchst Du?"/>
             <button ng-click="doQuery()" tabindex="2" accesskey="S"><spring:message code="query.start.button"/></button>
         </p>
         <p><input type="checkbox" ng-model="useWildcard" tabindex="3"/><spring:message
@@ -44,7 +44,7 @@
                 <div style="float:right;vertical-align: top;margin-right: 10px;font-size: 10px;"><a
                         href="#"><spring:message
                         code="document.research.result.edit"/></a>, <a
-                        href="#"><spring:message
+                        ng-click="deleteDocument(document, $index)"><spring:message
                         code="document.research.result.delete"/></a></div>
 
                 <img ng-src="<c:url value="/document/{{document.hash}}.thumbnail"/>"
@@ -68,7 +68,9 @@
                         HH:mm:ss'}}
                     </li>
                 </ul>
-                <%--<dox:attributeListing documentReference="${doc}" query="${query}"/>--%>
+                <div class="attributeListing">
+                    <span ng-repeat="(label, value) in document.indices">{{label}}: {{value}},&nbsp;</span>
+                </div>
             </div>
 
         </div>
