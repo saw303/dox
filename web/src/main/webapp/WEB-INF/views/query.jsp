@@ -39,8 +39,8 @@
 
 
         <div ng-repeat="document in documents" style="background: url('<c:url
-                value="/resources/img/file-extensions/pdf.png"/>') left top no-repeat; border: 1px solid; border-radius: 5px; margin-bottom: 10px; overflow: auto; box-shadow:5px 5px 5px #999999; background-color: #F5DEB3;">
-            <div style="margin-left: 25%;">
+                value="/resources/img/file-extensions/pdf.png"/>') left top no-repeat; border: 1px solid; border-radius: 5px; margin-bottom: 10px; overflow: auto; box-shadow:5px 5px 5px #999999; background-color: #F5DEB3; background-size: 10%">
+            <div style="margin-left: 10%;">
                 <div style="float:right;vertical-align: top;margin-right: 10px;font-size: 10px;"><a
                         href="#"><spring:message
                         code="document.research.result.edit"/></a>, <a
@@ -48,9 +48,10 @@
                         code="document.research.result.delete"/></a></div>
 
                 <img ng-src="<c:url value="/document/{{document.hash}}.thumbnail"/>"
-                     style="display: block; float: right; margin: 25px; box-shadow: 5px 5px 5px #999999;"/>
+                     style="display: block; float: right; margin: 25px; box-shadow: 5px 5px 5px #999999;"
+                     ng-click="showDocument(document)"/>
 
-                <h2 id="{{document.id}}"
+                <h2 id="{{document.id}}" ng-click="showDocument(document)"
                     style="text-align: left; padding: 30px 0 0 35px; margin: 2px 0 0 0; overflow: hidden;">
                     {{document.fileName}}</h2>
 
@@ -60,7 +61,7 @@
                     </li>
                     <li><spring:message code="pages"/>: {{document.pageCount}}</li>
                     <li title="{{document.hash}}"><spring:message
-                            code="document.hashCode"/>: {{document.hash}}...
+                            code="document.hashCode"/>: {{document.hash.substring(0,30)}}...
                     </li>
                     <li><spring:message code="document.userReference"/>: {{document.userReference}}</li>
                     <li><spring:message code="document.filesize"/>: {{document.fileSize}}</li>

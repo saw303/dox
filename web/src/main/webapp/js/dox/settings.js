@@ -19,7 +19,7 @@ angular.module('dox', ['ngResource'])
         return $resource('/api/v1/settings/:settingId', {settingId: '@id'});
     })
 
-    .controller('QueryController', function ($scope, $log, $http, Settings) {
+    .controller('QueryController', function ($scope, $log, $http, $window, Settings) {
 
         $scope.query = '';
         $scope.useWildcard = false;
@@ -65,6 +65,11 @@ angular.module('dox', ['ngResource'])
             }, function (response) {
                 $log.error('Something went wrong. Http status code %s', response.status);
             });
+        }
+
+        $scope.showDocument = function (document) {
+            $log.info('About to show document %s with filename %s', document.id, document.fileName);
+            $window.open('/document/' + document.id);
         }
     })
 ;
