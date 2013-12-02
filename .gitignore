@@ -17,6 +17,6 @@ out
 *.log
 
 domain/src/main/generated
-**/release
+*/release
 
 gradle.properties
