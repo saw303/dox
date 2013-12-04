@@ -22,9 +22,9 @@ import org.xml.sax.InputSource
 
 buildscript {
     repositories {
-        mavenCentral()
-        maven { url "http://scala-tools.org/repo-releases" }
-        maven { url "http://download.java.net/maven/2/" }
+        maven {
+            url 'http://repo.wangler.io/repository/repo'
+        }
     }
     dependencies {
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.4'
