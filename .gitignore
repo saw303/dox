@@ -20,3 +20,5 @@ domain/src/main/generated
 */release
 
 gradle.properties
+
+*Guide.pdf
