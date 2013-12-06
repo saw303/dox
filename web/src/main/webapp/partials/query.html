@@ -20,8 +20,7 @@
 
     <div id="documentList">
 
-        <span ng-if="isEmptyResult()">Kein Resultat</span>
-
+        <span ng-if="isEmptyResult()">Es konnten keine Dokumente mit dem Suchbegriff &laquo;{{query}}&raquo; gefunden werden</span>
 
         <div ng-repeat="document in documents"
              style="background: url('/resources/img/file-extensions/pdf.png') left top no-repeat; border: 1px solid; border-radius: 5px; margin-bottom: 10px; overflow: auto; box-shadow:5px 5px 5px #999999; background-color: #F5DEB3;">

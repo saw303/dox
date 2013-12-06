@@ -64,7 +64,6 @@ angular.module('dox', ['ngResource', 'ngRoute'])
             });
         });
 
-
         $scope.doQuery = function () {
 
             var promise = $http.get('/api/v1/document?q=' + $scope.query + '&wc=' + $scope.useWildcard + '&uo=' + $scope.findOnlyMyDocuments);
