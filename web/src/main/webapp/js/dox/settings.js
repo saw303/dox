@@ -39,11 +39,10 @@ angular.module('dox', ['ngResource', 'ngRoute'])
     .controller('ImportController', ['$scope', '$log', function ($scope, $log) {
 
         $scope.documentClasses = [
-            {id: 1, name: 'A', attributes: null },
-            {id: 2, name: 'B', attributes: null },
-            {id: 3, name: 'C', attributes: null }
+            {shortName: 'A', translatedText: 'Dokumentenklasse A' },
+            {shortName: 'B', translatedText: 'Dokumentenklasse B' },
+            {shortName: 'C', translatedText: 'Dokumentenklasse C' }
         ];
-
     }])
 
     .controller('QueryController',['$scope', '$log', '$http', 'Settings', function ($scope, $log, $http, Settings) {
