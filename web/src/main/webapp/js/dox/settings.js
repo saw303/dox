@@ -1,6 +1,23 @@
-angular.module('dox', ['ngResource'])
+angular.module('dox', ['ngResource', 'ngRoute'])
 
-    .controller('SettingsController', function ($scope, $log, Settings) {
+    .config(function ($routeProvider, $locationProvider) {
+
+        $routeProvider.when('/', {
+            templateUrl: 'partials/query.html'
+        });
+
+        $routeProvider.when('/import', {
+            templateUrl: 'partials/importDocument.html'
+        });
+
+        $routeProvider.otherwise({
+            redirectTo: '/'
+        });
+
+        $locationProvider.html5Mode(true);
+    })
+
+    .controller('SettingsController', ['$scope', '$log', 'Settings',  function ($scope, $log, Settings) {
         Settings.query(function (settings) {
             $scope.settings = settings;
             $log.debug('Retrieved ' + $scope.settings.length + ' settings for current user');
@@ -13,13 +30,23 @@ angular.module('dox', ['ngResource'])
                 setting.$save();
             });
         };
-    })
+    }])
 
-    .factory('Settings', function ($resource) {
+    .factory('Settings', ['$resource', function ($resource) {
         return $resource('/api/v1/settings/:settingId', {settingId: '@id'});
-    })
+    }])
 
-    .controller('QueryController', function ($scope, $log, $http, Settings) {
+    .controller('ImportController', ['$scope', '$log', function ($scope, $log) {
+
+        $scope.documentClasses = [
+            {id: 1, name: 'A', attributes: null },
+            {id: 2, name: 'B', attributes: null },
+            {id: 3, name: 'C', attributes: null }
+        ];
+
+    }])
+
+    .controller('QueryController',['$scope', '$log', '$http', 'Settings', function ($scope, $log, $http, Settings) {
 
         $scope.query = '';
         $scope.useWildcard = false;
@@ -56,7 +83,7 @@ angular.module('dox', ['ngResource'])
             return $scope.documents.length == 0 && executed;
         }
 
-        $scope.deleteDocument = function(document, idx) {
+        $scope.deleteDocument = function (document, idx) {
             var promise = $http.delete('/api/v1/document/' + document.id);
 
             promise.then(function (response) {
@@ -66,5 +93,4 @@ angular.module('dox', ['ngResource'])
                 $log.error('Something went wrong. Http status code %s', response.status);
             });
         }
-    })
-;
+    }]);

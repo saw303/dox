@@ -40,6 +40,7 @@
     <link type="text/plain" rel="author" href="humans.txt"/>
     <script src="<c:url value="/js/libs/angular-1.2.0/angular.js"/>"></script>
     <script src="<c:url value="/js/libs/angular-1.2.0/angular-resource.js"/>"></script>
+    <script src="<c:url value="/js/libs/angular-1.2.0/angular-route.js"/>"></script>
     <script src="<c:url value="/js/dox/settings.js"/>"></script>
 </head>
 <body>
@@ -49,7 +50,7 @@
         <tiles:insertAttribute name="header"/>
     </header>
     <div id="main" role="main">
-        <tiles:insertAttribute name="body"/>
+        <ng-view></ng-view>
     </div>
     <footer>
         <tiles:insertAttribute name="footer"/>
