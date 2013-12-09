@@ -1,5 +1,11 @@
 angular.module('dox', ['ngResource', 'ngRoute'])
 
+    .run(function($rootScope, $templateCache) {
+        $rootScope.$on('$viewContentLoaded', function() {
+            $templateCache.removeAll();
+        });
+    })
+
     .config(function ($routeProvider, $locationProvider) {
 
         $routeProvider.when('/', {
@@ -42,10 +48,12 @@ angular.module('dox', ['ngResource', 'ngRoute'])
 
     .controller('ImportController', ['$scope', '$log', 'DocumentClasses', function ($scope, $log, DocumentClasses) {
 
+        $scope.documentClass;
+
         DocumentClasses.query(function(docClasses) {
 
             angular.forEach(docClasses, function(docClass) {
-                $log.debug(docClass);
+                $log.debug("Document class '%s' with shortname '%s'", docClass.translation, docClass.shortName);
             })
 
             $scope.documentClasses = docClasses;
