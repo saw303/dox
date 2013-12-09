@@ -142,4 +142,10 @@ public interface DocumentService {
      * @throws IllegalArgumentException if id is null
      */
     void deleteDocument(Long id);
+
+    /**
+     * Retrieves all document classes
+     * @return all document classes
+     */
+    List<DocumentClass> findAllDocumentClasses();
 }

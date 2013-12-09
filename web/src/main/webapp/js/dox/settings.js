@@ -36,13 +36,20 @@ angular.module('dox', ['ngResource', 'ngRoute'])
         return $resource('/api/v1/settings/:settingId', {settingId: '@id'});
     }])
 
-    .controller('ImportController', ['$scope', '$log', function ($scope, $log) {
+    .factory('DocumentClasses', ['$resource', function($resource) {
+        return $resource('/api/v1/documentClass/:documentClassId', {documentClassId: '@id'})
+    }])
 
-        $scope.documentClasses = [
-            {shortName: 'A', translatedText: 'Dokumentenklasse A' },
-            {shortName: 'B', translatedText: 'Dokumentenklasse B' },
-            {shortName: 'C', translatedText: 'Dokumentenklasse C' }
-        ];
+    .controller('ImportController', ['$scope', '$log', 'DocumentClasses', function ($scope, $log, DocumentClasses) {
+
+        DocumentClasses.query(function(docClasses) {
+
+            angular.forEach(docClasses, function(docClass) {
+                $log.debug(docClass);
+            })
+
+            $scope.documentClasses = docClasses;
+        })
     }])
 
     .controller('QueryController',['$scope', '$log', '$http', 'Settings', function ($scope, $log, $http, Settings) {

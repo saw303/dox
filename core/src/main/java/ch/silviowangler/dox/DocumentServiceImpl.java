@@ -63,6 +63,7 @@ import java.util.*;
 import static ch.silviowangler.dox.domain.AttributeDataType.*;
 import static ch.silviowangler.dox.domain.DomainUtils.containsWildcardCharacters;
 import static ch.silviowangler.dox.domain.DomainUtils.replaceWildcardCharacters;
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Lists.newArrayListWithCapacity;
 import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
 import static java.text.DateFormat.MEDIUM;
@@ -108,6 +109,20 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         isTrue(archiveDirectory.canRead(), "Archive store must be readable ['" + this.archiveDirectory + "']");
         isTrue(archiveDirectory.canWrite(), "Archive store must be writable ['" + this.archiveDirectory + "']");
         notEmpty(mimeTypes, "No mime types have been set");
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ch.silviowangler.dox.api.DocumentClass> findAllDocumentClasses() {
+
+        List<ch.silviowangler.dox.api.DocumentClass> documentClasses = newArrayList();
+
+        Iterable<DocumentClass> documentClassEntities = documentClassRepository.findAll();
+
+        for (DocumentClass documentClassEntity : documentClassEntities) {
+            documentClasses.add(toDocumentClassApi(documentClassEntity));
+        }
+        return documentClasses;
     }
 
     @Override
