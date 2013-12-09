@@ -1,6 +1,6 @@
 package ch.silviowangler.dox.web.rest;
 
-import ch.silviowangler.dox.api.DocumentClass;
+import ch.silviowangler.dox.api.rest.DocumentClass;
 import ch.silviowangler.dox.api.DocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
