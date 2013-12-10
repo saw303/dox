@@ -90,4 +90,16 @@ public class AmountOfMoneyTest {
         assertThat(money.getAmount().toPlainString(), is("2.20"));
         assertThat(money.getCurrency().getCurrencyCode(), is("CHF"));
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void stringWithoutCurrencyCodeThrowsIllegalArgumentException() {
+        new AmountOfMoney("125.55");
+    }
+
+    @Test
+    public void moneyEquality() {
+        assertThat(new AmountOfMoney("CHF 120").equals(new AmountOfMoney("CHF 120")), is(true));
+        assertThat(new AmountOfMoney("CHF 120.05").equals(new AmountOfMoney("CHF 120")), is(false));
+        assertThat(new AmountOfMoney("EUR 120").equals(new AmountOfMoney("CHF 120")), is(false));
+    }
 }
