@@ -7,7 +7,7 @@
 <div id="query" ng-controller="QueryController">
     <form>
         <p>
-            <input id="q" name="q" ng-model="query" tabindex="1" placeholder="Nach was suchst Du?"/>
+            <input id="q" name="q" ng-model="query" tabindex="1" placeholder="Nach was suchst Du?" type="search"/>
             <button ng-click="doQuery()" tabindex="2" accesskey="S">Suche</button>
         </p>
         <p><input type="checkbox" ng-model="useWildcard" tabindex="3"/>Mit Wildcards suchen | <input type="checkbox"
