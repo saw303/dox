@@ -33,6 +33,7 @@
     <meta name="author" content="Silvio Wangler">
 
     <meta name="viewport" content="width=device-width">
+    <meta name="fragment" content="!" />
 
     <link href='http://fonts.googleapis.com/css?family=Playball|Montserrat:700,400' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>"/>
