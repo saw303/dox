@@ -18,6 +18,7 @@ package ch.silviowangler.dox.api.rest;
 
 import ch.silviowangler.dox.api.AbstractTranslatable;
 import ch.silviowangler.dox.api.Attribute;
+import ch.silviowangler.dox.api.TranslateProperties;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import java.util.List;
  * @author Silvio Wangler
  * @since 0.1
  */
+@TranslateProperties(value = {"attributes"})
 public class DocumentClass extends AbstractTranslatable implements Serializable {
 
     private String shortName;
