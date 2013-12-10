@@ -24,6 +24,7 @@ import ch.silviowangler.dox.domain.Attribute;
 import ch.silviowangler.dox.domain.AttributeDataType;
 import ch.silviowangler.dox.domain.Range;
 import ch.silviowangler.dox.repository.*;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.itextpdf.text.io.RandomAccessSource;
@@ -69,6 +70,8 @@ import static java.text.DateFormat.MEDIUM;
 import static org.springframework.transaction.annotation.Propagation.REQUIRED;
 import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
 import static org.springframework.util.Assert.*;
+
+import ch.silviowangler.dox.api.rest.DocumentClass;
 
 /**
  * @author Silvio Wangler
@@ -567,11 +570,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     private boolean isRangeCompatible(AttributeDataType desiredDataType) {
-        return (DATE.equals(desiredDataType) ||
-                DOUBLE.equals(desiredDataType) ||
-                INTEGER.equals(desiredDataType) ||
-                LONG.equals(desiredDataType) ||
-                SHORT.equals(desiredDataType));
+        return Lists.newArrayList(DATE, DOUBLE, INTEGER, LONG, SHORT).contains(desiredDataType);
     }
 
     @SuppressWarnings("unchecked")
