@@ -10,12 +10,25 @@
 
     <div ng-show="documentClass" id="docClassAttributes">
 
+        <form ng-submit="alert('hello');">
         <p ng-repeat="attribute in documentClass.attributes">
-            {{attribute.shortName}}
+
+            <label for="{{attribute.shortName}}">{{attribute.translation}}</label>
+
+            <span ng-switch="attribute.dataType">
+                <input ng-switch-when="STRING" name="{{attribute.shortName}}" type="text"/>
+                <input ng-switch-when="DATE" name="{{attribute.shortName}}" type="date"/>
+                <input ng-switch-when="CURRENCY" name="{{attribute.shortName}}" type="text" value="CHF " pattern="\D{3} [-+]?[0-9]*[.,]?[0-9]+"/>
+                <input ng-switch-when="DOUBLE" name="{{attribute.shortName}}" type="number" min="0" step="any"/>
+                <input ng-switch-when="LONG" name="{{attribute.shortName}}" type="number" min="0" step="any"/>
+                <input ng-switch-when="SHORT" name="{{attribute.shortName}}" type="number" min="0" step="any"/>
+                <input ng-switch-when="INTEGER" name="{{attribute.shortName}}" type="number" min="0" step="any"/>
+            </span>
         </p>
 
         <input type="file" name="file" required="required"/>
         <button type="submit" id="importDocBtn">Importieren</button>
+        </form>
     </div>
 
 </div>
