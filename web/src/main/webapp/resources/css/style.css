@@ -489,7 +489,7 @@ Form upload
 AngularJS styles
 ========================================================================== */
 input.ng-invalid {
-    border: 1px solid red;
+    border: 2px solid red;
 }
 
 input.ng-valid {

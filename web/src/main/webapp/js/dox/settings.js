@@ -50,6 +50,10 @@ angular.module('dox', ['ngResource', 'ngRoute'])
 
         $scope.documentClass;
 
+        $scope.isValid = function() {
+            return $scope.form.$valid;
+        }
+
         DocumentClasses.query(function(docClasses) {
 
             angular.forEach(docClasses, function(docClass) {
