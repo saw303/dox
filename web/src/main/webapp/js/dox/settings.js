@@ -1,7 +1,7 @@
 angular.module('dox', ['ngResource', 'ngRoute'])
 
-    .run(function($rootScope, $templateCache) {
-        $rootScope.$on('$viewContentLoaded', function() {
+    .run(function ($rootScope, $templateCache) {
+        $rootScope.$on('$viewContentLoaded', function () {
             $templateCache.removeAll();
         });
     })
@@ -23,7 +23,7 @@ angular.module('dox', ['ngResource', 'ngRoute'])
         $locationProvider.html5Mode(true);
     })
 
-    .controller('SettingsController', ['$scope', '$log', 'Settings',  function ($scope, $log, Settings) {
+    .controller('SettingsController', ['$scope', '$log', 'Settings', function ($scope, $log, Settings) {
         Settings.query(function (settings) {
             $scope.settings = settings;
             $log.debug('Retrieved ' + $scope.settings.length + ' settings for current user');
@@ -42,7 +42,7 @@ angular.module('dox', ['ngResource', 'ngRoute'])
         return $resource('/api/v1/settings/:settingId', {settingId: '@id'});
     }])
 
-    .factory('DocumentClasses', ['$resource', function($resource) {
+    .factory('DocumentClasses', ['$resource', function ($resource) {
         return $resource('/api/v1/documentClass/:documentClassId', {documentClassId: '@id'})
     }])
 
@@ -50,13 +50,13 @@ angular.module('dox', ['ngResource', 'ngRoute'])
 
         $scope.documentClass;
 
-        $scope.isValid = function() {
-            return $scope.form.$valid;
+        $scope.isValid = function () {
+            return $scope.form.$dirty && $scope.form.$valid
         }
 
-        DocumentClasses.query(function(docClasses) {
+        DocumentClasses.query(function (docClasses) {
 
-            angular.forEach(docClasses, function(docClass) {
+            angular.forEach(docClasses, function (docClass) {
                 $log.debug("Document class '%s' with shortname '%s'", docClass.translation, docClass.shortName);
             })
 
@@ -64,7 +64,7 @@ angular.module('dox', ['ngResource', 'ngRoute'])
         })
     }])
 
-    .controller('QueryController',['$scope', '$log', '$http', 'Settings', function ($scope, $log, $http, Settings) {
+    .controller('QueryController', ['$scope', '$log', '$http', 'Settings', function ($scope, $log, $http, Settings) {
 
         $scope.query = '';
         $scope.useWildcard = false;
