@@ -1,17 +1,16 @@
 package ch.silviowangler.dox.web.rest;
 
-import ch.silviowangler.dox.api.rest.DocumentClass;
 import ch.silviowangler.dox.api.DocumentService;
+import ch.silviowangler.dox.api.rest.DocumentClass;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
-@Controller
+@RestController
 @RequestMapping("/api/v1/documentClass")
 public class DocumentClassController {
 
@@ -19,7 +18,7 @@ public class DocumentClassController {
     private DocumentService documentService;
 
     @RequestMapping(method = GET)
-    public @ResponseBody List<DocumentClass> list() {
+    public List<DocumentClass> list() {
         return documentService.findAllDocumentClasses();
     }
 }
