@@ -1,4 +1,4 @@
-angular.module('dox.services', ['ngResource', 'ngRoute'])
+angular.module('dox.services', ['ngResource'])
 
     .factory('Settings', ['$resource', function ($resource) {
         return $resource('/api/v1/settings/:settingId', {settingId: '@id'});

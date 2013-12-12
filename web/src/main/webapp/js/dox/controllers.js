@@ -8,7 +8,7 @@ angular.module('dox.controllers', ['dox.services'])
 
         $scope.save = function () {
 
-            angular.forEach($scope.settings, function (setting, index) {
+            angular.forEach($scope.settings, function (setting) {
                 $log.debug('About to save \'%s\' and setting \'%s\'', setting.key, setting.value);
                 setting.$save();
             });

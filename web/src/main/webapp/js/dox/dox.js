@@ -1,4 +1,4 @@
-angular.module('dox', ['dox.controllers','ngResource', 'ngRoute'])
+angular.module('dox', ['dox.controllers', 'ngRoute'])
 
     .run(function ($rootScope, $templateCache) {
         $rootScope.$on('$viewContentLoaded', function () {
