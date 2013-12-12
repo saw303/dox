@@ -23,6 +23,10 @@ angular.module('dox.controllers', ['dox.services'])
             return $scope.form.$dirty && $scope.form.$valid
         }
 
+        $scope.doUpload = function() {
+            $log.debug("Starting upload");
+        }
+
         DocumentClasses.query(function (docClasses) {
 
             angular.forEach(docClasses, function (docClass) {

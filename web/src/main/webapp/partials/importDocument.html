@@ -15,7 +15,7 @@
 
         {{form.invoiceAmount}}
 
-        <form name="form" novalidate="novalidate">
+        <form name="form" novalidate="novalidate" ng-submit="doUpload()">
             <p ng-repeat="attribute in documentClass.attributes">
 
                 <label for="{{attribute.shortName}}">{{attribute.translation}}</label>
