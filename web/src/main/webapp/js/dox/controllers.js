@@ -1,27 +1,4 @@
-angular.module('dox', ['ngResource', 'ngRoute'])
-
-    .run(function ($rootScope, $templateCache) {
-        $rootScope.$on('$viewContentLoaded', function () {
-            $templateCache.removeAll();
-        });
-    })
-
-    .config(function ($routeProvider, $locationProvider) {
-
-        $routeProvider.when('/', {
-            templateUrl: 'partials/query.html'
-        });
-
-        $routeProvider.when('/import', {
-            templateUrl: 'partials/importDocument.html'
-        });
-
-        $routeProvider.otherwise({
-            redirectTo: '/'
-        });
-
-        $locationProvider.html5Mode(true);
-    })
+angular.module('dox.controllers', ['dox.services'])
 
     .controller('SettingsController', ['$scope', '$log', 'Settings', function ($scope, $log, Settings) {
         Settings.query(function (settings) {
@@ -36,14 +13,6 @@ angular.module('dox', ['ngResource', 'ngRoute'])
                 setting.$save();
             });
         };
-    }])
-
-    .factory('Settings', ['$resource', function ($resource) {
-        return $resource('/api/v1/settings/:settingId', {settingId: '@id'});
-    }])
-
-    .factory('DocumentClasses', ['$resource', function ($resource) {
-        return $resource('/api/v1/documentClass/:documentClassId', {documentClassId: '@id'})
     }])
 
     .controller('ImportController', ['$scope', '$log', 'DocumentClasses', function ($scope, $log, DocumentClasses) {
@@ -110,4 +79,4 @@ angular.module('dox', ['ngResource', 'ngRoute'])
                 $log.error('Something went wrong. Http status code %s', response.status);
             });
         }
-    }]);
+    }])
