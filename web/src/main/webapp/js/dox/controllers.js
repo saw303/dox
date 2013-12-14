@@ -15,7 +15,7 @@ angular.module('dox.controllers', ['dox.services'])
         };
     }])
 
-    .controller('ImportController', ['$scope', '$log', 'DocumentClasses', function ($scope, $log, DocumentClasses) {
+    .controller('ImportController', ['$scope', '$log', 'DocumentClasses', 'UploadService', function ($scope, $log, DocumentClasses, UploadService) {
 
         $scope.documentClass;
 
@@ -25,6 +25,7 @@ angular.module('dox.controllers', ['dox.services'])
 
         $scope.doUpload = function() {
             $log.debug("Starting upload");
+            UploadService.upload('', $scope.documentClass);
         }
 
         DocumentClasses.query(function (docClasses) {
@@ -83,4 +84,4 @@ angular.module('dox.controllers', ['dox.services'])
                 $log.error('Something went wrong. Http status code %s', response.status);
             });
         }
-    }])
+    }]);

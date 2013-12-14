@@ -45,6 +45,7 @@
     <script src="<c:url value="/js/dox/dox.js"/>"></script>
     <script src="<c:url value="/js/dox/controllers.js"/>"></script>
     <script src="<c:url value="/js/dox/services.js"/>"></script>
+    <script src="<c:url value="/js/dox/directives.js"/>"></script>
 </head>
 <body>
 

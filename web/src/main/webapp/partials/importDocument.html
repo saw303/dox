@@ -13,9 +13,10 @@
 
     <div ng-show="documentClass" id="docClassAttributes">
 
-        {{form.invoiceAmount}}
-
         <form name="form" novalidate="novalidate" ng-submit="doUpload()">
+
+            <upload-form documentClass="documentClass"></upload-form>
+
             <p ng-repeat="attribute in documentClass.attributes">
 
                 <label for="{{attribute.shortName}}">{{attribute.translation}}</label>
