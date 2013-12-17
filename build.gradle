@@ -84,7 +84,7 @@ allprojects {
         springMobileVersion = '1.1.0.RELEASE'
         springDataVersion = '1.4.1.RELEASE'
         springSecurityVersion = '3.2.0.RELEASE'
-        hibernateVersion = '4.2.6.Final'
+        hibernateVersion = '4.3.0.Final'
         slf4jVersion = '1.7.5'
         logbackVersion = '1.0.13'
         junitVersion = '4.11'
