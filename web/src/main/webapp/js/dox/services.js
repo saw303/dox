@@ -13,9 +13,11 @@ angular.module('dox.services', ['ngResource'])
         return {
             upload: function(files, data) {
 
-                data.forEach(function(key) {
-                   $log.debug("Service: %s", key);
-                });
+                $log.debug("form items %s", form.length);
+
+                for (var i = 0; i < form.length; i++) {
+                    $log.debug("Service: %s", form[i].name);
+                }
             }
         };
     }]);

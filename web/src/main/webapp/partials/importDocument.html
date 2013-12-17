@@ -15,11 +15,11 @@
 
         <form name="form" novalidate="novalidate" ng-submit="doUpload()">
 
-            <upload-form documentClass="documentClass"></upload-form>
+            <input name="documentClassShortName" type="hidden" value="{{documentClass.shortName}}"/>
 
             <p ng-repeat="attribute in documentClass.attributes">
 
-                <label for="{{attribute.shortName}}">{{attribute.translation}}</label>
+            <label for="{{attribute.shortName}}">{{attribute.translation}}: </label>
 
             <span ng-switch="attribute.dataType">
                 <input ng-switch-when="STRING" ng-model="inputValue"
@@ -46,7 +46,7 @@
             </p>
 
             <input type="file" name="file" required="required" accept="application/pdf"/>
-            <button type="submit" id="importDocBtn" ng-disabled="!isValid()">Importieren</button>
+            <button type="submit" id="importDocBtn" ng-disabled="!isReadyToSubmit()">Importieren</button>
         </form>
     </div>
 

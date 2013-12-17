@@ -19,13 +19,14 @@ angular.module('dox.controllers', ['dox.services'])
 
         $scope.documentClass;
 
-        $scope.isValid = function () {
+        $scope.isReadyToSubmit = function () {
             return $scope.form.$dirty && $scope.form.$valid
         }
 
         $scope.doUpload = function() {
             $log.debug("Starting upload");
-            UploadService.upload('', $scope.documentClass);
+
+            UploadService.upload('', $scope.form);
         }
 
         DocumentClasses.query(function (docClasses) {
