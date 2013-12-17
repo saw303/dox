@@ -96,12 +96,12 @@ allprojects {
         jodaTimeVersion = '2.3'
         h2Version = '1.3.174'
         mysqlVersion = '5.1.27'
-        iTextVersion = '5.4.4'
+        iTextVersion = '5.4.5'
         guavaVersion = '15.0'
         mockitoVersion = '1.9.5'
-        flywayVersion = '2.2.1'
+        flywayVersion = '2.3'
         groovyVersion = '2.2.1'
-        xstreamVersion = '1.4.5'
+        xstreamVersion = '1.4.6'
     }
 
     configurations.all {
@@ -269,7 +269,7 @@ project(':web') {
         compile "org.springframework.mobile:spring-mobile-device:${ext.springMobileVersion}"
         compile "com.google.guava:guava:${ext.guavaVersion}"
         compile "joda-time:joda-time:${ext.jodaTimeVersion}"
-        compile "bitwalker:UserAgentUtils:1.11"
+        compile "bitwalker:UserAgentUtils:1.12"
         runtime "org.apache.tiles:tiles-core:${ext.tilesVersion}"
         runtime "org.apache.tiles:tiles-servlet:${ext.tilesVersion}"
         runtime "org.apache.tiles:tiles-jsp:${ext.tilesVersion}"
