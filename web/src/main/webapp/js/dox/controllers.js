@@ -15,12 +15,17 @@ angular.module('dox.controllers', ['dox.services'])
         };
     }])
 
-    .controller('ImportController', ['$scope', '$log', 'DocumentClasses', 'UploadService', function ($scope, $log, DocumentClasses, UploadService) {
+    .controller('ImportController', ['$scope', '$log', 'DocumentClasses', 'UploadService', '$location', function ($scope, $log, DocumentClasses, UploadService, $location) {
 
         $scope.documentClass;
 
         $scope.isReadyToSubmit = function () {
             return $scope.form.$dirty && $scope.form.$valid
+        }
+
+        var success = function() {
+            $location.path('/');
+            $scope.$apply(); // otherwise it does not change the view
         }
 
         $scope.doUpload = function () {
@@ -41,7 +46,7 @@ angular.module('dox.controllers', ['dox.services'])
                 }
             }
 
-            UploadService.upload(formData);
+            UploadService.upload(formData, success);
         }
 
         DocumentClasses.query(function (docClasses) {

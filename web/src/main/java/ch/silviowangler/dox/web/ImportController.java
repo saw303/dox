@@ -132,7 +132,7 @@ public class ImportController implements MessageSourceAware, InitializingBean {
 
     @ResponseStatus(CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "performImport.html")
-    public @ResponseBody DocumentReference importDocument(MultipartFile file, WebRequest request) {
+    public void importDocument(MultipartFile file, WebRequest request) {
 
         try {
             DocumentClass documentClass = new DocumentClass(request.getParameter(DOCUMENT_CLASS_SHORT_NAME));
@@ -156,7 +156,6 @@ public class ImportController implements MessageSourceAware, InitializingBean {
             DocumentReference documentReference = documentService.importDocument(physicalDocument);
 
             logger.info("Successfully imported file {}. Id = {}", file.getOriginalFilename(), documentReference.getHash());
-            return documentReference;
 
         } catch (ValidationException | IOException | DocumentClassNotFoundException e) {
             logger.error("Unable to import document", e);

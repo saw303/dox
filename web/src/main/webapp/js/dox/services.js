@@ -11,7 +11,7 @@ angular.module('dox.services', ['ngResource'])
     .factory('UploadService', ['$log' , function ($log) {
 
         return {
-            upload: function(formData) {
+            upload: function(formData, success) {
 
                 var xhr = new XMLHttpRequest();
                 xhr.open('POST', 'performImport.html', true);
@@ -22,6 +22,7 @@ angular.module('dox.services', ['ngResource'])
 
                     if (this.status == 201) {
                         $log.debug('Server got:', this.response);
+                        if (success) success.call();
                     }
                 };
 
