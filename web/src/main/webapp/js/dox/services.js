@@ -20,7 +20,7 @@ angular.module('dox.services', ['ngResource'])
 
                     $log.debug("Upload returns status %s", this.status);
 
-                    if (this.status == 200) {
+                    if (this.status == 201) {
                         $log.debug('Server got:', this.response);
                     }
                 };

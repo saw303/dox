@@ -26,10 +26,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
 import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -42,6 +39,7 @@ import static com.google.common.collect.ImmutableList.copyOf;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Sets.newHashSet;
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.util.Assert.notNull;
 import static org.springframework.web.util.HtmlUtils.htmlEscape;
 
@@ -132,10 +130,9 @@ public class ImportController implements MessageSourceAware, InitializingBean {
         return html;
     }
 
+    @ResponseStatus(CREATED)
     @RequestMapping(method = RequestMethod.POST, value = "performImport.html")
-    public ModelAndView importDocument(MultipartFile file, WebRequest request) {
-
-        Map<String, Object> model = newHashMap();
+    public @ResponseBody DocumentReference importDocument(MultipartFile file, WebRequest request) {
 
         try {
             DocumentClass documentClass = new DocumentClass(request.getParameter(DOCUMENT_CLASS_SHORT_NAME));
@@ -158,18 +155,15 @@ public class ImportController implements MessageSourceAware, InitializingBean {
 
             DocumentReference documentReference = documentService.importDocument(physicalDocument);
 
-            model.put("doc", documentReference);
-            return new ModelAndView("import.successful", model);
+            logger.info("Successfully imported file {}. Id = {}", file.getOriginalFilename(), documentReference.getHash());
+            return documentReference;
 
         } catch (ValidationException | IOException | DocumentClassNotFoundException e) {
             logger.error("Unable to import document", e);
-            model.put("exception", e);
-            return new ModelAndView("import.failure", model);
+            throw new RuntimeException(e.getMessage());
         } catch (DocumentDuplicationException e) {
             logger.error("Unable to import document. Duplicate document detected", e);
-            model.put("docId", e.getDocumentId());
-            model.put("docHash", e.getHash());
-            return new ModelAndView("import.duplicate.document", model);
+            throw new RuntimeException(e.getMessage());
         }
     }
 }
