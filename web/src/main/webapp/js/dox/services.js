@@ -11,13 +11,21 @@ angular.module('dox.services', ['ngResource'])
     .factory('UploadService', ['$log' , function ($log) {
 
         return {
-            upload: function(files, data) {
+            upload: function(formData) {
 
-                $log.debug("form items %s", form.length);
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'performImport.html', true);
 
-                for (var i = 0; i < form.length; i++) {
-                    $log.debug("Service: %s", form[i].name);
-                }
+                xhr.onload = function() {
+
+                    $log.debug("Upload returns status %s", this.status);
+
+                    if (this.status == 200) {
+                        $log.debug('Server got:', this.response);
+                    }
+                };
+
+                xhr.send(formData);
             }
         };
     }]);

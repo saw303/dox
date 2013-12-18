@@ -23,10 +23,25 @@ angular.module('dox.controllers', ['dox.services'])
             return $scope.form.$dirty && $scope.form.$valid
         }
 
-        $scope.doUpload = function() {
+        $scope.doUpload = function () {
             $log.debug("Starting upload");
 
-            UploadService.upload('', $scope.form);
+            var formData = new FormData();
+
+            for (var i = 0; i < form.length; i++) {
+                if (form[i].nodeName == 'INPUT') {
+                    $log.debug('Appending input field %s to form data', form[i].name);
+
+                    if (form[i].type == 'file') {
+                        formData.append(form[i].name, form[i].files[0]);
+                    }
+                    else {
+                        formData.append(form[i].name, form[i].value);
+                    }
+                }
+            }
+
+            UploadService.upload(formData);
         }
 
         DocumentClasses.query(function (docClasses) {
