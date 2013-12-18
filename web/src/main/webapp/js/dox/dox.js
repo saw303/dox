@@ -8,16 +8,16 @@ angular.module('dox', ['dox.controllers', 'ngRoute'])
 
     .config(function ($routeProvider, $locationProvider) {
 
-        $routeProvider.when('/', {
-            templateUrl: 'partials/query.html'
+        $routeProvider.when('/ui/', {
+            templateUrl: '/partials/query.html'
         });
 
-        $routeProvider.when('/import', {
-            templateUrl: 'partials/importDocument.html'
+        $routeProvider.when('/ui/import', {
+            templateUrl: '/partials/importDocument.html'
         });
 
         $routeProvider.otherwise({
-            redirectTo: '/'
+            redirectTo: '/ui/'
         });
 
         $locationProvider.html5Mode(true);

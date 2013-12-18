@@ -70,6 +70,11 @@ public class HomeController {
         return new ModelAndView("base.definition.angularjs", model);
     }
 
+    @RequestMapping(method = GET, value = "/ui/*")
+    public ModelAndView interceptAnyUICalls(@RequestParam(value = "q", defaultValue = "", required = false) String query) {
+        return homeScreen(query);
+    }
+
     @RequestMapping(method = POST, value = "extendedQuery.html")
     public ModelAndView advancedQuery(@RequestParam(DOCUMENT_CLASS_SHORT_NAME) String documentClassShortName, WebRequest request) {
 

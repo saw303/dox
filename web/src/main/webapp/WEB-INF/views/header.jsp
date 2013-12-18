@@ -25,8 +25,8 @@
             /></div>
     <nav>
         <ul>
-            <li><a href="<c:url value="/"/>"><spring:message code="nav.home"/></a></li>
-            <li><a href="/import"><spring:message code="nav.add.new.document"
+            <li><a href="<c:url value="/ui/"/>"><spring:message code="nav.home"/></a></li>
+            <li><a href="/ui/import"><spring:message code="nav.add.new.document"
                     /></a></li>
             <sec:authorize access="hasRole('ROLE_ADMIN')">
                 <li><a href="<c:url value="/admin/export"/>"><spring:message code="nav.export"/></a>

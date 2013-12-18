@@ -24,7 +24,7 @@ angular.module('dox.controllers', ['dox.services'])
         }
 
         var success = function() {
-            $location.path('/');
+            $location.path('/ui/');
             $scope.$apply(); // otherwise it does not change the view
         }
 

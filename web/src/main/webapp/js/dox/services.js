@@ -14,7 +14,7 @@ angular.module('dox.services', ['ngResource'])
             upload: function(formData, success) {
 
                 var xhr = new XMLHttpRequest();
-                xhr.open('POST', 'performImport.html', true);
+                xhr.open('POST', '/performImport.html', true);
 
                 xhr.onload = function() {
 
