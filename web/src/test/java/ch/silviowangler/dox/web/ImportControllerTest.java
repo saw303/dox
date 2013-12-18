@@ -29,6 +29,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.context.MessageSource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -42,10 +43,13 @@ import static com.google.common.collect.Sets.newHashSet;
 import static com.google.common.collect.Sets.newTreeSet;
 import static java.util.Locale.GERMAN;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.CREATED;
 
 /**
  * @author Silvio Wangler
@@ -273,7 +277,8 @@ public class ImportControllerTest {
 
         when(documentService.importDocument(any(PhysicalDocument.class))).thenReturn(new DocumentReference("test.pdf"));
 
-        controller.importDocument(new MockMultipartFile("test.pdf", "this is just a test".getBytes()), request);
+        ResponseEntity responseEntity = controller.importDocument(new MockMultipartFile("test.pdf", "this is just a test".getBytes()), request);
+        assertThat(responseEntity.getStatusCode(), is(CREATED));
 
         verify(documentService).importDocument(any(PhysicalDocument.class));
     }
@@ -287,12 +292,9 @@ public class ImportControllerTest {
         when(request.getParameter("c")).thenReturn("C");
         when(documentService.importDocument(any(PhysicalDocument.class))).thenThrow(new DocumentDuplicationException(1L, "hash"));
 
-        try {
-            controller.importDocument(new MockMultipartFile("test.pdf", "this is just a test".getBytes()), request);
-            fail("RuntimeException expected");
-        } catch (RuntimeException e) {
-            // ok
-        }
+        ResponseEntity responseEntity = controller.importDocument(new MockMultipartFile("test.pdf", "this is just a test".getBytes()), request);
+        assertThat(responseEntity.getStatusCode(), is(CONFLICT));
+
         verify(documentService).importDocument(any(PhysicalDocument.class));
     }
 
@@ -305,12 +307,9 @@ public class ImportControllerTest {
         when(request.getParameter("c")).thenReturn("C");
         when(documentService.importDocument(any(PhysicalDocument.class))).thenThrow(new ValidationException("bla"));
 
-        try {
-            controller.importDocument(new MockMultipartFile("test.pdf", "this is just a test".getBytes()), request);
-            fail("RuntimeException expected");
-        } catch (RuntimeException e) {
-            // ok
-        }
+        ResponseEntity responseEntity = controller.importDocument(new MockMultipartFile("test.pdf", "this is just a test".getBytes()), request);
+
+        assertThat(responseEntity.getStatusCode(), is(CONFLICT));
 
         verify(documentService).importDocument(any(PhysicalDocument.class));
     }

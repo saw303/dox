@@ -11,6 +11,8 @@
     <option value="">-- No Selection --</option>
 </select>
 
+    <div ng-show="errorMessage">{{errorMessage}}</div>
+
     <div ng-show="documentClass" id="docClassAttributes">
 
         <form name="form" novalidate="novalidate" ng-submit="doUpload()">

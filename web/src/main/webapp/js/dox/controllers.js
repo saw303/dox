@@ -19,12 +19,19 @@ angular.module('dox.controllers', ['dox.services'])
 
         $scope.documentClass;
 
+        $scope.errorMessage;
+
         $scope.isReadyToSubmit = function () {
             return $scope.form.$dirty && $scope.form.$valid
         }
 
-        var success = function() {
+        var successCallback = function() {
             $location.path('/ui/');
+            $scope.$apply(); // otherwise it does not change the view
+        }
+
+        var errorCallback = function() {
+            $scope.errorMessage = this.responseText;
             $scope.$apply(); // otherwise it does not change the view
         }
 
@@ -46,7 +53,7 @@ angular.module('dox.controllers', ['dox.services'])
                 }
             }
 
-            UploadService.upload(formData, success);
+            UploadService.upload(formData, successCallback, errorCallback);
         }
 
         DocumentClasses.query(function (docClasses) {
