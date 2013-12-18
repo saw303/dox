@@ -19,19 +19,25 @@ angular.module('dox.controllers', ['dox.services'])
 
         $scope.documentClass;
 
-        $scope.errorMessage;
+        $scope.message = {
+            visible: false,
+            value: ''
+        };
 
         $scope.isReadyToSubmit = function () {
             return $scope.form.$dirty && $scope.form.$valid
         }
 
         var successCallback = function() {
-            $location.path('/ui/');
+            form.reset();
+            $scope.message.visible = true;
+            $scope.message.value = 'Erfolgreich importiert';
             $scope.$apply(); // otherwise it does not change the view
         }
 
         var errorCallback = function() {
-            $scope.errorMessage = this.responseText;
+            $scope.message.visible = true;
+            $scope.message.value = this.responseText;
             $scope.$apply(); // otherwise it does not change the view
         }
 

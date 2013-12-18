@@ -11,7 +11,7 @@
     <option value="">-- No Selection --</option>
 </select>
 
-    <div ng-show="errorMessage">{{errorMessage}}</div>
+    <div ng-show="message.visible" class="messageBox">{{message.value}}</div>
 
     <div ng-show="documentClass" id="docClassAttributes">
 
