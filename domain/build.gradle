@@ -29,10 +29,8 @@ displayName = 'Domain module'
 
 buildscript {
     repositories {
-        mavenCentral()
         maven {
-            url 'https://repository.jboss.org/nexus/content/groups/public'
-            url 'http://repo.springsource.org/libs-milestone'
+            url 'http://repo.wangler.io/repository/repo'
         }
     }
     dependencies {
