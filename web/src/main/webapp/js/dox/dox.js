@@ -8,19 +8,22 @@ angular.module('dox', ['dox.controllers', 'ngRoute'])
 
     .config(['$routeProvider', '$locationProvider', '$provide', function ($routeProvider, $locationProvider, $provide) {
 
-        $routeProvider.when('/ui/', {
-            templateUrl: '/partials/query.html'
+        var basePath = angular.element(document.querySelector('#apiRoot')).attr('href');
+
+        $routeProvider.when(basePath + '/ui/', {
+            templateUrl: basePath + '/partials/query.html'
         });
 
-        $routeProvider.when('/ui/import', {
-            templateUrl: '/partials/importDocument.html'
+        $routeProvider.when(basePath + '/ui/import', {
+            templateUrl: basePath + '/partials/importDocument.html'
         });
 
         $routeProvider.otherwise({
-            redirectTo: '/ui/'
+            redirectTo: basePath + '/ui/'
         });
 
         $locationProvider.html5Mode(true);
 
-        $provide.value('apiRoot', $('#apiRoot').attr('href'));
+
+        $provide.value('apiRoot', basePath);
     }]);

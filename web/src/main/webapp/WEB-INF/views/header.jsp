@@ -25,16 +25,15 @@
             /></div>
     <nav>
         <ul>
-            <li><a href="<c:url value="/ui/"/>"><spring:message code="nav.home"/></a></li>
-            <li><a href="/ui/import"><spring:message code="nav.add.new.document"
-                    /></a></li>
+            <li><a href="<%=request.getContextPath()%>/ui"><spring:message code="nav.home"/></a></li>
+            <li><a href="<%=request.getContextPath()%>/ui/import"><spring:message code="nav.add.new.document"/></a></li>
             <sec:authorize access="hasRole('ROLE_ADMIN')">
-                <li><a href="<c:url value="/admin/export"/>"><spring:message code="nav.export"/></a>
+                <li><a href="<%=request.getContextPath()%>/admin/export"><spring:message code="nav.export"/></a>
                 </li>
             </sec:authorize>
-            <li><a href="<c:url value="/settings.html"/>"><spring:message code="nav.settings"/></a></li>
-            <li><a href="<c:url value="/maintenance"/>"><spring:message code="nav.maintenance"/></a></li>
-            <li><a href="<c:url value="/logout"/>"><spring:message code="nav.logout"/></a></li>
+            <li><a href="<%=request.getContextPath()%>/settings.html"><spring:message code="nav.settings"/></a></li>
+            <li><a href="<%=request.getContextPath()%>/maintenance"><spring:message code="nav.maintenance"/></a></li>
+            <li><a href="<%=request.getContextPath()%>/logout"><spring:message code="nav.logout"/></a></li>
         </ul>
     </nav>
 </sec:authorize>

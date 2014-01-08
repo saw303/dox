@@ -72,7 +72,7 @@ angular.module('dox.controllers', ['dox.services'])
         })
     }])
 
-    .controller('QueryController', ['$scope', '$log', '$http', 'Settings', function ($scope, $log, $http, Settings) {
+    .controller('QueryController', ['$scope', '$log', '$http', 'Settings', 'apiRoot', function ($scope, $log, $http, Settings, apiRoot) {
 
         $scope.query = '';
         $scope.useWildcard = false;
@@ -92,7 +92,7 @@ angular.module('dox.controllers', ['dox.services'])
 
         $scope.doQuery = function () {
 
-            var promise = $http.get('/api/v1/document?q=' + $scope.query + '&wc=' + $scope.useWildcard + '&uo=' + $scope.findOnlyMyDocuments);
+            var promise = $http.get(apiRoot + '/api/v1/document?q=' + $scope.query + '&wc=' + $scope.useWildcard + '&uo=' + $scope.findOnlyMyDocuments);
 
             promise.then(function (response) {
                 executed = true;
@@ -109,7 +109,7 @@ angular.module('dox.controllers', ['dox.services'])
         }
 
         $scope.deleteDocument = function (document, idx) {
-            var promise = $http.delete('/api/v1/document/' + document.id);
+            var promise = $http.delete(apiRoot + '/api/v1/document/' + document.id);
 
             promise.then(function (response) {
                 $scope.documents.splice(idx, 1);
