@@ -31,8 +31,8 @@ buildscript {
 
         classpath 'xalan:xalan:2.7.1'
         classpath "org.markdownj:markdownj:0.3.0-1.0.2b4"
-        classpath "org.ccil.cowan.tagsoup:tagsoup:1.2"
-        classpath "org.xhtmlrenderer:core-renderer:R8"
+        classpath "org.ccil.cowan.tagsoup:tagsoup:1.2.1"
+        classpath "org.xhtmlrenderer:core-renderer:8.0"
     }
 }
 
@@ -82,7 +82,7 @@ allprojects {
     project.ext {
         springVersion = '4.0.0.RELEASE'
         springMobileVersion = '1.1.0.RELEASE'
-        springDataVersion = '1.4.1.RELEASE'
+        springDataVersion = '1.5.0.M1'
         springSecurityVersion = '3.2.0.RELEASE'
         hibernateVersion = '4.3.0.Final'
         slf4jVersion = '1.7.5'
@@ -90,16 +90,16 @@ allprojects {
         junitVersion = '4.11'
         tilesVersion = '3.0.3'
         commonsIOVersion = '2.4'
-        commonsCodecVersion = '1.8'
+        commonsCodecVersion = '1.9'
         commonsBeanUtilsVersion = '1.8.3'
-        commonsExec = '1.1'
+        commonsExec = '1.2'
         jodaTimeVersion = '2.3'
         h2Version = '1.3.174'
-        mysqlVersion = '5.1.27'
+        mysqlVersion = '5.1.28'
         iTextVersion = '5.4.5'
         guavaVersion = '15.0'
         mockitoVersion = '1.9.5'
-        flywayVersion = '2.3'
+        flywayVersion = '2.3.1'
         groovyVersion = '2.2.1'
         xstreamVersion = '1.4.6'
     }
