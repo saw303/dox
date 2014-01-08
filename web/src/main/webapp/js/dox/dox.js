@@ -1,12 +1,12 @@
 angular.module('dox', ['dox.controllers', 'ngRoute'])
 
-    .run(function ($rootScope, $templateCache) {
+    .run(['$rootScope', '$templateCache', function ($rootScope, $templateCache) {
         $rootScope.$on('$viewContentLoaded', function () {
             $templateCache.removeAll();
         });
-    })
+    }])
 
-    .config(function ($routeProvider, $locationProvider) {
+    .config(['$routeProvider', '$locationProvider', '$provide', function ($routeProvider, $locationProvider, $provide) {
 
         $routeProvider.when('/ui/', {
             templateUrl: '/partials/query.html'
@@ -21,4 +21,6 @@ angular.module('dox', ['dox.controllers', 'ngRoute'])
         });
 
         $locationProvider.html5Mode(true);
-    });
+
+        $provide.value('apiRoot', $('#apiRoot').attr('href'));
+    }]);
