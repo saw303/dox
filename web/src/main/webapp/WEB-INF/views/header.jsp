@@ -31,7 +31,7 @@
                 <li><a href="<%=request.getContextPath()%>/admin/export"><spring:message code="nav.export"/></a>
                 </li>
             </sec:authorize>
-            <li><a href="<%=request.getContextPath()%>/settings.html"><spring:message code="nav.settings"/></a></li>
+            <li><a href="<%=request.getContextPath()%>/ui/settings"><spring:message code="nav.settings"/></a></li>
             <li><a href="<%=request.getContextPath()%>/maintenance"><spring:message code="nav.maintenance"/></a></li>
             <li><a href="<%=request.getContextPath()%>/logout"><spring:message code="nav.logout"/></a></li>
         </ul>
