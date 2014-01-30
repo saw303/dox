@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
+
 import com.petebevin.markdown.MarkdownProcessor
-import org.xhtmlrenderer.pdf.ITextRenderer
-import org.ccil.cowan.tagsoup.Parser
 import org.apache.xalan.xsltc.trax.SAX2DOM
+import org.ccil.cowan.tagsoup.Parser
+import org.xhtmlrenderer.pdf.ITextRenderer
 import org.xml.sax.InputSource
 
 buildscript {
@@ -27,7 +28,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.4'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.5-beta-1'
 
         classpath 'xalan:xalan:2.7.1'
         classpath "org.markdownj:markdownj:0.3.0-1.0.2b4"
@@ -80,13 +81,13 @@ allprojects {
     version = '0.3-SNAPSHOT'
 
     project.ext {
-        springVersion = '4.0.0.RELEASE'
+        springVersion = '4.0.1.RELEASE'
         springMobileVersion = '1.1.0.RELEASE'
-        springDataVersion = '1.5.0.M1'
+        springDataVersion = '1.5.0.RC1'
         springSecurityVersion = '3.2.0.RELEASE'
-        hibernateVersion = '4.3.0.Final'
+        hibernateVersion = '4.3.1.Final'
         slf4jVersion = '1.7.5'
-        logbackVersion = '1.0.13'
+        logbackVersion = '1.1.0'
         junitVersion = '4.11'
         tilesVersion = '3.0.3'
         commonsIOVersion = '2.4'
@@ -94,10 +95,10 @@ allprojects {
         commonsBeanUtilsVersion = '1.8.3'
         commonsExec = '1.2'
         jodaTimeVersion = '2.3'
-        h2Version = '1.3.174'
+        h2Version = '1.3.175'
         mysqlVersion = '5.1.28'
         iTextVersion = '5.4.5'
-        guavaVersion = '15.0'
+        guavaVersion = '16.0'
         mockitoVersion = '1.9.5'
         flywayVersion = '2.3.1'
         groovyVersion = '2.2.1'
