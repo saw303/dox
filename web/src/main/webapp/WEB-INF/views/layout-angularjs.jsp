@@ -33,14 +33,18 @@
     <meta name="author" content="Silvio Wangler">
 
     <meta name="viewport" content="width=device-width">
+    <meta name="fragment" content="!" />
 
     <link href='http://fonts.googleapis.com/css?family=Playball|Montserrat:700,400' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>"/>
 
     <link type="text/plain" rel="author" href="humans.txt"/>
-    <script src="<c:url value="/js/libs/angular-1.2.0/angular.js"/>"></script>
-    <script src="<c:url value="/js/libs/angular-1.2.0/angular-resource.js"/>"></script>
-    <script src="<c:url value="/js/dox/settings.js"/>"></script>
+    <script src="<c:url value="/js/libs/angular-1.2.4/angular.js"/>"></script>
+    <script src="<c:url value="/js/libs/angular-1.2.4/angular-resource.js"/>"></script>
+    <script src="<c:url value="/js/libs/angular-1.2.4/angular-route.js"/>"></script>
+    <script src="<c:url value="/js/dox/dox.js"/>"></script>
+    <script src="<c:url value="/js/dox/controllers.js"/>"></script>
+    <script src="<c:url value="/js/dox/services.js"/>"></script>
 </head>
 <body>
 
@@ -49,7 +53,7 @@
         <tiles:insertAttribute name="header"/>
     </header>
     <div id="main" role="main">
-        <tiles:insertAttribute name="body"/>
+        <ng-view></ng-view>
     </div>
     <footer>
         <tiles:insertAttribute name="footer"/>

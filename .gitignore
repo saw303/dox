@@ -17,6 +17,9 @@ out
 *.log
 
 domain/src/main/generated
-**/release
+*/release
+web/src/main/webapp/js/libs/angular*/docs
 
-gradle.properties
+*gradle.properties
+
+*Guide.pdf

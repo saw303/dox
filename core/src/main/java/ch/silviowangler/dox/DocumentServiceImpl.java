@@ -18,12 +18,13 @@ package ch.silviowangler.dox;
 
 import ch.silviowangler.dox.api.*;
 import ch.silviowangler.dox.api.Domain;
+import ch.silviowangler.dox.api.rest.DocumentClass;
 import ch.silviowangler.dox.domain.*;
 import ch.silviowangler.dox.domain.Attribute;
 import ch.silviowangler.dox.domain.AttributeDataType;
-import ch.silviowangler.dox.domain.DocumentClass;
 import ch.silviowangler.dox.domain.Range;
 import ch.silviowangler.dox.repository.*;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.itextpdf.text.io.RandomAccessSource;
@@ -57,18 +58,20 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static ch.silviowangler.dox.domain.AttributeDataType.*;
 import static ch.silviowangler.dox.domain.DomainUtils.containsWildcardCharacters;
 import static ch.silviowangler.dox.domain.DomainUtils.replaceWildcardCharacters;
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Lists.newArrayListWithCapacity;
 import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
 import static java.text.DateFormat.MEDIUM;
 import static org.springframework.transaction.annotation.Propagation.REQUIRED;
 import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
 import static org.springframework.util.Assert.*;
+
+import ch.silviowangler.dox.api.rest.DocumentClass;
 
 /**
  * @author Silvio Wangler
@@ -98,8 +101,6 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     private Properties mimeTypes;
     @Autowired
     private IndexMapEntryRepository indexMapEntryRepository;
-    @Autowired
-    private TranslationService translationService;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -108,6 +109,22 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         isTrue(archiveDirectory.canRead(), "Archive store must be readable ['" + this.archiveDirectory + "']");
         isTrue(archiveDirectory.canWrite(), "Archive store must be writable ['" + this.archiveDirectory + "']");
         notEmpty(mimeTypes, "No mime types have been set");
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<DocumentClass> findAllDocumentClasses() {
+
+        List<DocumentClass> documentClasses = newArrayList();
+
+        Iterable<ch.silviowangler.dox.domain.DocumentClass> documentClassEntities = documentClassRepository.findAll();
+
+        for (ch.silviowangler.dox.domain.DocumentClass documentClassEntity : documentClassEntities) {
+            DocumentClass documentClass = toDocumentClassWithAttributesApi(documentClassEntity);
+            documentClass.setAttributes(newArrayList(toAttributeApi(attributeRepository.findAttributesForDocumentClass(documentClassEntity))));
+            documentClasses.add(documentClass);
+        }
+        return documentClasses;
     }
 
     @Override
@@ -153,7 +170,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     @PreAuthorize("hasRole('ROLE_USER')")
     public SortedSet<ch.silviowangler.dox.api.Attribute> findAttributes(ch.silviowangler.dox.api.DocumentClass documentClass) throws DocumentClassNotFoundException {
 
-        DocumentClass docClass = findDocumentClass(documentClass.getShortName());
+        ch.silviowangler.dox.domain.DocumentClass docClass = findDocumentClass(documentClass.getShortName());
         List<Attribute> attributes = attributeRepository.findAttributesForDocumentClass(docClass);
         return toAttributeApi(attributes);
     }
@@ -164,9 +181,9 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     public Set<ch.silviowangler.dox.api.DocumentClass> findDocumentClasses() {
 
         Set<ch.silviowangler.dox.api.DocumentClass> result = new HashSet<>();
-        Iterable<DocumentClass> documentClasses = documentClassRepository.findAll();
+        Iterable<ch.silviowangler.dox.domain.DocumentClass> documentClasses = documentClassRepository.findAll();
 
-        for (DocumentClass documentClass : documentClasses) {
+        for (ch.silviowangler.dox.domain.DocumentClass documentClass : documentClasses) {
             logger.debug("Processing document class '{}' with id {}", documentClass.getShortName(), documentClass.getId());
             result.add(toDocumentClassApi(documentClass));
         }
@@ -242,7 +259,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     public Set<DocumentReference> findDocumentReferences(Map<TranslatableKey, Object> queryParams, String documentClassShortName) throws DocumentClassNotFoundException {
 
         logger.debug("Trying to find document references in document class '{}' using params '{}'", documentClassShortName, queryParams);
-        DocumentClass documentClass = findDocumentClass(documentClassShortName);
+        ch.silviowangler.dox.domain.DocumentClass documentClass = findDocumentClass(documentClassShortName);
         List<Attribute> attributes = attributeRepository.findAttributesForDocumentClass(documentClass);
 
         List<Document> documents = documentRepository.findDocuments(toEntityMap(fixDataTypesOfIndices(queryParams, attributes)), toAttributeMap(attributes), documentClass);
@@ -310,7 +327,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     public DocumentReference importDocument(PhysicalDocument physicalDocumentApi) throws ValidationException, DocumentDuplicationException, DocumentClassNotFoundException {
 
         final String documentClassShortName = physicalDocumentApi.getDocumentClass().getShortName();
-        DocumentClass documentClassEntity = findDocumentClass(documentClassShortName);
+        ch.silviowangler.dox.domain.DocumentClass documentClassEntity = findDocumentClass(documentClassShortName);
 
         List<Attribute> attributes = attributeRepository.findAttributesForDocumentClass(documentClassEntity);
 
@@ -386,7 +403,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         documentReferenceApi.getIndices().putAll(reference.getIndices());
 
         Document document = documentRepository.findOne(reference.getId());
-        DocumentClass documentClassEntity = document.getDocumentClass();
+        ch.silviowangler.dox.domain.DocumentClass documentClassEntity = document.getDocumentClass();
 
         List<Attribute> attributes = attributeRepository.findAttributesForDocumentClass(documentClassEntity);
 
@@ -553,11 +570,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     private boolean isRangeCompatible(AttributeDataType desiredDataType) {
-        return (DATE.equals(desiredDataType) ||
-                DOUBLE.equals(desiredDataType) ||
-                INTEGER.equals(desiredDataType) ||
-                LONG.equals(desiredDataType) ||
-                SHORT.equals(desiredDataType));
+        return Lists.newArrayList(DATE, DOUBLE, INTEGER, LONG, SHORT).contains(desiredDataType);
     }
 
     @SuppressWarnings("unchecked")
@@ -698,8 +711,12 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         return indices;
     }
 
-    private ch.silviowangler.dox.api.DocumentClass toDocumentClassApi(DocumentClass documentClass) {
+    private ch.silviowangler.dox.api.DocumentClass toDocumentClassApi(ch.silviowangler.dox.domain.DocumentClass documentClass) {
         return new ch.silviowangler.dox.api.DocumentClass(documentClass.getShortName());
+    }
+
+    private DocumentClass toDocumentClassWithAttributesApi(ch.silviowangler.dox.domain.DocumentClass documentClass) {
+        return new DocumentClass(documentClass.getShortName());
     }
 
     private Map<String, Attribute> toAttributeMap(List<Attribute> attributes) {
@@ -741,8 +758,8 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
 
-    private DocumentClass findDocumentClass(String documentClassShortName) throws DocumentClassNotFoundException {
-        DocumentClass documentClassEntity = documentClassRepository.findByShortName(documentClassShortName);
+    private ch.silviowangler.dox.domain.DocumentClass findDocumentClass(String documentClassShortName) throws DocumentClassNotFoundException {
+        ch.silviowangler.dox.domain.DocumentClass documentClassEntity = documentClassRepository.findByShortName(documentClassShortName);
 
         if (documentClassEntity == null) {
             logger.error("No such document class with name '{}' found", documentClassShortName);

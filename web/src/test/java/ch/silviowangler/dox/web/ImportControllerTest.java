@@ -29,6 +29,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.context.MessageSource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -47,6 +48,8 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.CREATED;
 
 /**
  * @author Silvio Wangler
@@ -272,10 +275,10 @@ public class ImportControllerTest {
         when(request.getParameter("b")).thenReturn("B");
         when(request.getParameter("c")).thenReturn("C");
 
-        final ModelAndView modelAndView = controller.importDocument(new MockMultipartFile("test.pdf", "this is just a test".getBytes()), request);
+        when(documentService.importDocument(any(PhysicalDocument.class))).thenReturn(new DocumentReference("test.pdf"));
 
-        assertThat(modelAndView.getViewName(), is("import.successful"));
-        assertThat(modelAndView.getModel().size(), is(1));
+        ResponseEntity responseEntity = controller.importDocument(new MockMultipartFile("test.pdf", "this is just a test".getBytes()), request);
+        assertThat(responseEntity.getStatusCode(), is(CREATED));
 
         verify(documentService).importDocument(any(PhysicalDocument.class));
     }
@@ -289,12 +292,8 @@ public class ImportControllerTest {
         when(request.getParameter("c")).thenReturn("C");
         when(documentService.importDocument(any(PhysicalDocument.class))).thenThrow(new DocumentDuplicationException(1L, "hash"));
 
-        final ModelAndView modelAndView = controller.importDocument(new MockMultipartFile("test.pdf", "this is just a test".getBytes()), request);
-
-        assertThat(modelAndView.getViewName(), is("import.duplicate.document"));
-        assertThat(modelAndView.getModel().size(), is(2));
-        assertThat(modelAndView.getModel().get("docId").toString(), is("1"));
-        assertThat(modelAndView.getModel().get("docHash").toString(), is("hash"));
+        ResponseEntity responseEntity = controller.importDocument(new MockMultipartFile("test.pdf", "this is just a test".getBytes()), request);
+        assertThat(responseEntity.getStatusCode(), is(CONFLICT));
 
         verify(documentService).importDocument(any(PhysicalDocument.class));
     }
@@ -308,11 +307,9 @@ public class ImportControllerTest {
         when(request.getParameter("c")).thenReturn("C");
         when(documentService.importDocument(any(PhysicalDocument.class))).thenThrow(new ValidationException("bla"));
 
-        final ModelAndView modelAndView = controller.importDocument(new MockMultipartFile("test.pdf", "this is just a test".getBytes()), request);
+        ResponseEntity responseEntity = controller.importDocument(new MockMultipartFile("test.pdf", "this is just a test".getBytes()), request);
 
-        assertThat(modelAndView.getViewName(), is("import.failure"));
-        assertThat(modelAndView.getModel().size(), is(1));
-        assertThat(((Exception) modelAndView.getModel().get("exception")).getMessage(), is("bla"));
+        assertThat(responseEntity.getStatusCode(), is(CONFLICT));
 
         verify(documentService).importDocument(any(PhysicalDocument.class));
     }

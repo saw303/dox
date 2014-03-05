@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<div ng-controller="ImportController">
+
+    Dokumentenklasse: <select ng-model="documentClass" required="required" ng-value="shortName"
+                              ng-options="d.translation for d in documentClasses | orderBy: 'translation' ">
+    <option value="">-- No Selection --</option>
+</select>
+
+    <div ng-show="message.visible" class="messageBox">{{message.value}}</div>
+
+    <div ng-show="documentClass" id="docClassAttributes">
+
+        <form name="form" novalidate="novalidate" ng-submit="doUpload()">
+
+            <input name="documentClassShortName" type="hidden" value="{{documentClass.shortName}}"/>
+
+            <p ng-repeat="attribute in documentClass.attributes">
+
+                <label for="{{attribute.shortName}}">{{attribute.translation}}: </label>
+
+            <span ng-switch="attribute.dataType">
+                <span ng-switch-when="STRING">
+                    <datalist id="list-{{attribute.shortName}}">
+                        <option value="{{value}}" ng-repeat="value in attribute.domain.values"/>
+                    </datalist>
+                    <input ng-model="inputValue" name="{{attribute.shortName}}" type="text"
+                           ng-required="!attribute.optional" list="list-{{attribute.shortName}}"/>
+                </span>
+                    <input ng-switch-when="DATE" ng-model="inputValue" name="{{attribute.shortName}}" type="date"
+                           ng-required="!attribute.optional"/>
+                <input ng-switch-when="CURRENCY" ng-model="inputValue" name="{{attribute.shortName}}" type="text"
+                       value="CHF "
+                       ng-pattern="/\D{3} [-+]?[0-9]*[.,]?[0-9]+/" ng-required="!attribute.optional"/>
+                <input ng-switch-when="DOUBLE" ng-model="inputValue" name="{{attribute.shortName}}" type="number"
+                       min="0" step="any"
+                       ng-required="!attribute.optional"/>
+                <input ng-switch-when="LONG" ng-model="inputValue" name="{{attribute.shortName}}" type="number" min="0"
+                       step="any"
+                       ng-required="!attribute.optional"/>
+                <input ng-switch-when="SHORT" ng-model="inputValue" name="{{attribute.shortName}}" type="number" min="0"
+                       step="any"
+                       ng-required="!attribute.optional"/>
+                <input ng-switch-when="INTEGER" ng-model="inputValue" name="{{attribute.shortName}}" type="number"
+                       min="0" step="any"
+                       ng-required="!attribute.optional"/>
+            </span>
+            </p>
+
+            <input type="file" name="file" required="required" accept="application/pdf"/>
+            <button type="submit" id="importDocBtn" ng-disabled="!isReadyToSubmit()">Importieren</button>
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<div id="query" ng-controller="QueryController">
+    <form>
+        <p>
+            <input id="q" name="q" ng-model="query" tabindex="1" placeholder="Nach was suchst Du?" type="search"/>
+            <button ng-click="doQuery()" tabindex="2" accesskey="S">Suche</button>
+        </p>
+        <p><input type="checkbox" ng-model="useWildcard" tabindex="3"/> Mit Wildcards suchen | <input type="checkbox"
+                                                                                                     ng-model="findOnlyMyDocuments"
+                                                                                                     tabindex="4"/> Nur
+            eigene Dokumente suchen</p>
+    </form>
+
+
+    <div id="documentList">
+
+        <span ng-if="isEmptyResult()">Es konnten keine Dokumente mit dem Suchbegriff &laquo;{{query}}&raquo; gefunden werden</span>
+
+        <div ng-repeat="document in documents"
+             style="background: url('/resources/img/file-extensions/pdf.png') left top no-repeat; border: 1px solid; border-radius: 5px; margin-bottom: 10px; overflow: auto; box-shadow:5px 5px 5px #999999; background-color: #F5DEB3;">
+            <div style="margin-left: 25%;">
+                <div style="float:right;vertical-align: top;margin-right: 10px;font-size: 10px;"><a
+                        href="#">Bearbeiten</a>, <a
+                        ng-click="deleteDocument(document, $index)">L&ouml;schen</a></div>
+
+                <img ng-src="/document/{{document.hash}}.thumbnail" style="display: block; float: right; margin: 25px; box-shadow: 5px 5px 5px #999999;"/>
+
+                <h2 id="{{document.id}}"
+                    style="text-align: left; padding: 30px 0 0 35px; margin: 2px 0 0 0; overflow: hidden;">
+                    {{document.fileName}}</h2>
+
+                <ul style="list-style: none; text-align: left; font-size: 0.8em; padding-left: 35px;">
+                    <li>Dokumentenklasse: {{document.documentClass.translation}}</li>
+                    <li>Seiten: {{document.pageCount}}</li>
+                    <li title="{{document.hash}}">Hash: {{document.hash}}...
+                    </li>
+                    <li>Benutzer: {{document.userReference}}</li>
+                    <li>Dateigr&ouml;sse: {{document.fileSize}}</li>
+                    <li>Erstelldatum: {{document.creationDate | date:'dd.MM.yyyy HH:mm:ss'}}
+                    </li>
+                </ul>
+                <div class="attributeListing">
+                    <span ng-repeat="(label, value) in document.indices">{{label}}: {{value}},&nbsp;</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

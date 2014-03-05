@@ -9,8 +9,8 @@ env:
 before_install:
 
 # Gradle
-- wget http://services.gradle.org/distributions/gradle-1.8-bin.zip
-- unzip gradle-1.8-bin.zip
-- export GRADLE_HOME=$PWD/gradle-1.8
+- wget http://services.gradle.org/distributions/gradle-1.10-bin.zip
+- unzip gradle-1.10-bin.zip
+- export GRADLE_HOME=$PWD/gradle-1.10
 - export PATH=$GRADLE_HOME/bin:$PATH
 - gradle -version

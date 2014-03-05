@@ -23,8 +23,7 @@ import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.util.Currency;
 
-import static org.springframework.util.Assert.hasText;
-import static org.springframework.util.Assert.notNull;
+import static org.springframework.util.Assert.*;
 
 /**
  * @author Silvio Wangler
@@ -55,6 +54,8 @@ public class AmountOfMoney {
         final String clearedWhitespaces = trimmedValue.replaceAll(" +", " ");
         logger.trace("Cleared value is '{}'", trimmedValue);
         String[] args = clearedWhitespaces.split(" ");
+
+        isTrue(args.length == 2, "Please provide currency code and amount. E.g. CHF 1250.50. Your value is " + value);
 
         logger.trace("Arg currency {}, arg amount {}", args[0], args[1]);
 

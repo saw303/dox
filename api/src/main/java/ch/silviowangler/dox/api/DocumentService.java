@@ -101,7 +101,7 @@ public interface DocumentService {
      */
     List<DocumentReference> findDocumentReferencesForCurrentUser(String queryString, Locale locale);
 
-    Set<DocumentClass> findDocumentClasses();
+    Set<ch.silviowangler.dox.api.DocumentClass> findDocumentClasses();
 
     /**
      * Finds all attributes assigned to the given document class. It returns the global and the document class specific attributes.
@@ -110,7 +110,7 @@ public interface DocumentService {
      * @return all attributes to the given document class
      * @throws DocumentClassNotFoundException if the document class does not exist
      */
-    SortedSet<Attribute> findAttributes(DocumentClass documentClass) throws DocumentClassNotFoundException;
+    SortedSet<Attribute> findAttributes(ch.silviowangler.dox.api.DocumentClass documentClass) throws DocumentClassNotFoundException;
 
     /**
      * Updates the index values of an existing document reference
@@ -142,4 +142,10 @@ public interface DocumentService {
      * @throws IllegalArgumentException if id is null
      */
     void deleteDocument(Long id);
+
+    /**
+     * Retrieves all document classes
+     * @return all document classes with their corresponding attributes
+     */
+    List<ch.silviowangler.dox.api.rest.DocumentClass> findAllDocumentClasses();
 }
