@@ -1,24 +1,37 @@
 angular.module('dox', ['dox.controllers', 'ngRoute'])
 
-    .run(function ($rootScope, $templateCache) {
+    .run(['$rootScope', '$templateCache', function ($rootScope, $templateCache) {
         $rootScope.$on('$viewContentLoaded', function () {
             $templateCache.removeAll();
         });
-    })
+    }])
 
-    .config(function ($routeProvider, $locationProvider) {
+    .config(['$routeProvider', '$locationProvider', '$provide', function ($routeProvider, $locationProvider, $provide) {
 
-        $routeProvider.when('/ui/', {
-            templateUrl: '/partials/query.html'
+        var basePath = angular.element(document.querySelector('#apiRoot')).attr('href');
+
+        $routeProvider.when(basePath + '/', {
+            templateUrl: basePath + '/partials/query.html'
         });
 
-        $routeProvider.when('/ui/import', {
-            templateUrl: '/partials/importDocument.html'
+        $routeProvider.when(basePath + '/ui/', {
+            templateUrl: basePath + '/partials/query.html'
         });
 
-        $routeProvider.otherwise({
-            redirectTo: '/ui/'
+        $routeProvider.when(basePath + '/ui/import', {
+            templateUrl: basePath + '/partials/importDocument.html'
         });
+
+        $routeProvider.when(basePath + '/ui/settings', {
+            templateUrl: basePath + '/partials/settings.html'
+        });
+
+        /*$routeProvider.otherwise({
+            redirectTo: basePath + '/ui/'
+        });*/
 
         $locationProvider.html5Mode(true);
-    });
+
+
+        $provide.value('apiRoot', basePath);
+    }]);

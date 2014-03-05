@@ -23,13 +23,15 @@ import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.util.Currency;
 
+import java.io.Serializable;
+
 import static org.springframework.util.Assert.*;
 
 /**
  * @author Silvio Wangler
  * @since 0.2
  */
-public class AmountOfMoney {
+public class AmountOfMoney implements Serializable {
 
     private Currency currency;
     private BigDecimal amount;

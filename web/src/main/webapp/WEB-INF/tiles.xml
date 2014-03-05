@@ -61,10 +61,6 @@
         <put-attribute name="body" value="/WEB-INF/views/edit.jsp"/>
     </definition>
 
-    <definition name="settings" extends="base.definition.angularjs">
-        <put-attribute name="body" value="/WEB-INF/views/settings.jsp"/>
-    </definition>
-
     <definition name="maintenance" extends="base.definition">
         <put-attribute name="body" value="/WEB-INF/views/maintenance.jsp"/>
     </definition>

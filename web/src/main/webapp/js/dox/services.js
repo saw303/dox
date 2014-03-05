@@ -1,20 +1,20 @@
 angular.module('dox.services', ['ngResource'])
 
-    .factory('Settings', ['$resource', function ($resource) {
-        return $resource('/api/v1/settings/:settingId', {settingId: '@id'});
+    .factory('Settings', ['$resource', 'apiRoot', function ($resource, apiRoot) {
+        return $resource(apiRoot + '/api/v1/settings/:settingId', {settingId: '@id'});
     }])
 
-    .factory('DocumentClasses', ['$resource', function ($resource) {
-        return $resource('/api/v1/documentClass/:documentClassId', {documentClassId: '@id'})
+    .factory('DocumentClasses', ['$resource', 'apiRoot', function ($resource, apiRoot) {
+        return $resource(apiRoot + '/api/v1/documentClass/:documentClassId', {documentClassId: '@id'})
     }])
 
-    .factory('UploadService', ['$log' , function ($log) {
+    .factory('UploadService', ['$log', 'apiRoot', function ($log, apiRoot) {
 
         return {
             upload: function(formData, success, error) {
 
                 var xhr = new XMLHttpRequest();
-                xhr.open('POST', '/performImport.html', true);
+                xhr.open('POST', apiRoot + '/performImport.html', true);
 
                 xhr.onload = function() {
 

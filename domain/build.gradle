@@ -34,25 +34,25 @@ buildscript {
         }
     }
     dependencies {
-        classpath "org.hibernate:hibernate-core:${ext.hibernateVersion}",
-                "org.hibernate:hibernate-entitymanager:${ext.hibernateVersion}",
-                "com.h2database:h2:${ext.h2Version}",
-                "joda-time:joda-time:${ext.jodaTimeVersion}"
-        classpath("org.springframework.data:spring-data-jpa:${ext.springDataVersion}") {
+        classpath "org.hibernate:hibernate-core:${project.ext.hibernateVersion}",
+                "org.hibernate:hibernate-entitymanager:${project.ext.hibernateVersion}",
+                "com.h2database:h2:${project.ext.h2Version}",
+                "joda-time:joda-time:${project.ext.jodaTimeVersion}"
+        classpath("org.springframework.data:spring-data-jpa:${project.ext.springDataVersion}") {
             exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
         }
     }
 }
 
 dependencies {
-    compile "org.hibernate:hibernate-core:${ext.hibernateVersion}",
-            "org.hibernate:hibernate-entitymanager:${ext.hibernateVersion}",
-            "joda-time:joda-time:${ext.jodaTimeVersion}",
-            "com.google.guava:guava:${ext.guavaVersion}"
-    compile("org.springframework.data:spring-data-jpa:${ext.springDataVersion}") {
+    compile "org.hibernate:hibernate-core:${project.ext.hibernateVersion}",
+            "org.hibernate:hibernate-entitymanager:${project.ext.hibernateVersion}",
+            "joda-time:joda-time:${project.ext.jodaTimeVersion}",
+            "com.google.guava:guava:${project.ext.guavaVersion}"
+    compile("org.springframework.data:spring-data-jpa:${project.ext.springDataVersion}") {
         exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
     }
-    testRuntime "ch.qos.logback:logback-classic:${ext.logbackVersion}"
+    testRuntime "ch.qos.logback:logback-classic:${project.ext.logbackVersion}"
 }
 
 sourceSets {
