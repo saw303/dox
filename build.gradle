@@ -24,7 +24,7 @@ import org.xml.sax.InputSource
 buildscript {
     repositories {
         maven {
-            url 'http://repo.wangler.io/repository/repo'
+            url 'http://repo.wangler.io/repo'
         }
     }
     dependencies {
@@ -73,7 +73,7 @@ allprojects {
 
     repositories {
         maven {
-            url 'http://repo.wangler.io/repository/repo'
+            url 'http://repo.wangler.io/repo'
         }
     }
 
