@@ -29,7 +29,7 @@ public class DomainUtils {
      * Replaces characters ? or * to %.
      *
      * @param value
-     * @return
+     * @return replaced string value
      */
     public static String replaceWildcardCharacters(final String value) {
         return value.replaceAll("(\\*|\\?)", "%");
@@ -39,7 +39,7 @@ public class DomainUtils {
      * Checks whether the string contains characters like ? or *
      *
      * @param value
-     * @return
+     * @return replaced string value
      */
     public static boolean containsWildcardCharacters(final String value) {
         return value.contains("*") || value.contains("?");
