@@ -83,8 +83,8 @@ allprojects {
     project.ext {
         springVersion = '4.0.2.RELEASE'
         springMobileVersion = '1.1.1.RELEASE'
-        springDataVersion = '1.5.0.RC1'
-        springSecurityVersion = '3.2.1.RELEASE'
+        springDataVersion = '1.5.1.RELEASE'
+        springSecurityVersion = '3.2.2.RELEASE'
         hibernateVersion = '4.3.4.Final'
         slf4jVersion = '1.7.6'
         logbackVersion = '1.1.1'
@@ -201,7 +201,8 @@ project(':core') {
         runtime "org.slf4j:jcl-over-slf4j:${project.ext.slf4jVersion}",
                 "ch.qos.logback:logback-classic:${project.ext.logbackVersion}",
                 "org.springframework.security:spring-security-config:${project.ext.springSecurityVersion}",
-                'org.aspectj:aspectjweaver:1.7.4' // need this version because 1.6.x is buggy with Spring 3.x (http://goo.gl/73Pwi)
+                'org.aspectj:aspectjweaver:1.7.4', // need this version because 1.6.x is buggy with Spring 3.x (http://goo.gl/73Pwi)
+                'org.bouncycastle:bcprov-jdk15on:1.49', 'org.bouncycastle:bcpkix-jdk15on:1.49'
         testCompile "org.springframework:spring-test:${project.ext.springVersion}",
                 "commons-io:commons-io:${project.ext.commonsIOVersion}",
                 "com.google.guava:guava:${project.ext.guavaVersion}"

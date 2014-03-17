@@ -198,7 +198,6 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         assertThat(money, is(not(nullValue())));
         assertThat(money.getCurrency().getCurrencyCode(), is("CHF"));
         assertThat(money.getAmount().toPlainString(), is("1235.50"));
-
     }
 
     @Test
@@ -487,5 +486,28 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
             assertTrue(documentClass instanceof Translatable);
             assertThat("There should be a translation available", documentClass.getTranslation(), is(not(nullValue())));
         }
+    }
+
+    @Test
+    public void importPdfWithEncryption() throws DocumentClassNotFoundException, DocumentDuplicationException, ValidationException, IOException {
+
+        File singlePagePdf = loadFile("Zinsausweis2013-CS-680419-20.pdf");
+
+        Map<TranslatableKey, Object> indexes = newHashMapWithExpectedSize(1);
+        indexes.put(COMPANY, "Sunrise");
+        indexes.put(MONEY, new Money(Currency.getInstance("CHF"), new BigDecimal("1235.50")));
+        indexes.put(INVOICE_AMOUNT, 12350L);
+        indexes.put(INVOICE_DATE, new Date());
+
+        PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
+        final DocumentReference documentReference = documentService.importDocument(doc);
+
+        assertThat(documentReference.getPageCount(), is(1));
+
+        final Money money = (Money) documentReference.getIndices().get(MONEY);
+        assertThat(money, is(not(nullValue())));
+        assertThat(money.getCurrency().getCurrencyCode(), is("CHF"));
+        assertThat(money.getAmount().toPlainString(), is("1235.50"));
+
     }
 }
