@@ -136,7 +136,7 @@ public class ImportController implements MessageSourceAware, InitializingBean {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "performImport.html")
-    public ResponseEntity importDocument(MultipartFile file, WebRequest request) {
+    public ResponseEntity<String> importDocument(MultipartFile file, WebRequest request) {
 
         try {
             DocumentClass documentClass = new DocumentClass(request.getParameter(DOCUMENT_CLASS_SHORT_NAME));
