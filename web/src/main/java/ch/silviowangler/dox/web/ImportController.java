@@ -51,9 +51,9 @@ import static org.springframework.web.util.HtmlUtils.htmlEscape;
 /**
  * @author Silvio Wangler
  * @since 0.1
- *        <div>
- *        Date: 17.07.12 08:22
- *        </div>
+ * <div>
+ * Date: 17.07.12 08:22
+ * </div>
  */
 @Controller
 public class ImportController implements MessageSourceAware, InitializingBean {
