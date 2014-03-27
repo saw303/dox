@@ -81,10 +81,10 @@ allprojects {
     version = '0.3-M1'
 
     project.ext {
-        springVersion = '4.0.2.RELEASE'
+        springVersion = '4.0.3.RELEASE'
         springMobileVersion = '1.1.1.RELEASE'
         springDataVersion = '1.5.1.RELEASE'
-        springSecurityVersion = '3.2.2.RELEASE'
+        springSecurityVersion = '3.2.3.RELEASE'
         hibernateVersion = '4.3.4.Final'
         slf4jVersion = '1.7.6'
         logbackVersion = '1.1.1'
