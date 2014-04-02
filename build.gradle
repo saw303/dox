@@ -96,7 +96,7 @@ allprojects {
         commonsExec = '1.2'
         jodaTimeVersion = '2.3'
         h2Version = '1.3.175'
-        mysqlVersion = '5.1.29'
+        mysqlVersion = '5.1.30'
         iTextVersion = '5.5.0'
         guavaVersion = '16.0.1'
         mockitoVersion = '1.9.5'
