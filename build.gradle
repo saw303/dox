@@ -86,8 +86,8 @@ allprojects {
         springDataVersion = '1.5.1.RELEASE'
         springSecurityVersion = '3.2.3.RELEASE'
         hibernateVersion = '4.3.5.Final'
-        slf4jVersion = '1.7.6'
-        logbackVersion = '1.1.1'
+        slf4jVersion = '1.7.7'
+        logbackVersion = '1.1.2'
         junitVersion = '4.11'
         tilesVersion = '3.0.3'
         commonsIOVersion = '2.4'
@@ -95,7 +95,7 @@ allprojects {
         commonsBeanUtilsVersion = '1.8.3'
         commonsExec = '1.2'
         jodaTimeVersion = '2.3'
-        h2Version = '1.3.175'
+        h2Version = '1.4.177'
         mysqlVersion = '5.1.30'
         iTextVersion = '5.5.0'
         guavaVersion = '16.0.1'
@@ -201,8 +201,8 @@ project(':core') {
         runtime "org.slf4j:jcl-over-slf4j:${project.ext.slf4jVersion}",
                 "ch.qos.logback:logback-classic:${project.ext.logbackVersion}",
                 "org.springframework.security:spring-security-config:${project.ext.springSecurityVersion}",
-                'org.aspectj:aspectjweaver:1.7.4', // need this version because 1.6.x is buggy with Spring 3.x (http://goo.gl/73Pwi)
-                'org.bouncycastle:bcprov-jdk15on:1.49', 'org.bouncycastle:bcpkix-jdk15on:1.49'
+                'org.aspectj:aspectjweaver:1.8.0', // need this version because 1.6.x is buggy with Spring 3.x (http://goo.gl/73Pwi)
+                'org.bouncycastle:bcprov-jdk15on:1.50', 'org.bouncycastle:bcpkix-jdk15on:1.50'
         testCompile "org.springframework:spring-test:${project.ext.springVersion}",
                 "commons-io:commons-io:${project.ext.commonsIOVersion}",
                 "com.google.guava:guava:${project.ext.guavaVersion}"
