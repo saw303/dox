@@ -40,9 +40,9 @@
     <link id="apiRoot" href="<%=request.getContextPath()%>"/>
     <link type="text/plain" rel="author" href="humans.txt"/>
 
-    <script src="<c:url value="/js/libs/angular-1.2.4/angular.js"/>"></script>
-    <script src="<c:url value="/js/libs/angular-1.2.4/angular-resource.js"/>"></script>
-    <script src="<c:url value="/js/libs/angular-1.2.4/angular-route.js"/>"></script>
+    <script src="<c:url value="/js/libs/angular-1.2.16/angular.js"/>"></script>
+    <script src="<c:url value="/js/libs/angular-1.2.16/angular-resource.js"/>"></script>
+    <script src="<c:url value="/js/libs/angular-1.2.16/angular-route.js"/>"></script>
     <script src="<c:url value="/js/dox/dox.js"/>"></script>
     <script src="<c:url value="/js/dox/controllers.js"/>"></script>
     <script src="<c:url value="/js/dox/services.js"/>"></script>
