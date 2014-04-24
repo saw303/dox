@@ -28,24 +28,23 @@
                     <datalist id="list-{{attribute.shortName}}">
                         <option value="{{value}}" ng-repeat="value in attribute.domain.values"/>
                     </datalist>
-                    <input ng-model="inputValue" name="{{attribute.shortName}}" type="text"
+                    <input name="{{attribute.shortName}}" type="text"
                            ng-required="!attribute.optional" list="list-{{attribute.shortName}}"/>
                 </span>
-                    <input ng-switch-when="DATE" ng-model="inputValue" name="{{attribute.shortName}}" type="date"
+                    <input ng-switch-when="DATE" name="{{attribute.shortName}}" type="date"
                            ng-required="!attribute.optional"/>
-                <input ng-switch-when="CURRENCY" ng-model="inputValue" name="{{attribute.shortName}}" type="text"
-                       value="CHF "
-                       ng-pattern="/\D{3} [-+]?[0-9]*[.,]?[0-9]+/" ng-required="!attribute.optional"/>
-                <input ng-switch-when="DOUBLE" ng-model="inputValue" name="{{attribute.shortName}}" type="number"
+                <input ng-switch-when="CURRENCY" name="{{attribute.shortName}}" type="text"
+                       value="CHF " ng-pattern="/\D{3} [-+]?[0-9]*[.,]?[0-9]+/" ng-required="!attribute.optional"/>
+                <input ng-switch-when="DOUBLE" name="{{attribute.shortName}}" type="number"
                        min="0" step="any"
                        ng-required="!attribute.optional"/>
-                <input ng-switch-when="LONG" ng-model="inputValue" name="{{attribute.shortName}}" type="number" min="0"
+                <input ng-switch-when="LONG" name="{{attribute.shortName}}" type="number" min="0"
                        step="any"
                        ng-required="!attribute.optional"/>
-                <input ng-switch-when="SHORT" ng-model="inputValue" name="{{attribute.shortName}}" type="number" min="0"
+                <input ng-switch-when="SHORT" name="{{attribute.shortName}}" type="number" min="0"
                        step="any"
                        ng-required="!attribute.optional"/>
-                <input ng-switch-when="INTEGER" ng-model="inputValue" name="{{attribute.shortName}}" type="number"
+                <input ng-switch-when="INTEGER" name="{{attribute.shortName}}" type="number"
                        min="0" step="any"
                        ng-required="!attribute.optional"/>
             </span>

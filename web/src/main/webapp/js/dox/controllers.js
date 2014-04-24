@@ -15,7 +15,7 @@ angular.module('dox.controllers', ['dox.services'])
         };
     }])
 
-    .controller('ImportController', ['$scope', '$log', 'DocumentClasses', 'UploadService', '$location', function ($scope, $log, DocumentClasses, UploadService, $location) {
+    .controller('ImportController', ['$scope', '$log', 'DocumentClasses', 'UploadService', function ($scope, $log, DocumentClasses, UploadService) {
 
         $scope.documentClass;
 
