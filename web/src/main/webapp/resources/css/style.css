@@ -404,7 +404,7 @@ nav a:hover {
 }
 
 #docTechAttrs li:last-child:after {
-    content: ""
+    content: "";
 }
 
 .thumbnail {
