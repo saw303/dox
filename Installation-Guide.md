@@ -72,7 +72,7 @@ DOX uses JDNI to lookup its connection to the database. The lookup name is calle
 
 Copy the WAR file into `<TOMCAT_HOME>/webapps`
 
-    cp dox-<version>.war <TOMCAT_HOME>/webapps/dox.war
+    cp dox-<version>.war <TOMCAT_HOME>/webapps/ROOT.war
 
 Start Tomcat 
 
