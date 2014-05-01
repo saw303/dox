@@ -382,6 +382,39 @@ nav a:hover {
     padding-left: 35px;
 }
 
+.attributeListing span:after {
+    content: ", ";
+}
+
+.attributeListing span:last-child:after {
+    content: ""
+}
+
+#docTechAttrs {
+    list-style: none;
+    text-align: left;
+    font-size: 0.8em;
+    padding-left: 35px;
+    margin: 0;
+}
+
+#docTechAttrs li {
+    display: inline;
+    counter: ", ";
+}
+
+#docTechAttrs li:last-child:after {
+    content: ""
+}
+
+.thumbnail {
+    display: block;
+    float: right;
+    margin: 25px 0 20px 0;
+    box-shadow: 5px 5px 5px #999999;
+    width: 10%;
+}
+
 .highlight {
     background-color: #ffff00;
     font-weight: bold;

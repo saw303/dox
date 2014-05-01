@@ -25,7 +25,10 @@ angular.module('dox.controllers', ['dox.services'])
         };
 
         $scope.isReadyToSubmit = function () {
-            return $scope.form.$dirty && $scope.form.$valid
+
+            var result = $scope.form.$dirty && $scope.form.$valid;
+            $log.debug("Import form is ready to submit? %s", result);
+            return  result;
         }
 
         var successCallback = function() {
@@ -72,7 +75,7 @@ angular.module('dox.controllers', ['dox.services'])
         })
     }])
 
-    .controller('QueryController', ['$scope', '$log', '$http', 'Settings', 'apiRoot', function ($scope, $log, $http, Settings, apiRoot) {
+    .controller('QueryController', ['$scope', '$log', '$http', 'Settings', 'apiRoot', '$window', function ($scope, $log, $http, Settings, apiRoot, $window) {
 
         $scope.query = '';
         $scope.useWildcard = false;
@@ -117,5 +120,10 @@ angular.module('dox.controllers', ['dox.services'])
             }, function (response) {
                 $log.error('Something went wrong. Http status code %s', response.status);
             });
+        }
+
+        $scope.showDocument = function(document) {
+            $log.debug("About to open document %s in a separate window", document.id);
+            $window.open(apiRoot + '/document/' + document.id, 'docViewer', "location=no,status=no,menubar=no");
         }
     }]);
