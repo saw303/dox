@@ -83,8 +83,8 @@ allprojects {
     project.ext {
         springVersion = '4.0.4.RELEASE'
         springMobileVersion = '1.1.1.RELEASE'
-        springDataVersion = '1.5.1.RELEASE'
-        springSecurityVersion = '3.2.3.RELEASE'
+        springDataVersion = '1.6.0.RC1'
+        springSecurityVersion = '4.0.0.M1'
         hibernateVersion = '4.3.5.Final'
         slf4jVersion = '1.7.7'
         logbackVersion = '1.1.2'
@@ -95,13 +95,13 @@ allprojects {
         commonsBeanUtilsVersion = '1.8.3'
         commonsExec = '1.2'
         jodaTimeVersion = '2.3'
-        h2Version = '1.4.177'
+        h2Version = '1.4.178'
         mysqlVersion = '5.1.30'
         iTextVersion = '5.5.0'
         guavaVersion = '17.0'
         mockitoVersion = '1.9.5'
         flywayVersion = '2.3.1'
-        groovyVersion = '2.3.0-rc-2'
+        groovyVersion = '2.3.0'
         xstreamVersion = '1.4.7'
     }
 
