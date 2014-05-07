@@ -31,6 +31,8 @@ Then install the Nginx PPA repo.
 
 #### Install Apache Tomcat 7
 
+#### Install ImageMagick
+
 ### Configure third party software
 
 ### Install DOX
