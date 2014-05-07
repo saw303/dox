@@ -15,9 +15,9 @@
  */
 
 
-import org.markdownj.MarkdownProcessor
 import org.apache.xalan.xsltc.trax.SAX2DOM
 import org.ccil.cowan.tagsoup.Parser
+import org.markdownj.MarkdownProcessor
 import org.xhtmlrenderer.pdf.ITextRenderer
 import org.xml.sax.InputSource
 
@@ -38,13 +38,40 @@ buildscript {
     }
 }
 
-task build <<{
-    def source = 'Installation-Guide.md'
-    def target = 'Installation-Guide.pdf'
+task build << {
+
+	def baseName = 'Installation-Guide'
+    def source = "${baseName}.md"
+    def targetPdf = "${baseName}.pdf"
+    def targetHtml = "${baseName}.html"
+	
 
     //Convert from markdown to html
     def mp = new MarkdownProcessor()
-    def html = "<html><body>${mp.markdown((new File(source).text))}</body></html>"
+    def html = """<html>
+		<head>
+			<title>DOX :: Installation Guide</title>
+			
+			<style type="text/css">
+				body {
+					font-family: Verdana,sans-serif;
+					font-size: 0.8em;
+				}
+				code {
+					background-clip: padding-box;
+					background-color: #F5F5F5;
+					border: 1px solid #CCCCCC;
+					border-radius: 3px;
+					display: block;
+					font-size: 12px;
+					line-height: 18px;
+					overflow: auto;
+					padding: 6px 10px;
+				}
+			</style>
+		</head>
+	<body>${mp.markdown((new File(source).text))}</body></html>
+	"""
 
     //Convert from html to w3c document
     def parser = new Parser()
@@ -57,7 +84,10 @@ task build <<{
     ITextRenderer renderer = new ITextRenderer();
     renderer.setDocument(sax2dom.getDOM(), null);
     renderer.layout();
-    renderer.createPDF((new File(target).newOutputStream()))
+    renderer.createPDF((new File('build', targetPdf).newOutputStream()))
+	
+	def htmlFile = new File('build', targetHtml)
+	htmlFile << html
 }
 
 allprojects {
