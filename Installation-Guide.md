@@ -1,5 +1,5 @@
 # DOX - Installation Guide
-_A document management system brought you by Silvio Wangler_
+_A document management system brought you by Silvio Wangler <silvio.wangler@gmail.com>_
 
 ## Server Installation
 In order to get an optimal experience I recommend to run DOX on a Linux server such as Ubuntu or some other Linux distribution.

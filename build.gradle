@@ -38,6 +38,10 @@ buildscript {
     }
 }
 
+task clean << {
+    delete fileTree(dir: 'build').include('*.html').include('*.pdf')
+}
+
 task build << {
 
 	def baseName = 'Installation-Guide'
