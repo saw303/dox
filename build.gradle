@@ -124,7 +124,7 @@ allprojects {
         slf4jVersion = '1.7.7'
         logbackVersion = '1.1.2'
         junitVersion = '4.11'
-        tilesVersion = '3.0.3'
+        tilesVersion = '3.0.4'
         commonsIOVersion = '2.4'
         commonsCodecVersion = '1.9'
         commonsBeanUtilsVersion = '1.8.3'
