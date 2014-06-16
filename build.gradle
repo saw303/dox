@@ -116,8 +116,8 @@ allprojects {
     version = '0.3-M1'
 
     project.ext {
-        springVersion = '4.0.4.RELEASE'
-        springMobileVersion = '1.1.1.RELEASE'
+        springVersion = '4.0.5.RELEASE'
+        springMobileVersion = '1.1.2.RELEASE'
         springDataVersion = '1.6.0.RC1'
         springSecurityVersion = '4.0.0.M1'
         hibernateVersion = '4.3.5.Final'
@@ -131,8 +131,8 @@ allprojects {
         commonsExec = '1.2'
         jodaTimeVersion = '2.3'
         h2Version = '1.4.178'
-        mysqlVersion = '5.1.30'
-        iTextVersion = '5.5.0'
+        mysqlVersion = '5.1.31'
+        iTextVersion = '5.5.1'
         guavaVersion = '17.0'
         mockitoVersion = '1.9.5'
         flywayVersion = '2.3.1'
