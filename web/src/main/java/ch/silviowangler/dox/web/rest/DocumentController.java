@@ -1,5 +1,6 @@
 package ch.silviowangler.dox.web.rest;
 
+import ch.silviowangler.dox.api.DocumentNotFoundException;
 import ch.silviowangler.dox.api.DocumentReference;
 import ch.silviowangler.dox.api.DocumentService;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Locale;
 
+import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -53,6 +55,21 @@ public class DocumentController {
             documentReferences = documentService.findDocumentReferences(queryStringCopy, locale);
         }
         return documentReferences;
+    }
+
+    @RequestMapping(value = "/{id}", method = GET)
+    public
+    @ResponseBody
+    DocumentReference getDocumentReference(@PathVariable("id") Long docId, HttpServletResponse response) {
+        DocumentReference documentReference;
+        try {
+            documentReference = documentService.findDocumentReference(docId);
+            response.setStatus(SC_OK);
+            return documentReference;
+        } catch (DocumentNotFoundException e) {
+            response.setStatus(SC_NOT_FOUND);
+            return null;
+        }
     }
 
     @RequestMapping(value = "/{id}", method = DELETE)

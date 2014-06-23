@@ -22,6 +22,11 @@ angular.module('dox', ['dox.controllers', 'ngRoute'])
             templateUrl: basePath + '/partials/importDocument.html'
         });
 
+        $routeProvider.when(basePath + '/ui/edit/:id', {
+            templateUrl: basePath + '/partials/editDocument.html',
+            controller: 'DocumentController'
+        });
+
         $routeProvider.when(basePath + '/ui/settings', {
             templateUrl: basePath + '/partials/settings.html'
         });

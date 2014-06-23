@@ -75,6 +75,20 @@ angular.module('dox.controllers', ['dox.services'])
         })
     }])
 
+    .controller('DocumentController', ['$scope', '$log', '$routeParams', '$http', 'apiRoot', function($scope, $log, $routeParams, $http, apiRoot) {
+
+        $scope.document;
+
+        $http.get(apiRoot + '/api/v1/document/' + $routeParams.id)
+            .success(function (data) {
+                $scope.document = data;
+            })
+            .error(function (data) {
+                $log.error("Something went wrong")
+            }
+        );
+    }])
+
     .controller('QueryController', ['$scope', '$log', '$http', 'Settings', 'apiRoot', '$window', function ($scope, $log, $http, Settings, apiRoot, $window) {
 
         $scope.query = '';
