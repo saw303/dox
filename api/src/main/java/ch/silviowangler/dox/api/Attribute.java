@@ -21,9 +21,9 @@ import java.io.Serializable;
 /**
  * @author Silvio Wangler
  * @since 0.1
- *        <div>
- *        Date: 17.07.12 11:12
- *        </div>
+ * <div>
+ * Date: 17.07.12 11:12
+ * </div>
  */
 public class Attribute extends AbstractTranslatable implements Serializable, Comparable<Attribute> {
 
@@ -126,6 +126,23 @@ public class Attribute extends AbstractTranslatable implements Serializable, Com
     @Override
     public int compareTo(Attribute o) {
         return this.shortName.compareTo(o.getShortName());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Attribute)) return false;
+
+        Attribute attribute = (Attribute) o;
+
+        if (shortName != null ? !shortName.equals(attribute.shortName) : attribute.shortName != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return shortName != null ? shortName.hashCode() : 0;
     }
 
     @Override

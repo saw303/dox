@@ -97,7 +97,13 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
         logger.debug("Found {}", documentReferences);
 
         assertThat(documentReferences.size(), is(2));
-        assertThat((String) documentReferences.iterator().next().getIndices().get(COMPANY).getValue(), is(companyName));
+
+        assertThat(documentReferences.iterator().next().getIndices().get(COMPANY) instanceof DescriptiveIndex, is(true));
+
+        final DescriptiveIndex index = (DescriptiveIndex) documentReferences.iterator().next().getIndices().get(COMPANY);
+        assertThat((String) index.getValue(), is(companyName));
+        assertThat(index.getAttribute(), is(not(nullValue())));
+
     }
 
     @Test

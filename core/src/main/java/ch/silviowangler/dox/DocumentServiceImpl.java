@@ -684,6 +684,10 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         Map<TranslatableKey, Index> indices = newHashMapWithExpectedSize(attributes.size());
 
         for (Attribute attribute : attributes) {
+
+            DescriptiveIndex index = new DescriptiveIndex();
+            index.setAttribute(toAttributeApi(attribute));
+
             try {
                 final Object propertyValue = PropertyUtils.getProperty(indexStore, attribute.getMappingColumn().toLowerCase());
 
@@ -691,18 +695,17 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
                 if (attribute.getDataType() == CURRENCY) {
                     AmountOfMoney amountOfMoney = (AmountOfMoney) propertyValue;
                     if (locale == null) {
-                        indices.put(key, new Index( (amountOfMoney == null) ? null : new Money(amountOfMoney.getCurrency(), amountOfMoney.getAmount())));
+                        index.setValue((amountOfMoney == null) ? null : new Money(amountOfMoney.getCurrency(), amountOfMoney.getAmount()));
                     } else {
-                        indices.put(key, new Index((amountOfMoney == null) ? null : amountOfMoney.getCurrency() + " " + amountOfMoney.getAmount()));
+                        index.setValue((amountOfMoney == null) ? null : amountOfMoney.getCurrency() + " " + amountOfMoney.getAmount());
                     }
-                }
-                else if (attribute.getDataType() == DATE && locale != null) {
+                } else if (attribute.getDataType() == DATE && locale != null) {
                     DateFormat format = DateFormat.getDateInstance(MEDIUM, locale);
-                    indices.put(key, new Index(format.format(((DateTime)propertyValue).toDate())));
+                    index.setValue(format.format(((DateTime) propertyValue).toDate()));
+                } else {
+                    index.setValue(propertyValue);
                 }
-                else {
-                    indices.put(key, new Index(propertyValue));
-                }
+                indices.put(key, index);
 
             } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 logger.error("Error setting property '{}'", attribute.getShortName(), e);
