@@ -52,9 +52,9 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 /**
  * @author Silvio Wangler
  * @since 0.1
- *        <div>
- *        Date: 22.07.12 11:45
- *        </div>
+ * <div>
+ * Date: 22.07.12 11:45
+ * </div>
  */
 @Controller
 public class DocumentController {
@@ -173,7 +173,7 @@ public class DocumentController {
 
                 if (paramValue != null) {
                     didChangeValue = true;
-                    documentReference.getIndices().put(key, new String(paramValue.getBytes("iso-8859-1"), "utf-8"));
+                    documentReference.getIndices().put(key, new Index(new String(paramValue.getBytes("iso-8859-1"), "utf-8")));
                 }
             }
 

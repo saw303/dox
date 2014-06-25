@@ -79,7 +79,7 @@ public class DocumentAttributeListingTag extends TagSupport {
             boolean afterFirst = false;
             for (TranslatableKey key : documentReference.getIndices().keySet()) {
 
-                Object object = documentReference.getIndices().get(key);
+                Object object = documentReference.getIndices().get(key).getValue();
 
                 final String value;
                 if (object instanceof DateTime) {

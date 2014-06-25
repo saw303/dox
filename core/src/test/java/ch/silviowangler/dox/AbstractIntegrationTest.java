@@ -87,22 +87,22 @@ public abstract class AbstractIntegrationTest extends AbstractTransactionalJUnit
 
     protected DocumentReference importDocument(String fileName, String documentClassShortname) throws IOException, ValidationException, DocumentDuplicationException, DocumentClassNotFoundException {
 
-        Map<TranslatableKey, Object> indexes = newHashMapWithExpectedSize(3);
+        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(3);
 
-        indexes.put(new TranslatableKey("company"), "Sunrise");
-        indexes.put(new TranslatableKey("invoiceDate"), "01.11.2012");
-        indexes.put(new TranslatableKey("invoiceAmount"), "2000");
+        indexes.put(new TranslatableKey("company"), new Index("Sunrise"));
+        indexes.put(new TranslatableKey("invoiceDate"), new Index("01.11.2012"));
+        indexes.put(new TranslatableKey("invoiceAmount"), new Index("2000"));
 
         return importDocument(fileName, indexes, documentClassShortname);
     }
 
-    protected DocumentReference importDocument(String fileName, Map<TranslatableKey, Object> indexes, String documentClassShortName) throws IOException, ValidationException, DocumentDuplicationException, DocumentClassNotFoundException {
+    protected DocumentReference importDocument(String fileName, Map<TranslatableKey, Index> indexes, String documentClassShortName) throws IOException, ValidationException, DocumentDuplicationException, DocumentClassNotFoundException {
         File singlePagePdf = loadFile(fileName);
         PhysicalDocument doc = new PhysicalDocument(new DocumentClass(documentClassShortName), FileUtils.readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
         return documentService.importDocument(doc);
     }
 
-    protected DocumentReference importFile(final String fileName, final String content, final String docClassShortName, final Map<TranslatableKey, Object> indices) throws ValidationException, DocumentDuplicationException, IOException, DocumentNotFoundException, DocumentClassNotFoundException {
+    protected DocumentReference importFile(final String fileName, final String content, final String docClassShortName, final Map<TranslatableKey, Index> indices) throws ValidationException, DocumentDuplicationException, IOException, DocumentNotFoundException, DocumentClassNotFoundException {
         File textFile01 = createTestFile(fileName, content);
         PhysicalDocument doc = new PhysicalDocument(new DocumentClass(docClassShortName), readFileToByteArray(textFile01), indices, fileName);
         try {

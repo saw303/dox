@@ -145,7 +145,7 @@ public class AutomaticTranslatorAdviceTest {
         LocaleContextHolder.setLocale(ENGLISH);
         DocumentReference documentReference = new DocumentReference("hello.txt");
 
-        documentReference.getIndices().put(new TranslatableKey("hello", null), "World");
+        documentReference.getIndices().put(new TranslatableKey("hello", null), new Index("World"));
 
         when(translationService.findTranslation("Attribute:hello", ENGLISH)).thenReturn("I am translated text");
 
@@ -162,7 +162,7 @@ public class AutomaticTranslatorAdviceTest {
 
         LocaleContextHolder.setLocale(ENGLISH);
         DocumentReference documentReference = new DocumentReference("hello.txt");
-        documentReference.getIndices().put(new TranslatableKey("hello", null), "World");
+        documentReference.getIndices().put(new TranslatableKey("hello", null), new Index("World"));
 
         Set<DocumentReference> resultSet = Sets.newHashSet(documentReference);
 

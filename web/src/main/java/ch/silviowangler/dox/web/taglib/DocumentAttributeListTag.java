@@ -58,7 +58,7 @@ public class DocumentAttributeListTag extends TagSupport {
                 for (TranslatableKey key : documentReference.getIndices().keySet()) {
 
                     sb.append("<li>").append(key.getTranslation());
-                    Object value = documentReference.getIndices().get(key);
+                    Object value = documentReference.getIndices().get(key).getValue();
 
                     if (value instanceof DateTime) {
                         DateFormat f = getDateInstance(DateFormat.MEDIUM, pageContext.getRequest().getLocale());

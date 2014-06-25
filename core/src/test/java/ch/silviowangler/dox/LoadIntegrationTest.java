@@ -16,10 +16,7 @@
 
 package ch.silviowangler.dox;
 
-import ch.silviowangler.dox.api.Attribute;
-import ch.silviowangler.dox.api.DocumentClass;
-import ch.silviowangler.dox.api.DocumentReference;
-import ch.silviowangler.dox.api.TranslatableKey;
+import ch.silviowangler.dox.api.*;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -52,7 +49,7 @@ public class LoadIntegrationTest extends AbstractIntegrationTest {
 
         for (int i = 1; i <= TOTAL_AMOUNT_OF_FILES; i++) {
 
-            Map<TranslatableKey, Object> indices = new HashMap<>();
+            Map<TranslatableKey, Index> indices = new HashMap<>();
 
             SortedSet<Attribute> attributes;
             if (!cache.containsKey("INVOICE")) {
@@ -94,7 +91,7 @@ public class LoadIntegrationTest extends AbstractIntegrationTest {
                         default:
                             throw new IllegalArgumentException("Unknown attribute type: " + attribute.getDataType());
                     }
-                    indices.put(new TranslatableKey(attribute.getShortName()), o);
+                    indices.put(new TranslatableKey(attribute.getShortName()), new Index(o));
                 }
             }
 
@@ -110,10 +107,10 @@ public class LoadIntegrationTest extends AbstractIntegrationTest {
 
         StopWatch stopWatch = new StopWatch();
 
-        Map<TranslatableKey, Object> indices = new HashMap<>();
+        Map<TranslatableKey, Index> indices = new HashMap<>();
 
         TranslatableKey company = new TranslatableKey("company");
-        indices.put(company, "3?");
+        indices.put(company, new Index("3?"));
 
         stopWatch.start();
         Set<DocumentReference> invoices = documentService.findDocumentReferences(indices, "INVOICE");

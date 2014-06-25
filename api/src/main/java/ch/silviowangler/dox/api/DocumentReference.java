@@ -37,7 +37,7 @@ public class DocumentReference implements Serializable {
     private int pageCount;
     private String mimeType;
     private DocumentClass documentClass;
-    private Map<TranslatableKey, Object> indices = Maps.newHashMap();
+    private Map<TranslatableKey, Index> indices = Maps.newHashMap();
     private String fileName;
     private String userReference;
     private long fileSize;
@@ -47,15 +47,15 @@ public class DocumentReference implements Serializable {
         this.fileName = fileName;
     }
 
-    public DocumentReference(String hash, int pageCount, String mimeType, DocumentClass documentClass, Map<TranslatableKey, Object> indices, String fileName) {
+    public DocumentReference(String hash, int pageCount, String mimeType, DocumentClass documentClass, Map<TranslatableKey, Index> indices, String fileName) {
         this(hash, null, pageCount, mimeType, documentClass, indices, fileName);
     }
 
-    public DocumentReference(String hash, Long id, int pageCount, String mimeType, DocumentClass documentClass, Map<TranslatableKey, Object> indices, String fileName) {
+    public DocumentReference(String hash, Long id, int pageCount, String mimeType, DocumentClass documentClass, Map<TranslatableKey, Index> indices, String fileName) {
         this(hash, id, pageCount, mimeType, documentClass, indices, fileName, null, -1L);
     }
 
-    public DocumentReference(String hash, Long id, int pageCount, String mimeType, DocumentClass documentClass, Map<TranslatableKey, Object> indices, String fileName, String userName, long fileSize) {
+    public DocumentReference(String hash, Long id, int pageCount, String mimeType, DocumentClass documentClass, Map<TranslatableKey, Index> indices, String fileName, String userName, long fileSize) {
         this.hash = hash;
         this.id = id;
         this.pageCount = pageCount;
@@ -107,11 +107,11 @@ public class DocumentReference implements Serializable {
         this.documentClass = documentClass;
     }
 
-    public Map<TranslatableKey, Object> getIndices() {
+    public Map<TranslatableKey, Index> getIndices() {
         return indices;
     }
 
-    public void setIndices(Map<TranslatableKey, Object> indices) {
+    public void setIndices(Map<TranslatableKey, Index> indices) {
         this.indices = indices;
     }
 

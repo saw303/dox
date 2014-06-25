@@ -193,7 +193,7 @@ public class DocumentControllerTest {
         assertThat(modelAndView.getModel().containsKey("doc"), is(true));
         final DocumentReference doc = (DocumentReference) modelAndView.getModel().get("doc");
         assertThat(doc, is(documentReference));
-        assertThat(doc.getIndices().get(new TranslatableKey("name")).toString(), is("Wangler"));
+        assertThat(doc.getIndices().get(new TranslatableKey("name")).getValue().toString(), is("Wangler"));
 
         InOrder order = inOrder(documentService);
 
@@ -219,7 +219,7 @@ public class DocumentControllerTest {
         assertThat(modelAndView.getModel().containsKey("doc"), is(true));
         final DocumentReference doc = (DocumentReference) modelAndView.getModel().get("doc");
         assertThat(doc, is(documentReference));
-        assertThat(doc.getIndices().get(new TranslatableKey("name")).toString(), is("Wangler"));
+        assertThat(doc.getIndices().get(new TranslatableKey("name")).getValue().toString(), is("Wangler"));
 
         InOrder order = inOrder(documentService);
 

@@ -98,11 +98,11 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
 
         File singlePagePdf = loadFile("document-1p.pdf");
 
-        Map<TranslatableKey, Object> indexes = newHashMapWithExpectedSize(3);
+        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(3);
 
-        indexes.put(COMPANY, "Sunrise");
-        indexes.put(INVOICE_DATE, new Date());
-        indexes.put(INVOICE_AMOUNT, new BigDecimal("50.00"));
+        indexes.put(COMPANY,new Index("Sunrise"));
+        indexes.put(INVOICE_DATE, new Index(new Date()));
+        indexes.put(INVOICE_AMOUNT, new Index(new BigDecimal("50.00")));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
         DocumentReference documentReference = documentService.importDocument(doc);
@@ -116,11 +116,11 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         assertNotNull(documentReference.getIndices());
         assertEquals(INVOICE_AMOUNT_INDICES, documentReference.getIndices().size());
         assertTrue(documentReference.getIndices().containsKey(COMPANY));
-        assertEquals("Sunrise", documentReference.getIndices().get(COMPANY));
+        assertEquals("Sunrise", documentReference.getIndices().get(COMPANY).getValue());
         assertTrue(documentReference.getIndices().containsKey(INVOICE_DATE));
-        assertTrue("Is not org.joda.time.DateTime. It's " + documentReference.getIndices().get(INVOICE_DATE).getClass().getCanonicalName(), documentReference.getIndices().get(INVOICE_DATE) instanceof DateTime);
+        assertTrue("Is not org.joda.time.DateTime. It's " + documentReference.getIndices().get(INVOICE_DATE).getValue().getClass().getCanonicalName(), documentReference.getIndices().get(INVOICE_DATE).getValue() instanceof DateTime);
         assertTrue(documentReference.getIndices().containsKey(INVOICE_AMOUNT));
-        assertEquals(new BigDecimal("50.00"), documentReference.getIndices().get(INVOICE_AMOUNT));
+        assertEquals(new BigDecimal("50.00"), documentReference.getIndices().get(INVOICE_AMOUNT).getValue());
         assertThat(documentReference.getUserReference(), is("root_test"));
         assertThat(documentReference.getFileSize(), is(100524L));
 
@@ -134,11 +134,11 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
 
         File fivePagesPdfFile = loadFile("document-5p.pdf");
 
-        Map<TranslatableKey, Object> indexes = newHashMapWithExpectedSize(3);
+        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(3);
 
-        indexes.put(COMPANY, "Swisscom");
-        indexes.put(INVOICE_DATE, new Date());
-        indexes.put(INVOICE_AMOUNT, "50.25");
+        indexes.put(COMPANY, new Index("Swisscom"));
+        indexes.put(INVOICE_DATE, new Index(new Date()));
+        indexes.put(INVOICE_AMOUNT, new Index("50.25"));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(fivePagesPdfFile), indexes, fivePagesPdfFile.getName());
         DocumentReference documentReference = documentService.importDocument(doc);
@@ -152,11 +152,11 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         assertNotNull(documentReference.getIndices());
         assertEquals(INVOICE_AMOUNT_INDICES, documentReference.getIndices().size());
         assertTrue(documentReference.getIndices().containsKey(COMPANY));
-        assertEquals("Swisscom", documentReference.getIndices().get(COMPANY));
+        assertEquals("Swisscom", documentReference.getIndices().get(COMPANY).getValue());
         assertTrue(documentReference.getIndices().containsKey(INVOICE_DATE));
-        assertTrue("Is not org.joda.time.DateTime. It's " + documentReference.getIndices().get(INVOICE_DATE).getClass().getCanonicalName(), documentReference.getIndices().get(INVOICE_DATE) instanceof DateTime);
+        assertTrue("Is not org.joda.time.DateTime. It's " + documentReference.getIndices().get(INVOICE_DATE).getValue().getClass().getCanonicalName(), documentReference.getIndices().get(INVOICE_DATE).getValue() instanceof DateTime);
         assertTrue(documentReference.getIndices().containsKey(INVOICE_AMOUNT));
-        assertEquals(new BigDecimal("50.25"), documentReference.getIndices().get(INVOICE_AMOUNT));
+        assertEquals(new BigDecimal("50.25"), documentReference.getIndices().get(INVOICE_AMOUNT).getValue());
 
         PhysicalDocument docFromDox = documentService.findPhysicalDocument(documentReference.getId());
 
@@ -171,10 +171,10 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         File singlePagePdf = loadFile("document-1p.pdf");
 
         documentClass = new DocumentClass("WHATEVAMAN");
-        Map<TranslatableKey, Object> indexes = newHashMapWithExpectedSize(2);
+        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(2);
 
-        indexes.put(COMPANY, "Sunrise");
-        indexes.put(INVOICE_DATE, new Date());
+        indexes.put(COMPANY,new Index("Sunrise"));
+        indexes.put(INVOICE_DATE, new Index(new Date()));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
         documentService.importDocument(doc);
@@ -185,16 +185,16 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
 
         File singlePagePdf = loadFile("document-1p.pdf");
 
-        Map<TranslatableKey, Object> indexes = newHashMapWithExpectedSize(1);
-        indexes.put(COMPANY, "Sunrise");
-        indexes.put(MONEY, new Money(Currency.getInstance("CHF"), new BigDecimal("1235.50")));
-        indexes.put(INVOICE_AMOUNT, 12350L);
-        indexes.put(INVOICE_DATE, new Date());
+        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(1);
+        indexes.put(COMPANY, new Index("Sunrise"));
+        indexes.put(MONEY, new Index(new Money(Currency.getInstance("CHF"), new BigDecimal("1235.50"))));
+        indexes.put(INVOICE_AMOUNT, new Index(12350L));
+        indexes.put(INVOICE_DATE, new Index(new Date()));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
         final DocumentReference documentReference = documentService.importDocument(doc);
 
-        final Money money = (Money) documentReference.getIndices().get(MONEY);
+        final Money money = (Money) documentReference.getIndices().get(MONEY).getValue();
         assertThat(money, is(not(nullValue())));
         assertThat(money.getCurrency().getCurrencyCode(), is("CHF"));
         assertThat(money.getAmount().toPlainString(), is("1235.50"));
@@ -205,16 +205,16 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
 
         File singlePagePdf = loadFile("document-1p.pdf");
 
-        Map<TranslatableKey, Object> indexes = newHashMapWithExpectedSize(1);
-        indexes.put(COMPANY, "Sunrise");
-        indexes.put(MONEY, "CHF 1235.50");
-        indexes.put(INVOICE_AMOUNT, 12350L);
-        indexes.put(INVOICE_DATE, new Date());
+        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(1);
+        indexes.put(COMPANY,new Index("Sunrise"));
+        indexes.put(MONEY, new Index("CHF 1235.50"));
+        indexes.put(INVOICE_AMOUNT, new Index(12350L));
+        indexes.put(INVOICE_DATE, new Index(new Date()));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
         final DocumentReference documentReference = documentService.importDocument(doc);
 
-        final Money money = (Money) documentReference.getIndices().get(MONEY);
+        final Money money = (Money) documentReference.getIndices().get(MONEY).getValue();
         assertThat(money, is(not(nullValue())));
         assertThat(money.getCurrency().getCurrencyCode(), is("CHF"));
         assertThat(money.getAmount().toPlainString(), is("1235.50"));
@@ -225,8 +225,8 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
 
         File singlePagePdf = loadFile("document-1p.pdf");
 
-        Map<TranslatableKey, Object> indexes = newHashMapWithExpectedSize(1);
-        indexes.put(INVOICE_DATE, "Sunrise");
+        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(1);
+        indexes.put(INVOICE_DATE, new Index("Sunrise"));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
         documentService.importDocument(doc);
@@ -237,11 +237,11 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
 
         File singlePagePdf = loadFile("document-1p.pdf");
 
-        Map<TranslatableKey, Object> indexes = newHashMapWithExpectedSize(3);
+        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(3);
 
-        indexes.put(COMPANY, "Sunrise");
-        indexes.put(INVOICE_DATE, new Date());
-        indexes.put(new TranslatableKey("whatever"), 12L);
+        indexes.put(COMPANY, new Index("Sunrise"));
+        indexes.put(INVOICE_DATE, new Index(new Date()));
+        indexes.put(new TranslatableKey("whatever"), new Index(12L));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
         documentService.importDocument(doc);
@@ -251,11 +251,11 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
     public void importDocumentUsingProperFormattedStringOnDateIndex() throws IOException, ValidationException, DocumentNotFoundException, DocumentDuplicationException, DocumentClassNotFoundException {
         File singlePagePdf = loadFile("document-16p.pdf");
 
-        Map<TranslatableKey, Object> indexes = newHashMapWithExpectedSize(2);
+        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(2);
 
-        indexes.put(COMPANY, "Sunrise");
-        indexes.put(INVOICE_DATE, "01.11.1978");
-        indexes.put(INVOICE_AMOUNT, 777.0);
+        indexes.put(COMPANY, new Index("Sunrise"));
+        indexes.put(INVOICE_DATE, new Index("01.11.1978"));
+        indexes.put(INVOICE_AMOUNT, new Index(777.0));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
         DocumentReference documentReference = documentService.importDocument(doc);
@@ -265,19 +265,19 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         DocumentReference documentReferenceFromStore = documentService.findDocumentReference(documentReference.getId());
 
         assertTrue(documentReferenceFromStore.getIndices().containsKey(INVOICE_DATE));
-        assertTrue(documentReferenceFromStore.getIndices().get(INVOICE_DATE) instanceof DateTime);
-        assertEquals(new DateTime(1978, 11, 1, 0, 0), documentReferenceFromStore.getIndices().get(INVOICE_DATE));
+        assertTrue(documentReferenceFromStore.getIndices().get(INVOICE_DATE).getValue() instanceof DateTime);
+        assertEquals(new DateTime(1978, 11, 1, 0, 0), documentReferenceFromStore.getIndices().get(INVOICE_DATE).getValue());
     }
 
     @Test
     public void addingTheSameDocumentTwiceToDoxShouldThrowAnException() throws IOException, ValidationException, DocumentDuplicationException, DocumentClassNotFoundException {
         File temp = createTestFile("hello.world.txt", "Lorem ipsum");
 
-        Map<TranslatableKey, Object> indexes = newHashMapWithExpectedSize(2);
+        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(2);
 
-        indexes.put(COMPANY, "Sunrise");
-        indexes.put(INVOICE_DATE, "01.11.1978");
-        indexes.put(INVOICE_AMOUNT, 51.0);
+        indexes.put(COMPANY, new Index("Sunrise"));
+        indexes.put(INVOICE_DATE, new Index("01.11.1978"));
+        indexes.put(INVOICE_AMOUNT, new Index(51.0));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(temp), indexes, temp.getName());
         DocumentReference documentReference = documentService.importDocument(doc);
@@ -307,13 +307,13 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
     public void importMustRespectAttributesAssignedToADomain() throws IOException, DocumentDuplicationException, ValidationException, DocumentClassNotFoundException {
         File temp = createTestFile("hello2.world.txt", "Must not import");
 
-        Map<TranslatableKey, Object> indexes = newHashMapWithExpectedSize(3);
+        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(3);
 
         final String valueNotInDomain = "This value does not belong to the company domain";
-        indexes.put(COMPANY, valueNotInDomain);
-        indexes.put(STRICT_COMPANY, valueNotInDomain);
-        indexes.put(INVOICE_AMOUNT, 100.0);
-        indexes.put(INVOICE_DATE, new Date());
+        indexes.put(COMPANY, new Index(valueNotInDomain));
+        indexes.put(STRICT_COMPANY, new Index(valueNotInDomain));
+        indexes.put(INVOICE_AMOUNT, new Index(100.0));
+        indexes.put(INVOICE_DATE, new Index(new Date()));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(temp), indexes, temp.getName());
         try {
@@ -334,12 +334,12 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
 
         final SortedSet<Attribute> attributesBefore = documentService.findAttributes(documentClass);
 
-        Map<TranslatableKey, Object> indexes = newHashMapWithExpectedSize(3);
+        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(3);
 
-        indexes.put(COMPANY, "Hello");
-        indexes.put(STRICT_COMPANY, "Swisscom");
-        indexes.put(INVOICE_AMOUNT, 100.0);
-        indexes.put(INVOICE_DATE, new Date());
+        indexes.put(COMPANY, new Index("Hello"));
+        indexes.put(STRICT_COMPANY, new Index("Swisscom"));
+        indexes.put(INVOICE_AMOUNT, new Index(100.0));
+        indexes.put(INVOICE_DATE, new Index(new Date()));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(temp), indexes, temp.getName());
         documentService.importDocument(doc);
@@ -368,34 +368,34 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
     public void importMustAcceptIntegerOnDoubleField() throws IOException, DocumentDuplicationException, ValidationException, DocumentClassNotFoundException {
         File temp = createTestFile("hello2.world.txt", "Content");
 
-        Map<TranslatableKey, Object> indexes = newHashMapWithExpectedSize(3);
+        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(3);
 
-        indexes.put(COMPANY, "Sunrise");
-        indexes.put(INVOICE_AMOUNT, 100);
-        indexes.put(INVOICE_DATE, new Date());
+        indexes.put(COMPANY, new Index("Sunrise"));
+        indexes.put(INVOICE_AMOUNT, new Index(100));
+        indexes.put(INVOICE_DATE, new Index(new Date()));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(temp), indexes, temp.getName());
         DocumentReference reference = documentService.importDocument(doc);
 
-        assertEquals(BigDecimal.class, reference.getIndices().get(INVOICE_AMOUNT).getClass());
-        assertEquals("100", String.valueOf(reference.getIndices().get(INVOICE_AMOUNT)));
+        assertEquals(BigDecimal.class, reference.getIndices().get(INVOICE_AMOUNT).getValue().getClass());
+        assertEquals("100", String.valueOf(reference.getIndices().get(INVOICE_AMOUNT).getValue()));
     }
 
     @Test
     public void importMustAcceptLongOnDoubleField() throws IOException, DocumentDuplicationException, ValidationException, DocumentClassNotFoundException {
         File temp = createTestFile("hello2.world.txt", "This is a content");
 
-        Map<TranslatableKey, Object> indexes = newHashMapWithExpectedSize(3);
+        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(3);
 
-        indexes.put(COMPANY, "Sunrise");
-        indexes.put(INVOICE_AMOUNT, 100L);
-        indexes.put(INVOICE_DATE, new Date());
+        indexes.put(COMPANY, new Index("Sunrise"));
+        indexes.put(INVOICE_AMOUNT, new Index(100L));
+        indexes.put(INVOICE_DATE, new Index(new Date()));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(temp), indexes, temp.getName());
         DocumentReference reference = documentService.importDocument(doc);
 
-        assertEquals(BigDecimal.class, reference.getIndices().get(INVOICE_AMOUNT).getClass());
-        assertEquals("100", String.valueOf(reference.getIndices().get(INVOICE_AMOUNT)));
+        assertEquals(BigDecimal.class, reference.getIndices().get(INVOICE_AMOUNT).getValue().getClass());
+        assertEquals("100", String.valueOf(reference.getIndices().get(INVOICE_AMOUNT).getValue()));
     }
 
     @Test
@@ -403,25 +403,25 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
 
         File temp = createTestFile("file.txt", "content of this file");
 
-        Map<TranslatableKey, Object> indexes = newHashMapWithExpectedSize(3);
+        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(3);
 
-        indexes.put(COMPANY, "Sunrise");
-        indexes.put(INVOICE_AMOUNT, 101L);
-        indexes.put(INVOICE_DATE, new Date());
+        indexes.put(COMPANY, new Index("Sunrise"));
+        indexes.put(INVOICE_AMOUNT, new Index(101L));
+        indexes.put(INVOICE_DATE, new Index(new Date()));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(temp), indexes, temp.getName());
         DocumentReference reference = documentService.importDocument(doc);
 
-        reference.getIndices().put(COMPANY, "Swisscom");
-        reference.getIndices().put(INVOICE_AMOUNT, 2);
-        reference.getIndices().put(INVOICE_DATE, "15.12.1982");
+        reference.getIndices().put(COMPANY, new Index("Swisscom"));
+        reference.getIndices().put(INVOICE_AMOUNT, new Index(2));
+        reference.getIndices().put(INVOICE_DATE, new Index("15.12.1982"));
 
         DocumentReference referenceAfterUpdate = documentService.updateIndices(reference);
 
         assertEquals(INVOICE_AMOUNT_INDICES, referenceAfterUpdate.getIndices().size());
-        assertEquals("Swisscom", referenceAfterUpdate.getIndices().get(COMPANY));
-        assertEquals("2", String.valueOf(referenceAfterUpdate.getIndices().get(INVOICE_AMOUNT)));
-        assertEquals(new DateTime(1982, 12, 15, 0, 0), referenceAfterUpdate.getIndices().get(INVOICE_DATE));
+        assertEquals("Swisscom", referenceAfterUpdate.getIndices().get(COMPANY).getValue());
+        assertEquals("2", String.valueOf(referenceAfterUpdate.getIndices().get(INVOICE_AMOUNT).getValue()));
+        assertEquals(new DateTime(1982, 12, 15, 0, 0), referenceAfterUpdate.getIndices().get(INVOICE_DATE).getValue());
     }
 
     @Test
@@ -447,8 +447,8 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         DocumentReference documentReferenceFromStore = documentService.findDocumentReference(documentReference.getId());
 
         assertTrue(documentReferenceFromStore.getIndices().containsKey(INVOICE_DATE));
-        assertTrue(documentReferenceFromStore.getIndices().get(INVOICE_DATE) instanceof DateTime);
-        assertEquals(new DateTime(2012, 11, 1, 0, 0), documentReferenceFromStore.getIndices().get(INVOICE_DATE));
+        assertTrue(documentReferenceFromStore.getIndices().get(INVOICE_DATE).getValue() instanceof DateTime);
+        assertEquals(new DateTime(2012, 11, 1, 0, 0), documentReferenceFromStore.getIndices().get(INVOICE_DATE).getValue());
         assertEquals("image/tiff", documentReferenceFromStore.getMimeType());
         assertEquals(expectedPageCount, documentReferenceFromStore.getPageCount());
     }
@@ -493,18 +493,18 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
 
         File singlePagePdf = loadFile("Zinsausweis2013-CS-680419-20.pdf");
 
-        Map<TranslatableKey, Object> indexes = newHashMapWithExpectedSize(1);
-        indexes.put(COMPANY, "Sunrise");
-        indexes.put(MONEY, new Money(Currency.getInstance("CHF"), new BigDecimal("1235.50")));
-        indexes.put(INVOICE_AMOUNT, 12350L);
-        indexes.put(INVOICE_DATE, new Date());
+        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(1);
+        indexes.put(COMPANY, new Index("Sunrise"));
+        indexes.put(MONEY, new Index( new Money(Currency.getInstance("CHF"), new BigDecimal("1235.50"))));
+        indexes.put(INVOICE_AMOUNT, new Index( 12350L));
+        indexes.put(INVOICE_DATE, new Index( new Date()));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
         final DocumentReference documentReference = documentService.importDocument(doc);
 
         assertThat(documentReference.getPageCount(), is(1));
 
-        final Money money = (Money) documentReference.getIndices().get(MONEY);
+        final Money money = (Money) documentReference.getIndices().get(MONEY).getValue();
         assertThat(money, is(not(nullValue())));
         assertThat(money.getCurrency().getCurrencyCode(), is("CHF"));
         assertThat(money.getAmount().toPlainString(), is("1235.50"));

@@ -16,10 +16,7 @@
 
 package ch.silviowangler.dox.web;
 
-import ch.silviowangler.dox.api.DocumentClassNotFoundException;
-import ch.silviowangler.dox.api.DocumentReference;
-import ch.silviowangler.dox.api.DocumentService;
-import ch.silviowangler.dox.api.TranslatableKey;
+import ch.silviowangler.dox.api.*;
 import com.google.common.collect.ImmutableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,7 +77,7 @@ public class HomeController {
 
         try {
 
-            Map<TranslatableKey, Object> indices = newHashMap();
+            Map<TranslatableKey, Index> indices = newHashMap();
 
             final Iterator<String> iterator = request.getParameterNames();
 
@@ -90,7 +87,7 @@ public class HomeController {
                     String value = request.getParameter(parameterName);
 
                     if (value.length() > 0) {
-                        indices.put(new TranslatableKey(parameterName), value);
+                        indices.put(new TranslatableKey(parameterName), new Index(value));
                     }
                 }
             }

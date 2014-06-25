@@ -256,7 +256,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     @Override
     @Transactional(propagation = SUPPORTS, readOnly = true)
     @PreAuthorize("hasRole('ROLE_USER')")
-    public Set<DocumentReference> findDocumentReferences(Map<TranslatableKey, Object> queryParams, String documentClassShortName) throws DocumentClassNotFoundException {
+    public Set<DocumentReference> findDocumentReferences(Map<TranslatableKey, Index> queryParams, String documentClassShortName) throws DocumentClassNotFoundException {
 
         logger.debug("Trying to find document references in document class '{}' using params '{}'", documentClassShortName, queryParams);
         ch.silviowangler.dox.domain.DocumentClass documentClass = findDocumentClass(documentClassShortName);
@@ -439,7 +439,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             final String attributeShortName = attribute.getShortName();
             final TranslatableKey key = new TranslatableKey(attributeShortName);
             if (attribute.getDomain() != null && physicalDocument.getIndices().containsKey(key)) {
-                final String attributeValue = String.valueOf(physicalDocument.getIndices().get(key));
+                final String attributeValue = String.valueOf(physicalDocument.getIndices().get(key).getValue());
                 logger.debug("Analyzing domain value on attribute '{}' for value '{}'", attributeShortName, attributeValue);
                 if (!attribute.getDomain().getValues().contains(attributeValue)) {
                     logger.error("Attribute '{}' belongs to a domain. This domain does not contain the value '{}'", attributeShortName, attributeValue);
@@ -480,17 +480,17 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         throw new UnsupportedOperationException("No mime type registered for file extension " + fileName);
     }
 
-    private Map<TranslatableKey, Object> fixDataTypesOfIndices(final Map<TranslatableKey, Object> indexes, List<Attribute> attributes) {
+    private Map<TranslatableKey, Index> fixDataTypesOfIndices(final Map<TranslatableKey, Index> indexes, List<Attribute> attributes) {
 
-        Map<TranslatableKey, Object> resultMap = Maps.newHashMap(indexes); // copy elements
+        Map<TranslatableKey, Index> resultMap = Maps.newHashMap(indexes); // copy elements
 
         for (Attribute attribute : attributes) {
 
             final TranslatableKey key = new TranslatableKey(attribute.getShortName());
-            if (resultMap.containsKey(key) && resultMap.get(key) != null) {
-                if (!isAssignableType(attribute.getDataType(), resultMap.get(key).getClass())) {
+            if (resultMap.containsKey(key) && resultMap.get(key).getValue() != null) {
+                if (!isAssignableType(attribute.getDataType(), resultMap.get(key).getValue().getClass())) {
                     logger.debug("Attribute '{}' is not assignable to '{}'", key, attribute.getDataType());
-                    resultMap.put(key, makeAssignable(attribute.getDataType(), resultMap.get(key)));
+                    resultMap.put(key, new Index(makeAssignable(attribute.getDataType(), resultMap.get(key).getValue())));
                 }
             } else {
                 logger.debug("Ignoring attribute '{}' since it was not mentioned in the index map", key);
@@ -499,11 +499,11 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         return resultMap;
     }
 
-    private Map<String, Object> toEntityMap(final Map<TranslatableKey, Object> indices) {
+    private Map<String, Object> toEntityMap(final Map<TranslatableKey, Index> indices) {
         Map<String, Object> entityMap = Maps.newHashMapWithExpectedSize(indices.size());
 
         for (TranslatableKey key : indices.keySet()) {
-            entityMap.put(key.getKey(), indices.get(key));
+            entityMap.put(key.getKey(), indices.get(key).getValue());
         }
         return entityMap;
     }
@@ -566,7 +566,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         }
 
         logger.error("Unable to convert data type '{}' and value '{}' (class: '{}')", new Object[]{desiredDataType, valueToConvert, valueToConvert.getClass().getCanonicalName()});
-        throw new IllegalArgumentException("Unable to convert data type " + desiredDataType + " and value " + valueToConvert + "(Class: '" + valueToConvert.getClass().getCanonicalName() + "')");
+        throw new IllegalArgumentException("Unable to convert data type '" + desiredDataType + "' and value '" + valueToConvert + "' (Target class: '" + valueToConvert.getClass().getCanonicalName() + "')");
     }
 
     private boolean isRangeCompatible(AttributeDataType desiredDataType) {
@@ -596,7 +596,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             Attribute attribute = attributeRepository.findByShortName(key.getKey());
             assert attribute != null : "Attribute " + key + " must be there";
 
-            final Object value = documentReference.getIndices().get(key);
+            final Object value = documentReference.getIndices().get(key).getValue();
             try {
                 final String propertyName = attribute.getMappingColumn().toLowerCase();
                 logger.debug("About to set column '{}' using value '{}' on index store", propertyName, value);
@@ -679,9 +679,9 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         return documentReference;
     }
 
-    private Map<TranslatableKey, Object> toIndexMap(IndexStore indexStore, List<Attribute> attributes, Locale locale) {
+    private Map<TranslatableKey, Index> toIndexMap(IndexStore indexStore, List<Attribute> attributes, Locale locale) {
 
-        Map<TranslatableKey, Object> indices = newHashMapWithExpectedSize(attributes.size());
+        Map<TranslatableKey, Index> indices = newHashMapWithExpectedSize(attributes.size());
 
         for (Attribute attribute : attributes) {
             try {
@@ -691,17 +691,17 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
                 if (attribute.getDataType() == CURRENCY) {
                     AmountOfMoney amountOfMoney = (AmountOfMoney) propertyValue;
                     if (locale == null) {
-                        indices.put(key, (amountOfMoney == null) ? null : new Money(amountOfMoney.getCurrency(), amountOfMoney.getAmount()));
+                        indices.put(key, new Index( (amountOfMoney == null) ? null : new Money(amountOfMoney.getCurrency(), amountOfMoney.getAmount())));
                     } else {
-                        indices.put(key, (amountOfMoney == null) ? null : amountOfMoney.getCurrency() + " " + amountOfMoney.getAmount());
+                        indices.put(key, new Index((amountOfMoney == null) ? null : amountOfMoney.getCurrency() + " " + amountOfMoney.getAmount()));
                     }
                 }
                 else if (attribute.getDataType() == DATE && locale != null) {
                     DateFormat format = DateFormat.getDateInstance(MEDIUM, locale);
-                    indices.put(key, format.format(((DateTime)propertyValue).toDate()));
+                    indices.put(key, new Index(format.format(((DateTime)propertyValue).toDate())));
                 }
                 else {
-                    indices.put(key, propertyValue);
+                    indices.put(key, new Index(propertyValue));
                 }
 
             } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
