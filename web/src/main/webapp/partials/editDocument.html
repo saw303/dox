@@ -8,7 +8,9 @@
 
     <div>Dokumenten ID: {{document.hash}}</div>
 
-    <form>
+    <form novalidate="novalidate">
+
+        <input type="hidden" value="{{document.id}}"/>
 
         <p ng-repeat="(label, index) in document.indices">
 
@@ -23,8 +25,8 @@
                            ng-required="!index.attribute.optional" list="list-{{index.attribute.shortName}}"
                            value="{{index.value}}"/>
                 </span>
-                    <input ng-switch-when="DATE" name="{{index.attribute.shortName}}" type="date"
-                           ng-required="!index.attribute.optional" value="{{index.value | date: 'dd.MM.yyyy'}}"/>
+                <input ng-switch-when="DATE" name="{{index.attribute.shortName}}" type="date"
+                       ng-required="!index.attribute.optional" value="{{index.value | date: 'yyyy-MM-dd'}}"/>
                 <input ng-switch-when="CURRENCY" name="{{index.attribute.shortName}}" type="text"
                        value="{{index.value.currency}} {{index.value.amount}}"
                        ng-pattern="/\D{3} [-+]?[0-9]*[.,]?[0-9]+/"
@@ -42,6 +44,9 @@
                        min="0" step="any"
                        ng-required="!index.attribute.optional" value="{{index.value}}"/>
             </span>
+        </p>
+        <p>
+            <button type="submit" id="importDocBtn">Aktualisieren</button>
         </p>
     </form>
 
