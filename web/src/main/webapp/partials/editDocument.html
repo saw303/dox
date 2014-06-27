@@ -8,7 +8,7 @@
 
     <div>Dokumenten ID: {{document.hash}}</div>
 
-    <form novalidate="novalidate">
+    <form novalidate="novalidate" ng-submit="doSubmit()">
 
         <input type="hidden" value="{{document.id}}"/>
 
@@ -16,33 +16,33 @@
 
             <label for="{{index.attribute.shortName}}">{{label}}: </label>
 
-        <span ng-switch="index.attribute.dataType">
+            <span ng-switch="index.attribute.dataType">
                 <span ng-switch-when="STRING">
                     <datalist id="list-{{index.attribute.shortName}}">
                         <option value="{{value}}" ng-repeat="value in index.attribute.domain.values"/>
                     </datalist>
                     <input name="{{index.attribute.shortName}}" type="text"
                            ng-required="!index.attribute.optional" list="list-{{index.attribute.shortName}}"
-                           value="{{index.value}}"/>
+                           ng-model="index.value"/>
                 </span>
                 <input ng-switch-when="DATE" name="{{index.attribute.shortName}}" type="date"
-                       ng-required="!index.attribute.optional" value="{{index.value | date: 'yyyy-MM-dd'}}"/>
+                       ng-required="!index.attribute.optional" ng-model="index.value"/>
                 <input ng-switch-when="CURRENCY" name="{{index.attribute.shortName}}" type="text"
-                       value="{{index.value.currency}} {{index.value.amount}}"
+                       ng-model="index.value.amount"
                        ng-pattern="/\D{3} [-+]?[0-9]*[.,]?[0-9]+/"
                        ng-required="!index.attribute.optional"/>
                 <input ng-switch-when="DOUBLE" name="{{index.attribute.shortName}}" type="number"
                        min="0" step="any"
-                       ng-required="!index.attribute.optional" value="{{index.value}}"/>
+                       ng-required="!index.attribute.optional" ng-model="index.value"/>
                 <input ng-switch-when="LONG" name="{{index.attribute.shortName}}" type="number" min="0"
                        step="any"
-                       ng-required="!index.attribute.optional" value="{{index.value}}"/>
+                       ng-required="!index.attribute.optional" ng-model="index.value"/>
                 <input ng-switch-when="SHORT" name="{{index.attribute.shortName}}" type="number" min="0"
                        step="any"
-                       ng-required="!index.attribute.optional" value="{{index.value}}"/>
+                       ng-required="!index.attribute.optional" ng-model="index.value"/>
                 <input ng-switch-when="INTEGER" name="{{index.attribute.shortName}}" type="number"
                        min="0" step="any"
-                       ng-required="!index.attribute.optional" value="{{index.value}}"/>
+                       ng-required="!index.attribute.optional" ng-model="index.value"/>
             </span>
         </p>
         <p>

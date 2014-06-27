@@ -75,11 +75,16 @@ angular.module('dox.controllers', ['dox.services'])
         })
     }])
 
-    .controller('DocumentController', ['$scope', '$log', '$routeParams', 'Document', function($scope, $log, $routeParams, Document) {
+    .controller('DocumentController', ['$scope', '$log', '$routeParams', 'Document', function ($scope, $log, $routeParams, Document) {
 
-        Document.get({documentId:$routeParams.id}, function(doc) {
+        Document.get({documentId: $routeParams.id}, function (doc) {
             $scope.document = doc;
         });
+
+        $scope.doSubmit = function() {
+            $log.debug("Submitting form");
+            $scope.document.$save();
+        }
     }])
 
     .controller('QueryController', ['$scope', '$log', '$http', 'Settings', 'apiRoot', '$window', function ($scope, $log, $http, Settings, apiRoot, $window) {
