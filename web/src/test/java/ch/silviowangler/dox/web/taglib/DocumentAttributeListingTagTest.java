@@ -16,8 +16,8 @@
 
 package ch.silviowangler.dox.web.taglib;
 
+import ch.silviowangler.dox.api.DescriptiveIndex;
 import ch.silviowangler.dox.api.DocumentReference;
-import ch.silviowangler.dox.api.Index;
 import ch.silviowangler.dox.api.TranslatableKey;
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -60,7 +60,7 @@ public class DocumentAttributeListingTagTest {
     private PageContext pageContext;
     @Mock
     private MessageSource messageSource;
-    private Map<TranslatableKey, Index> indices;
+    private Map<TranslatableKey, DescriptiveIndex> indices;
     private ServletContext servletContext;
     private MockHttpServletRequest request;
     @Mock
@@ -97,7 +97,7 @@ public class DocumentAttributeListingTagTest {
 
     @Test
     public void singleThatDoesNotMatchQuery() throws UnsupportedEncodingException, JspException {
-        indices.put(new TranslatableKey("wicked", "Name"), new Index("Hello"));
+        indices.put(new TranslatableKey("wicked", "Name"), new DescriptiveIndex("Hello"));
 
         assertEquals(SKIP_BODY, tag.doStartTag());
         assertEquals("<div class=\"attributeListing\">Name:&nbsp;Hello</div>" + newLine, ((MockHttpServletResponse) pageContext.getResponse()).getContentAsString());
@@ -105,7 +105,7 @@ public class DocumentAttributeListingTagTest {
 
     @Test
     public void singleThatDoesMatchQuery() throws UnsupportedEncodingException, JspException {
-        indices.put(new TranslatableKey("wicked", "Name"), new Index("Hello"));
+        indices.put(new TranslatableKey("wicked", "Name"), new DescriptiveIndex("Hello"));
         tag.setQuery("Hello");
 
         assertEquals(SKIP_BODY, tag.doStartTag());
@@ -114,7 +114,7 @@ public class DocumentAttributeListingTagTest {
 
     @Test
     public void singleThatDoesMatchQueryButIgnoresCase() throws UnsupportedEncodingException, JspException {
-        indices.put(new TranslatableKey("wicked", "Name"), new Index("Hello"));
+        indices.put(new TranslatableKey("wicked", "Name"), new DescriptiveIndex("Hello"));
         tag.setQuery("hello");
 
         assertEquals(SKIP_BODY, tag.doStartTag());
@@ -123,7 +123,7 @@ public class DocumentAttributeListingTagTest {
 
     @Test
     public void singleThatDoesMatchQueryWithWildcard() throws UnsupportedEncodingException, JspException {
-        indices.put(new TranslatableKey("wicked", "Name"), new Index("Hello"));
+        indices.put(new TranslatableKey("wicked", "Name"), new DescriptiveIndex("Hello"));
         tag.setQuery("*ello");
 
         assertEquals(SKIP_BODY, tag.doStartTag());
@@ -132,7 +132,7 @@ public class DocumentAttributeListingTagTest {
 
     @Test
     public void singleThatDoesMatchQueryWithWildcard2() throws UnsupportedEncodingException, JspException {
-        indices.put(new TranslatableKey("wicked", "Name"), new Index("Hello"));
+        indices.put(new TranslatableKey("wicked", "Name"), new DescriptiveIndex("Hello"));
         tag.setQuery("*el?o");
 
         assertEquals(SKIP_BODY, tag.doStartTag());
@@ -141,7 +141,7 @@ public class DocumentAttributeListingTagTest {
 
     @Test
     public void singleThatDoesMatchQueryWithWildcard3() throws UnsupportedEncodingException, JspException {
-        indices.put(new TranslatableKey("wicked", "Name"), new Index("Hello"));
+        indices.put(new TranslatableKey("wicked", "Name"), new DescriptiveIndex("Hello"));
         tag.setQuery("*e*o");
 
         assertEquals(SKIP_BODY, tag.doStartTag());
@@ -150,7 +150,7 @@ public class DocumentAttributeListingTagTest {
 
     @Test
     public void singleThatDoesMatchQueryWithWildcard4() throws UnsupportedEncodingException, JspException {
-        indices.put(new TranslatableKey("dob", "Date Of Birth"), new Index(new DateTime(2013, 8, 11, 0, 0)));
+        indices.put(new TranslatableKey("dob", "Date Of Birth"), new DescriptiveIndex(new DateTime(2013, 8, 11, 0, 0)));
         tag.setQuery("*13");
 
         assertEquals(SKIP_BODY, tag.doStartTag());
@@ -159,8 +159,8 @@ public class DocumentAttributeListingTagTest {
 
     @Test
     public void singleThatDoesMatchQueryWithWildcard5() throws UnsupportedEncodingException, JspException {
-        indices.put(new TranslatableKey("dob", "Date Of Birth"), new Index(new DateTime(2013, 8, 11, 0, 0)));
-        indices.put(new TranslatableKey("amount", "Amount"), new Index(1234L));
+        indices.put(new TranslatableKey("dob", "Date Of Birth"), new DescriptiveIndex(new DateTime(2013, 8, 11, 0, 0)));
+        indices.put(new TranslatableKey("amount", "Amount"), new DescriptiveIndex(1234L));
         tag.setQuery("*13");
 
         assertEquals(SKIP_BODY, tag.doStartTag());
@@ -170,8 +170,8 @@ public class DocumentAttributeListingTagTest {
     @Test
     public void formatDate() throws UnsupportedEncodingException, JspException {
 
-        indices.put(new TranslatableKey("wicked", "Name"), new Index("Hello"));
-        indices.put(new TranslatableKey("dob", "Date Of Birth"), new Index(new DateTime(2013, 2, 23, 0, 0)));
+        indices.put(new TranslatableKey("wicked", "Name"), new DescriptiveIndex("Hello"));
+        indices.put(new TranslatableKey("dob", "Date Of Birth"), new DescriptiveIndex(new DateTime(2013, 2, 23, 0, 0)));
         tag.setQuery("Hello");
 
         assertEquals(SKIP_BODY, tag.doStartTag());

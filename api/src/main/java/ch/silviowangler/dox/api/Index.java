@@ -5,17 +5,9 @@ import java.io.Serializable;
 /**
  * Created by SWangler on 25.06.2014.
  */
-public class Index implements Serializable {
+public abstract class Index implements Serializable {
 
     private Object value;
-
-    public Index(Object value) {
-        this.value = value;
-    }
-
-    public Index() {
-        super();
-    }
 
     public Object getValue() {
         return value;

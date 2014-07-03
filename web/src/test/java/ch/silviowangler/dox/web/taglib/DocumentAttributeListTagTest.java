@@ -16,8 +16,8 @@
 
 package ch.silviowangler.dox.web.taglib;
 
+import ch.silviowangler.dox.api.DescriptiveIndex;
 import ch.silviowangler.dox.api.DocumentReference;
-import ch.silviowangler.dox.api.Index;
 import ch.silviowangler.dox.api.TranslatableKey;
 import com.google.common.collect.Maps;
 import org.joda.time.DateTime;
@@ -59,7 +59,7 @@ public class DocumentAttributeListTagTest {
     private PageContext pageContext;
     @Mock
     private MessageSource messageSource;
-    private Map<TranslatableKey, Index> indices;
+    private Map<TranslatableKey, DescriptiveIndex> indices;
     private ServletContext servletContext;
     private MockHttpServletRequest request;
     @Mock
@@ -97,7 +97,7 @@ public class DocumentAttributeListTagTest {
     @Test
     public void oneIndexShouldResultInEmptyOutput() throws JspException, IOException {
 
-        indices.put(new TranslatableKey("wicked", "Name"), new Index("Hello"));
+        indices.put(new TranslatableKey("wicked", "Name"), new DescriptiveIndex("Hello"));
 
         assertEquals(SKIP_BODY, tag.doStartTag());
         assertEquals("<ul><li>Name = Hello</li></ul>" + newLine, ((MockHttpServletResponse) pageContext.getResponse()).getContentAsString());
@@ -106,8 +106,8 @@ public class DocumentAttributeListTagTest {
     @Test
     public void twoIndexShouldResultInEmptyOutput() throws JspException, IOException {
 
-        indices.put(A_PROP, new Index("Computer"));
-        indices.put(new TranslatableKey("test", "Lisa"), new Index("Fellow"));
+        indices.put(A_PROP, new DescriptiveIndex("Computer"));
+        indices.put(new TranslatableKey("test", "Lisa"), new DescriptiveIndex("Fellow"));
         assertEquals(SKIP_BODY, tag.doStartTag());
         assertEquals("<ul><li>Name = Computer</li><li>Lisa = Fellow</li></ul>" + newLine, ((MockHttpServletResponse) pageContext.getResponse()).getContentAsString());
     }
@@ -115,7 +115,7 @@ public class DocumentAttributeListTagTest {
     @Test
     public void jodaTimeDateTimeShouldBeFormattedAccordingTheCurrentLocale() throws JspException, IOException {
 
-        indices.put(A_PROP, new Index( new DateTime(2010, 11, 01, 0, 0)));
+        indices.put(A_PROP, new DescriptiveIndex(new DateTime(2010, 11, 01, 0, 0)));
         assertEquals(SKIP_BODY, tag.doStartTag());
         assertEquals("<ul><li>Name = 01.11.2010</li></ul>" + newLine, ((MockHttpServletResponse) pageContext.getResponse()).getContentAsString());
     }
@@ -125,7 +125,7 @@ public class DocumentAttributeListTagTest {
 
         request.addPreferredLocale(Locale.CANADA);
 
-        indices.put(A_PROP, new Index( new DateTime(2010, 11, 01, 0, 0)));
+        indices.put(A_PROP, new DescriptiveIndex(new DateTime(2010, 11, 01, 0, 0)));
 
         assertEquals(SKIP_BODY, tag.doStartTag());
         assertEquals("<ul><li>Name = 1-Nov-2010</li></ul>" + newLine, ((MockHttpServletResponse) pageContext.getResponse()).getContentAsString());
@@ -136,7 +136,7 @@ public class DocumentAttributeListTagTest {
 
         request.addPreferredLocale(Locale.UK);
 
-        indices.put(A_PROP, new Index( new DateTime(2010, 11, 01, 0, 0)));
+        indices.put(A_PROP, new DescriptiveIndex(new DateTime(2010, 11, 01, 0, 0)));
 
         assertEquals(SKIP_BODY, tag.doStartTag());
         assertEquals("<ul><li>Name = 01-Nov-2010</li></ul>" + newLine, ((MockHttpServletResponse) pageContext.getResponse()).getContentAsString());

@@ -27,6 +27,10 @@ public class DocumentClass extends AbstractTranslatable implements Serializable 
     private String shortName;
     private String translatedText;
 
+    public DocumentClass() {
+        super();
+    }
+
     public DocumentClass(String shortName, String translatedText) {
         this.shortName = shortName;
         this.translatedText = translatedText;

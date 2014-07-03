@@ -173,7 +173,7 @@ public class DocumentController {
 
                 if (paramValue != null) {
                     didChangeValue = true;
-                    documentReference.getIndices().put(key, new Index(new String(paramValue.getBytes("iso-8859-1"), "utf-8")));
+                    documentReference.getIndices().put(key, new DescriptiveIndex(new String(paramValue.getBytes("iso-8859-1"), "utf-8")));
                 }
             }
 

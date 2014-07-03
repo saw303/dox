@@ -256,7 +256,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     @Override
     @Transactional(propagation = SUPPORTS, readOnly = true)
     @PreAuthorize("hasRole('ROLE_USER')")
-    public Set<DocumentReference> findDocumentReferences(Map<TranslatableKey, Index> queryParams, String documentClassShortName) throws DocumentClassNotFoundException {
+    public Set<DocumentReference> findDocumentReferences(Map<TranslatableKey, DescriptiveIndex> queryParams, String documentClassShortName) throws DocumentClassNotFoundException {
 
         logger.debug("Trying to find document references in document class '{}' using params '{}'", documentClassShortName, queryParams);
         ch.silviowangler.dox.domain.DocumentClass documentClass = findDocumentClass(documentClassShortName);
@@ -480,9 +480,9 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         throw new UnsupportedOperationException("No mime type registered for file extension " + fileName);
     }
 
-    private Map<TranslatableKey, Index> fixDataTypesOfIndices(final Map<TranslatableKey, Index> indexes, List<Attribute> attributes) {
+    private Map<TranslatableKey, DescriptiveIndex> fixDataTypesOfIndices(final Map<TranslatableKey, DescriptiveIndex> indexes, List<Attribute> attributes) {
 
-        Map<TranslatableKey, Index> resultMap = Maps.newHashMap(indexes); // copy elements
+        Map<TranslatableKey, DescriptiveIndex> resultMap = Maps.newHashMap(indexes); // copy elements
 
         for (Attribute attribute : attributes) {
 
@@ -490,7 +490,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             if (resultMap.containsKey(key) && resultMap.get(key).getValue() != null) {
                 if (!isAssignableType(attribute.getDataType(), resultMap.get(key).getValue().getClass())) {
                     logger.debug("Attribute '{}' is not assignable to '{}'", key, attribute.getDataType());
-                    resultMap.put(key, new Index(makeAssignable(attribute.getDataType(), resultMap.get(key).getValue())));
+                    resultMap.put(key, new DescriptiveIndex(makeAssignable(attribute.getDataType(), resultMap.get(key).getValue())));
                 }
             } else {
                 logger.debug("Ignoring attribute '{}' since it was not mentioned in the index map", key);
@@ -499,7 +499,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         return resultMap;
     }
 
-    private Map<String, Object> toEntityMap(final Map<TranslatableKey, Index> indices) {
+    private Map<String, Object> toEntityMap(final Map<TranslatableKey, DescriptiveIndex> indices) {
         Map<String, Object> entityMap = Maps.newHashMapWithExpectedSize(indices.size());
 
         for (TranslatableKey key : indices.keySet()) {
@@ -679,9 +679,9 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         return documentReference;
     }
 
-    private Map<TranslatableKey, Index> toIndexMap(IndexStore indexStore, List<Attribute> attributes, Locale locale) {
+    private Map<TranslatableKey, DescriptiveIndex> toIndexMap(IndexStore indexStore, List<Attribute> attributes, Locale locale) {
 
-        Map<TranslatableKey, Index> indices = newHashMapWithExpectedSize(attributes.size());
+        Map<TranslatableKey, DescriptiveIndex> indices = newHashMapWithExpectedSize(attributes.size());
 
         for (Attribute attribute : attributes) {
 

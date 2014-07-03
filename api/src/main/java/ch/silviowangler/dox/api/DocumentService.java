@@ -63,7 +63,7 @@ public interface DocumentService {
      */
     PhysicalDocument findPhysicalDocument(Long id) throws DocumentNotFoundException, DocumentNotInStoreException;
 
-    Set<DocumentReference> findDocumentReferences(Map<TranslatableKey, Index> queryParams, String documentClassShortName) throws DocumentClassNotFoundException;
+    Set<DocumentReference> findDocumentReferences(Map<TranslatableKey, DescriptiveIndex> queryParams, String documentClassShortName) throws DocumentClassNotFoundException;
 
     /**
      * Implement a search à la Google. Uses a single String to find document references.
@@ -75,8 +75,9 @@ public interface DocumentService {
 
     /**
      * Finds document references and returns the indices map keys translated to the given locale and the map values formatted using the given locale
+     *
      * @param queryString query params
-     * @param locale language / region setting to format/translate map key and value pairs
+     * @param locale      language / region setting to format/translate map key and value pairs
      * @return see description above
      * @since 0.3
      */
@@ -95,7 +96,7 @@ public interface DocumentService {
      * Retrieves for the current user only
      *
      * @param queryString query params
-     * @param locale language / region setting to format/translate map key and value pairs
+     * @param locale      language / region setting to format/translate map key and value pairs
      * @return all document references that match with the query
      * @since 0.3
      */
@@ -145,6 +146,7 @@ public interface DocumentService {
 
     /**
      * Retrieves all document classes
+     *
      * @return all document classes with their corresponding attributes
      */
     List<ch.silviowangler.dox.api.rest.DocumentClass> findAllDocumentClasses();

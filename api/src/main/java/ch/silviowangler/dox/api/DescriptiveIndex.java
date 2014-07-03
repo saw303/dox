@@ -7,8 +7,12 @@ public class DescriptiveIndex extends Index {
 
     private Attribute attribute;
 
+    public DescriptiveIndex(Object value) {
+        super.setValue(value);
+    }
+
     public DescriptiveIndex(Object value, Attribute attribute) {
-        super(value);
+        super.setValue(value);
         this.attribute = attribute;
     }
 

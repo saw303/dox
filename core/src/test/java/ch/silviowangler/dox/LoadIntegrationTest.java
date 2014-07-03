@@ -91,7 +91,7 @@ public class LoadIntegrationTest extends AbstractIntegrationTest {
                         default:
                             throw new IllegalArgumentException("Unknown attribute type: " + attribute.getDataType());
                     }
-                    indices.put(new TranslatableKey(attribute.getShortName()), new Index(o));
+                    indices.put(new TranslatableKey(attribute.getShortName()), new DescriptiveIndex(o));
                 }
             }
 
@@ -110,7 +110,7 @@ public class LoadIntegrationTest extends AbstractIntegrationTest {
         Map<TranslatableKey, Index> indices = new HashMap<>();
 
         TranslatableKey company = new TranslatableKey("company");
-        indices.put(company, new Index("3?"));
+        indices.put(company, new DescriptiveIndex("3?"));
 
         stopWatch.start();
         Set<DocumentReference> invoices = documentService.findDocumentReferences(indices, "INVOICE");

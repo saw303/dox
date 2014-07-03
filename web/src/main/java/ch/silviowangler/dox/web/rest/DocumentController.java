@@ -7,10 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -18,8 +15,7 @@ import java.util.Locale;
 
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
-import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
  * @author Silvio Wangler
@@ -34,9 +30,7 @@ public class DocumentController {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @RequestMapping(method = GET)
-    public
-    @ResponseBody
-    List<DocumentReference> query(@RequestParam("q") String queryString, @RequestParam(value = "wc", defaultValue = "false", required = false) boolean useWildcard, @RequestParam(value = "uo", defaultValue = "false", required = false) boolean forCurrentUserOnly, Locale locale) {
+    public @ResponseBody List<DocumentReference> query(@RequestParam("q") String queryString, @RequestParam(value = "wc", defaultValue = "false", required = false) boolean useWildcard, @RequestParam(value = "uo", defaultValue = "false", required = false) boolean forCurrentUserOnly, Locale locale) {
         final boolean hasWildcard = containsWildcard(queryString);
         String queryStringCopy = queryString;
 
@@ -58,9 +52,7 @@ public class DocumentController {
     }
 
     @RequestMapping(value = "/{id}", method = GET)
-    public
-    @ResponseBody
-    DocumentReference getDocumentReference(@PathVariable("id") Long docId, HttpServletResponse response) {
+    public @ResponseBody DocumentReference getDocumentReference(@PathVariable("id") Long docId, HttpServletResponse response) {
         DocumentReference documentReference;
         try {
             documentReference = documentService.findDocumentReference(docId);
@@ -70,6 +62,12 @@ public class DocumentController {
             response.setStatus(SC_NOT_FOUND);
             return null;
         }
+    }
+
+    @RequestMapping(value = "/{id}", method = POST)
+    public void updateDocument(@RequestBody DocumentReference documentReference, HttpServletResponse response) {
+        logger.info("About to update document {}", documentReference.getId());
+        response.setStatus(SC_OK);
     }
 
     @RequestMapping(value = "/{id}", method = DELETE)

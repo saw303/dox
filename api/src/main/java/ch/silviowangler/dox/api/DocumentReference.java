@@ -37,25 +37,29 @@ public class DocumentReference implements Serializable {
     private int pageCount;
     private String mimeType;
     private DocumentClass documentClass;
-    private Map<TranslatableKey, Index> indices = Maps.newHashMap();
+    private Map<TranslatableKey, DescriptiveIndex> indices = Maps.newHashMap();
     private String fileName;
     private String userReference;
     private long fileSize;
     private DateTime creationDate;
 
+    public DocumentReference() {
+        super();
+    }
+
     public DocumentReference(String fileName) {
         this.fileName = fileName;
     }
 
-    public DocumentReference(String hash, int pageCount, String mimeType, DocumentClass documentClass, Map<TranslatableKey, Index> indices, String fileName) {
+    public DocumentReference(String hash, int pageCount, String mimeType, DocumentClass documentClass, Map<TranslatableKey, DescriptiveIndex> indices, String fileName) {
         this(hash, null, pageCount, mimeType, documentClass, indices, fileName);
     }
 
-    public DocumentReference(String hash, Long id, int pageCount, String mimeType, DocumentClass documentClass, Map<TranslatableKey, Index> indices, String fileName) {
+    public DocumentReference(String hash, Long id, int pageCount, String mimeType, DocumentClass documentClass, Map<TranslatableKey, DescriptiveIndex> indices, String fileName) {
         this(hash, id, pageCount, mimeType, documentClass, indices, fileName, null, -1L);
     }
 
-    public DocumentReference(String hash, Long id, int pageCount, String mimeType, DocumentClass documentClass, Map<TranslatableKey, Index> indices, String fileName, String userName, long fileSize) {
+    public DocumentReference(String hash, Long id, int pageCount, String mimeType, DocumentClass documentClass, Map<TranslatableKey, DescriptiveIndex> indices, String fileName, String userName, long fileSize) {
         this.hash = hash;
         this.id = id;
         this.pageCount = pageCount;
@@ -107,11 +111,11 @@ public class DocumentReference implements Serializable {
         this.documentClass = documentClass;
     }
 
-    public Map<TranslatableKey, Index> getIndices() {
+    public Map<TranslatableKey, DescriptiveIndex> getIndices() {
         return indices;
     }
 
-    public void setIndices(Map<TranslatableKey, Index> indices) {
+    public void setIndices(Map<TranslatableKey, DescriptiveIndex> indices) {
         this.indices = indices;
     }
 

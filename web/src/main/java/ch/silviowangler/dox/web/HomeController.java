@@ -87,7 +87,7 @@ public class HomeController {
                     String value = request.getParameter(parameterName);
 
                     if (value.length() > 0) {
-                        indices.put(new TranslatableKey(parameterName), new Index(value));
+                        indices.put(new TranslatableKey(parameterName), new DescriptiveIndex(value));
                     }
                 }
             }

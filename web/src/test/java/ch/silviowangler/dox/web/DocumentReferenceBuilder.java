@@ -16,9 +16,9 @@
 
 package ch.silviowangler.dox.web;
 
+import ch.silviowangler.dox.api.DescriptiveIndex;
 import ch.silviowangler.dox.api.DocumentClass;
 import ch.silviowangler.dox.api.DocumentReference;
-import ch.silviowangler.dox.api.Index;
 import ch.silviowangler.dox.api.TranslatableKey;
 
 /**
@@ -51,7 +51,7 @@ public class DocumentReferenceBuilder {
     }
 
     public DocumentReferenceBuilder withIndex(String indexName, Object indexValue) {
-        this.documentReference.getIndices().put(new TranslatableKey(indexName), new Index(indexValue));
+        this.documentReference.getIndices().put(new TranslatableKey(indexName), new DescriptiveIndex(indexValue));
         return this;
     }
 }
