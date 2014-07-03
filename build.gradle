@@ -208,7 +208,6 @@ subprojects {
 }
 
 project(':api') {
-    displayName = 'API module'
     dependencies {
         compile "com.google.guava:guava:${project.ext.guavaVersion}",
                 "joda-time:joda-time:${project.ext.jodaTimeVersion}"
@@ -216,8 +215,6 @@ project(':api') {
 }
 
 project(':core') {
-    displayName = 'Core module'
-
     dependencies {
         compile project(':api'), project(':domain'), project(':inexport'),
                 "org.springframework:spring-context:${project.ext.springVersion}",
@@ -283,7 +280,6 @@ project(':core') {
 }
 
 project(':web') {
-    displayName = 'WEB module'
     apply plugin: 'war'
 
     war.archiveName = "dox-${version}.war"
@@ -329,7 +325,6 @@ project(':web') {
 }
 
 project(':inexport') {
-    displayName = 'In- & Export module'
     dependencies {
         compile project(':api'),
                 "org.springframework:spring-context:${project.ext.springVersion}"
@@ -358,5 +353,5 @@ idea.project {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.7'
+    gradleVersion = '2.0'
 }
