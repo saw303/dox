@@ -35,6 +35,9 @@ public class Attribute extends AbstractTranslatable implements Serializable, Com
     private String translation;
     private String mappingColumn;
 
+    public Attribute() {
+    }
+
     public Attribute(String shortName, boolean optional, AttributeDataType dataType) {
         this(shortName, optional, null, dataType, true);
     }

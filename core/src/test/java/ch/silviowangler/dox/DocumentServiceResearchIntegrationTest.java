@@ -56,7 +56,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
 
         loginAsRoot();
 
-        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(3);
+        Map<TranslatableKey, DescriptiveIndex> indexes = newHashMapWithExpectedSize(3);
         indexes.put(COMPANY, new DescriptiveIndex(SUNRISE));
         indexes.put(INVOICE_DATE, new DescriptiveIndex("01.12.2009"));
         indexes.put(INVOICE_AMOUNT, new DescriptiveIndex("100.5"));
@@ -86,7 +86,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
     @Test
     public void findSwisscomInvoice() throws DocumentClassNotFoundException {
 
-        Map<TranslatableKey, Index> queryParams = newHashMapWithExpectedSize(1);
+        Map<TranslatableKey, DescriptiveIndex> queryParams = newHashMapWithExpectedSize(1);
         final String companyName = SWISSCOM;
         queryParams.put(COMPANY, new DescriptiveIndex(companyName));
 
@@ -109,7 +109,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
     @Test
     public void findSunriseInvoice() throws DocumentClassNotFoundException {
 
-        Map<TranslatableKey, Index> queryParams = newHashMapWithExpectedSize(1);
+        Map<TranslatableKey, DescriptiveIndex> queryParams = newHashMapWithExpectedSize(1);
         final String companyName = SUNRISE;
         queryParams.put(COMPANY, new DescriptiveIndex(companyName));
 
@@ -123,7 +123,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
     @Test
     public void findInvoicesByCompaniesStartingWithS() throws DocumentClassNotFoundException {
 
-        Map<TranslatableKey, Index> queryParams = newHashMapWithExpectedSize(1);
+        Map<TranslatableKey, DescriptiveIndex> queryParams = newHashMapWithExpectedSize(1);
         final String companyName = "S*";
         queryParams.put(COMPANY, new DescriptiveIndex(companyName));
 
@@ -139,7 +139,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
     @Test
     public void findInvoicesByCompaniesStartingWithSAndContainingAnotherS() throws DocumentClassNotFoundException {
 
-        Map<TranslatableKey, Index> queryParams = newHashMapWithExpectedSize(1);
+        Map<TranslatableKey, DescriptiveIndex> queryParams = newHashMapWithExpectedSize(1);
         final String companyName = "S*s*";
         queryParams.put(COMPANY, new DescriptiveIndex(companyName));
 
@@ -155,7 +155,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
     @Test
     public void findInvoicesByCompaniesSunXise() throws DocumentClassNotFoundException {
 
-        Map<TranslatableKey, Index> queryParams = newHashMapWithExpectedSize(1);
+        Map<TranslatableKey, DescriptiveIndex> queryParams = newHashMapWithExpectedSize(1);
         final String companyName = "Sun?ise";
         queryParams.put(COMPANY, new DescriptiveIndex(companyName));
 
@@ -169,7 +169,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
     @Test
     public void findByExactInvoiceAmount() throws DocumentClassNotFoundException {
 
-        Map<TranslatableKey, Index> queryParams = newHashMapWithExpectedSize(1);
+        Map<TranslatableKey, DescriptiveIndex> queryParams = newHashMapWithExpectedSize(1);
         queryParams.put(INVOICE_AMOUNT, new DescriptiveIndex("100.50"));
 
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryParams, "INVOICE");
@@ -182,7 +182,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
     @Test
     public void findByRangeInvoiceAmount() throws DocumentClassNotFoundException {
 
-        Map<TranslatableKey, Index> queryParams = newHashMapWithExpectedSize(1);
+        Map<TranslatableKey, DescriptiveIndex> queryParams = newHashMapWithExpectedSize(1);
         queryParams.put(INVOICE_AMOUNT, new DescriptiveIndex(new Range<>(new BigDecimal("100"), new BigDecimal("101"))));
 
         Set<DocumentReference> documentReferences = documentService.findDocumentReferences(queryParams, "INVOICE");
@@ -329,7 +329,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
     @Test
     public void testMakeSureItRespectsTheDocumentClass() throws Exception {
 
-        Map<TranslatableKey, Index> index = Maps.newHashMap();
+        Map<TranslatableKey, DescriptiveIndex> index = Maps.newHashMap();
         index.put(COMPANY, new DescriptiveIndex(SUNRISE));
 
         final Set<DocumentReference> documentReferences = documentService.findDocumentReferences(index, "CONTRACTS");
@@ -341,7 +341,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
     @Test
     public void testMakeSureItRespectsTheDocumentClass2() throws Exception {
 
-        Map<TranslatableKey, Index> index = Maps.newHashMap();
+        Map<TranslatableKey, DescriptiveIndex> index = Maps.newHashMap();
         index.put(COMPANY, new DescriptiveIndex(SUNRISE));
         index.put(TITLE, new DescriptiveIndex("This is a title"));
 
@@ -354,7 +354,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
     @Test
     public void testMakeSureItRespectsTheDocumentClass3() throws Exception {
 
-        Map<TranslatableKey, Index> index = Maps.newHashMap();
+        Map<TranslatableKey, DescriptiveIndex> index = Maps.newHashMap();
         index.put(COMPANY, new DescriptiveIndex(SUNRISE));
         index.put(TITLE, new DescriptiveIndex("*title"));
 

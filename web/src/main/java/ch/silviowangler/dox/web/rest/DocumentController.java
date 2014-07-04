@@ -13,8 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Locale;
 
-import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
-import static javax.servlet.http.HttpServletResponse.SC_OK;
+import static javax.servlet.http.HttpServletResponse.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
@@ -67,7 +66,14 @@ public class DocumentController {
     @RequestMapping(value = "/{id}", method = POST)
     public void updateDocument(@RequestBody DocumentReference documentReference, HttpServletResponse response) {
         logger.info("About to update document {}", documentReference.getId());
-        response.setStatus(SC_OK);
+
+        try {
+            documentService.updateIndices(documentReference);
+            response.setStatus(SC_OK);
+        } catch (DocumentNotFoundException e) {
+            logger.error("Document {} not found ", documentReference.getId(), e);
+            response.setStatus(SC_BAD_REQUEST);
+        }
     }
 
     @RequestMapping(value = "/{id}", method = DELETE)
@@ -78,7 +84,6 @@ public class DocumentController {
         response.setStatus(SC_OK);
     }
 
-    private boolean containsWildcard(final String queryString) {
-        return queryString.contains("*") || queryString.contains("?");
+    private boolean containsWildcard(final String queryString) { return queryString.contains("*") || queryString.contains("?");
     }
 }

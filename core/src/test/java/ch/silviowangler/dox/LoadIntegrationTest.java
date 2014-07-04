@@ -49,7 +49,7 @@ public class LoadIntegrationTest extends AbstractIntegrationTest {
 
         for (int i = 1; i <= TOTAL_AMOUNT_OF_FILES; i++) {
 
-            Map<TranslatableKey, Index> indices = new HashMap<>();
+            Map<TranslatableKey, DescriptiveIndex> indices = new HashMap<>();
 
             SortedSet<Attribute> attributes;
             if (!cache.containsKey("INVOICE")) {
@@ -107,7 +107,7 @@ public class LoadIntegrationTest extends AbstractIntegrationTest {
 
         StopWatch stopWatch = new StopWatch();
 
-        Map<TranslatableKey, Index> indices = new HashMap<>();
+        Map<TranslatableKey, DescriptiveIndex> indices = new HashMap<>();
 
         TranslatableKey company = new TranslatableKey("company");
         indices.put(company, new DescriptiveIndex("3?"));

@@ -98,7 +98,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
 
         File singlePagePdf = loadFile("document-1p.pdf");
 
-        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(3);
+        Map<TranslatableKey, DescriptiveIndex> indexes = newHashMapWithExpectedSize(3);
 
         indexes.put(COMPANY, new DescriptiveIndex("Sunrise"));
         indexes.put(INVOICE_DATE, new DescriptiveIndex(new Date()));
@@ -134,7 +134,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
 
         File fivePagesPdfFile = loadFile("document-5p.pdf");
 
-        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(3);
+        Map<TranslatableKey, DescriptiveIndex> indexes = newHashMapWithExpectedSize(3);
 
         indexes.put(COMPANY, new DescriptiveIndex("Swisscom"));
         indexes.put(INVOICE_DATE, new DescriptiveIndex(new Date()));
@@ -171,7 +171,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         File singlePagePdf = loadFile("document-1p.pdf");
 
         documentClass = new DocumentClass("WHATEVAMAN");
-        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(2);
+        Map<TranslatableKey, DescriptiveIndex> indexes = newHashMapWithExpectedSize(2);
 
         indexes.put(COMPANY, new DescriptiveIndex("Sunrise"));
         indexes.put(INVOICE_DATE, new DescriptiveIndex(new Date()));
@@ -185,7 +185,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
 
         File singlePagePdf = loadFile("document-1p.pdf");
 
-        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(1);
+        Map<TranslatableKey, DescriptiveIndex> indexes = newHashMapWithExpectedSize(1);
         indexes.put(COMPANY, new DescriptiveIndex("Sunrise"));
         indexes.put(MONEY, new DescriptiveIndex(new Money(Currency.getInstance("CHF"), new BigDecimal("1235.50"))));
         indexes.put(INVOICE_AMOUNT, new DescriptiveIndex(12350L));
@@ -205,7 +205,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
 
         File singlePagePdf = loadFile("document-1p.pdf");
 
-        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(1);
+        Map<TranslatableKey, DescriptiveIndex> indexes = newHashMapWithExpectedSize(1);
         indexes.put(COMPANY, new DescriptiveIndex("Sunrise"));
         indexes.put(MONEY, new DescriptiveIndex("CHF 1235.50"));
         indexes.put(INVOICE_AMOUNT, new DescriptiveIndex(12350L));
@@ -225,7 +225,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
 
         File singlePagePdf = loadFile("document-1p.pdf");
 
-        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(1);
+        Map<TranslatableKey, DescriptiveIndex> indexes = newHashMapWithExpectedSize(1);
         indexes.put(INVOICE_DATE, new DescriptiveIndex("Sunrise"));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
@@ -237,7 +237,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
 
         File singlePagePdf = loadFile("document-1p.pdf");
 
-        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(3);
+        Map<TranslatableKey, DescriptiveIndex> indexes = newHashMapWithExpectedSize(3);
 
         indexes.put(COMPANY, new DescriptiveIndex("Sunrise"));
         indexes.put(INVOICE_DATE, new DescriptiveIndex(new Date()));
@@ -251,7 +251,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
     public void importDocumentUsingProperFormattedStringOnDateIndex() throws IOException, ValidationException, DocumentNotFoundException, DocumentDuplicationException, DocumentClassNotFoundException {
         File singlePagePdf = loadFile("document-16p.pdf");
 
-        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(2);
+        Map<TranslatableKey, DescriptiveIndex> indexes = newHashMapWithExpectedSize(2);
 
         indexes.put(COMPANY, new DescriptiveIndex("Sunrise"));
         indexes.put(INVOICE_DATE, new DescriptiveIndex("01.11.1978"));
@@ -273,7 +273,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
     public void addingTheSameDocumentTwiceToDoxShouldThrowAnException() throws IOException, ValidationException, DocumentDuplicationException, DocumentClassNotFoundException {
         File temp = createTestFile("hello.world.txt", "Lorem ipsum");
 
-        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(2);
+        Map<TranslatableKey, DescriptiveIndex> indexes = newHashMapWithExpectedSize(2);
 
         indexes.put(COMPANY, new DescriptiveIndex("Sunrise"));
         indexes.put(INVOICE_DATE, new DescriptiveIndex("01.11.1978"));
@@ -307,7 +307,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
     public void importMustRespectAttributesAssignedToADomain() throws IOException, DocumentDuplicationException, ValidationException, DocumentClassNotFoundException {
         File temp = createTestFile("hello2.world.txt", "Must not import");
 
-        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(3);
+        Map<TranslatableKey, DescriptiveIndex> indexes = newHashMapWithExpectedSize(3);
 
         final String valueNotInDomain = "This value does not belong to the company domain";
         indexes.put(COMPANY, new DescriptiveIndex(valueNotInDomain));
@@ -334,7 +334,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
 
         final SortedSet<Attribute> attributesBefore = documentService.findAttributes(documentClass);
 
-        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(3);
+        Map<TranslatableKey, DescriptiveIndex> indexes = newHashMapWithExpectedSize(3);
 
         indexes.put(COMPANY, new DescriptiveIndex("Hello"));
         indexes.put(STRICT_COMPANY, new DescriptiveIndex("Swisscom"));
@@ -368,7 +368,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
     public void importMustAcceptIntegerOnDoubleField() throws IOException, DocumentDuplicationException, ValidationException, DocumentClassNotFoundException {
         File temp = createTestFile("hello2.world.txt", "Content");
 
-        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(3);
+        Map<TranslatableKey, DescriptiveIndex> indexes = newHashMapWithExpectedSize(3);
 
         indexes.put(COMPANY, new DescriptiveIndex("Sunrise"));
         indexes.put(INVOICE_AMOUNT, new DescriptiveIndex(100));
@@ -385,7 +385,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
     public void importMustAcceptLongOnDoubleField() throws IOException, DocumentDuplicationException, ValidationException, DocumentClassNotFoundException {
         File temp = createTestFile("hello2.world.txt", "This is a content");
 
-        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(3);
+        Map<TranslatableKey, DescriptiveIndex> indexes = newHashMapWithExpectedSize(3);
 
         indexes.put(COMPANY, new DescriptiveIndex("Sunrise"));
         indexes.put(INVOICE_AMOUNT, new DescriptiveIndex(100L));
@@ -403,7 +403,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
 
         File temp = createTestFile("file.txt", "content of this file");
 
-        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(3);
+        Map<TranslatableKey, DescriptiveIndex> indexes = newHashMapWithExpectedSize(3);
 
         indexes.put(COMPANY, new DescriptiveIndex("Sunrise"));
         indexes.put(INVOICE_AMOUNT, new DescriptiveIndex(101L));
@@ -493,7 +493,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
 
         File singlePagePdf = loadFile("Zinsausweis2013-CS-680419-20.pdf");
 
-        Map<TranslatableKey, Index> indexes = newHashMapWithExpectedSize(1);
+        Map<TranslatableKey, DescriptiveIndex> indexes = newHashMapWithExpectedSize(1);
         indexes.put(COMPANY, new DescriptiveIndex("Sunrise"));
         indexes.put(MONEY, new DescriptiveIndex(new Money(Currency.getInstance("CHF"), new BigDecimal("1235.50"))));
         indexes.put(INVOICE_AMOUNT, new DescriptiveIndex(12350L));

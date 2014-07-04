@@ -77,7 +77,7 @@ public class HomeController {
 
         try {
 
-            Map<TranslatableKey, Index> indices = newHashMap();
+            Map<TranslatableKey, DescriptiveIndex> indices = newHashMap();
 
             final Iterator<String> iterator = request.getParameterNames();
 

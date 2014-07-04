@@ -135,6 +135,7 @@ public class ImportController implements MessageSourceAware, InitializingBean {
         return html;
     }
 
+    @SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.POST, value = "performImport.html")
     public ResponseEntity<String> importDocument(MultipartFile file, WebRequest request) {
 
