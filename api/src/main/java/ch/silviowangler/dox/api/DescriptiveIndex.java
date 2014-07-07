@@ -3,6 +3,7 @@ package ch.silviowangler.dox.api;
 /**
  * Created by saw303 on 25.06.14.
  */
+@TranslateProperties(value = {"attribute"})
 public class DescriptiveIndex extends Index {
 
     private Attribute attribute;

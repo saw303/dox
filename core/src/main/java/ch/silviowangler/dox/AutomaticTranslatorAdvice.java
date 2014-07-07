@@ -106,6 +106,14 @@ public class AutomaticTranslatorAdvice {
                 if (isTranslatable(key)) {
                     translate((Translatable) key);
                 }
+
+                Object value = map.get(key);
+
+                try {
+                    addTranslationIfNeeded(value);
+                } catch (Throwable throwable) {
+                    logger.error("Unable to translate value of map key {}", key, throwable);
+                }
             }
         }
     }

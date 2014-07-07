@@ -14,7 +14,7 @@
 
         <p ng-repeat="(label, index) in document.indices">
 
-            <label for="{{index.attribute.shortName}}">{{label}}: </label>
+            <label for="{{index.attribute.shortName}}">{{index.attribute.translation}}: </label>
 
             <span ng-switch="index.attribute.dataType">
                 <span ng-switch-when="STRING">
@@ -23,7 +23,7 @@
                     </datalist>
                     <input name="{{index.attribute.shortName}}" type="text"
                            ng-required="!index.attribute.optional" list="list-{{index.attribute.shortName}}"
-                           ng-model="index.value"/>
+                           ng-model="index.value" size="{{value.length()}}"/>
                 </span>
                 <input ng-switch-when="DATE" name="{{index.attribute.shortName}}" type="date"
                        ng-required="!index.attribute.optional" ng-model="index.value"/>

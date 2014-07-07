@@ -324,10 +324,6 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
             assertEquals(SWISSCOM, indices.get(COMPANY).getValue());
             assertEquals("12.60", indices.get(INVOICE_AMOUNT).getValue().toString());
             assertEquals("CHF 12.50", indices.get(MONEY).getValue());
-
-            for (DescriptiveIndex descriptiveIndex : indices.values()) {
-                assertNotNull("Translation of index '"+ descriptiveIndex.getAttribute().getShortName() +"' must not be null", descriptiveIndex.getAttribute().getTranslation());
-            }
         }
     }
 
@@ -340,7 +336,13 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
         final Set<DocumentReference> documentReferences = documentService.findDocumentReferences(index, "CONTRACTS");
 
         assertThat(documentReferences.size(), is(1));
-        assertThat(documentReferences.iterator().next().getDocumentClass().getShortName(), is("CONTRACTS"));
+        final DocumentReference documentReference = documentReferences.iterator().next();
+
+        assertThat(documentReference.getDocumentClass().getShortName(), is("CONTRACTS"));
+
+        for (DescriptiveIndex descriptiveIndex : documentReference.getIndices().values()) {
+            assertNotNull("Translation of index '" + descriptiveIndex.getAttribute().getShortName() + "' must not be null", descriptiveIndex.getAttribute().getTranslation());
+        }
     }
 
     @Test
