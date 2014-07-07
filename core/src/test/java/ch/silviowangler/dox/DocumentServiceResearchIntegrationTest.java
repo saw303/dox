@@ -320,9 +320,14 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
         for (List<DocumentReference> documentReferences : results) {
             assertThat(documentReferences, is(not(nullValue())));
             assertThat(documentReferences.size(), CoreMatchers.is(1));
-            assertEquals(SWISSCOM, documentReferences.get(0).getIndices().get(COMPANY).getValue());
-            assertEquals("12.60", documentReferences.get(0).getIndices().get(INVOICE_AMOUNT).getValue().toString());
-            assertEquals("CHF 12.50", documentReferences.get(0).getIndices().get(MONEY).getValue());
+            final Map<TranslatableKey, DescriptiveIndex> indices = documentReferences.get(0).getIndices();
+            assertEquals(SWISSCOM, indices.get(COMPANY).getValue());
+            assertEquals("12.60", indices.get(INVOICE_AMOUNT).getValue().toString());
+            assertEquals("CHF 12.50", indices.get(MONEY).getValue());
+
+            for (DescriptiveIndex descriptiveIndex : indices.values()) {
+                assertNotNull("Translation of index '"+ descriptiveIndex.getAttribute().getShortName() +"' must not be null", descriptiveIndex.getAttribute().getTranslation());
+            }
         }
     }
 

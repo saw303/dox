@@ -14,7 +14,7 @@
 
         <p ng-repeat="(label, index) in document.indices">
 
-            <label for="{{index.attribute.shortName}}">{{label.translation}}: </label>
+            <label for="{{index.attribute.shortName}}">{{label}}: </label>
 
             <span ng-switch="index.attribute.dataType">
                 <span ng-switch-when="STRING">

@@ -82,5 +82,8 @@ public class TranslatableKey extends AbstractTranslatable implements Serializabl
         return key != null ? key.hashCode() : 0;
     }
 
-
+    @Override
+    public String toString() {
+        return this.getKey();
+    }
 }
