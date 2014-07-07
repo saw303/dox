@@ -21,7 +21,7 @@
                     <datalist id="list-{{index.attribute.shortName}}">
                         <option value="{{value}}" ng-repeat="value in index.attribute.domain.values"/>
                     </datalist>
-                    <input name="{{index.attribute.shortName}}" type="text"
+                    <input style="width:50%" name="{{index.attribute.shortName}}" type="text"
                            ng-required="!index.attribute.optional" list="list-{{index.attribute.shortName}}"
                            ng-model="index.value" size="{{value.length()}}"/>
                 </span>

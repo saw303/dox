@@ -49,7 +49,7 @@
                     <li><strong>Erstelldatum:</strong> {{document.creationDate | date:'dd.MM.yyyy HH:mm:ss'}}</li>
                 </ul>
                 <div class="attributeListing"><strong>Indexwerte:</strong>
-                    <span ng-repeat="(label, index) in document.indices">{{label}}: {{index.value}}</span>
+                    <span ng-repeat="(label, index) in document.indices">{{index.attribute.translation}}: {{index.value}}</span>
                 </div>
             </div>
 
