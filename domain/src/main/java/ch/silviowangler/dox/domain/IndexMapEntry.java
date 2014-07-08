@@ -17,7 +17,6 @@
 package ch.silviowangler.dox.domain;
 
 import com.google.common.base.Objects;
-import org.hibernate.annotations.Index;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
@@ -30,8 +29,7 @@ import javax.persistence.*;
  *        </div>
  */
 @Entity
-@Table(name = "DOX_IDX_MAP")
-@org.hibernate.annotations.Table(appliesTo = "DOX_IDX_MAP", indexes = {@Index(name = "IDX_STR_VAL", columnNames = {"stringRepresentation"})})
+@Table(name = "DOX_IDX_MAP", indexes = {@Index(name = "IDX_STR_VAL", columnList = "stringRepresentation")})
 public class IndexMapEntry extends AbstractPersistable<Long> {
 
     @Column(nullable = false, length = 15)

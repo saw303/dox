@@ -20,7 +20,7 @@ import ch.silviowangler.dox.domain.AmountOfMoney;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.type.StandardBasicTypes;
-import org.hibernate.usertype.EnhancedUserType;
+import org.hibernate.usertype.UserType;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -39,26 +39,9 @@ import java.util.Currency;
  *        Date: 11.07.12 09:37
  *        </div>
  */
-public class AmountOfMoneyType implements EnhancedUserType, Serializable {
+public class AmountOfMoneyType implements UserType, Serializable {
 
     private static final int[] SQL_TYPES = new int[]{Types.VARCHAR,};
-
-    @Override
-    public String objectToSQLString(Object value) {
-        throw new UnsupportedOperationException("not yet implemented");
-    }
-
-    @Override
-    public String toXMLString(Object value) {
-        // will be removed when Hibernate 5 gets released
-        throw new UnsupportedOperationException("not yet implemented");
-    }
-
-    @Override
-    public Object fromXMLString(String xmlValue) {
-        // will be removed when Hibernate 5 gets released
-        throw new UnsupportedOperationException("not yet implemented");
-    }
 
     @Override
     public int[] sqlTypes() {

@@ -19,7 +19,7 @@ package ch.silviowangler.dox.hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.type.StandardBasicTypes;
-import org.hibernate.usertype.EnhancedUserType;
+import org.hibernate.usertype.UserType;
 import org.joda.time.DateTime;
 
 import java.io.Serializable;
@@ -35,26 +35,9 @@ import java.sql.Types;
  *        Date: 11.07.12 09:37
  *        </div>
  */
-public class PersistentDateTime implements EnhancedUserType, Serializable {
+public class PersistentDateTime implements UserType, Serializable {
 
     private static final int[] SQL_TYPES = new int[]{Types.TIMESTAMP,};
-
-    @Override
-    public String objectToSQLString(Object value) {
-        throw new UnsupportedOperationException("not yet implemented");
-    }
-
-    @Override
-    public String toXMLString(Object value) {
-        // will be removed when Hibernate 5 gets released
-        throw new UnsupportedOperationException("not yet implemented");
-    }
-
-    @Override
-    public Object fromXMLString(String xmlValue) {
-        // will be removed when Hibernate 5 gets released
-        throw new UnsupportedOperationException("not yet implemented");
-    }
 
     @Override
     public int[] sqlTypes() {

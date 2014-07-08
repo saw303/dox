@@ -17,8 +17,7 @@
 package ch.silviowangler.dox.domain;
 
 import com.google.common.base.Objects;
-import org.hibernate.annotations.Sort;
-import org.hibernate.annotations.SortType;
+import org.hibernate.annotations.SortNatural;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
@@ -37,7 +36,7 @@ public class Domain extends AbstractPersistable<Long> {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "DOX_DOMAIN_VALUES")
-    @Sort(type = SortType.NATURAL)
+    @SortNatural
     @Column(nullable = false, name = "VAL")
     private List<String> values;
 
