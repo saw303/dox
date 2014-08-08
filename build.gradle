@@ -127,17 +127,18 @@ allprojects {
         tilesVersion = '3.0.4'
         commonsIOVersion = '2.4'
         commonsCodecVersion = '1.9'
-        commonsBeanUtilsVersion = '1.8.3'
+        commonsBeanUtilsVersion = '1.9.2'
         commonsExec = '1.2'
-        jodaTimeVersion = '2.3'
-        h2Version = '1.4.179'
+        jodaTimeVersion = '2.4'
+        h2Version = '1.4.181'
         mysqlVersion = '5.1.31'
-        iTextVersion = '5.5.1'
+        iTextVersion = '5.5.2'
         guavaVersion = '17.0'
         mockitoVersion = '1.9.5'
         flywayVersion = '2.3.1'
         groovyVersion = '2.3.0'
         xstreamVersion = '1.4.7'
+		bouncycastleVersion = '1.51'
     }
 
     configurations.all {
@@ -234,7 +235,7 @@ project(':core') {
                 "ch.qos.logback:logback-classic:${project.ext.logbackVersion}",
                 "org.springframework.security:spring-security-config:${project.ext.springSecurityVersion}",
                 'org.aspectj:aspectjweaver:1.8.1', // need this version because 1.6.x is buggy with Spring 3.x (http://goo.gl/73Pwi)
-                'org.bouncycastle:bcprov-jdk15on:1.50', 'org.bouncycastle:bcpkix-jdk15on:1.50'
+                "org.bouncycastle:bcprov-jdk15on:${project.ext.bouncycastleVersion}", "org.bouncycastle:bcpkix-jdk15on:${project.ext.bouncycastleVersion}"
         testCompile "org.springframework:spring-test:${project.ext.springVersion}",
                 "commons-io:commons-io:${project.ext.commonsIOVersion}",
                 "com.google.guava:guava:${project.ext.guavaVersion}"
