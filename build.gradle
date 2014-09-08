@@ -30,7 +30,7 @@ buildscript {
     dependencies {
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.5-beta-1'
 
-        classpath 'xalan:xalan:2.7.1'
+        classpath 'xalan:xalan:2.7.2'
         classpath "org.markdownj:markdownj:0.4"
         classpath "org.ccil.cowan.tagsoup:tagsoup:1.2.1"
         classpath "org.xhtmlrenderer:core-renderer:8.0"
@@ -119,7 +119,7 @@ allprojects {
         springVersion = '4.0.6.RELEASE'
         springMobileVersion = '1.1.2.RELEASE'
         springDataVersion = '1.6.1.RELEASE'
-        springSecurityVersion = '4.0.0.M1'
+        springSecurityVersion = '4.0.0.M2'
         hibernateVersion = '4.3.5.Final'
         slf4jVersion = '1.7.7'
         logbackVersion = '1.1.2'
@@ -131,14 +131,14 @@ allprojects {
         commonsExec = '1.2'
         jodaTimeVersion = '2.4'
         h2Version = '1.4.181'
-        mysqlVersion = '5.1.31'
+        mysqlVersion = '5.1.32'
         iTextVersion = '5.5.2'
-        guavaVersion = '17.0'
+        guavaVersion = '18.0'
         mockitoVersion = '1.9.5'
         flywayVersion = '2.3.1'
         groovyVersion = '2.3.0'
         xstreamVersion = '1.4.7'
-		bouncycastleVersion = '1.51'
+	bouncycastleVersion = '1.51'
     }
 
     configurations.all {
@@ -234,7 +234,7 @@ project(':core') {
         runtime "org.slf4j:jcl-over-slf4j:${project.ext.slf4jVersion}",
                 "ch.qos.logback:logback-classic:${project.ext.logbackVersion}",
                 "org.springframework.security:spring-security-config:${project.ext.springSecurityVersion}",
-                'org.aspectj:aspectjweaver:1.8.1', // need this version because 1.6.x is buggy with Spring 3.x (http://goo.gl/73Pwi)
+                'org.aspectj:aspectjweaver:1.8.2', // need this version because 1.6.x is buggy with Spring 3.x (http://goo.gl/73Pwi)
                 "org.bouncycastle:bcprov-jdk15on:${project.ext.bouncycastleVersion}", "org.bouncycastle:bcpkix-jdk15on:${project.ext.bouncycastleVersion}"
         testCompile "org.springframework:spring-test:${project.ext.springVersion}",
                 "commons-io:commons-io:${project.ext.commonsIOVersion}",
