@@ -1,6 +1,6 @@
 package ch.silviowangler.dox.api.settings;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 
 import java.io.Serializable;
 
@@ -50,7 +50,7 @@ public class Setting implements Serializable {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("key", key)
                 .add("value", value)
                 .add("description", description)

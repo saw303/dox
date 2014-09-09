@@ -16,14 +16,13 @@
 
 package ch.silviowangler.dox.domain;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Currency;
-
-import java.io.Serializable;
 
 import static org.springframework.util.Assert.*;
 
@@ -83,7 +82,7 @@ public class AmountOfMoney implements Serializable {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("currency", currency)
                 .add("amount", amount)
                 .toString();

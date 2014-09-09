@@ -16,7 +16,7 @@
 
 package ch.silviowangler.dox.domain;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 import org.springframework.data.jpa.domain.AbstractPersistable;
@@ -674,7 +674,7 @@ public class IndexStore extends AbstractPersistable<Long> {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("document", document.getId())
                 .add("S_01", S_01)
                 .add("S_02", S_02)

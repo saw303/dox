@@ -16,7 +16,7 @@
 
 package ch.silviowangler.dox.domain;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
@@ -75,7 +75,7 @@ public class IndexMapEntry extends AbstractPersistable<Long> {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("attributeName", attributeName)
                 .add("stringRepresentation", stringRepresentation)
                 .add("document", document)

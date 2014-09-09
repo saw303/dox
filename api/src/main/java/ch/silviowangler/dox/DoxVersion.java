@@ -16,7 +16,7 @@
 
 package ch.silviowangler.dox;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -77,7 +77,7 @@ public class DoxVersion implements Serializable {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("version", version)
                 .toString();
     }

@@ -16,7 +16,7 @@
 
 package ch.silviowangler.dox.domain;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 
 import java.io.Serializable;
 
@@ -52,7 +52,7 @@ public class Range<T> implements Serializable {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("from", from)
                 .add("to", to)
                 .toString();

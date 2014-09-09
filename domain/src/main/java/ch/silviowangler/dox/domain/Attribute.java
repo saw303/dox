@@ -16,7 +16,7 @@
 
 package ch.silviowangler.dox.domain;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
@@ -105,7 +105,7 @@ public class Attribute extends AbstractPersistable<Long> {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("shortName", shortName)
                 .add("optional", optional)
                 .add("dataType", dataType)

@@ -1,6 +1,6 @@
 package ch.silviowangler.dox.api;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 
 import java.io.Serializable;
 
@@ -35,7 +35,7 @@ public class MissingDocument implements Serializable {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("hash", hash)
                 .add("source", source)
                 .toString();

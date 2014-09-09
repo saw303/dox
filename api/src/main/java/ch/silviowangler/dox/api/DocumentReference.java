@@ -16,7 +16,7 @@
 
 package ch.silviowangler.dox.api;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.Maps;
 import org.joda.time.DateTime;
 
@@ -157,7 +157,7 @@ public class DocumentReference implements Serializable {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("hash", hash)
                 .add("id", id)
                 .add("pageCount", pageCount)
