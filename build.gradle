@@ -116,7 +116,7 @@ allprojects {
     version = '0.3-M1'
 
     project.ext {
-        springVersion = '4.0.6.RELEASE'
+        springVersion = '4.1.0.RELEASE'
         springMobileVersion = '1.1.2.RELEASE'
         springDataVersion = '1.6.1.RELEASE'
         springSecurityVersion = '4.0.0.M2'
