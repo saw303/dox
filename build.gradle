@@ -34,7 +34,7 @@ buildscript {
         classpath "org.markdownj:markdownj:0.4"
         classpath "org.ccil.cowan.tagsoup:tagsoup:1.2.1"
         classpath "org.xhtmlrenderer:core-renderer:8.0"
-		classpath 'com.lowagie:itext:2.0.8'
+        classpath 'com.lowagie:itext:2.0.8'
     }
 }
 
@@ -44,11 +44,10 @@ task clean << {
 
 task build << {
 
-	def baseName = 'Installation-Guide'
+    def baseName = 'Installation-Guide'
     def source = "${baseName}.md"
     def targetPdf = "${baseName}.pdf"
     def targetHtml = "${baseName}.html"
-	
 
     //Convert from markdown to html
     def mp = new MarkdownProcessor()
@@ -89,9 +88,9 @@ task build << {
     renderer.setDocument(sax2dom.getDOM(), null);
     renderer.layout();
     renderer.createPDF((new File('build', targetPdf).newOutputStream()))
-	
-	def htmlFile = new File('build', targetHtml)
-	htmlFile << html
+
+    def htmlFile = new File('build', targetHtml)
+    htmlFile << html
 }
 
 allprojects {
@@ -138,7 +137,8 @@ allprojects {
         flywayVersion = '2.3.1'
         groovyVersion = '2.3.0'
         xstreamVersion = '1.4.7'
-	bouncycastleVersion = '1.51'
+        bouncycastleVersion = '1.51'
+        jacksonVersion = '2.4.2'
     }
 
     configurations.all {
@@ -200,7 +200,7 @@ subprojects {
         from(sourceSets.main.resources.srcDirs) {
             include '**/*.properties' filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
                     'dox.app.version': "${version}-${new Date().format("yyyyMMddHHmmss")}".toString(),
-                    'gradleVersion': project.gradle.gradleVersion
+                    'gradleVersion'  : project.gradle.gradleVersion
             ])
         }
         from(sourceSets.main.resources.srcDirs) { exclude '**/*.properties' }
@@ -309,7 +309,8 @@ project(':web') {
         runtime "org.apache.tiles:tiles-template:${project.ext.tilesVersion}"
         runtime "ch.qos.logback:logback-access:${project.ext.logbackVersion}"
         runtime 'javax.servlet:jstl:1.2'
-        runtime 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
+        runtime "com.fasterxml.jackson.core:jackson-core:${project.ext.jacksonVersion}"
+        runtime "com.fasterxml.jackson.core:jackson-databind:${project.ext.jacksonVersion}"
         runtime "org.springframework:spring-oxm:${project.ext.springVersion}"
         runtime "com.thoughtworks.xstream:xstream:${project.ext.xstreamVersion}"
         runtime 'joda-time:joda-time-jsptags:1.1.1'

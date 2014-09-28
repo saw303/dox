@@ -55,7 +55,7 @@
 
     <mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
         <mvc:message-converters>
-            <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
             <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
             <ref bean="marshallingHttpMessageConverter"/>
         </mvc:message-converters>

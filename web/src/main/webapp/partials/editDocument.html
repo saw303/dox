@@ -27,9 +27,13 @@
                 </span>
                 <input ng-switch-when="DATE" name="{{index.attribute.shortName}}" type="date"
                        ng-required="!index.attribute.optional" ng-model="index.value"/>
-                <input ng-switch-when="CURRENCY" name="{{index.attribute.shortName}}" type="text"
+                <input ng-switch-when="CURRENCY" name="{{index.attribute.shortName}}.currency" type="text"
+                       ng-model="index.value.currency"
+                       ng-pattern="/\D{3}/" maxlength="3"
+                       ng-required="!index.attribute.optional"/>
+                <input ng-switch-when="CURRENCY" name="{{index.attribute.shortName}}.amount" type="text"
                        ng-model="index.value.amount"
-                       ng-pattern="/\D{3} [-+]?[0-9]*[.,]?[0-9]+/"
+                       ng-pattern="/[-+]?[0-9]*[.,]?[0-9]+/"
                        ng-required="!index.attribute.optional"/>
                 <input ng-switch-when="DOUBLE" name="{{index.attribute.shortName}}" type="number"
                        min="0" step="any"

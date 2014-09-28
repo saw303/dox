@@ -16,12 +16,13 @@
 
 package ch.silviowangler.dox;
 
-import com.google.common.base.MoreObjects;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.io.Serializable;
+
+import static com.google.common.base.MoreObjects.toStringHelper;
 
 /**
  * @author Silvio Wangler
@@ -77,8 +78,6 @@ public class DoxVersion implements Serializable {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("version", version)
-                .toString();
+        return toStringHelper(this).add("version", version).toString();
     }
 }
