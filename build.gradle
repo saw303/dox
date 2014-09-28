@@ -134,7 +134,7 @@ allprojects {
         mysqlVersion = '5.1.33'
         iTextVersion = '5.5.3'
         guavaVersion = '18.0'
-        mockitoVersion = '1.10.2'
+        mockitoVersion = '1.10.3'
         flywayVersion = '2.3.1'
         groovyVersion = '2.3.0'
         xstreamVersion = '1.4.7'
