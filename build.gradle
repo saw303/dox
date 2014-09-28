@@ -28,7 +28,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.5-beta-1'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.5'
 
         classpath 'xalan:xalan:2.7.2'
         classpath "org.markdownj:markdownj:0.4"
@@ -98,7 +98,7 @@ allprojects {
 
     apply plugin: 'idea'
     apply plugin: 'project-report'
-    apply plugin: 'versions'
+    apply plugin: "com.github.ben-manes.versions"
     apply plugin: 'jacoco'
 
     configurations {
@@ -164,7 +164,6 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'versions'
     apply plugin: 'jacoco'
 
     compileJava.options.compilerArgs = ['-Xlint:unchecked', '-Xlint:deprecation']
