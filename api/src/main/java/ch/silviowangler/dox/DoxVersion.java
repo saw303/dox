@@ -46,16 +46,16 @@ public class DoxVersion implements Serializable {
 
             String[] tokens = this.version.split("-");
 
-            if (tokens.length == 3 && this.version.contains("SNAPSHOT")) {
+            if (tokens.length == 3 && this.version.matches("(\\d\\.?)+-[A-Za-z0-9]+-\\d{14}")) {
 
                 DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyyMMddHHmmss");
-
                 DateTime dateTime = dateTimeFormatter.parseDateTime(tokens[tokens.length - 1]);
 
                 StringBuilder sb = new StringBuilder(tokens[0]);
                 sb.append("-").append(tokens[1]).append(" (").append(dateTime.toString("dd.MM.yyyy HH:mm:ss")).append(")");
 
                 return sb.toString();
+
             } else if (tokens.length == 2 && tokens[1].matches("\\d{14}")) {
 
                 DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyyMMddHHmmss");

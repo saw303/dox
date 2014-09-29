@@ -72,4 +72,10 @@ public class DoxVersionTest {
         assertThat(this.doxVersion.formatVersion(), is("<development mode>"));
     }
 
+    @Test
+    public void testVersion() {
+        this.doxVersion = new DoxVersion("0.3-M1-20140928103637");
+        assertThat(this.doxVersion.formatVersion(), is("0.3-M1 (28.09.2014 10:36:37)"));
+    }
+
 }
