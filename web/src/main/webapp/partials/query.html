@@ -46,7 +46,7 @@
                     <li title="{{document.hash}}" alt="{{document.hash}}"><strong>Hash:</strong> {{document.hash}}</li>
                     <li><strong>Benutzer:</strong> {{document.userReference}}</li>
                     <li><strong>Dateigr&ouml;sse:</strong> {{document.fileSize}}</li>
-                    <li><strong>Erstelldatum:</strong> {{document.creationDate.millis | date:'dd.MM.yyyy HH:mm:ss'}}</li>
+                    <li><strong>Erstelldatum:</strong> {{document.creationDate | date:'dd.MM.yyyy HH:mm:ss'}}</li>
                 </ul>
                 <div class="attributeListing"><strong>Indexwerte:</strong>
                     <span ng-repeat="(label, index) in document.indices">{{index.attribute.translation}}: {{index.value}}</span>

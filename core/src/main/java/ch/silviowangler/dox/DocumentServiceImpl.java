@@ -563,7 +563,11 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         } else if (CURRENCY.equals(desiredDataType) && valueToConvert instanceof Money) {
             Money money = (Money) valueToConvert;
             return new AmountOfMoney(money.getCurrency(), money.getAmount());
+        } else if (CURRENCY.equals(desiredDataType) && valueToConvert instanceof Map) {
+            Map money = (Map) valueToConvert;
+            return new AmountOfMoney(Currency.getInstance((String) money.get("currency")), new BigDecimal((String) money.get("amount")));
         }
+
 
         logger.error("Unable to convert data type '{}' and value '{}' (class: '{}')", new Object[]{desiredDataType, valueToConvert, valueToConvert.getClass().getCanonicalName()});
         throw new IllegalArgumentException("Unable to convert data type '" + desiredDataType + "' and value '" + valueToConvert + "' (Target class: '" + valueToConvert.getClass().getCanonicalName() + "')");

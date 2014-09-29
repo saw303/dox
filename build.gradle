@@ -310,7 +310,8 @@ project(':web') {
         runtime "ch.qos.logback:logback-access:${project.ext.logbackVersion}"
         runtime 'javax.servlet:jstl:1.2'
         runtime "com.fasterxml.jackson.core:jackson-core:${project.ext.jacksonVersion}"
-        runtime "com.fasterxml.jackson.core:jackson-databind:${project.ext.jacksonVersion}"
+        compile "com.fasterxml.jackson.core:jackson-databind:${project.ext.jacksonVersion}"
+        compile "com.fasterxml.jackson.datatype:jackson-datatype-joda:${project.ext.jacksonVersion}"
         runtime "org.springframework:spring-oxm:${project.ext.springVersion}"
         runtime "com.thoughtworks.xstream:xstream:${project.ext.xstreamVersion}"
         runtime 'joda-time:joda-time-jsptags:1.1.1'
