@@ -33,10 +33,10 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.RandomAccessFileOrArray;
 import com.itextpdf.text.pdf.codec.TiffImage;
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,11 +54,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static ch.silviowangler.dox.domain.AttributeDataType.*;
@@ -67,7 +66,6 @@ import static ch.silviowangler.dox.domain.DomainUtils.replaceWildcardCharacters;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Lists.newArrayListWithCapacity;
 import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
-import static java.text.DateFormat.MEDIUM;
 import static org.springframework.transaction.annotation.Propagation.REQUIRED;
 import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
 import static org.springframework.util.Assert.*;
@@ -605,8 +603,8 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             try {
                 final String propertyName = attribute.getMappingColumn().toLowerCase();
                 logger.debug("About to set column '{}' using value '{}' on index store", propertyName, value);
-                PropertyUtils.setProperty(indexStore, propertyName, value);
-            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                setFieldValue(indexStore, propertyName, value);
+            } catch (IllegalAccessException | NoSuchFieldException e) {
                 logger.error("Error setting property '{}' with value '{}'", new Object[]{key, value, e});
             }
         }
@@ -694,7 +692,8 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             index.setAttribute(toAttributeApi(attribute));
 
             try {
-                final Object propertyValue = PropertyUtils.getProperty(indexStore, attribute.getMappingColumn().toLowerCase());
+                final String fieldName = attribute.getMappingColumn();
+                final Object propertyValue = getFieldValue(indexStore, fieldName);
 
                 final TranslatableKey key = new TranslatableKey(attribute.getShortName());
                 if (attribute.getDataType() == CURRENCY) {
@@ -709,11 +708,29 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
                 }
                 indices.put(key, index);
 
-            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            } catch (IllegalAccessException | NoSuchFieldException e) {
                 logger.error("Error setting property '{}'", attribute.getShortName(), e);
             }
         }
         return indices;
+    }
+
+    private Object getFieldValue(IndexStore indexStore, String fieldName) throws NoSuchFieldException, IllegalAccessException {
+        final Field field = indexStore.getClass().getDeclaredField(fieldName.toUpperCase());
+        field.setAccessible(true);
+        return field.get(indexStore);
+    }
+
+    private void setFieldValue(IndexStore indexStore, String fieldName, Object value) throws NoSuchFieldException, IllegalAccessException {
+        final Field field = indexStore.getClass().getDeclaredField(fieldName.toUpperCase());
+        field.setAccessible(true);
+
+        if (field.getType() == LocalDate.class && value.getClass() == DateTime.class) {
+            field.set(indexStore, ((DateTime) value).toLocalDate());
+        } else {
+            field.set(indexStore, value);
+        }
+
     }
 
     private ch.silviowangler.dox.api.DocumentClass toDocumentClassApi(ch.silviowangler.dox.domain.DocumentClass documentClass) {

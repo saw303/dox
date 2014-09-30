@@ -16,13 +16,15 @@
 
 package ch.silviowangler.dox.domain;
 
-import com.google.common.base.MoreObjects;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+
+import static com.google.common.base.MoreObjects.toStringHelper;
 
 /**
  * @author Silvio Wangler
@@ -183,6 +185,21 @@ public class IndexStore extends AbstractPersistable<Long> {
     private BigDecimal F_09;
     @Column
     private BigDecimal F_10;
+    @Column
+    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDate")
+    private LocalDate LD_01;
+    @Column
+    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDate")
+    private LocalDate LD_02;
+    @Column
+    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDate")
+    private LocalDate LD_03;
+    @Column
+    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDate")
+    private LocalDate LD_04;
+    @Column
+    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDate")
+    private LocalDate LD_05;
 
     public String getS_01() {
         return S_01;
@@ -672,9 +689,49 @@ public class IndexStore extends AbstractPersistable<Long> {
         C_10 = c_10;
     }
 
+    public LocalDate getLD_01() {
+        return LD_01;
+    }
+
+    public void setLD_01(LocalDate ld_01) {
+        this.LD_01 = ld_01;
+    }
+
+    public LocalDate getLD_02() {
+        return LD_02;
+    }
+
+    public void setLD_02(LocalDate ld_02) {
+        this.LD_02 = ld_02;
+    }
+
+    public LocalDate getLD_03() {
+        return LD_03;
+    }
+
+    public void setLD_03(LocalDate ld_03) {
+        this.LD_03 = ld_03;
+    }
+
+    public LocalDate getLD_04() {
+        return LD_04;
+    }
+
+    public void setLD_04(LocalDate ld_04) {
+        this.LD_04 = ld_04;
+    }
+
+    public LocalDate getLD_05() {
+        return LD_05;
+    }
+
+    public void setLD_05(LocalDate ld_05) {
+        this.LD_05 = ld_05;
+    }
+
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
+        return toStringHelper(this)
                 .add("document", document.getId())
                 .add("S_01", S_01)
                 .add("S_02", S_02)
@@ -736,6 +793,11 @@ public class IndexStore extends AbstractPersistable<Long> {
                 .add("F_08", F_08)
                 .add("F_09", F_09)
                 .add("F_10", F_10)
+                .add("LD_01", LD_01)
+                .add("LD_02", LD_02)
+                .add("LD_03", LD_03)
+                .add("LD_04", LD_04)
+                .add("LD_05", LD_05)
                 .toString();
     }
 }

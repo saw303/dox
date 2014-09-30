@@ -42,7 +42,7 @@ public class Attribute extends AbstractPersistable<Long> {
     private Domain domain;
     @ManyToMany(mappedBy = "attributes")
     private Set<DocumentClass> documentClasses;
-    @Column(nullable = false, length = 4)
+    @Column(nullable = false, length = 5)
     private String mappingColumn;
     @Column(nullable = false)
     private boolean updateable;
