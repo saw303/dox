@@ -25,7 +25,7 @@
                            ng-required="!index.attribute.optional" list="list-{{index.attribute.shortName}}"
                            ng-model="index.value" size="{{value.length()}}"/>
                 </span>
-                <input ng-switch-when="DATE" name="{{index.attribute.shortName}}" type="date"
+                <input ng-switch-when="DATE" name="{{index.attribute.shortName}}" type="dateTimeLocal"
                        ng-required="!index.attribute.optional" ng-model="index.value"/>
                 <input ng-switch-when="CURRENCY" name="{{index.attribute.shortName}}.currency" type="text"
                        ng-model="index.value.currency"
