@@ -45,11 +45,17 @@
                     <li><strong>Seiten:</strong> {{document.pageCount}}</li>
                     <li title="{{document.hash}}" alt="{{document.hash}}"><strong>Hash:</strong> {{document.hash}}</li>
                     <li><strong>Benutzer:</strong> {{document.userReference}}</li>
-                    <li><strong>Dateigr&ouml;sse:</strong> {{document.fileSize}}</li>
+                    <li><strong>Dateigr&ouml;sse:</strong> {{document.fileSize}} Bytes</li>
                     <li><strong>Erstelldatum:</strong> {{document.creationDate | date:'dd.MM.yyyy HH:mm:ss'}}</li>
                 </ul>
                 <div class="attributeListing"><strong>Indexwerte:</strong>
-                    <span ng-repeat="(label, index) in document.indices">{{index.attribute.translation}}: {{index.value}}</span>
+                    <span ng-repeat="(label, index) in document.indices">
+                        {{index.attribute.translation}}:
+                        <span ng-switch="index.attribute.dataType">
+                            <span ng-switch-when="DATE">{{index.value | date: 'dd.MM.yyyy'}}</span>
+                            <span ng-switch-default>{{index.value}}</span>
+                        </span>
+                    </span>
                 </div>
             </div>
 

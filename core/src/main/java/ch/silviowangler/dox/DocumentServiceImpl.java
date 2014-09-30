@@ -58,6 +58,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static ch.silviowangler.dox.domain.AttributeDataType.*;
@@ -703,9 +704,6 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
                     } else {
                         index.setValue((amountOfMoney == null) ? null : amountOfMoney.getCurrency() + " " + amountOfMoney.getAmount());
                     }
-                } else if (attribute.getDataType() == DATE && locale != null) {
-                    DateFormat format = DateFormat.getDateInstance(MEDIUM, locale);
-                    index.setValue(format.format(((DateTime) propertyValue).toDate()));
                 } else {
                     index.setValue(propertyValue);
                 }

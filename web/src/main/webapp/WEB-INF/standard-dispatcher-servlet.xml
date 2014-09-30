@@ -53,13 +53,24 @@
         <property name="unmarshaller" ref="xstreamMarshaller"/>
     </bean>
 
+    <!--
+     http://stackoverflow.com/questions/13700853/jackson2-json-iso-8601-date-from-jodatime-in-spring-3-2rc1
+    -->
+    <bean name="objectMapper" class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+        <property name="modules">
+            <list>
+                <bean class="com.fasterxml.jackson.datatype.joda.JodaModule" />
+            </list>
+        </property>
+        <property name="simpleDateFormat" value="yyyy-MM-dd"/>
+        <property name="indentOutput" value="true"/>
+    </bean>
+
     <mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
         <mvc:message-converters>
-            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-                <property name="objectMapper">
-                    <bean class="ch.silviowangler.dox.web.rest.databind.DoxObjectMapper"/>
-                </property>
-            </bean>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"
+                  p:objectMapper-ref="objectMapper"/>
+
             <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
             <ref bean="marshallingHttpMessageConverter"/>
         </mvc:message-converters>
