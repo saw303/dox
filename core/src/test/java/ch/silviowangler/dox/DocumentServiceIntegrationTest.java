@@ -18,7 +18,7 @@ package ch.silviowangler.dox;
 
 import ch.silviowangler.dox.api.*;
 import com.google.common.base.Predicate;
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -118,7 +118,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         assertTrue(documentReference.getIndices().containsKey(COMPANY));
         assertEquals("Sunrise", documentReference.getIndices().get(COMPANY).getValue());
         assertTrue(documentReference.getIndices().containsKey(INVOICE_DATE));
-        assertTrue("Is not org.joda.time.DateTime. It's " + documentReference.getIndices().get(INVOICE_DATE).getValue().getClass().getCanonicalName(), documentReference.getIndices().get(INVOICE_DATE).getValue() instanceof DateTime);
+        assertTrue("Is not org.joda.time.DateTime. It's " + documentReference.getIndices().get(INVOICE_DATE).getValue().getClass().getCanonicalName(), documentReference.getIndices().get(INVOICE_DATE).getValue() instanceof LocalDate);
         assertTrue(documentReference.getIndices().containsKey(INVOICE_AMOUNT));
         assertEquals(new BigDecimal("50.00"), documentReference.getIndices().get(INVOICE_AMOUNT).getValue());
         assertThat(documentReference.getUserReference(), is("root_test"));
@@ -154,7 +154,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         assertTrue(documentReference.getIndices().containsKey(COMPANY));
         assertEquals("Swisscom", documentReference.getIndices().get(COMPANY).getValue());
         assertTrue(documentReference.getIndices().containsKey(INVOICE_DATE));
-        assertTrue("Is not org.joda.time.DateTime. It's " + documentReference.getIndices().get(INVOICE_DATE).getValue().getClass().getCanonicalName(), documentReference.getIndices().get(INVOICE_DATE).getValue() instanceof DateTime);
+        assertTrue("Is not org.joda.time.DateTime. It's " + documentReference.getIndices().get(INVOICE_DATE).getValue().getClass().getCanonicalName(), documentReference.getIndices().get(INVOICE_DATE).getValue() instanceof LocalDate);
         assertTrue(documentReference.getIndices().containsKey(INVOICE_AMOUNT));
         assertEquals(new BigDecimal("50.25"), documentReference.getIndices().get(INVOICE_AMOUNT).getValue());
 
@@ -265,8 +265,8 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         DocumentReference documentReferenceFromStore = documentService.findDocumentReference(documentReference.getId());
 
         assertTrue(documentReferenceFromStore.getIndices().containsKey(INVOICE_DATE));
-        assertTrue(documentReferenceFromStore.getIndices().get(INVOICE_DATE).getValue() instanceof DateTime);
-        assertEquals(new DateTime(1978, 11, 1, 0, 0), documentReferenceFromStore.getIndices().get(INVOICE_DATE).getValue());
+        assertTrue(documentReferenceFromStore.getIndices().get(INVOICE_DATE).getValue() instanceof LocalDate);
+        assertEquals(new LocalDate(1978, 11, 1), documentReferenceFromStore.getIndices().get(INVOICE_DATE).getValue());
     }
 
     @Test
@@ -421,7 +421,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         assertEquals(INVOICE_AMOUNT_INDICES, referenceAfterUpdate.getIndices().size());
         assertEquals("Swisscom", referenceAfterUpdate.getIndices().get(COMPANY).getValue());
         assertEquals("2", String.valueOf(referenceAfterUpdate.getIndices().get(INVOICE_AMOUNT).getValue()));
-        assertEquals(new DateTime(1982, 12, 15, 0, 0), referenceAfterUpdate.getIndices().get(INVOICE_DATE).getValue());
+        assertEquals(new LocalDate(1982, 12, 15), referenceAfterUpdate.getIndices().get(INVOICE_DATE).getValue());
     }
 
     @Test
@@ -447,8 +447,8 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         DocumentReference documentReferenceFromStore = documentService.findDocumentReference(documentReference.getId());
 
         assertTrue(documentReferenceFromStore.getIndices().containsKey(INVOICE_DATE));
-        assertTrue(documentReferenceFromStore.getIndices().get(INVOICE_DATE).getValue() instanceof DateTime);
-        assertEquals(new DateTime(2012, 11, 1, 0, 0), documentReferenceFromStore.getIndices().get(INVOICE_DATE).getValue());
+        assertTrue(documentReferenceFromStore.getIndices().get(INVOICE_DATE).getValue() instanceof LocalDate);
+        assertEquals(new LocalDate(2012, 11, 1), documentReferenceFromStore.getIndices().get(INVOICE_DATE).getValue());
         assertEquals("image/tiff", documentReferenceFromStore.getMimeType());
         assertEquals(expectedPageCount, documentReferenceFromStore.getPageCount());
     }

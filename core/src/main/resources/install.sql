@@ -18,11 +18,11 @@ INSERT INTO DOX_DOMAIN_VALUES(Domain_id, VAL) VALUES ((SELECT id FROM DOX_DOMAIN
 INSERT INTO DOX_DOMAIN_VALUES(Domain_id, VAL) VALUES ((SELECT id FROM DOX_DOMAIN WHERE shortName='banks'), 'PostFinance');
 
 INSERT INTO DOX_ATTR(dataType, optional, shortName, domain_id, mappingColumn, updateable) VALUES('STRING', 0, 'company', (SELECT id FROM DOX_DOMAIN WHERE shortName='company'), 'S_01', 1);
-INSERT INTO DOX_ATTR(dataType, optional, shortName, domain_id, mappingColumn, updateable) VALUES('DATE', 0, 'invoiceDate', NULL, 'D_01', 1);
-INSERT INTO DOX_ATTR(dataType, optional, shortName, domain_id, mappingColumn, updateable) VALUES('DATE', 0, 'taxDate', NULL, 'D_02', 1);
+INSERT INTO DOX_ATTR(dataType, optional, shortName, domain_id, mappingColumn, updateable) VALUES('DATE', 0, 'invoiceDate', NULL, 'LD_01', 1);
+INSERT INTO DOX_ATTR(dataType, optional, shortName, domain_id, mappingColumn, updateable) VALUES('DATE', 0, 'taxDate', NULL, 'LD_02', 1);
 INSERT INTO DOX_ATTR(dataType, optional, shortName, domain_id, mappingColumn, updateable) VALUES('DOUBLE', 0, 'invoiceAmount', NULL, 'F_01', 1);
 INSERT INTO DOX_ATTR(dataType, optional, shortName, domain_id, mappingColumn, updateable) VALUES('DOUBLE', 0, 'salaryAmount', NULL, 'F_02', 1);
-INSERT INTO DOX_ATTR(dataType, optional, shortName, domain_id, mappingColumn, updateable) VALUES('DATE', 0, 'salaryDate', NULL, 'D_03', 1);
+INSERT INTO DOX_ATTR(dataType, optional, shortName, domain_id, mappingColumn, updateable) VALUES('DATE', 0, 'salaryDate', NULL, 'LD_03', 1);
 INSERT INTO DOX_ATTR(dataType, optional, shortName, domain_id, mappingColumn, updateable) VALUES('STRING', 0, 'title', NULL, 'S_02', 1);
 INSERT INTO DOX_ATTR(dataType, optional, shortName, domain_id, mappingColumn, updateable) VALUES('STRING', 0, 'institute', (SELECT id FROM DOX_DOMAIN WHERE shortName='banks'), 'S_03', 1);
 INSERT INTO DOX_ATTR(dataType, optional, shortName, domain_id, mappingColumn, updateable) VALUES('STRING', 0, 'accountNumber', NULL, 'S_04', 1);
