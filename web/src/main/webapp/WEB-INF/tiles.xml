@@ -37,28 +37,8 @@
         <put-attribute name="footer" value="/WEB-INF/views/footer.jsp"/>
     </definition>
 
-    <definition name="result.definition" extends="base.definition">
-        <put-attribute name="body" value="/WEB-INF/views/result.jsp"/>
-    </definition>
-
-    <definition name="import.definition" extends="base.definition">
-        <put-attribute name="body" value="/WEB-INF/views/import.jsp"/>
-    </definition>
-
     <definition name="import.duplicate.document" extends="base.definition">
         <put-attribute name="body" value="/WEB-INF/views/duplicateDocument.jsp"/>
-    </definition>
-
-    <definition name="import.successful" extends="base.definition">
-        <put-attribute name="body" value="/WEB-INF/views/importSuccessful.jsp"/>
-    </definition>
-
-    <definition name="import.failure" extends="base.definition">
-        <put-attribute name="body" value="/WEB-INF/views/importFailure.jsp"/>
-    </definition>
-
-    <definition name="edit.doc" extends="base.definition">
-        <put-attribute name="body" value="/WEB-INF/views/edit.jsp"/>
     </definition>
 
     <definition name="maintenance" extends="base.definition">

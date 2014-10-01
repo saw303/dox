@@ -16,31 +16,21 @@
 
 package ch.silviowangler.dox.web;
 
-import ch.silviowangler.dox.api.*;
-import com.google.common.collect.ImmutableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.HtmlUtils;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
-import static ch.silviowangler.dox.web.WebConstants.DOCUMENT_CLASS_SHORT_NAME;
-import static com.google.common.collect.ImmutableMap.of;
-import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * @author Silvio Wangler
@@ -52,8 +42,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @Controller
 public class HomeController {
 
-    @Autowired
-    private DocumentService documentService;
     @Value("#{systemEnvironment['DOX_STORE']}")
     private File archiveDirectory;
 
@@ -77,34 +65,5 @@ public class HomeController {
     public ModelAndView retrieveViews(@PathVariable("view") String viewName) {
         logger.debug("Getting request for partial view {}", viewName);
         return new ModelAndView(viewName);
-    }
-
-    @RequestMapping(method = POST, value = "extendedQuery.html")
-    public ModelAndView advancedQuery(@RequestParam(DOCUMENT_CLASS_SHORT_NAME) String documentClassShortName, WebRequest request) {
-
-        try {
-
-            Map<TranslatableKey, DescriptiveIndex> indices = newHashMap();
-
-            final Iterator<String> iterator = request.getParameterNames();
-
-            while (iterator.hasNext()) {
-                final String parameterName = iterator.next();
-                if (!DOCUMENT_CLASS_SHORT_NAME.equals(parameterName)) {
-                    String value = request.getParameter(parameterName);
-
-                    if (value.length() > 0) {
-                        indices.put(new TranslatableKey(parameterName), new DescriptiveIndex(value));
-                    }
-                }
-            }
-
-            final Set<DocumentReference> documentReferences = documentService.findDocumentReferences(indices, documentClassShortName);
-            ImmutableMap<String, Object> model = of("documents", documentReferences, "query", "custom");
-            return new ModelAndView("result.definition", model);
-        } catch (DocumentClassNotFoundException e) {
-            logger.error("Illegal document class short name {}", documentClassShortName, e);
-            return new ModelAndView("result.definition");
-        }
     }
 }
