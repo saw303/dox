@@ -1,15 +1,33 @@
 # DOX - Installation Guide
 _A document management system brought you by Silvio Wangler <silvio.wangler@gmail.com>_
 
-## Server Installation
+## Indication
+This software is licensed under Apache 2.0 and is provided "as is", without warranty of any kind.
+
 In order to get an optimal experience I recommend to run DOX on a Linux server such as Ubuntu or some other Linux distribution.
+DOX has not been tested on a Windows environment but since it has been implemented with Java it will most likely run on Windows too.
+
+## Hardware Requirements
+
+* At least 640 MB free RAM
+* 200 MB free disk space (and some more disk space for the documents you want to store in DOX)
+
+## Software Requirements
+
+* RDBMS such as MySQL 5.6 (or above), MariaDB, Oracle, IBM DB2, Microsoft SQL Server or Postgres
+* Java 7
+* Servlet Engine such as [Tomcat 7] [tomcat7] (or above)
+* [ImageMagick] [imagemagick] or [GraphicsMagick] [graphicsmagick]
+* (Optional) Webserver such as [Nginx] [nginx] as a reverse proxy
+
+## Server Installation
 
 ### Install third party software
 
-#### Install MySQL 5.5
-DOX uses Hibernate 4.x to interact with a relational database. I recommend to use MySQL 5.5 (or greater).
+#### Install MySQL 5.6
+DOX uses Hibernate 4.x to interact with a relational database. I recommend to use MySQL 5.6 (or greater).
 
-	sudo apt-get install mysql-server-5.5
+	sudo apt-get install mysql-server-5.6
 
 #### Install latest stable Nginx
 Install add-apt-repository Python script.
@@ -30,15 +48,17 @@ Then install the Nginx PPA repo.
 	sudo apt-get install oracle-java7-installer
 
 #### Install Apache Tomcat 7
+tbd
 
 #### Install ImageMagick
+tbd
 
 ### Configure third party software
 
 ### Install DOX
 #### Setup the MySQL database
-To set up the database for DOX you can the following DDL script ddl_mysql5innodb_create.sql for MySQL. You find the script
-in the domain.jar of the WAR. Open the WAR file by using 7zip (or some equal app) and navigate to
+To set up the database for DOX you can the following DDL script `ddl_mysql5innodb_create.sql` for MySQL. You find the script
+in the `domain.jar` of the WAR. Open the WAR file by using 7zip (or some equal app) and navigate to
 
 	/WEB-INF/lib/dox-domain-<version>.jar
 
@@ -79,3 +99,9 @@ Copy the WAR file into `<TOMCAT_HOME>/webapps`
 Start Tomcat 
 
     <TOMCAT_HOME>/bin/startup.sh
+
+
+[graphicsmagick]: http://www.graphicsmagick.org/ "GraphicsMagick"
+[imagemagick]: http://imagemagick.org/ "ImageMagick"
+[tomcat7]: http://tomcat.apache.org/
+[nginx]: http://nginx.org/
