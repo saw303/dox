@@ -8,7 +8,7 @@ angular.module('dox.services', ['ngResource'])
         return $resource(apiRoot + '/api/v1/documentClass/:documentClassId', {documentClassId: '@id'})
     }])
 
-    .factory('Document', ['$resource', 'apiRoot', function ($resource, apiRoot) {
+        .factory('Document', ['$resource', 'apiRoot', function ($resource, apiRoot) {
         return $resource(apiRoot + '/api/v1/document/:documentId', {documentId: '@id'})
     }])
 

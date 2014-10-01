@@ -77,13 +77,22 @@ angular.module('dox.controllers', ['dox.services'])
 
     .controller('DocumentController', ['$scope', '$log', '$routeParams', 'Document', function ($scope, $log, $routeParams, Document) {
 
+        var messageVisible = false;
+
+        $scope.displayMessage = function() {
+            return messageVisible;
+        }
+
         Document.get({documentId: $routeParams.id}, function (doc) {
             $scope.document = doc;
         });
 
         $scope.doSubmit = function() {
-            $log.debug("Submitting form");
+            messageVisible = false;
+            $log.debug("Updating document %s", $routeParams.id);
             $scope.document.$save();
+            $log.debug("Done updating document %s", $routeParams.id);
+            messageVisible = true;
         }
     }])
 

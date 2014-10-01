@@ -6,6 +6,10 @@
 <body>
 <div>
 
+    <div ng-show="displayMessage()">
+        Das Dokument {{document.id}} wurde erfolgreich aktualisiert
+    </div>
+
     <div>Dokumenten ID: {{document.hash}}</div>
 
     <form novalidate="novalidate" ng-submit="doSubmit()">
