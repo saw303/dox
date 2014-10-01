@@ -1,4 +1,6 @@
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title></title>
@@ -7,10 +9,10 @@
 <div>
 
     <div ng-show="displayMessage()">
-        Das Dokument {{document.id}} wurde erfolgreich aktualisiert
+        <spring:message code="document.update.success.message.start"/> {{document.id}} <spring:message code="document.update.success.message.end"/>
     </div>
 
-    <div>Dokumenten ID: {{document.hash}}</div>
+    <div><spring:message code="document.id"/>: {{document.hash}}</div>
 
     <form novalidate="novalidate" ng-submit="doSubmit()">
 
@@ -56,11 +58,9 @@
             </span>
         </p>
         <p>
-            <button type="submit" id="importDocBtn">Aktualisieren</button>
+            <button type="submit" id="importDocBtn"><spring:message code="button.modify.document"/></button>
         </p>
     </form>
-
 </div>
-
 </body>
 </html>

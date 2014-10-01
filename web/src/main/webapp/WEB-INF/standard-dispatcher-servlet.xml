@@ -103,7 +103,7 @@
     <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"
           p:defaultLocale="en"/>
 
-    <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+    <bean id="tilesViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView"/>
     </bean>
 
@@ -113,6 +113,12 @@
                 <value>/WEB-INF/tiles.xml</value>
             </list>
         </property>
+    </bean>
+
+    <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/partials/"/>
+        <property name="suffix" value=".jsp"/>
     </bean>
 
     <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>

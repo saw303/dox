@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <html>
 <head>
     <title></title>
@@ -6,9 +8,9 @@
 <body>
 <div ng-controller="ImportController">
 
-    Dokumentenklasse: <select ng-model="documentClass" required="required" ng-value="shortName"
+    <spring:message code="document.import.label.document.class"/>: <select ng-model="documentClass" required="required" ng-value="shortName"
                               ng-options="d.translation for d in documentClasses | orderBy: 'translation' ">
-    <option value="">-- No Selection --</option>
+    <option value=""><spring:message code="document.import.choose.document.class"/></option>
 </select>
 
     <div ng-show="message.visible" class="messageBox">{{message.value}}</div>
@@ -53,7 +55,7 @@
             </p>
 
             <input type="file" name="file" required="required" accept="application/pdf"/>
-            <button type="submit" id="importDocBtn">Importieren</button>
+            <button type="submit" id="importDocBtn"><spring:message code="button.import.document"/></button>
         </form>
     </div>
 
