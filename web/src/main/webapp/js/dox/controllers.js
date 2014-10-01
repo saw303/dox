@@ -102,6 +102,7 @@ angular.module('dox.controllers', ['dox.services'])
         $scope.useWildcard = false;
         $scope.findOnlyMyDocuments = false;
         $scope.documents = [];
+        $scope.showSpinner = false;
 
         var executed = false;
 
@@ -116,13 +117,17 @@ angular.module('dox.controllers', ['dox.services'])
 
         $scope.doQuery = function () {
 
+            $scope.showSpinner = true;
+
             var promise = $http.get(apiRoot + '/api/v1/document?q=' + $scope.query + '&wc=' + $scope.useWildcard + '&uo=' + $scope.findOnlyMyDocuments);
 
             promise.then(function (response) {
                 executed = true;
                 $scope.documents = response.data;
+                $scope.showSpinner = false;
             }, function (response) {
                 $log.error('Something went wrong');
+                $scope.showSpinner = false;
             });
 
             $log.info('submit query %s', $scope.query);
