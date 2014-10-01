@@ -14,7 +14,13 @@ DOX has not been tested on a Windows environment but since it has been implement
 
 ## Software Requirements
 
-* RDBMS such as MySQL 5.6 (or above), MariaDB, Oracle, IBM DB2, Microsoft SQL Server or Postgres
+* RDBMS such as
+    * MySQL 5.6 (or above)
+    * MariaDB
+    * Oracle
+    * IBM DB2
+    * Microsoft SQL Server
+    * Postgres
 * Java 7
 * Servlet Engine such as [Tomcat 7] [tomcat7] (or above)
 * [ImageMagick] [imagemagick] or [GraphicsMagick] [graphicsmagick]
