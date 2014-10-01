@@ -31,8 +31,10 @@
                     <input name="{{attribute.shortName}}" type="text"
                            ng-required="!attribute.optional" list="list-{{attribute.shortName}}"/>
                 </span>
-                    <input ng-switch-when="DATE" name="{{attribute.shortName}}" type="date"
+                <input ng-switch-when="DATE" name="{{attribute.shortName}}" type="date"
                            ng-required="!attribute.optional"/>
+                <input ng-switch-when="DATETIME" name="{{attribute.shortName}}" type="datetime-local"
+                       ng-required="!attribute.optional"/>
                 <input ng-switch-when="CURRENCY" name="{{attribute.shortName}}" type="text"
                        value="CHF " ng-pattern="/\D{3} [-+]?[0-9]*[.,]?[0-9]+/" ng-required="!attribute.optional"/>
                 <input ng-switch-when="DOUBLE" name="{{attribute.shortName}}" type="number"
