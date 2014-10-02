@@ -39,8 +39,8 @@ public class VersionServiceIntegrationTest extends AbstractIntegrationTest {
         assumeTrue("Test only works in Gradle", !version.startsWith("@") && !version.endsWith("@"));
 
         // make sure release builds don't break this test
-        if (version.contains("SNAPSHOT")) {
-            assertTrue("Version does not match " + version, version.matches("0.3-SNAPSHOT-\\d{14}"));
+        if (version.contains("SNAPSHOT") || version.contains("RELEASE")) {
+            assertTrue("Version does not match " + version, version.matches("0.3-(SNAPSHOT|RELEASE)-\\d{14}"));
         } else if (version.contains("-M")) {
             assertTrue("Version does not match " + version, version.matches("0.3-M\\d-\\d{14}"));
         } else {
