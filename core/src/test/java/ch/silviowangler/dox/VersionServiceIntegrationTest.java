@@ -40,11 +40,11 @@ public class VersionServiceIntegrationTest extends AbstractIntegrationTest {
 
         // make sure release builds don't break this test
         if (version.contains("SNAPSHOT") || version.contains("RELEASE")) {
-            assertTrue("Version does not match " + version, version.matches("0.3-(SNAPSHOT|RELEASE)-\\d{14}"));
+            assertTrue("Version does not match " + version, version.matches("(\\d\\.?)+-(SNAPSHOT|RELEASE)-\\d{14}"));
         } else if (version.contains("-M")) {
-            assertTrue("Version does not match " + version, version.matches("0.3-M\\d-\\d{14}"));
+            assertTrue("Version does not match " + version, version.matches("(\\d\\.?)+-M\\d-\\d{14}"));
         } else {
-            assertTrue("Version does not match " + version, version.matches("0.3-\\d{14}"));
+            assertTrue("Version does not match " + version, version.matches("(\\d\\.?)+-\\d{14}"));
         }
     }
 }

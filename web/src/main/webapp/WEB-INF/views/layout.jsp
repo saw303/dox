@@ -34,7 +34,7 @@
 
     <meta name="viewport" content="width=device-width">
 
-    <link href='http://fonts.googleapis.com/css?family=Playball|Montserrat:700,400' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Varela+Round|Playball|Montserrat:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>"/>
 
     <link type="text/plain" rel="author" href="humans.txt"/>
@@ -53,22 +53,5 @@
         <tiles:insertAttribute name="footer"/>
     </footer>
 </div>
-
-<script src="//code.jquery.com/jquery-2.0.2.min.js"></script>
-<script>window.jQuery || document.write('<script src="js/libs/boilerplate/jquery-2.0.2.min.js"><\/script>')</script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $("#docClass").change(function (event) {
-            $("#docClassAttributes").load("<c:url value="/ajax/attributes"/>",
-                    {
-                        documentClassShortName: this.value,
-                        advancedQuery: ${advancedQuery != null ? advancedQuery : false}
-                    });
-        });
-    });
-    $("#username").focus();
-    $("#q").focus();
-</script>
-
 </body>
 </html>

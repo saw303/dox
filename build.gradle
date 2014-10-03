@@ -112,10 +112,10 @@ allprojects {
     }
 
     group = 'ch.silviowangler.dox'
-    version = '0.3-RELEASE'
+    version = '0.3.2-SNAPSHOT'
 
     project.ext {
-        springVersion = '4.1.0.RELEASE'
+        springVersion = '4.1.1.RELEASE'
         springMobileVersion = '1.1.2.RELEASE'
         springDataVersion = '1.7.0.RELEASE'
         springSecurityVersion = '4.0.0.M2'

@@ -43,11 +43,12 @@ html {
 }
 
 html, button, input, select, textarea {
-    font-family: sans-serif;
+    font-family: 'Varela Round', sans-serif;
     color: #222;
 }
 
 body {
+    font-family: 'Varela Round', sans-serif;
     margin: 0;
     font-size: 1em;
     line-height: 1.4;
