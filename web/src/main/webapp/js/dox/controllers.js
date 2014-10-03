@@ -152,4 +152,11 @@ angular.module('dox.controllers', ['dox.services'])
             $log.debug("About to open document %s in a separate window", document.id);
             $window.open(apiRoot + '/document/' + document.id, 'docViewer', "location=no,status=no,menubar=no");
         }
+
+        $scope.retrieveExtension = function(document) {
+            if (document.mimeType.indexOf('msword')> -1) return 'doc.png';
+            else if (document.mimeType == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') return 'docx.png';
+            else if (document.mimeType.indexOf('tiff')>-1) return 'tif.png';
+            return 'pdf.png';
+        }
     }]);

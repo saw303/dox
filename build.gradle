@@ -139,6 +139,7 @@ allprojects {
         xstreamVersion = '1.4.7'
         bouncycastleVersion = '1.51'
         jacksonVersion = '2.4.2'
+        poiVersion = '3.10.1'
     }
 
     configurations.all {

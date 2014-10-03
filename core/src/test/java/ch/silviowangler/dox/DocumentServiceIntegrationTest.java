@@ -165,6 +165,40 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         assertDocumentReference(documentReference, docFromDox);
     }
 
+    @Test
+    public void importSinglePageWordDocument() throws DocumentClassNotFoundException, DocumentDuplicationException, ValidationException, IOException {
+        File singlePageWordDocument = loadFile("word-1-page.doc");
+
+        Map<TranslatableKey, DescriptiveIndex> indexes = newHashMapWithExpectedSize(3);
+
+        indexes.put(COMPANY, new DescriptiveIndex("Sunrise"));
+        indexes.put(INVOICE_DATE, new DescriptiveIndex(new Date()));
+        indexes.put(INVOICE_AMOUNT, new DescriptiveIndex("20.05"));
+
+        PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePageWordDocument), indexes, singlePageWordDocument.getName());
+        DocumentReference documentReference = documentService.importDocument(doc);
+
+        assertThat(documentReference.getPageCount(), is(-1));
+        assertThat(documentReference.getMimeType(), is("application/msword"));
+    }
+
+    @Test
+    public void importSinglePageOpenWordDocument() throws DocumentClassNotFoundException, DocumentDuplicationException, ValidationException, IOException {
+        File singlePageWordDocument = loadFile("word-1-page.docx");
+
+        Map<TranslatableKey, DescriptiveIndex> indexes = newHashMapWithExpectedSize(3);
+
+        indexes.put(COMPANY, new DescriptiveIndex("Sunrise"));
+        indexes.put(INVOICE_DATE, new DescriptiveIndex(new Date()));
+        indexes.put(INVOICE_AMOUNT, new DescriptiveIndex("20.05"));
+
+        PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePageWordDocument), indexes, singlePageWordDocument.getName());
+        DocumentReference documentReference = documentService.importDocument(doc);
+
+        assertThat(documentReference.getPageCount(), is(-1));
+        assertThat(documentReference.getMimeType(), is("application/vnd.openxmlformats-officedocument.wordprocessingml.document"));
+    }
+
     @Test(expected = DocumentClassNotFoundException.class)
     public void importSinglePagePdfUsingAnUnknownDocumentClass() throws IOException, ValidationException, DocumentDuplicationException, DocumentClassNotFoundException {
 

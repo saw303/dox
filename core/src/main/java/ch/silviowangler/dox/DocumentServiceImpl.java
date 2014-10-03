@@ -82,6 +82,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     private static final String DD_MM_YYYY = "dd.MM.yyyy";
     private static final String YYYY_MM_DD = "yyyy-MM-dd";
     public static final String CACHE_DOCUMENT_COUNT = "documentCount";
+    public static final int PAGE_NUMBER_NOT_RETRIEVABLE = -1;
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
@@ -640,7 +641,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     private int getNumberOfPages(final PhysicalDocument physicalDocument, final String mimeType) {
 
-        int numberOfPages = -1;
+        int numberOfPages = PAGE_NUMBER_NOT_RETRIEVABLE;
 
         if ("application/pdf".equals(mimeType)) {
 
@@ -653,11 +654,16 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
                 return numberOfPages;
             }
         } else if ("text/plain".equals(mimeType)) {
-            numberOfPages = -1;
+            numberOfPages = PAGE_NUMBER_NOT_RETRIEVABLE;
         } else if ("image/tiff".equals(mimeType)) {
             RandomAccessSource source = new RandomAccessSourceFactory().createSource(physicalDocument.getContent());
             numberOfPages = TiffImage.getNumberOfPages(new RandomAccessFileOrArray(source));
-        } else {
+        } else if ("application/msword".equals(mimeType)) {
+            numberOfPages = PAGE_NUMBER_NOT_RETRIEVABLE;
+        } else if ("application/vnd.openxmlformats-officedocument.wordprocessingml.document".equals(mimeType)) {
+            numberOfPages = PAGE_NUMBER_NOT_RETRIEVABLE;
+        }
+        else {
             throw new UnsupportedOperationException("Cannot determine page count from a document with a mime type '" + mimeType + "'");
         }
         logger.debug("Found {} page(s) on physical document {}", numberOfPages, physicalDocument);
