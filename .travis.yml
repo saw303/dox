@@ -10,7 +10,7 @@ before_install:
 
 # Install LibreOffice
 - sudo apt-get update
-- sudo apt-get install libreoffice
+- sudo apt-get install libreoffice-writer
 # Gradle
 - wget http://services.gradle.org/distributions/gradle-2.1-bin.zip
 - unzip gradle-2.1-bin.zip
