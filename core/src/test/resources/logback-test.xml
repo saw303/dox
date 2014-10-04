@@ -36,6 +36,7 @@
     <logger name="org.apache.commons" level="ERROR"/>
     <logger name="ch.silviowangler.dox" level="INFO"/>
     <logger name="ch.silviowangler.dox.export" level="TRACE"/>
+    <logger name="ch.silviowangler.dox.document" level="TRACE"/>
 
     <root level="ERROR">
         <appender-ref ref="STDOUT"/>

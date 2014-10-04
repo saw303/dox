@@ -27,7 +27,7 @@
         <span ng-if="isEmptyResult()"><spring:message code="document.research.no.result.start"/>{{query}}<spring:message code="document.research.no.result.end"/></span>
 
         <div ng-repeat="document in documents"
-             style="background: url('/resources/img/file-extensions/pdf.png') left top no-repeat;background-size: 6%;border: 1px solid;border-radius: 5px;margin-bottom: 10px;overflow: auto;box-shadow: 5px 5px 5px #999999;background-color: #F5DEB3;">
+             style="background: url('/resources/img/file-extensions/{{retrieveExtension(document)}}') left top no-repeat;background-size: 6%;border: 1px solid;border-radius: 5px;margin-bottom: 10px;overflow: auto;box-shadow: 5px 5px 5px #999999;background-color: #F5DEB3;">
             <div style="margin-left: 10%;">
                 <div style="float:right;vertical-align: top;margin-right: 10px;font-size: 10px;">
                     <a ng-href="/ui/edit/{{document.id}}"><spring:message code="document.research.result.edit"/></a>,
@@ -49,6 +49,7 @@
                     <li><strong><spring:message code="document.userReference"/>:</strong> {{document.userReference}}</li>
                     <li><strong><spring:message code="document.filesize"/>:</strong> {{document.fileSize | number}} Bytes</li>
                     <li><strong><spring:message code="document.creationDate"/>:</strong> {{document.creationDate | date:'short'}}</li>
+                    <li><strong><spring:message code="document.mimeType"/>:</strong> {{document.mimeType}}</li>
                 </ul>
                 <div class="attributeListing"><strong><spring:message code="document.indices"/>:</strong>
                     <span ng-repeat="(label, index) in document.indices">

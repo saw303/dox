@@ -38,7 +38,7 @@ public class Document extends AbstractPersistable<Long> {
     private DocumentClass documentClass;
     @Column(nullable = false)
     private Integer pageCount = -1;
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 100)
     private String mimeType;
     @Column(nullable = false, length = 255)
     private String originalFilename;
