@@ -166,6 +166,7 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
+    apply plugin: 'groovy'
 
     compileJava.options.compilerArgs = ['-Xlint:unchecked', '-Xlint:deprecation']
     compileTestJava.options.compilerArgs = ['-Xlint:unchecked', '-Xlint:deprecation']
@@ -174,6 +175,8 @@ subprojects {
     targetCompatibility = 7
 
     dependencies {
+        testCompile "org.codehaus.groovy:groovy-all:2.3.7"
+        testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
         compile "org.slf4j:slf4j-api:${project.ext.slf4jVersion}"
         testCompile "junit:junit:${project.ext.junitVersion}",
                 "org.mockito:mockito-core:${project.ext.mockitoVersion}",

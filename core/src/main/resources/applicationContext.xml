@@ -61,7 +61,7 @@
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
 
-    <bean id="executor" class="org.apache.commons.exec.DefaultExecutor"/>
+    <bean id="executor" class="org.apache.commons.exec.DefaultExecutor" scope="prototype"/>
 
     <util:properties id="mimeTypes" location="classpath:mimeTypes.properties"/>
 
@@ -72,6 +72,26 @@
                                  returning="retVal"/>
         </aop:aspect>
     </aop:config>
+
+    <bean id="documentInspectorFactory" class="ch.silviowangler.dox.document.DocumentInspectorFactoryImpl">
+        <property name="documentInspectorMap">
+            <map key-type="java.lang.String" value-type="ch.silviowangler.dox.document.DocumentInspector">
+                <entry key="application/pdf">
+                    <ref bean="pdfDocumentInspector"/>
+                </entry>
+                <entry key="image/tiff">
+                    <ref bean="tiffDocumentInspector"/>
+                </entry>
+                <entry key="application/msword">
+                    <ref bean="microsoftWordDocumentInspector"/>
+                </entry>
+                <entry key="application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                    <ref bean="microsoftWordDocumentInspector"/>
+                </entry>
+            </map>
+        </property>
+        <property name="fallbackDocumentInspector" ref="dummyDocumentInspector"/>
+    </bean>
 
     <beans profile="prod">
         <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"

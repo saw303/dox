@@ -178,7 +178,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePageWordDocument), indexes, singlePageWordDocument.getName());
         DocumentReference documentReference = documentService.importDocument(doc);
 
-        assertThat(documentReference.getPageCount(), is(-1));
+        assertThat(documentReference.getPageCount(), is(1));
         assertThat(documentReference.getMimeType(), is("application/msword"));
     }
 
@@ -195,7 +195,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePageWordDocument), indexes, singlePageWordDocument.getName());
         DocumentReference documentReference = documentService.importDocument(doc);
 
-        assertThat(documentReference.getPageCount(), is(-1));
+        assertThat(documentReference.getPageCount(), is(1));
         assertThat(documentReference.getMimeType(), is("application/vnd.openxmlformats-officedocument.wordprocessingml.document"));
     }
 

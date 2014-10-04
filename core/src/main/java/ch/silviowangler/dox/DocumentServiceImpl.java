@@ -19,6 +19,8 @@ package ch.silviowangler.dox;
 import ch.silviowangler.dox.api.*;
 import ch.silviowangler.dox.api.Domain;
 import ch.silviowangler.dox.api.rest.DocumentClass;
+import ch.silviowangler.dox.document.DocumentInspectorFactory;
+import ch.silviowangler.dox.document.DocumentInspectorFactoryImpl;
 import ch.silviowangler.dox.domain.*;
 import ch.silviowangler.dox.domain.Attribute;
 import ch.silviowangler.dox.domain.AttributeDataType;
@@ -53,6 +55,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -69,8 +72,6 @@ import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
 import static org.springframework.transaction.annotation.Propagation.REQUIRED;
 import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
 import static org.springframework.util.Assert.*;
-
-import ch.silviowangler.dox.api.rest.DocumentClass;
 
 /**
  * @author Silvio Wangler
@@ -101,6 +102,8 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     private Properties mimeTypes;
     @Autowired
     private IndexMapEntryRepository indexMapEntryRepository;
+    @Autowired
+    private DocumentInspectorFactory documentInspectorFactory;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -360,16 +363,13 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             throw new DocumentDuplicationException(documentByHash.getId(), hash);
         }
 
-        final int numberOfPages = getNumberOfPages(physicalDocumentApi, mimeType);
-
         IndexStore indexStore = new IndexStore();
         updateIndices(physicalDocumentApi, indexStore);
 
         User user = getPrincipal();
 
-        Document document = new Document(hash, documentClassEntity, numberOfPages, mimeType, physicalDocumentApi.getFileName(), indexStore, user.getUsername());
+        Document document = new Document(hash, documentClassEntity, -1, mimeType, physicalDocumentApi.getFileName(), indexStore, user.getUsername());
         indexStore.setDocument(document);
-
 
         document = documentRepository.save(document);
         indexStoreRepository.save(indexStore);
@@ -380,12 +380,16 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         try {
             FileUtils.writeByteArrayToFile(target, physicalDocumentApi.getContent());
         } catch (IOException e) {
-            logger.error("Unable to write content to store", e);
+            logger.error("Unable to write file to store at {}", this.archiveDirectory.getAbsolutePath(), e);
         }
 
         try {
             final long size = Files.size(target.toPath());
             document.setFileSize(size);
+
+            final int numberOfPages = documentInspectorFactory.findDocumentInspector(mimeType).retrievePageCount(target);
+            document.setPageCount(numberOfPages);
+
             document = documentRepository.save(document);
         } catch (IOException e) {
             logger.error("Unable to calculate file size of file {}", target.getAbsolutePath(), e);
@@ -637,37 +641,6 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
                 }
             }
         }
-    }
-
-    private int getNumberOfPages(final PhysicalDocument physicalDocument, final String mimeType) {
-
-        int numberOfPages = PAGE_NUMBER_NOT_RETRIEVABLE;
-
-        if ("application/pdf".equals(mimeType)) {
-
-            PdfReader pdfReader;
-            try {
-                pdfReader = new PdfReader(physicalDocument.getContent());
-                numberOfPages = pdfReader.getNumberOfPages();
-            } catch (IOException e) {
-                logger.error("Unable to determine the number of pages", e);
-                return numberOfPages;
-            }
-        } else if ("text/plain".equals(mimeType)) {
-            numberOfPages = PAGE_NUMBER_NOT_RETRIEVABLE;
-        } else if ("image/tiff".equals(mimeType)) {
-            RandomAccessSource source = new RandomAccessSourceFactory().createSource(physicalDocument.getContent());
-            numberOfPages = TiffImage.getNumberOfPages(new RandomAccessFileOrArray(source));
-        } else if ("application/msword".equals(mimeType)) {
-            numberOfPages = PAGE_NUMBER_NOT_RETRIEVABLE;
-        } else if ("application/vnd.openxmlformats-officedocument.wordprocessingml.document".equals(mimeType)) {
-            numberOfPages = PAGE_NUMBER_NOT_RETRIEVABLE;
-        }
-        else {
-            throw new UnsupportedOperationException("Cannot determine page count from a document with a mime type '" + mimeType + "'");
-        }
-        logger.debug("Found {} page(s) on physical document {}", numberOfPages, physicalDocument);
-        return numberOfPages;
     }
 
     private boolean documentReferenceExists(Long id) {

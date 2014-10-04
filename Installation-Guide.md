@@ -24,6 +24,7 @@ DOX has not been tested on a Windows environment but since it has been implement
 * Java 7
 * Servlet Engine such as [Tomcat 7] [tomcat7] (or above)
 * [ImageMagick] [imagemagick] or [GraphicsMagick] [graphicsmagick]
+* [LibreOffice] [libreoffice]
 * (Optional) Webserver such as [Nginx] [nginx] as a reverse proxy
 
 ## Server Installation
@@ -111,3 +112,4 @@ Start Tomcat
 [imagemagick]: http://imagemagick.org/ "ImageMagick"
 [tomcat7]: http://tomcat.apache.org/
 [nginx]: http://nginx.org/
+[libreoffice]: https://www.libreoffice.org/ "LibreOffice"
