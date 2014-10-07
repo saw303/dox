@@ -15,7 +15,7 @@ angular.module('dox.controllers', ['dox.services'])
         };
     }])
 
-    .controller('ImportController', ['$scope', '$log', 'DocumentClasses', 'UploadService', function ($scope, $log, DocumentClasses, UploadService) {
+    .controller('ImportController', ['$scope', '$log', 'DocumentClasses', 'UploadService', '$window', function ($scope, $log, DocumentClasses, UploadService, $window) {
 
         $scope.documentClass;
 
@@ -33,9 +33,7 @@ angular.module('dox.controllers', ['dox.services'])
 
         var successCallback = function() {
             form.reset();
-            $scope.message.visible = true;
-            $scope.message.value = 'Erfolgreich importiert';
-            $scope.$apply(); // otherwise it does not change the view
+            $window.location.href = '/ui/importDone';
         }
 
         var errorCallback = function() {
