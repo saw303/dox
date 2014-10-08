@@ -15,7 +15,7 @@ angular.module('dox.controllers', ['dox.services'])
         };
     }])
 
-    .controller('ImportController', ['$scope', '$log', 'DocumentClasses', 'UploadService', function ($scope, $log, DocumentClasses, UploadService) {
+    .controller('ImportController', ['$scope', '$log', 'DocumentClasses', 'UploadService', '$window', function ($scope, $log, DocumentClasses, UploadService, $window) {
 
         $scope.documentClass;
 
@@ -28,17 +28,15 @@ angular.module('dox.controllers', ['dox.services'])
 
             var result = $scope.form.$dirty && $scope.form.$valid;
             $log.debug("Import form is ready to submit? %s", result);
-            return  result;
+            return result;
         }
 
-        var successCallback = function() {
+        var successCallback = function () {
             form.reset();
-            $scope.message.visible = true;
-            $scope.message.value = 'Erfolgreich importiert';
-            $scope.$apply(); // otherwise it does not change the view
+            $window.location.href = '/ui/importDone';
         }
 
-        var errorCallback = function() {
+        var errorCallback = function () {
             $scope.message.visible = true;
             $scope.message.value = this.responseText;
             $scope.$apply(); // otherwise it does not change the view
@@ -79,7 +77,7 @@ angular.module('dox.controllers', ['dox.services'])
 
         var messageVisible = false;
 
-        $scope.displayMessage = function() {
+        $scope.displayMessage = function () {
             return messageVisible;
         }
 
@@ -87,12 +85,28 @@ angular.module('dox.controllers', ['dox.services'])
             $scope.document = doc;
         });
 
-        $scope.doSubmit = function() {
+        $scope.doSubmit = function () {
             messageVisible = false;
             $log.debug("Updating document %s", $routeParams.id);
             $scope.document.$save();
             $log.debug("Done updating document %s", $routeParams.id);
             messageVisible = true;
+        }
+    }])
+
+    .controller('LogoutController', ['$scope', '$log', '$http', '$window', 'apiRoot', function ($scope, $log, $http, $window, apiRoot) {
+
+        $scope.logout = function () {
+            $log.info('Logging out. Good bye');
+
+            var promise = $http.get(apiRoot + '/logout');
+
+            promise.then(function () {
+                $log.debug('Logout successful');
+                $window.location.href = apiRoot + '/';
+            }, function (data, status, headers, config) {
+                $log.error('Error while log out attempt. Status: %s', status);
+            });
         }
     }])
 
@@ -148,15 +162,15 @@ angular.module('dox.controllers', ['dox.services'])
             });
         }
 
-        $scope.showDocument = function(document) {
+        $scope.showDocument = function (document) {
             $log.debug("About to open document %s in a separate window", document.id);
             $window.open(apiRoot + '/document/' + document.id, 'docViewer', "location=no,status=no,menubar=no");
         }
 
-        $scope.retrieveExtension = function(document) {
-            if (document.mimeType.indexOf('msword')> -1) return 'doc.png';
+        $scope.retrieveExtension = function (document) {
+            if (document.mimeType.indexOf('msword') > -1) return 'doc.png';
             else if (document.mimeType == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') return 'docx.png';
-            else if (document.mimeType.indexOf('tiff')>-1) return 'tif.png';
+            else if (document.mimeType.indexOf('tiff') > -1) return 'tif.png';
             return 'pdf.png';
         }
     }]);

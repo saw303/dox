@@ -33,7 +33,7 @@
             </sec:authorize>
             <li><a href="<%=request.getContextPath()%>/ui/settings"><spring:message code="nav.settings"/></a></li>
             <li><a href="<%=request.getContextPath()%>/maintenance"><spring:message code="nav.maintenance"/></a></li>
-            <li><a href="<%=request.getContextPath()%>/logout"><spring:message code="nav.logout"/></a></li>
+            <li ng-controller="LogoutController"><a ng-click="logout()"><spring:message code="nav.logout"/></a></li>
         </ul>
     </nav>
 </sec:authorize>
