@@ -87,7 +87,9 @@ task build << {
     ITextRenderer renderer = new ITextRenderer();
     renderer.setDocument(sax2dom.getDOM(), null);
     renderer.layout();
-    renderer.createPDF((new File('build', targetPdf).newOutputStream()))
+    def rootFolder = file('build')
+    if (! rootFolder.exists()) rootFolder.mkdir()
+    renderer.createPDF((new File(rootFolder, targetPdf).newOutputStream()))
 
     def htmlFile = new File('build', targetHtml)
     htmlFile << html
