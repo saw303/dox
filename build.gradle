@@ -87,7 +87,9 @@ task build << {
     ITextRenderer renderer = new ITextRenderer();
     renderer.setDocument(sax2dom.getDOM(), null);
     renderer.layout();
-    renderer.createPDF((new File('build', targetPdf).newOutputStream()))
+    def rootFolder = file('build')
+    if (! rootFolder.exists()) rootFolder.mkdir()
+    renderer.createPDF((new File(rootFolder, targetPdf).newOutputStream()))
 
     def htmlFile = new File('build', targetHtml)
     htmlFile << html
@@ -115,7 +117,7 @@ allprojects {
     version = '0.3.4-SNAPSHOT'
 
     project.ext {
-        springVersion = '4.1.1.RELEASE'
+        springVersion = '4.1.2.RELEASE'
         springMobileVersion = '1.1.3.RELEASE'
         springDataVersion = '1.7.0.RELEASE'
         springSecurityVersion = '4.0.0.M2'
@@ -129,17 +131,21 @@ allprojects {
         commonsBeanUtilsVersion = '1.9.2'
         commonsExec = '1.2'
         jodaTimeVersion = '2.5'
-        h2Version = '1.4.181'
+        h2Version = '1.4.182'
         mysqlVersion = '5.1.33'
         iTextVersion = '5.5.3'
         guavaVersion = '18.0'
-        mockitoVersion = '1.10.6'
+        mockitoVersion = '1.10.13'
         flywayVersion = '2.3.1'
         groovyVersion = '2.3.0'
         xstreamVersion = '1.4.7'
         bouncycastleVersion = '1.51'
-        jacksonVersion = '2.4.3'
+        jacksonVersion = '2.4.4'
         poiVersion = '3.10.1'
+        groovyVersion = '2.3.7'
+        spockVersion = '0.7-groovy-2.0'
+        hamcrestVersion = '1.3'
+        aspectjWeaverVersion='1.8.2'
     }
 
     configurations.all {
@@ -175,13 +181,13 @@ subprojects {
     targetCompatibility = 7
 
     dependencies {
-        testCompile "org.codehaus.groovy:groovy-all:2.3.7"
-        testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
+        testCompile "org.codehaus.groovy:groovy-all:${project.ext.groovyVersion}"
+        testCompile "org.spockframework:spock-core:${project.ext.spockVersion}"
         compile "org.slf4j:slf4j-api:${project.ext.slf4jVersion}"
         testCompile "junit:junit:${project.ext.junitVersion}",
                 "org.mockito:mockito-core:${project.ext.mockitoVersion}",
-                'org.hamcrest:hamcrest-core:1.3',
-                'org.hamcrest:hamcrest-library:1.3'
+                "org.hamcrest:hamcrest-core:${project.ext.hamcrestVersion}",
+                "org.hamcrest:hamcrest-library:${project.ext.hamcrestVersion}"
     }
 
     jar {
@@ -237,7 +243,7 @@ project(':core') {
         runtime "org.slf4j:jcl-over-slf4j:${project.ext.slf4jVersion}",
                 "ch.qos.logback:logback-classic:${project.ext.logbackVersion}",
                 "org.springframework.security:spring-security-config:${project.ext.springSecurityVersion}",
-                'org.aspectj:aspectjweaver:1.8.2', // need this version because 1.6.x is buggy with Spring 3.x (http://goo.gl/73Pwi)
+                "org.aspectj:aspectjweaver:${project.ext.aspectjWeaverVersion}", // need this version because 1.6.x is buggy with Spring 3.x (http://goo.gl/73Pwi)
                 "org.bouncycastle:bcprov-jdk15on:${project.ext.bouncycastleVersion}", "org.bouncycastle:bcpkix-jdk15on:${project.ext.bouncycastleVersion}"
         testCompile "org.springframework:spring-test:${project.ext.springVersion}",
                 "commons-io:commons-io:${project.ext.commonsIOVersion}",
