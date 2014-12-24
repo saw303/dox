@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -135,6 +136,9 @@ public class DocumentController {
         } catch (DocumentNotFoundException | DocumentNotInStoreException e) {
             logger.warn("Document with id '{}' not found", id, e);
             response.setStatus(SC_NOT_FOUND);
+        } catch (AccessDeniedException ade) {
+            logger.warn("Access denied on document {}", id, ade);
+            response.setStatus(SC_UNAUTHORIZED);
         } catch (IOException e) {
             logger.error("Could not write document to output stream", e);
             response.setStatus(SC_INTERNAL_SERVER_ERROR);
