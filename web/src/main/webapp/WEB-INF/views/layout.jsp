@@ -34,7 +34,7 @@
 
     <meta name="viewport" content="width=device-width">
 
-    <link href='http://fonts.googleapis.com/css?family=Varela+Round|Playball|Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <link href="//fonts.googleapis.com/css?family=Varela+Round|Playball|Montserrat:400,700" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>"/>
 
     <link type="text/plain" rel="author" href="humans.txt"/>
