@@ -86,7 +86,7 @@ public class DocumentControllerTest {
 
         controller.getDocument(1L, response);
 
-        assertThat(response.getStatus(), is(SC_UNAUTHORIZED));
+        assertThat(response.getStatus(), is(SC_FORBIDDEN));
     }
 
     @Test

@@ -138,7 +138,7 @@ public class DocumentController {
             response.setStatus(SC_NOT_FOUND);
         } catch (AccessDeniedException ade) {
             logger.warn("Access denied on document {}", id, ade);
-            response.setStatus(SC_UNAUTHORIZED);
+            response.setStatus(SC_FORBIDDEN);
         } catch (IOException e) {
             logger.error("Could not write document to output stream", e);
             response.setStatus(SC_INTERNAL_SERVER_ERROR);
