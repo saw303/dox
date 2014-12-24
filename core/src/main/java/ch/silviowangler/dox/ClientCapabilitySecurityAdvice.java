@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.collect.Lists.newArrayList;
+
 /**
  * Created by Silvio Wangler on 24.12.14.
  *
@@ -39,6 +41,7 @@ public class ClientCapabilitySecurityAdvice {
 
         boolean isAuth = isAuthenticated();
         DoxUser doxUser = null;
+        List<String> clientAccessDeniedList = newArrayList();
 
         if (isAuth) {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -48,13 +51,10 @@ public class ClientCapabilitySecurityAdvice {
         }
 
         boolean hasClientAssigned = false;
-        boolean clientPropertyDetected = false;
-        String rejectedClient = null;
 
         for (Object arg : joinPoint.getArgs()) {
 
             if (containsClient(arg)) {
-                clientPropertyDetected = true;
 
                 if (isAuth) {
                     String clientName = (String) new PropertyDescriptor(CLIENT_FIELD_NAME, arg.getClass()).getReadMethod().invoke(arg);
@@ -68,15 +68,35 @@ public class ClientCapabilitySecurityAdvice {
                             hasClientAssigned = true;
                             break;
                         }
-                        rejectedClient = clientName;
-                        hasClientAssigned = false;
+                    }
+
+                    if (!hasClientAssigned) {
+                        clientAccessDeniedList.add(clientName);
                     }
                 }
             }
         }
 
-        if (clientPropertyDetected && !hasClientAssigned) {
-            throw new AccessDeniedException("You have no access to client " + rejectedClient);
+        if (!clientAccessDeniedList.isEmpty()) {
+
+            StringBuilder sb = new StringBuilder("You have no access to ");
+
+            if (clientAccessDeniedList.size() > 1) {
+                sb.append("clients ");
+
+                for (int i = 0; i < clientAccessDeniedList.size(); i++) {
+                    String clientName = clientAccessDeniedList.get(i);
+
+                    if (i > 0) {
+                        sb.append(" and ");
+                    }
+                    sb.append(clientName);
+                }
+
+            } else {
+                sb.append("client ").append(clientAccessDeniedList.get(0));
+            }
+            throw new AccessDeniedException(sb.toString());
         }
 
         Object retVal = joinPoint.proceed();
