@@ -16,6 +16,7 @@
 
 package ch.silviowangler.dox.domain.security;
 
+import ch.silviowangler.dox.domain.Client;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Column;
@@ -28,9 +29,9 @@ import java.util.Set;
 /**
  * @author Silvio Wangler
  * @since 0.1
- *        <div>
- *        Date: 02.10.12 18:07
- *        </div>
+ * <div>
+ * Date: 02.10.12 18:07
+ * </div>
  */
 @Entity
 @Table(name = "DOX_USER")
@@ -52,6 +53,9 @@ public class DoxUser extends AbstractPersistable<Long> {
     private String password;
     @Column(nullable = false)
     private String email;
+
+    @ManyToMany
+    private Set<Client> clients;
 
     @ManyToMany
     Set<Role> roles = new HashSet<>();
@@ -86,6 +90,14 @@ public class DoxUser extends AbstractPersistable<Long> {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<Client> getClients() {
+        return clients;
+    }
+
+    public void setClients(Set<Client> clients) {
+        this.clients = clients;
     }
 
     @Override

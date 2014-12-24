@@ -27,23 +27,23 @@ import java.util.List;
 /**
  * @author Silvio Wangler
  * @since 0.1
- *        <div>
- *        Date: 15.07.12 19:16
- *        </div>
+ * <div>
+ * Date: 15.07.12 19:16
+ * </div>
  */
 public interface IndexMapEntryRepository extends CrudRepository<IndexMapEntry, Long> {
 
-    @Query("select distinct d from IndexMapEntry i, Document d where i.document = d and (i.stringRepresentation = :upperCaseValue or i.document.originalFilename = :originalValue) order by d.creationDate desc")
-    List<Document> findByValue(@Param("upperCaseValue") String upperCaseValue, @Param("originalValue") String originalValue);
+    @Query("select distinct d from IndexMapEntry i, Document d where i.document = d and d.client.shortName in (:clientShortNames) and (i.stringRepresentation = :upperCaseValue or i.document.originalFilename = :originalValue) order by d.creationDate desc")
+    List<Document> findByValue(@Param("upperCaseValue") String upperCaseValue, @Param("originalValue") String originalValue, @Param("clientShortNames") List<String> clientShortNames);
 
-    @Query("select distinct d from IndexMapEntry i, Document d where i.document = d and (i.stringRepresentation like %?1 or i.document.originalFilename like %?2) order by d.creationDate desc")
-    List<Document> findByValueLike(String upperCaseValue, String originalValue);
+    @Query("select distinct d from IndexMapEntry i, Document d where i.document = d and d.client.shortName in (?3) and (i.stringRepresentation like %?1 or i.document.originalFilename like %?2) order by d.creationDate desc")
+    List<Document> findByValueLike(String upperCaseValue, String originalValue, List<String> clientShortNames);
 
-    @Query("select distinct d from IndexMapEntry i, Document d where i.document = d and (i.stringRepresentation = :upperCaseValue or i.document.originalFilename = :originalValue) and i.document.userReference = :userReference  order by d.creationDate desc")
-    List<Document> findByValueAndUserReference(@Param("upperCaseValue") String upperCaseValue, @Param("originalValue") String originalValue, @Param("userReference") String userReference);
+    @Query("select distinct d from IndexMapEntry i, Document d where i.document = d and d.client.shortName in (:clientShortNames) and (i.stringRepresentation = :upperCaseValue or i.document.originalFilename = :originalValue) and i.document.userReference = :userReference  order by d.creationDate desc")
+    List<Document> findByValueAndUserReference(@Param("upperCaseValue") String upperCaseValue, @Param("originalValue") String originalValue, @Param("userReference") String userReference, @Param("clientShortNames") List<String> clientShortNames);
 
-    @Query("select distinct d from IndexMapEntry i, Document d where i.document = d and (i.stringRepresentation like %?1 or i.document.originalFilename like %?2) and i.document.userReference = ?3  order by d.creationDate desc")
-    List<Document> findByValueLikeAndUserReference(String upperCaseValue, String originalValue, String userReference);
+    @Query("select distinct d from IndexMapEntry i, Document d where i.document = d and d.client.shortName in (?3) and (i.stringRepresentation like %?1 or i.document.originalFilename like %?2) and i.document.userReference = ?3  order by d.creationDate desc")
+    List<Document> findByValueLikeAndUserReference(String upperCaseValue, String originalValue, String userReference, List<String> clientShortNames);
 
     List<IndexMapEntry> findByDocument(Document document);
 }

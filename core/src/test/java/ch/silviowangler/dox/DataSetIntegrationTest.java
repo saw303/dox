@@ -46,7 +46,7 @@ public class DataSetIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void verifyDocumentClassCount() {
-        assertEquals("Please verify the numbers of document classes", 7, documentClassRepository.count());
+        assertEquals("Please verify the numbers of document classes", 8, documentClassRepository.count());
     }
 
     @Test

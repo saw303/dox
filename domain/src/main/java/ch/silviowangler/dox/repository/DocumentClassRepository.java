@@ -17,7 +17,10 @@
 package ch.silviowangler.dox.repository;
 
 import ch.silviowangler.dox.domain.DocumentClass;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+
+import java.util.List;
 
 /**
  * @author Silvio Wangler
@@ -26,4 +29,7 @@ import org.springframework.data.repository.CrudRepository;
 public interface DocumentClassRepository extends CrudRepository<DocumentClass, Long> {
 
     DocumentClass findByShortName(String shortName);
+
+    @Query("select d from DocumentClass d where d.client.shortName in (?1)")
+    List<DocumentClass> findAllByClients(List<String> clients);
 }

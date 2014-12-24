@@ -71,6 +71,11 @@
             <aop:after-returning method="addTranslationIfNeeded" pointcut-ref="translationOperation"
                                  returning="retVal"/>
         </aop:aspect>
+
+        <aop:aspect id="clientCapabilityAdvice" ref="clientCapabilitySecurityAdvice">
+            <aop:pointcut id="clientCapability" expression="execution(* ch.silviowangler.dox.*ServiceImpl.*(..))"/>
+            <aop:around method="verifyUserCanPerformActionOnCurrentClient" pointcut-ref="clientCapability"/>
+        </aop:aspect>
     </aop:config>
 
     <bean id="documentInspectorFactory" class="ch.silviowangler.dox.document.DocumentInspectorFactoryImpl">

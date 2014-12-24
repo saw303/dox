@@ -20,20 +20,16 @@ import ch.silviowangler.dox.api.*;
 import ch.silviowangler.dox.api.Domain;
 import ch.silviowangler.dox.api.rest.DocumentClass;
 import ch.silviowangler.dox.document.DocumentInspectorFactory;
-import ch.silviowangler.dox.document.DocumentInspectorFactoryImpl;
 import ch.silviowangler.dox.domain.*;
 import ch.silviowangler.dox.domain.Attribute;
 import ch.silviowangler.dox.domain.AttributeDataType;
 import ch.silviowangler.dox.domain.Range;
+import ch.silviowangler.dox.domain.security.DoxUser;
 import ch.silviowangler.dox.repository.*;
+import ch.silviowangler.dox.repository.security.DoxUserRepository;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.itextpdf.text.io.RandomAccessSource;
-import com.itextpdf.text.io.RandomAccessSourceFactory;
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.RandomAccessFileOrArray;
-import com.itextpdf.text.pdf.codec.TiffImage;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
@@ -55,7 +51,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -72,6 +67,8 @@ import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
 import static org.springframework.transaction.annotation.Propagation.REQUIRED;
 import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
 import static org.springframework.util.Assert.*;
+
+import ch.silviowangler.dox.api.rest.DocumentClass;
 
 /**
  * @author Silvio Wangler
@@ -104,6 +101,11 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     private IndexMapEntryRepository indexMapEntryRepository;
     @Autowired
     private DocumentInspectorFactory documentInspectorFactory;
+    @Autowired
+    private ClientRepository clientRepository;
+    @Autowired
+    private DoxUserRepository doxUserRepository;
+
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -119,8 +121,9 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     public List<DocumentClass> findAllDocumentClasses() {
 
         List<DocumentClass> documentClasses = newArrayList();
+        List<String> clients = getClients();
 
-        Iterable<ch.silviowangler.dox.domain.DocumentClass> documentClassEntities = documentClassRepository.findAll();
+        Iterable<ch.silviowangler.dox.domain.DocumentClass> documentClassEntities = documentClassRepository.findAllByClients(clients);
 
         for (ch.silviowangler.dox.domain.DocumentClass documentClassEntity : documentClassEntities) {
             DocumentClass documentClass = toDocumentClassWithAttributesApi(documentClassEntity);
@@ -228,20 +231,21 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         logger.debug("About to find document references for query string '{}'", queryString);
 
         List<Document> documents;
+        List<String> clients = getClients();
 
         if (username == null) {
             if (containsWildcardCharacters(queryString)) {
                 String value = replaceWildcardCharacters(queryString);
-                documents = indexMapEntryRepository.findByValueLike(value.toUpperCase(), value);
+                documents = indexMapEntryRepository.findByValueLike(value.toUpperCase(), value, clients);
             } else {
-                documents = indexMapEntryRepository.findByValue(queryString.toUpperCase(), queryString);
+                documents = indexMapEntryRepository.findByValue(queryString.toUpperCase(), queryString, clients);
             }
         } else {
             if (containsWildcardCharacters(queryString)) {
                 String value = replaceWildcardCharacters(queryString);
-                documents = indexMapEntryRepository.findByValueLikeAndUserReference(value.toUpperCase(), value, username);
+                documents = indexMapEntryRepository.findByValueLikeAndUserReference(value.toUpperCase(), value, username, clients);
             } else {
-                documents = indexMapEntryRepository.findByValueAndUserReference(queryString.toUpperCase(), queryString, username);
+                documents = indexMapEntryRepository.findByValueAndUserReference(queryString.toUpperCase(), queryString, username, clients);
             }
         }
 
@@ -254,6 +258,18 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             documentReferences.add(toDocumentReference(document, locale));
         }
         return documentReferences;
+    }
+
+    private List<String> getClients() {
+        User user = getPrincipal();
+        DoxUser doxUser = doxUserRepository.findByUsername(user.getUsername());
+
+        List<String> clients = newArrayListWithCapacity(doxUser.getClients().size());
+
+        for (Client client : doxUser.getClients()) {
+            clients.add(client.getShortName());
+        }
+        return clients;
     }
 
     @Override
@@ -369,6 +385,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         User user = getPrincipal();
 
         Document document = new Document(hash, documentClassEntity, -1, mimeType, physicalDocumentApi.getFileName(), indexStore, user.getUsername());
+        document.setClient(clientRepository.findByShortName(physicalDocumentApi.getClient()));
         indexStore.setDocument(document);
 
         document = documentRepository.save(document);
@@ -657,6 +674,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
                 document.getOriginalFilename(), document.getUserReference(), document.getFileSize());
 
         documentReference.setCreationDate(document.getCreationDate());
+        documentReference.setClient(document.getClient().getShortName());
 
         return documentReference;
     }
@@ -717,7 +735,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     private DocumentClass toDocumentClassWithAttributesApi(ch.silviowangler.dox.domain.DocumentClass documentClass) {
-        return new DocumentClass(documentClass.getShortName());
+        return new DocumentClass(documentClass.getShortName(), documentClass.getClient().getShortName());
     }
 
     private Map<String, Attribute> toAttributeMap(List<Attribute> attributes) {

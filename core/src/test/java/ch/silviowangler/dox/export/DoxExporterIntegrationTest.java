@@ -37,7 +37,7 @@ public class DoxExporterIntegrationTest extends AbstractIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        loginAsRoot();
+        loginAsTestRoot();
     }
 
     @Test

@@ -44,13 +44,14 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
     public static final TranslatableKey COMPANY = new TranslatableKey("company");
     public static final TranslatableKey MONEY = new TranslatableKey("money");
     public static final TranslatableKey STRICT_COMPANY = new TranslatableKey("strictcompany");
+    public static final String CLIENT_WANGLER = "wangler";
     private DocumentClass documentClass;
     private final int INVOICE_AMOUNT_INDICES = 5;
 
     @Before
     public void init() {
         this.documentClass = new DocumentClass("INVOICE");
-        loginAsRoot();
+        loginAsTestRoot();
     }
 
     @Test
@@ -80,11 +81,11 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         Set<DocumentClass> documentClasses = documentService.findDocumentClasses();
 
         assertNotNull(documentClasses);
-        assertEquals(7, documentClasses.size());
+        assertEquals(8, documentClasses.size());
 
         for (DocumentClass currentDocumentClass : documentClasses) {
             final String currentShortName = currentDocumentClass.getShortName();
-            assertTrue("Unexpected document class " + currentShortName, currentShortName.matches("(INVOICE|TAXES|SALARY_REPORTS|CONTRACTS|BANK_DOCUMENTS|VARIA|DIPLOMA)"));
+            assertTrue("Unexpected document class " + currentShortName, currentShortName.matches("(INVOICE|TAXES|SALARY_REPORTS|CONTRACTS|BANK_DOCUMENTS|VARIA|DIPLOMA|DUMMY_DOC)"));
         }
     }
 
@@ -105,6 +106,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         indexes.put(INVOICE_AMOUNT, new DescriptiveIndex(new BigDecimal("50.00")));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
+        doc.setClient(CLIENT_WANGLER);
         DocumentReference documentReference = documentService.importDocument(doc);
 
         assertEquals(1, documentReference.getPageCount());
@@ -141,6 +143,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         indexes.put(INVOICE_AMOUNT, new DescriptiveIndex("50.25"));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(fivePagesPdfFile), indexes, fivePagesPdfFile.getName());
+        doc.setClient(CLIENT_WANGLER);
         DocumentReference documentReference = documentService.importDocument(doc);
 
         assertEquals(5, documentReference.getPageCount());
@@ -176,6 +179,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         indexes.put(INVOICE_AMOUNT, new DescriptiveIndex("20.05"));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePageWordDocument), indexes, singlePageWordDocument.getName());
+        doc.setClient(CLIENT_WANGLER);
         DocumentReference documentReference = documentService.importDocument(doc);
 
         assertThat(documentReference.getPageCount(), is(1));
@@ -193,6 +197,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         indexes.put(INVOICE_AMOUNT, new DescriptiveIndex("20.05"));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePageWordDocument), indexes, singlePageWordDocument.getName());
+        doc.setClient(CLIENT_WANGLER);
         DocumentReference documentReference = documentService.importDocument(doc);
 
         assertThat(documentReference.getPageCount(), is(1));
@@ -211,6 +216,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         indexes.put(INVOICE_DATE, new DescriptiveIndex(new Date()));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
+        doc.setClient(CLIENT_WANGLER);
         documentService.importDocument(doc);
     }
 
@@ -226,6 +232,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         indexes.put(INVOICE_DATE, new DescriptiveIndex(new Date()));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
+        doc.setClient(CLIENT_WANGLER);
         final DocumentReference documentReference = documentService.importDocument(doc);
 
         final Money money = (Money) documentReference.getIndices().get(MONEY).getValue();
@@ -246,6 +253,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         indexes.put(INVOICE_DATE, new DescriptiveIndex(new Date()));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
+        doc.setClient(CLIENT_WANGLER);
         final DocumentReference documentReference = documentService.importDocument(doc);
 
         final Money money = (Money) documentReference.getIndices().get(MONEY).getValue();
@@ -263,6 +271,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         indexes.put(INVOICE_DATE, new DescriptiveIndex("Sunrise"));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
+        doc.setClient(CLIENT_WANGLER);
         documentService.importDocument(doc);
     }
 
@@ -278,6 +287,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         indexes.put(new TranslatableKey("whatever"), new DescriptiveIndex(12L));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
+        doc.setClient(CLIENT_WANGLER);
         documentService.importDocument(doc);
     }
 
@@ -292,6 +302,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         indexes.put(INVOICE_AMOUNT, new DescriptiveIndex(777.0));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
+        doc.setClient(CLIENT_WANGLER);
         DocumentReference documentReference = documentService.importDocument(doc);
 
         assertNotNull(documentReference.getId());
@@ -314,6 +325,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         indexes.put(INVOICE_AMOUNT, new DescriptiveIndex(51.0));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(temp), indexes, temp.getName());
+        doc.setClient(CLIENT_WANGLER);
         DocumentReference documentReference = documentService.importDocument(doc);
 
         assertEquals("text/plain", documentReference.getMimeType());
@@ -350,6 +362,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         indexes.put(INVOICE_DATE, new DescriptiveIndex(new Date()));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(temp), indexes, temp.getName());
+        doc.setClient(CLIENT_WANGLER);
         try {
             documentService.importDocument(doc);
             fail("Should throw a validation exception");
@@ -376,6 +389,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         indexes.put(INVOICE_DATE, new DescriptiveIndex(new Date()));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(temp), indexes, temp.getName());
+        doc.setClient(CLIENT_WANGLER);
         documentService.importDocument(doc);
 
         SortedSet<Attribute> attributesAfter = documentService.findAttributes(documentClass);
@@ -409,6 +423,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         indexes.put(INVOICE_DATE, new DescriptiveIndex(new Date()));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(temp), indexes, temp.getName());
+        doc.setClient(CLIENT_WANGLER);
         DocumentReference reference = documentService.importDocument(doc);
 
         assertEquals(BigDecimal.class, reference.getIndices().get(INVOICE_AMOUNT).getValue().getClass());
@@ -426,6 +441,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         indexes.put(INVOICE_DATE, new DescriptiveIndex(new Date()));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(temp), indexes, temp.getName());
+        doc.setClient(CLIENT_WANGLER);
         DocumentReference reference = documentService.importDocument(doc);
 
         assertEquals(BigDecimal.class, reference.getIndices().get(INVOICE_AMOUNT).getValue().getClass());
@@ -444,6 +460,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         indexes.put(INVOICE_DATE, new DescriptiveIndex(new Date()));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(temp), indexes, temp.getName());
+        doc.setClient(CLIENT_WANGLER);
         DocumentReference reference = documentService.importDocument(doc);
 
         reference.getIndices().put(COMPANY, new DescriptiveIndex("Swisscom"));
@@ -534,6 +551,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         indexes.put(INVOICE_DATE, new DescriptiveIndex(new Date()));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
+        doc.setClient(CLIENT_WANGLER);
         final DocumentReference documentReference = documentService.importDocument(doc);
 
         assertThat(documentReference.getPageCount(), is(1));

@@ -53,6 +53,8 @@ public class Document extends AbstractPersistable<Long> {
     private String userReference;
     @Column(nullable = false)
     private long fileSize = -1L;
+    @ManyToOne(optional = false)
+    private Client client;
 
     public Document() {
         super();
@@ -141,6 +143,14 @@ public class Document extends AbstractPersistable<Long> {
         this.fileSize = fileSize;
     }
 
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
@@ -154,6 +164,7 @@ public class Document extends AbstractPersistable<Long> {
                 .add("indexMapEntries", indexMapEntries)
                 .add("userReference", userReference)
                 .add("fileSize", fileSize)
+                .add("client", client)
                 .toString();
     }
 }
