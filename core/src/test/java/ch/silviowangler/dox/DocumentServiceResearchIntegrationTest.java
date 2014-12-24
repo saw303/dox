@@ -391,6 +391,12 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
 
         documents = documentService.findDocumentReferences("*Kennedy*");
         assertThat(documents.size(), is(1));
+
+        DocumentReference documentReference = documents.get(0);
+        assertThat(documentReference.getClient(), is("wangler_test"));
+        assertThat(documentReference.getDocumentClass().getClient(), is("wangler_test"));
+        assertThat(documentReference.getDocumentClass().getClient(), is("wangler_test"));
+
     }
 
     @Test

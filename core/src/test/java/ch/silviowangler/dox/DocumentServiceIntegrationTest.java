@@ -51,6 +51,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
     @Before
     public void init() {
         this.documentClass = new DocumentClass("INVOICE");
+        this.documentClass.setClient(CLIENT_WANGLER);
         loginAsTestRoot();
     }
 
@@ -519,7 +520,8 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
     @Test
     public void verifyThatAttributeIsTranslatableAndGetsTranslated() throws DocumentClassNotFoundException {
 
-        final SortedSet<Attribute> attributes = documentService.findAttributes(new DocumentClass("INVOICE"));
+        DocumentClass invoice = DocumentClassBuilder.newDocumentClass().withShortName("INVOICE").withClient(CLIENT_WANGLER).build();
+        final SortedSet<Attribute> attributes = documentService.findAttributes(invoice);
 
         for (Attribute attribute : attributes) {
             assertTrue(attribute instanceof Translatable);

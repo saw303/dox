@@ -27,8 +27,13 @@ import java.util.Map;
 public class ClientCapabilitySecurityAdvice {
 
     public static final String CLIENT_FIELD_NAME = "client";
-    @Autowired
+
     private DoxUserRepository doxUserRepository;
+
+    @Autowired
+    public ClientCapabilitySecurityAdvice(DoxUserRepository doxUserRepository) {
+        this.doxUserRepository = doxUserRepository;
+    }
 
     public Object verifyUserCanPerformActionOnCurrentClient(ProceedingJoinPoint joinPoint) throws Throwable {
 

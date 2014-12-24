@@ -18,6 +18,8 @@ package ch.silviowangler.dox.api;
 
 import java.io.Serializable;
 
+import static com.google.common.base.MoreObjects.toStringHelper;
+
 /**
  * @author Silvio Wangler
  * @since 0.1
@@ -26,6 +28,7 @@ public class DocumentClass extends AbstractTranslatable implements Serializable 
 
     private String shortName;
     private String translatedText;
+    private String client;
 
     public DocumentClass() {
         super();
@@ -63,6 +66,14 @@ public class DocumentClass extends AbstractTranslatable implements Serializable 
         this.translatedText = translation;
     }
 
+    public String getClient() {
+        return client;
+    }
+
+    public void setClient(String client) {
+        this.client = client;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -88,10 +99,10 @@ public class DocumentClass extends AbstractTranslatable implements Serializable 
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("DocumentClass");
-        sb.append("{shortName='").append(shortName).append('\'');
-        sb.append('}');
-        return sb.toString();
+        return toStringHelper(this)
+                .add("shortName", shortName)
+                .add("translatedText", translatedText)
+                .add("client", client)
+                .toString();
     }
 }

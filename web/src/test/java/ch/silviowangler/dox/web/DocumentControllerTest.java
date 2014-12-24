@@ -34,7 +34,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import static ch.silviowangler.dox.web.DocumentReferenceBuilder.newDocumentReference;
+import static ch.silviowangler.dox.DocumentReferenceBuilder.newDocumentReference;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;

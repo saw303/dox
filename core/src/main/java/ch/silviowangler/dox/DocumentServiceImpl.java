@@ -731,7 +731,9 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     private ch.silviowangler.dox.api.DocumentClass toDocumentClassApi(ch.silviowangler.dox.domain.DocumentClass documentClass) {
-        return new ch.silviowangler.dox.api.DocumentClass(documentClass.getShortName());
+        ch.silviowangler.dox.api.DocumentClass docClassApi = new ch.silviowangler.dox.api.DocumentClass(documentClass.getShortName());
+        docClassApi.setClient(documentClass.getClient().getShortName());
+        return docClassApi;
     }
 
     private DocumentClass toDocumentClassWithAttributesApi(ch.silviowangler.dox.domain.DocumentClass documentClass) {
