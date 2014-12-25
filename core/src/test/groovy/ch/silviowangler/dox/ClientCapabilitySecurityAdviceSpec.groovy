@@ -2,6 +2,7 @@ package ch.silviowangler.dox
 
 import ch.silviowangler.dox.api.DocumentClass
 import ch.silviowangler.dox.api.DocumentReference
+import ch.silviowangler.dox.api.PhysicalDocument
 import ch.silviowangler.dox.domain.Client
 import ch.silviowangler.dox.domain.security.DoxUser
 import ch.silviowangler.dox.repository.security.DoxUserRepository
@@ -62,7 +63,7 @@ class ClientCapabilitySecurityAdviceSpec extends Specification {
         thrown(IllegalArgumentException)
 
         and: 'A user lookup is made'
-        1 * doxUserRepository.findByUsername('username')
+        1 * doxUserRepository.findByUsername('username') >> new DoxUser(username: 'username', clients: [new Client(shortName: 'clientX')])
     }
 
     @Unroll
@@ -100,7 +101,7 @@ class ClientCapabilitySecurityAdviceSpec extends Specification {
     }
 
     @Unroll
-    void "Verify client capability mechanism with user authentication and access denied"() {
+    void "Expect error message '#expectedMessage'"() {
 
         given: 'A user in the security context'
         SecurityContextHolder.context.setAuthentication(new UsernamePasswordAuthenticationToken(new User('username', 'password', []), 'password'))
@@ -117,7 +118,7 @@ class ClientCapabilitySecurityAdviceSpec extends Specification {
         1 * pointCut.getArgs() >> args
 
         and: 'the actual target is never called'
-        0 * pointCut.proceed()
+        proceedCalls * pointCut.proceed() >> pReturn
 
         and: 'a user lookup is made'
         1 * doxUserRepository.findByUsername('username') >> new DoxUser(username: 'username', clients: userClientAssignment)
@@ -129,10 +130,41 @@ class ClientCapabilitySecurityAdviceSpec extends Specification {
         ex.message == expectedMessage
 
         where:
-        args                                                                             | userClientAssignment                                                                                   || expectedMessage
-        [new DocumentClass(client: 'clientA')]                                           | [new Client(shortName: 'clientB')]                                                                     || 'You have no access to client clientA'
-        [new DocumentClass(client: 'clientX')]                                           | [new Client(shortName: 'clientA'), new Client(shortName: 'clientB')]                                   || 'You have no access to client clientX'
-        [new DocumentClass(client: 'clientY')]                                           | [new Client(shortName: 'clientA'), new Client(shortName: 'clientB'), new Client(shortName: 'clientZ')] || 'You have no access to client clientY'
-        [new DocumentClass(client: 'clientC'), new DocumentReference(client: 'clientD')] | [new Client(shortName: 'clientA'), new Client(shortName: 'clientB')]                                   || 'You have no access to clients clientC and clientD'
+        args                                                                             | proceedCalls | pReturn                                                                            | userClientAssignment                                                                                   || expectedMessage
+        [new DocumentClass(client: 'clientA')]                                           | 0            | null                                                                               | [new Client(shortName: 'clientB')]                                                                     || 'You have no access to client clientA'
+        [new DocumentClass(client: 'clientX')]                                           | 0            | null                                                                               | [new Client(shortName: 'clientA'), new Client(shortName: 'clientB')]                                   || 'You have no access to client clientX'
+        [new DocumentClass(client: 'clientY')]                                           | 0            | null                                                                               | [new Client(shortName: 'clientA'), new Client(shortName: 'clientB'), new Client(shortName: 'clientZ')] || 'You have no access to client clientY'
+        [new DocumentClass(client: 'clientC'), new DocumentReference(client: 'clientD')] | 0            | null                                                                               | [new Client(shortName: 'clientA'), new Client(shortName: 'clientB')]                                   || 'You have no access to clients clientC and clientD'
+        [1L]                                                                             | 1            | new PhysicalDocument(client: 'clientC')                                            | [new Client(shortName: 'clientA'), new Client(shortName: 'clientB')]                                   || 'You have no access to client clientC'
+        [99L]                                                                            | 1            | [new PhysicalDocument(client: 'clientC'), new PhysicalDocument(client: 'clientZ')] | [new Client(shortName: 'clientA'), new Client(shortName: 'clientB')]                                   || 'You have no access to clients clientC and clientZ'
+    }
+
+    void "Very return values are checked too"() {
+        given: 'A user in the security context'
+        SecurityContextHolder.context.setAuthentication(new UsernamePasswordAuthenticationToken(new User('username', 'password', []), 'password'))
+
+        and: 'further setup...'
+        def pointCut = Mock(ProceedingJoinPoint)
+        def doxUserRepository = Mock(DoxUserRepository)
+        def advice = new ClientCapabilitySecurityAdvice(doxUserRepository)
+
+        when: 'the advice gets called'
+        def retVal = advice.verifyUserCanPerformActionOnCurrentClient(pointCut)
+
+        then: 'the method calls would have the following arguments'
+        1 * pointCut.getArgs() >> args
+
+        and: 'the actual return value is set'
+        1 * pointCut.proceed() >> returnValue
+
+        and: 'a user lookup is made'
+        1 * doxUserRepository.findByUsername('username') >> new DoxUser(username: 'username', clients: userClientAssignment)
+
+        and: 'the call may proceed'
+        retVal == returnValue
+
+        where:
+        args | userClientAssignment               || returnValue
+        [1L] | [new Client(shortName: 'clientA')] || new PhysicalDocument(client: 'clientA')
     }
 }

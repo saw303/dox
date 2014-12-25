@@ -10,8 +10,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
+import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -50,57 +52,88 @@ public class ClientCapabilitySecurityAdvice {
             doxUser = doxUserRepository.findByUsername(user.getUsername());
         }
 
-        boolean hasClientAssigned = false;
-
         for (Object arg : joinPoint.getArgs()) {
-
-            if (containsClient(arg)) {
-
-                if (isAuth) {
-                    String clientName = (String) new PropertyDescriptor(CLIENT_FIELD_NAME, arg.getClass()).getReadMethod().invoke(arg);
-
-                    if (clientName == null) {
-                        throw new IllegalArgumentException("You need to provide a client name on class " + arg.getClass());
-                    }
-
-                    for (Client client : doxUser.getClients()) {
-                        if (client.getShortName().equals(clientName)) {
-                            hasClientAssigned = true;
-                            break;
-                        }
-                    }
-
-                    if (!hasClientAssigned) {
-                        clientAccessDeniedList.add(clientName);
-                    }
-                }
+            if (doxUser != null) {
+                clientAccessDeniedList.addAll(analyze(arg, doxUser));
             }
         }
 
         if (!clientAccessDeniedList.isEmpty()) {
-
-            StringBuilder sb = new StringBuilder("You have no access to ");
-
-            if (clientAccessDeniedList.size() > 1) {
-                sb.append("clients ");
-
-                for (int i = 0; i < clientAccessDeniedList.size(); i++) {
-                    String clientName = clientAccessDeniedList.get(i);
-
-                    if (i > 0) {
-                        sb.append(" and ");
-                    }
-                    sb.append(clientName);
-                }
-
-            } else {
-                sb.append("client ").append(clientAccessDeniedList.get(0));
-            }
-            throw new AccessDeniedException(sb.toString());
+            return throwAccessDeniedException(clientAccessDeniedList);
         }
 
         Object retVal = joinPoint.proceed();
+
+        if (retVal != null) {
+
+            if (retVal instanceof Iterable) {
+                Iterable iterable = (Iterable) retVal;
+                for (Object arg : iterable) {
+                    if (containsClient(arg)) {
+                        clientAccessDeniedList.addAll(analyze(arg, doxUser));
+                    }
+                }
+            } else {
+                if (containsClient(retVal)) {
+                    clientAccessDeniedList = analyze(retVal, doxUser);
+                }
+            }
+
+            if (!clientAccessDeniedList.isEmpty()) {
+                throwAccessDeniedException(clientAccessDeniedList);
+            }
+        }
         return retVal;
+    }
+
+    private Object throwAccessDeniedException(List<String> clientAccessDeniedList) {
+        StringBuilder sb = new StringBuilder("You have no access to ");
+
+        if (clientAccessDeniedList.size() > 1) {
+            sb.append("clients ");
+
+            for (int i = 0; i < clientAccessDeniedList.size(); i++) {
+                String clientName = clientAccessDeniedList.get(i);
+
+                if (i > 0) {
+                    sb.append(" and ");
+                }
+                sb.append(clientName);
+            }
+
+        } else {
+            sb.append("client ").append(clientAccessDeniedList.get(0));
+        }
+        throw new AccessDeniedException(sb.toString());
+    }
+
+    private List<String> analyze(Object arg, DoxUser doxUser) throws IntrospectionException, InvocationTargetException, IllegalAccessException {
+
+        List<String> list = newArrayList();
+
+        boolean hasClientAssigned = false;
+
+        if (containsClient(arg)) {
+
+            String clientName = (String) new PropertyDescriptor(CLIENT_FIELD_NAME, arg.getClass()).getReadMethod().invoke(arg);
+
+            if (clientName == null) {
+                throw new IllegalArgumentException("You need to provide a client name on class " + arg.getClass());
+            }
+
+            for (Client client : doxUser.getClients()) {
+                if (client.getShortName().equals(clientName)) {
+                    hasClientAssigned = true;
+                    break;
+                }
+            }
+
+            if (!hasClientAssigned) {
+                list.add(clientName);
+            }
+
+        }
+        return list;
     }
 
     private boolean isAuthenticated() {
