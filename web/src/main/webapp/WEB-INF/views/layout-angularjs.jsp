@@ -33,9 +33,10 @@
     <meta name="author" content="Silvio Wangler">
 
     <meta name="viewport" content="width=device-width">
-    <meta name="fragment" content="!" />
+    <meta name="fragment" content="!"/>
 
-    <link href='http://fonts.googleapis.com/css?family=Varela+Round|Playball|Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <link href="//fonts.googleapis.com/css?family=Varela+Round|Playball|Montserrat:400,700" rel="stylesheet"
+          type="text/css">
     <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>"/>
     <link id="apiRoot" href="<%=request.getContextPath()%>"/>
     <link type="text/plain" rel="author" href="humans.txt"/>
