@@ -13,14 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
-import org.apache.xalan.xsltc.trax.SAX2DOM
-import org.ccil.cowan.tagsoup.Parser
-import org.markdownj.MarkdownProcessor
-import org.xhtmlrenderer.pdf.ITextRenderer
-import org.xml.sax.InputSource
-
 buildscript {
     repositories {
         maven {
@@ -29,72 +21,9 @@ buildscript {
     }
     dependencies {
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.5'
-
-        classpath 'xalan:xalan:2.7.2'
-        classpath "org.markdownj:markdownj:0.4"
-        classpath "org.ccil.cowan.tagsoup:tagsoup:1.2.1"
-        classpath "org.xhtmlrenderer:core-renderer:8.0"
-        classpath 'com.lowagie:itext:2.0.8'
         classpath "com.eriwen:gradle-js-plugin:1.12.1"
         classpath 'com.eriwen:gradle-css-plugin:1.11.1'
     }
-}
-
-task clean << {
-    delete fileTree(dir: 'build').include('*.html').include('*.pdf')
-}
-
-task build << {
-
-    def baseName = 'Installation-Guide'
-    def source = "${baseName}.md"
-    def targetPdf = "${baseName}.pdf"
-    def targetHtml = "${baseName}.html"
-
-    //Convert from markdown to html
-    def mp = new MarkdownProcessor()
-    def html = """<html>
-		<head>
-			<title>DOX :: Installation Guide</title>
-			
-			<style type="text/css">
-				body {
-					font-family: Verdana,sans-serif;
-					font-size: 0.8em;
-				}
-				code {
-					background-clip: padding-box;
-					background-color: #F5F5F5;
-					border: 1px solid #CCCCCC;
-					border-radius: 3px;
-					display: block;
-					font-size: 12px;
-					line-height: 18px;
-					overflow: auto;
-					padding: 6px 10px;
-				}
-			</style>
-		</head>
-	<body>${mp.markdown((new File(source).text))}</body></html>
-	"""
-
-    //Convert from html to w3c document
-    def parser = new Parser()
-    def sax2dom = new SAX2DOM()
-    parser.setContentHandler(sax2dom);
-    parser.setFeature(Parser.namespacesFeature, false);
-    parser.parse(new InputSource(new ByteArrayInputStream(html.getBytes())));
-
-    //Use Document to create pdf
-    ITextRenderer renderer = new ITextRenderer();
-    renderer.setDocument(sax2dom.getDOM(), null);
-    renderer.layout();
-    def rootFolder = file('build')
-    if (!rootFolder.exists()) rootFolder.mkdir()
-    renderer.createPDF((new File(rootFolder, targetPdf).newOutputStream()))
-
-    def htmlFile = new File('build', targetHtml)
-    htmlFile << html
 }
 
 allprojects {

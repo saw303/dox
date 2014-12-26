@@ -1,0 +1,29 @@
+buildscript {
+    repositories {
+        maven {
+            url 'http://repo.wangler.io/repo'
+        }
+    }
+    dependencies {
+        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.2'
+    }
+}
+
+apply plugin: 'org.asciidoctor.convert'
+
+asciidoctor {
+
+    sources {
+        include 'manual.adoc'
+    }
+
+    outputDir "${buildDir}/docs"
+    options doctype: 'book', ruby: 'erubis'
+
+    attributes 'source-highlighter': 'coderay',
+            toc: 'left',
+            toclevels: '5',
+            idprefix: '',
+            idseparator: '-',
+            icons: 'font'
+}
