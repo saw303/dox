@@ -21,7 +21,8 @@ asciidoctor {
     options doctype: 'book', ruby: 'erubis'
 
     attributes 'source-highlighter': 'coderay',
-            toc: '',
+            toc: 'left',
+            toclevels: '5',
             idprefix: '',
             idseparator: '-',
             icons: 'font'

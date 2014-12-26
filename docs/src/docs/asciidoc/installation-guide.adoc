@@ -84,8 +84,6 @@ In order to install Graphismagick instead of ImageMagick use
 
     sudp apt-get install graphicsmagick-imagemagick-compat webp
 
-==== Configure third party software
-
 ==== Install DOX
 ===== Setup the MySQL / MariaDB database
 To set up the database for DOX you can the following DDL script `ddl_mysql5innodb_create.sql` for MySQL. You find the script
