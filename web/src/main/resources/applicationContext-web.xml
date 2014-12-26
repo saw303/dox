@@ -41,6 +41,8 @@
                              username-parameter="username"
                              default-target-url="/"/>
         <security:logout logout-url="/logout"/>
+
+        <security:csrf disabled="true"/>
     </security:http>
 
     <beans profile="dev">

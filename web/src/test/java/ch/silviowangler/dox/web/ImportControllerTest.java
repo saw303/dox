@@ -72,7 +72,7 @@ public class ImportControllerTest {
 
         when(documentService.importDocument(any(PhysicalDocument.class))).thenReturn(new DocumentReference("test.pdf"));
 
-        ResponseEntity responseEntity = controller.importDocument(new MockMultipartFile("test.pdf", "this is just a test".getBytes()), request);
+        ResponseEntity responseEntity = controller.importDocument(new MockMultipartFile("test.pdf", "this is just a test".getBytes()), request, "Client");
         assertThat(responseEntity.getStatusCode(), is(CREATED));
 
         verify(documentService).importDocument(any(PhysicalDocument.class));
@@ -87,7 +87,7 @@ public class ImportControllerTest {
         when(request.getParameter("c")).thenReturn("C");
         when(documentService.importDocument(any(PhysicalDocument.class))).thenThrow(new DocumentDuplicationException(1L, "hash"));
 
-        ResponseEntity responseEntity = controller.importDocument(new MockMultipartFile("test.pdf", "this is just a test".getBytes()), request);
+        ResponseEntity responseEntity = controller.importDocument(new MockMultipartFile("test.pdf", "this is just a test".getBytes()), request, "Client");
         assertThat(responseEntity.getStatusCode(), is(CONFLICT));
 
         verify(documentService).importDocument(any(PhysicalDocument.class));
@@ -102,7 +102,7 @@ public class ImportControllerTest {
         when(request.getParameter("c")).thenReturn("C");
         when(documentService.importDocument(any(PhysicalDocument.class))).thenThrow(new ValidationException("bla"));
 
-        ResponseEntity responseEntity = controller.importDocument(new MockMultipartFile("test.pdf", "this is just a test".getBytes()), request);
+        ResponseEntity responseEntity = controller.importDocument(new MockMultipartFile("test.pdf", "this is just a test".getBytes()), request, "Client");
 
         assertThat(responseEntity.getStatusCode(), is(CONFLICT));
 

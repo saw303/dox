@@ -48,7 +48,7 @@ angular.module('dox.controllers', ['dox.services'])
             var formData = new FormData();
 
             for (var i = 0; i < form.length; i++) {
-                if (form[i].nodeName == 'INPUT') {
+                if (form[i].nodeName == 'INPUT' || form[i].nodeName == 'SELECT') {
                     $log.debug('Appending input field %s to form data', form[i].name);
 
                     if (form[i].type == 'file') {

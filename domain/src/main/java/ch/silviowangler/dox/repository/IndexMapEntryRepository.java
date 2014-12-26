@@ -42,7 +42,7 @@ public interface IndexMapEntryRepository extends CrudRepository<IndexMapEntry, L
     @Query("select distinct d from IndexMapEntry i, Document d where i.document = d and d.client.shortName in (:clientShortNames) and (i.stringRepresentation = :upperCaseValue or i.document.originalFilename = :originalValue) and i.document.userReference = :userReference  order by d.creationDate desc")
     List<Document> findByValueAndUserReference(@Param("upperCaseValue") String upperCaseValue, @Param("originalValue") String originalValue, @Param("userReference") String userReference, @Param("clientShortNames") List<String> clientShortNames);
 
-    @Query("select distinct d from IndexMapEntry i, Document d where i.document = d and d.client.shortName in (?3) and (i.stringRepresentation like %?1 or i.document.originalFilename like %?2) and i.document.userReference = ?3  order by d.creationDate desc")
+    @Query("select distinct d from IndexMapEntry i, Document d where i.document = d and d.client.shortName in (?4) and (i.stringRepresentation like %?1 or i.document.originalFilename like %?2) and i.document.userReference = ?3  order by d.creationDate desc")
     List<Document> findByValueLikeAndUserReference(String upperCaseValue, String originalValue, String userReference, List<String> clientShortNames);
 
     List<IndexMapEntry> findByDocument(Document document);
