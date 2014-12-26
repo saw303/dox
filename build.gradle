@@ -26,10 +26,6 @@ buildscript {
     }
 }
 
-task clean << {
-    delete fileTree(dir: 'build').include('*.html').include('*.pdf')
-}
-
 allprojects {
 
     apply plugin: 'idea'
