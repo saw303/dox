@@ -30,7 +30,7 @@
     <logger name="org.springframework.jdbc.datasource.init" level="DEBUG"/>
     <logger name="org.springframework.jdbc.datasource.embedded" level="DEBUG"/>
     <logger name="org.springframework.data" level="ERROR"/>
-    <logger name="org.springframework.security" level="ERROR"/>
+    <logger name="org.springframework.security" level="DEBUG"/>
     <logger name="org.springframework.web" level="DEBUG"/>
     <logger name="org.hibernate" level="ERROR"/>
     <logger name="org.hibernate.tool.hbm2ddl" level="ERROR"/>

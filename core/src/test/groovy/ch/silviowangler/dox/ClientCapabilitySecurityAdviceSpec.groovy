@@ -3,6 +3,7 @@ package ch.silviowangler.dox
 import ch.silviowangler.dox.api.DocumentClass
 import ch.silviowangler.dox.api.DocumentReference
 import ch.silviowangler.dox.api.PhysicalDocument
+import ch.silviowangler.dox.api.security.UserService
 import ch.silviowangler.dox.domain.Client
 import ch.silviowangler.dox.domain.security.DoxUser
 import ch.silviowangler.dox.repository.security.DoxUserRepository
@@ -26,12 +27,16 @@ class ClientCapabilitySecurityAdviceSpec extends Specification {
         given:
         def pointCut = Mock(ProceedingJoinPoint)
         def doxUserRepository = Mock(DoxUserRepository)
-        def advice = new ClientCapabilitySecurityAdvice(doxUserRepository)
+        def userService = Mock(UserService)
+        def advice = new ClientCapabilitySecurityAdvice(doxUserRepository, userService)
 
         when: 'the advice gets called'
         def retVal = advice.verifyUserCanPerformActionOnCurrentClient(pointCut)
 
-        then: 'the method calls would have the following arguments'
+        then:
+        1 * userService.isLoggedIn() >> false
+
+        and: 'the method calls would have the following arguments'
         1 * pointCut.getArgs() >> ['xxx', 1L, 44]
 
         and: 'the actual return value is set'
@@ -51,12 +56,16 @@ class ClientCapabilitySecurityAdviceSpec extends Specification {
 
         def pointCut = Mock(ProceedingJoinPoint)
         def doxUserRepository = Mock(DoxUserRepository)
-        def advice = new ClientCapabilitySecurityAdvice(doxUserRepository)
+        def userService = Mock(UserService)
+        def advice = new ClientCapabilitySecurityAdvice(doxUserRepository, userService)
 
         when: 'the advice gets called'
         advice.verifyUserCanPerformActionOnCurrentClient(pointCut)
 
-        then: 'the call should provoke an exception since the client field is not set'
+        then:
+        1 * userService.isLoggedIn() >> true
+
+        and: 'the call should provoke an exception since the client field is not set'
         1 * pointCut.getArgs() >> [new DocumentReference(client: null)]
 
         and: 'Illegal argument exception is thrown'
@@ -75,12 +84,16 @@ class ClientCapabilitySecurityAdviceSpec extends Specification {
         and: 'further setup...'
         def pointCut = Mock(ProceedingJoinPoint)
         def doxUserRepository = Mock(DoxUserRepository)
-        def advice = new ClientCapabilitySecurityAdvice(doxUserRepository)
+        def userService = Mock(UserService)
+        def advice = new ClientCapabilitySecurityAdvice(doxUserRepository, userService)
 
         when: 'the advice gets called'
         def retVal = advice.verifyUserCanPerformActionOnCurrentClient(pointCut)
 
-        then: 'the method calls would have the following arguments'
+        then:
+        1 * userService.isLoggedIn() >> true
+
+        and: 'the method calls would have the following arguments'
         1 * pointCut.getArgs() >> args
 
         and: 'the actual return value is set'
@@ -101,7 +114,7 @@ class ClientCapabilitySecurityAdviceSpec extends Specification {
     }
 
     @Unroll
-    void "Expect error message '#expectedMessage'"() {
+    void "#proceedCalls invocations and expect error message '#expectedMessage'"() {
 
         given: 'A user in the security context'
         SecurityContextHolder.context.setAuthentication(new UsernamePasswordAuthenticationToken(new User('username', 'password', []), 'password'))
@@ -109,12 +122,16 @@ class ClientCapabilitySecurityAdviceSpec extends Specification {
         and: 'further setup...'
         def pointCut = Mock(ProceedingJoinPoint)
         def doxUserRepository = Mock(DoxUserRepository)
-        def advice = new ClientCapabilitySecurityAdvice(doxUserRepository)
+        def userService = Mock(UserService)
+        def advice = new ClientCapabilitySecurityAdvice(doxUserRepository, userService)
 
         when: 'the advice gets called'
         advice.verifyUserCanPerformActionOnCurrentClient(pointCut)
 
-        then: 'the method calls would have the following arguments'
+        then:
+        1 * userService.isLoggedIn() >> true
+
+        and: 'the method calls would have the following arguments'
         1 * pointCut.getArgs() >> args
 
         and: 'the actual target is never called'
@@ -146,12 +163,16 @@ class ClientCapabilitySecurityAdviceSpec extends Specification {
         and: 'further setup...'
         def pointCut = Mock(ProceedingJoinPoint)
         def doxUserRepository = Mock(DoxUserRepository)
-        def advice = new ClientCapabilitySecurityAdvice(doxUserRepository)
+        def userService = Mock(UserService)
+        def advice = new ClientCapabilitySecurityAdvice(doxUserRepository, userService)
 
         when: 'the advice gets called'
         def retVal = advice.verifyUserCanPerformActionOnCurrentClient(pointCut)
 
-        then: 'the method calls would have the following arguments'
+        then:
+        1 * userService.isLoggedIn() >> true
+
+        and: 'the method calls would have the following arguments'
         1 * pointCut.getArgs() >> args
 
         and: 'the actual return value is set'

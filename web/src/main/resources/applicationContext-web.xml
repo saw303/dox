@@ -16,7 +16,9 @@
   -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xmlns:security="http://www.springframework.org/schema/security"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
@@ -26,6 +28,12 @@
     <security:http pattern="/resources/**" secured="none"/>
     <security:http pattern="/js/**" secured="none"/>
     <security:http pattern="/humans.txt" secured="none"/>-->
+
+    <bean id="anonymousAuthFilter" class="org.springframework.security.web.authentication.AnonymousAuthenticationFilter"
+          c:key="dox"/>
+
+    <bean id="anonymousAuthenticationProvider"
+          class="org.springframework.security.authentication.AnonymousAuthenticationProvider" c:key="dox"/>
 
     <security:http auto-config="true" use-expressions="true">
         <security:intercept-url pattern="/login*" access="isAnonymous() || isAuthenticated()"/>

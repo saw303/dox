@@ -1,5 +1,6 @@
 package ch.silviowangler.dox;
 
+import ch.silviowangler.dox.api.security.UserService;
 import ch.silviowangler.dox.domain.Client;
 import ch.silviowangler.dox.domain.security.DoxUser;
 import ch.silviowangler.dox.repository.security.DoxUserRepository;
@@ -33,15 +34,17 @@ public class ClientCapabilitySecurityAdvice {
     public static final String CLIENT_FIELD_NAME = "client";
 
     private DoxUserRepository doxUserRepository;
+    private UserService userService;
 
     @Autowired
-    public ClientCapabilitySecurityAdvice(DoxUserRepository doxUserRepository) {
+    public ClientCapabilitySecurityAdvice(DoxUserRepository doxUserRepository, UserService userService) {
         this.doxUserRepository = doxUserRepository;
+        this.userService = userService;
     }
 
     public Object verifyUserCanPerformActionOnCurrentClient(ProceedingJoinPoint joinPoint) throws Throwable {
 
-        boolean isAuth = isAuthenticated();
+        boolean isAuth = userService.isLoggedIn();
         DoxUser doxUser = null;
         List<String> clientAccessDeniedList = newArrayList();
 
@@ -134,10 +137,6 @@ public class ClientCapabilitySecurityAdvice {
 
         }
         return list;
-    }
-
-    private boolean isAuthenticated() {
-        return SecurityContextHolder.getContext().getAuthentication() != null;
     }
 
     private boolean containsClient(Object arg) {

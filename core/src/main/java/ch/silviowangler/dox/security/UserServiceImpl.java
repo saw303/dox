@@ -8,6 +8,8 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationTrustResolver;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
@@ -22,14 +24,16 @@ import java.util.List;
  * @since 0.4
  */
 @Service("userService")
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private DoxUserRepository doxUserRepository;
+    @Autowired
+    private AuthenticationTrustResolver authenticationTrustResolver;
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    @Transactional(readOnly = true)
     public List<String> getCurrentUserClients() {
 
         User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -43,5 +47,11 @@ public class UserServiceImpl implements UserService {
             clientList.add(client.getShortName());
         }
         return clientList;
+    }
+
+    @Override
+    public boolean isLoggedIn() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null && !authenticationTrustResolver.isAnonymous(authentication);
     }
 }
