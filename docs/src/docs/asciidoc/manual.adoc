@@ -1,0 +1,12 @@
+= DOX
+A document management system brought you by Silvio Wangler <silvio.wangler@gmail.com>
+
+== Indication
+This software is licensed under http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0] and is provided "as is", without warranty of any kind.
+
+TIP: In order to get an optimal experience I recommend to run DOX on a Linux server such as http://www.ubuntu.com/server[Ubuntu] or some other Linux distribution.
+DOX has not been tested on a Windows environment but since it has been implemented with Java it will most likely run on Windows too.
+
+include::installation-guide.adoc[]
+
+include::appendix.adoc[]
