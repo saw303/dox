@@ -20,7 +20,7 @@ SET client_id = (SELECT
                  FROM DOX_CLIENT
                  WHERE shortName = 'wangler');
 
-ALTER TABLE DOX_DOC_CLASS ADD COLUMN client_id BIGINT NOT NULL;
+ALTER TABLE DOX_DOC_CLASS MODIFY COLUMN client_id BIGINT NOT NULL;
 
 ALTER TABLE DOX_DOC_CLASS
 ADD CONSTRAINT FK_ahrd5jrttgc117sb9tfpn470q
@@ -37,7 +37,7 @@ SET client_id = (SELECT
                  FROM DOX_CLIENT
                  WHERE shortName = 'wangler');
 
-ALTER TABLE DOX_ATTR ADD COLUMN client_id BIGINT NOT NULL;
+ALTER TABLE DOX_ATTR MODIFY COLUMN client_id BIGINT NOT NULL;
 
 ALTER TABLE DOX_ATTR
 ADD CONSTRAINT FK_1w9k5bufjopui91desoa9w0be
@@ -63,12 +63,11 @@ ADD CONSTRAINT FK_m3puppi5y39qjs0suraekgq8w
 FOREIGN KEY (DOX_USER_id)
 REFERENCES DOX_USER (id);
 
-INSERT INTO DOX_USER_DOX_CLIENT (DOX_USER_id, clients_id) VALUES ((SELECT
-                                                                     id
-                                                                   FROM DOX_CLIENT
-                                                                   WHERE shortName = 'wangler'), (SELECT
-                                                                                                    id
-                                                                                                  FROM DOX_USER));
+INSERT INTO DOX_USER_DOX_CLIENT (DOX_USER_id, clients_id) SELECT
+                                                            u.id,
+                                                            c.id
+                                                          FROM DOX_CLIENT c, DOX_USER u
+                                                          WHERE c.shortName = 'wangler';
 
 -- DOCUMENT
 ALTER TABLE DOX_DOC ADD COLUMN client_id BIGINT NULL;
@@ -79,7 +78,7 @@ SET client_id = (SELECT
                  FROM DOX_CLIENT
                  WHERE shortName = 'wangler');
 
-ALTER TABLE DOX_DOC ADD COLUMN client_id BIGINT NOT NULL;
+ALTER TABLE DOX_DOC MODIFY COLUMN client_id BIGINT NOT NULL;
 
 ALTER TABLE DOX_DOC
 ADD CONSTRAINT FK_s9vyghjc5mjhajeaaadixh6ag

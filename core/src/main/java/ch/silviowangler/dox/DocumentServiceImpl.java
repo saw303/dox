@@ -384,7 +384,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
         User user = getPrincipal();
 
-        Document document = new Document(hash, documentClassEntity, -1, mimeType, physicalDocumentApi.getFileName(), indexStore, user.getUsername());
+        Document document = new Document(hash, documentClassEntity, PAGE_NUMBER_NOT_RETRIEVABLE, mimeType, physicalDocumentApi.getFileName(), indexStore, user.getUsername());
         document.setClient(clientRepository.findByShortName(physicalDocumentApi.getClient()));
         indexStore.setDocument(document);
 
