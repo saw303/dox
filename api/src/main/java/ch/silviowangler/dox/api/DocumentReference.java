@@ -42,6 +42,7 @@ public class DocumentReference implements Serializable {
     private String userReference;
     private long fileSize;
     private DateTime creationDate;
+    private String client;
 
     public DocumentReference() {
         super();
@@ -155,6 +156,14 @@ public class DocumentReference implements Serializable {
         this.creationDate = creationDate;
     }
 
+    public String getClient() {
+        return client;
+    }
+
+    public void setClient(String client) {
+        this.client = client;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
@@ -168,6 +177,7 @@ public class DocumentReference implements Serializable {
                 .add("userReference", userReference)
                 .add("fileSize", fileSize)
                 .add("creationDate", creationDate)
+                .add("client", client)
                 .toString();
     }
 

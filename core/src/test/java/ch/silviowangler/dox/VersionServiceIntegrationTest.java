@@ -36,7 +36,8 @@ public class VersionServiceIntegrationTest extends AbstractIntegrationTest {
     public void verifyVersion() {
         final String version = versionService.fetchVersion().getVersion();
 
-        assumeTrue("Test only works in Gradle", !version.startsWith("@") && !version.endsWith("@"));
+        // Test only works in Gradle
+        assumeTrue(!version.startsWith("@") && !version.endsWith("@"));
 
         // make sure release builds don't break this test
         if (version.contains("SNAPSHOT") || version.contains("RELEASE")) {

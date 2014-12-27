@@ -18,10 +18,7 @@ package ch.silviowangler.dox.domain;
 
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Set;
 
 import static com.google.common.base.MoreObjects.toStringHelper;
@@ -38,6 +35,8 @@ public class DocumentClass extends AbstractPersistable<Long> {
     private String shortName;
     @ManyToMany
     private Set<Attribute> attributes;
+    @ManyToOne(optional = false)
+    private Client client;
 
     public String getShortName() {
         return shortName;
@@ -55,11 +54,20 @@ public class DocumentClass extends AbstractPersistable<Long> {
         this.attributes = attributes;
     }
 
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
     @Override
     public String toString() {
         return toStringHelper(this)
                 .add("shortName", shortName)
                 .add("attributes", attributes)
+                .add("client", client)
                 .toString();
     }
 }

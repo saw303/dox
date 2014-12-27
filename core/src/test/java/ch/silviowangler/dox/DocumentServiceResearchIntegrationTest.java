@@ -17,6 +17,7 @@
 package ch.silviowangler.dox;
 
 import ch.silviowangler.dox.api.*;
+import ch.silviowangler.dox.api.rest.DocumentClass;
 import com.google.common.collect.Maps;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
@@ -54,7 +55,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
     @Before
     public void init() throws ValidationException, DocumentDuplicationException, IOException, DocumentNotFoundException, DocumentClassNotFoundException {
 
-        loginAsRoot();
+        loginAsTestRoot();
 
         Map<TranslatableKey, DescriptiveIndex> indexes = newHashMapWithExpectedSize(3);
         indexes.put(COMPANY, new DescriptiveIndex(SUNRISE));
@@ -79,8 +80,6 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
         indexes.put(INVOICE_AMOUNT, new DescriptiveIndex("12.60"));
         indexes.put(MONEY, new DescriptiveIndex("CHF 12.50"));
         importFile("file-4.txt", "tiny content 2", "INVOICE", indexes);
-
-        loginAsRoot();
     }
 
     @Test
@@ -98,9 +97,11 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
 
         assertThat(documentReferences.size(), is(2));
 
-        assertThat(documentReferences.iterator().next().getIndices().get(COMPANY) instanceof DescriptiveIndex, is(true));
+        DocumentReference docOne = documentReferences.iterator().next();
+        assertThat(docOne.getIndices().get(COMPANY) instanceof DescriptiveIndex, is(true));
+        assertThat(docOne.getClient(), is("wangler"));
 
-        final DescriptiveIndex index = (DescriptiveIndex) documentReferences.iterator().next().getIndices().get(COMPANY);
+        final DescriptiveIndex index = documentReferences.iterator().next().getIndices().get(COMPANY);
         assertThat((String) index.getValue(), is(companyName));
         assertThat(index.getAttribute(), is(not(nullValue())));
 
@@ -369,5 +370,42 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
 
         assertThat(documentReferences.size(), is(1));
         assertThat(documentReferences.iterator().next().getDocumentClass().getShortName(), is("CONTRACTS"));
+    }
+
+    @Test
+    public void testClientCapabilityOnResearch() throws DocumentClassNotFoundException, IOException, DocumentNotFoundException, DocumentDuplicationException, ValidationException {
+
+        loginAsTestRoot();
+
+        Map<TranslatableKey, DescriptiveIndex> indexes = newHashMapWithExpectedSize(1);
+        indexes.put(new TranslatableKey("name"), new DescriptiveIndex("John F. Kennedy"));
+
+        importFile("yolo.txt", "Ich bin ein Berliner", "DUMMY_DOC", indexes, "wangler_test");
+
+        loginAs("root");
+        List<DocumentReference> documents = documentService.findDocumentReferences("*Kennedy*");
+
+        assertThat(documents.size(), is(0));
+
+        loginAsTestRoot();
+
+        documents = documentService.findDocumentReferences("*Kennedy*");
+        assertThat(documents.size(), is(1));
+
+        DocumentReference documentReference = documents.get(0);
+        assertThat(documentReference.getClient(), is("wangler_test"));
+        assertThat(documentReference.getDocumentClass().getClient(), is("wangler_test"));
+        assertThat(documentReference.getDocumentClass().getClient(), is("wangler_test"));
+
+    }
+
+    @Test
+    public void testClientCapabilityOnRetrievingDocumentClasses() {
+        loginAs("root");
+        List<ch.silviowangler.dox.api.rest.DocumentClass> documentClasses = documentService.findAllDocumentClasses();
+
+        for (DocumentClass documentClass : documentClasses) {
+            assertThat("Document class " + documentClass.getShortName(), documentClass.getClient(), is("wangler"));
+        }
     }
 }

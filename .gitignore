@@ -23,3 +23,5 @@ web/src/main/webapp/js/libs/angular*/docs
 *gradle.properties
 
 *Guide.pdf
+
+dox*.sql

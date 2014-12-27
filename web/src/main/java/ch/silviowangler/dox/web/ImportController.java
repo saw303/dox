@@ -27,6 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -69,7 +70,7 @@ public class ImportController implements MessageSourceAware, InitializingBean {
 
     @SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.POST, value = "performImport.html")
-    public ResponseEntity<String> importDocument(MultipartFile file, WebRequest request) {
+    public ResponseEntity<String> importDocument(MultipartFile file, WebRequest request, @RequestParam("x_client") String client) {
 
         try {
             DocumentClass documentClass = new DocumentClass(request.getParameter(DOCUMENT_CLASS_SHORT_NAME));
@@ -79,7 +80,7 @@ public class ImportController implements MessageSourceAware, InitializingBean {
 
             while (params.hasNext()) {
                 String param = params.next();
-                if (!DOCUMENT_CLASS_SHORT_NAME.endsWith(param)) {
+                if (!DOCUMENT_CLASS_SHORT_NAME.endsWith(param) && !param.startsWith("x_")) {
                     indices.put(new TranslatableKey(param), new DescriptiveIndex(new String(request.getParameter(param).getBytes("iso-8859-1"), "utf-8")));
                 }
             }
@@ -89,6 +90,7 @@ public class ImportController implements MessageSourceAware, InitializingBean {
                     file.getBytes(),
                     indices,
                     file.getOriginalFilename());
+            physicalDocument.setClient(client);
 
             DocumentReference documentReference = documentService.importDocument(physicalDocument);
 

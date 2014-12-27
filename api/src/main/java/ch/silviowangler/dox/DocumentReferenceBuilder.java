@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ch.silviowangler.dox.web;
+package ch.silviowangler.dox;
 
 import ch.silviowangler.dox.api.DescriptiveIndex;
 import ch.silviowangler.dox.api.DocumentClass;

@@ -24,7 +24,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
@@ -33,6 +35,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
@@ -54,9 +57,15 @@ public abstract class AbstractIntegrationTest extends AbstractTransactionalJUnit
     @Autowired
     protected DocumentService documentService;
 
-    protected void loginAsRoot() {
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("root_test", "velo"));
+    protected void loginAsTestRoot() {
+        loginAs("root_test");
     }
+
+    protected void loginAs(String username) {
+        SecurityContextHolder.clearContext();
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(new User(username, "velo", new ArrayList<GrantedAuthority>()), "velo"));
+    }
+
 
     protected File loadFile(String fileName) {
         URL resource = getClass().getClassLoader().getResource(fileName);
@@ -99,12 +108,18 @@ public abstract class AbstractIntegrationTest extends AbstractTransactionalJUnit
     protected DocumentReference importDocument(String fileName, Map<TranslatableKey, DescriptiveIndex> indexes, String documentClassShortName) throws IOException, ValidationException, DocumentDuplicationException, DocumentClassNotFoundException {
         File singlePagePdf = loadFile(fileName);
         PhysicalDocument doc = new PhysicalDocument(new DocumentClass(documentClassShortName), FileUtils.readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
+        doc.setClient("wangler");
         return documentService.importDocument(doc);
     }
 
     protected DocumentReference importFile(final String fileName, final String content, final String docClassShortName, final Map<TranslatableKey, DescriptiveIndex> indices) throws ValidationException, DocumentDuplicationException, IOException, DocumentNotFoundException, DocumentClassNotFoundException {
+        return importFile(fileName, content, docClassShortName, indices, "wangler");
+    }
+
+    protected DocumentReference importFile(final String fileName, final String content, final String docClassShortName, final Map<TranslatableKey, DescriptiveIndex> indices, final String clientName) throws ValidationException, DocumentDuplicationException, IOException, DocumentNotFoundException, DocumentClassNotFoundException {
         File textFile01 = createTestFile(fileName, content);
         PhysicalDocument doc = new PhysicalDocument(new DocumentClass(docClassShortName), readFileToByteArray(textFile01), indices, fileName);
+        doc.setClient(clientName);
         try {
             DocumentReference documentReference = documentService.importDocument(doc);
             logger.debug("File '{}' received id {}", fileName, documentReference.getId());

@@ -46,6 +46,8 @@ public class Attribute extends AbstractPersistable<Long> {
     private String mappingColumn;
     @Column(nullable = false)
     private boolean updateable;
+    @ManyToOne(optional = false)
+    private Client client;
 
     public boolean isUpdateable() {
         return updateable;
@@ -103,6 +105,14 @@ public class Attribute extends AbstractPersistable<Long> {
         this.mappingColumn = mappingColumn;
     }
 
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
@@ -112,6 +122,7 @@ public class Attribute extends AbstractPersistable<Long> {
                 .add("domain", domain)
                 .add("mappingColumn", mappingColumn)
                 .add("updateable", updateable)
+                .add("client", client)
                 .toString();
     }
 }

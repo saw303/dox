@@ -26,6 +26,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
@@ -34,7 +35,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import static ch.silviowangler.dox.web.DocumentReferenceBuilder.newDocumentReference;
+import static ch.silviowangler.dox.DocumentReferenceBuilder.newDocumentReference;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -72,6 +73,20 @@ public class DocumentControllerTest {
         assertThat(response.getContentAsString(), is("hello"));
         assertThat(response.getContentType(), is("aaa/bbb"));
         assertThat(response.getHeader("Content-Disposition"), is("inline; filename=\"hello.txt\""));
+    }
+
+    @Test
+    public void getTheDocumentContentCausesAccessDenied() throws DocumentNotFoundException, DocumentNotInStoreException, UnsupportedEncodingException {
+
+        MockHttpServletResponse response = new MockHttpServletResponse();
+
+        PhysicalDocument physicalDocument = new PhysicalDocument(new DocumentClass("hhh"), "hello".getBytes(), null, "hello.txt");
+        physicalDocument.setMimeType("aaa/bbb");
+        when(documentService.findPhysicalDocument(1L)).thenThrow(new AccessDeniedException("YOLO"));
+
+        controller.getDocument(1L, response);
+
+        assertThat(response.getStatus(), is(SC_FORBIDDEN));
     }
 
     @Test

@@ -1,3 +1,4 @@
+
 <%@page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
@@ -34,10 +35,16 @@
 
     <meta name="viewport" content="width=device-width">
 
-    <link href="//fonts.googleapis.com/css?family=Varela+Round|Playball|Montserrat:400,700" rel="stylesheet"
-          type="text/css">
-    <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>"/>
+    <link href="//fonts.googleapis.com/css?family=Varela+Round|Playball|Montserrat:400,700" rel="stylesheet" type="text/css">    
 
+    <c:choose>
+        <c:when test="${environment.acceptsProfiles('prod')}">
+            <link rel="stylesheet" href="<c:url value="/resources/css/all-min.css"/>"/>
+        </c:when>
+        <c:otherwise>
+            <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>"/>
+        </c:otherwise>
+    </c:choose>
     <link type="text/plain" rel="author" href="humans.txt"/>
     <script src="<c:url value="/js/libs/boilerplate/modernizr-2.6.2.min.js"/>"></script>
 </head>

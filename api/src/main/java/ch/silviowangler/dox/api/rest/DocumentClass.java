@@ -24,6 +24,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.google.common.base.MoreObjects.toStringHelper;
+
 /**
  * @author Silvio Wangler
  * @since 0.1
@@ -34,15 +36,17 @@ public class DocumentClass extends AbstractTranslatable implements Serializable 
     private String shortName;
     private String translatedText;
     private List<Attribute> attributes;
+    private String client;
 
-    public DocumentClass(String shortName, String translatedText, List<Attribute> attributes) {
+    public DocumentClass(String shortName, String translatedText, List<Attribute> attributes, String client) {
         this.shortName = shortName;
         this.translatedText = translatedText;
         this.attributes = attributes;
+        this.client = client;
     }
 
-    public DocumentClass(String shortName) {
-        this(shortName, null, new ArrayList<Attribute>());
+    public DocumentClass(String shortName, String client) {
+        this(shortName, null, new ArrayList<Attribute>(), client);
     }
 
     public String getShortName() {
@@ -76,6 +80,14 @@ public class DocumentClass extends AbstractTranslatable implements Serializable 
         this.translatedText = translation;
     }
 
+    public String getClient() {
+        return client;
+    }
+
+    public void setClient(String client) {
+        this.client = client;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -101,10 +113,10 @@ public class DocumentClass extends AbstractTranslatable implements Serializable 
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("DocumentClass");
-        sb.append("{shortName='").append(shortName).append('\'');
-        sb.append('}');
-        return sb.toString();
+        return toStringHelper(this)
+                .add("shortName", shortName)
+                .add("translatedText", translatedText)
+                .add("client", client)
+                .toString();
     }
 }

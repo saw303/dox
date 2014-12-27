@@ -41,7 +41,7 @@ public class LoadIntegrationTest extends AbstractIntegrationTest {
     @Before
     public void setUp() throws Exception {
 
-        loginAsRoot();
+        loginAsTestRoot();
 
         Calendar calendar = new GregorianCalendar(2013, Calendar.JANUARY, 1);
 
@@ -98,7 +98,7 @@ public class LoadIntegrationTest extends AbstractIntegrationTest {
             importFile(i + ".txt", Integer.toString(i), "INVOICE", indices);
         }
 
-        loginAsRoot();
+        loginAsTestRoot();
     }
 
     @Test

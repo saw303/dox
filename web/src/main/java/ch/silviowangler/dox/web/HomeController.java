@@ -16,8 +16,11 @@
 
 package ch.silviowangler.dox.web;
 
+import ch.silviowangler.dox.api.security.UserService;
+import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,6 +47,8 @@ public class HomeController {
 
     @Value("#{systemEnvironment['DOX_STORE']}")
     private File archiveDirectory;
+    @Autowired
+    private UserService userService;
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -64,6 +69,9 @@ public class HomeController {
     @RequestMapping(method = GET, value = "/partials/{view}")
     public ModelAndView retrieveViews(@PathVariable("view") String viewName) {
         logger.debug("Getting request for partial view {}", viewName);
-        return new ModelAndView(viewName);
+
+        Map<String, Object> model = Maps.newHashMap();
+        model.put("clients", userService.getCurrentUserClients());
+        return new ModelAndView(viewName, model);
     }
 }

@@ -33,7 +33,9 @@
        http://www.springframework.org/schema/util
        http://www.springframework.org/schema/util/spring-util.xsd
        http://www.springframework.org/schema/aop
-       http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/cache
+       http://www.springframework.org/schema/cache/spring-cache.xsd">
 
     <import resource="classpath*:applicationContext-jpa.xml"/>
     <import resource="classpath:applicationContext-security.xml"/>
@@ -70,6 +72,11 @@
             <aop:pointcut id="translationOperation" expression="execution(* ch.silviowangler.dox.*ServiceImpl.*(..))"/>
             <aop:after-returning method="addTranslationIfNeeded" pointcut-ref="translationOperation"
                                  returning="retVal"/>
+        </aop:aspect>
+
+        <aop:aspect id="clientCapabilityAdvice" ref="clientCapabilitySecurityAdvice">
+            <aop:pointcut id="clientCapability" expression="execution(* ch.silviowangler.dox.*ServiceImpl.*(..))"/>
+            <aop:around method="verifyUserCanPerformActionOnCurrentClient" pointcut-ref="clientCapability"/>
         </aop:aspect>
     </aop:config>
 

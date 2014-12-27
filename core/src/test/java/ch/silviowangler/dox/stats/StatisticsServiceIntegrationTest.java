@@ -39,7 +39,7 @@ public class StatisticsServiceIntegrationTest extends AbstractIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        loginAsRoot();
+        loginAsTestRoot();
     }
 
     @Test
