@@ -271,7 +271,7 @@ project(':web') {
     javascript.source {
         dev {
             js {
-                srcDirs file("${projectDir}/src/main/webapp/js/dox"), file("${projectDir}/src/main/webapp/js/libs/angular-1.2.26")
+                srcDirs file("${projectDir}/src/main/webapp/js/libs/angular-1.2.26"), file("${projectDir}/src/main/webapp/js/dox")
                 include "*.js"
                 exclude "*.min.js*"
             }
@@ -294,7 +294,7 @@ project(':web') {
 
     minifyJs {
         source = combineJs
-        dest = file("${buildDir}/dox-all-min.js")
+        dest = file("${buildDir}/gen/js/dox-all-min.js")
 
         closure {
             warningLevel = 'QUIET'
@@ -325,7 +325,7 @@ project(':web') {
 
     minifyCss {
         source = combineCss
-        dest = "${buildDir}/all-min.css"
+        dest = "${buildDir}/gen/css/all-min.css"
         yuicompressor { // Optional
             lineBreakPos = -1
         }
@@ -337,7 +337,7 @@ project(':web') {
     }
 
     war {
-        it.dependsOn gzipCss, gzipJs
+        it.dependsOn minifyCss, minifyJs
 
         from("${buildDir}/gen/js", {
             into 'js'

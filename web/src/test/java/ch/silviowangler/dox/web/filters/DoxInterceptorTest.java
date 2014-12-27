@@ -24,6 +24,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.ModelAndView;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -43,6 +44,8 @@ public class DoxInterceptorTest {
     private VersionService versionService;
     @Mock
     private DocumentService documentService;
+    @Mock
+    private Environment environment;
 
     @Test
     public void testPreHandle() throws Exception {
@@ -60,11 +63,13 @@ public class DoxInterceptorTest {
 
         doxInterceptor.postHandle(null, null, null, modelAndView);
 
-        assertThat(modelAndView.getModel().size(), is(2));
+        assertThat(modelAndView.getModel().size(), is(3));
         assertThat(modelAndView.getModel().containsKey("version"), is(true));
         assertThat(((DoxVersion) modelAndView.getModel().get("version")).getVersion(), is(expectedVersion));
         assertThat(modelAndView.getModel().containsKey("documentCount"), is(true));
         assertThat(modelAndView.getModel().get("documentCount").toString(), is("88"));
+        assertThat(modelAndView.getModel().containsKey("environment"), is(true));
+        assertThat(modelAndView.getModel().get("environment").getClass().getName().startsWith("org.springframework.core.env.Environment"), is(true));
     }
 
     @Test

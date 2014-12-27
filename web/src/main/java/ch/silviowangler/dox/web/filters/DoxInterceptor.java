@@ -19,6 +19,8 @@ package ch.silviowangler.dox.web.filters;
 import ch.silviowangler.dox.api.DocumentService;
 import ch.silviowangler.dox.api.VersionService;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -31,11 +33,12 @@ import static org.springframework.util.Assert.notNull;
  * @author Silvio Wangler
  * @since 0.2
  */
-public class DoxInterceptor implements HandlerInterceptor, InitializingBean {
+public class DoxInterceptor implements HandlerInterceptor, InitializingBean, EnvironmentAware {
 
 
     private VersionService versionService;
     private DocumentService documentService;
+    private Environment environment;
 
     public void setVersionService(VersionService versionService) {
         this.versionService = versionService;
@@ -43,6 +46,11 @@ public class DoxInterceptor implements HandlerInterceptor, InitializingBean {
 
     public void setDocumentService(DocumentService documentService) {
         this.documentService = documentService;
+    }
+
+    @Override
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
     }
 
     @Override
@@ -61,6 +69,7 @@ public class DoxInterceptor implements HandlerInterceptor, InitializingBean {
         if (modelExists(modelAndView)) {
             modelAndView.getModel().put("version", versionService.fetchVersion());
             modelAndView.getModel().put("documentCount", documentService.retrieveDocumentReferenceCount());
+            modelAndView.getModel().put("environment", environment);
         }
     }
 

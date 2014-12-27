@@ -13,12 +13,14 @@ import org.springframework.web.context.ConfigurableWebApplicationContext;
 public class ContextProfileInitializer  implements ApplicationContextInitializer<ConfigurableWebApplicationContext> {
 
     private static final Logger logger = LoggerFactory.getLogger(ContextProfileInitializer.class);
+    public static final String ENVIRONMENT_PRODUCTION = "prod";
+    public static final String ENVIRONMENT_DEVELOPMENT = "dev";
 
     @Override
     public void initialize(ConfigurableWebApplicationContext applicationContext) {
         final ConfigurableEnvironment environment = applicationContext.getEnvironment();
 
-        final String profile = System.getProperty("dox.env", "prod");
+        final String profile = System.getProperty("dox.env", ENVIRONMENT_PRODUCTION);
 
         logger.debug("Setting Spring profile to '{}'", profile);
 
