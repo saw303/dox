@@ -15,9 +15,16 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   --%>
-
-<p><spring:message code="application.footer" arguments="<%=new java.util.Date()%>"/> - <spring:message code="version"
-                                                                                                       arguments="${version.formatVersion()}"/></p>
-<sec:authorize access="isAuthenticated()">
-    <p style="font-size: 10px;"><spring:message code="footer.document.count" arguments="${documentCount}"/></p>
-</sec:authorize>
+<div class="row">
+    <div class="large-12 columns">
+        <footer>
+            <p><spring:message code="application.footer" arguments="<%=new java.util.Date()%>"/> - <spring:message
+                    code="version"
+                    arguments="${version.formatVersion()}"/></p>
+            <sec:authorize access="isAuthenticated()">
+                <p style="font-size: 10px;"><spring:message code="footer.document.count"
+                                                            arguments="${documentCount}"/></p>
+            </sec:authorize>
+        </footer>
+    </div>
+</div>

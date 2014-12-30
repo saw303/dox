@@ -5,13 +5,15 @@
     <title></title>
 </head>
 <body>
+<div class="large-12 columns">
 <div id="query" ng-controller="QueryController">
     <form>
         <p>
             <spring:message code="query.placeholder" var="placeholderText"/>
             <img src="images/spinner.gif" ng-show="showSpinner"/>
             <input id="q" name="q" ng-model="query" tabindex="1" placeholder="${placeholderText}" type="search"/>
-            <button ng-click="doQuery()" tabindex="2" accesskey="S"><spring:message code="query.start.button"/></button>
+            <button class="tiny radius" ng-click="doQuery()" tabindex="2" accesskey="S"><spring:message
+                    code="query.start.button"/></button>
         </p>
         <p>
             <input type="checkbox" ng-model="useWildcard" tabindex="3"/> <spring:message code="document.research.wildcard.label"/> | <input type="checkbox"
@@ -64,6 +66,7 @@
 
         </div>
     </div>
+</div>
 </div>
 </body>
 </html>

@@ -16,7 +16,8 @@
   ~ limitations under the License.
   --%>
 
-<div>
+<div class="large-3 columns">&nbsp;</div>
+<div class="large-6 columns">
     <form action="<c:url value="/login/verify"/>" method="post">
         <div>
             <input type="text" maxlength="25" required="true" name="username" id="username"
@@ -27,7 +28,9 @@
                    placeholder="<spring:message code="login.password" htmlEscape="true"/>"/>
         </div>
         <div style="margin-top: 10px;">
-            <input type="submit" value="<spring:message code="login.submit" htmlEscape="true"/>"/>
+            <input type="submit" value="<spring:message code="login.submit" htmlEscape="true"/>"
+                   class="small radius button"/>
         </div>
     </form>
 </div>
+<div class="large-3 columns">&nbsp;</div>

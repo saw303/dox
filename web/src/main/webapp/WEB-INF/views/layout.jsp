@@ -1,4 +1,3 @@
-
 <%@page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
@@ -43,24 +42,33 @@
             <link rel="stylesheet" href="<c:url value="/resources/css/all-min.css"/>"/>
         </c:when>
         <c:otherwise>
+            <link rel="stylesheet" href="<c:url value="/resources/css/foundation.css"/>"/>
+            <link rel="stylesheet" href="<c:url value="/resources/css/normalize.css"/>"/>
             <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>"/>
         </c:otherwise>
     </c:choose>
     <link type="text/plain" rel="author" href="humans.txt"/>
-    <script src="<c:url value="/js/libs/boilerplate/modernizr-2.6.2.min.js"/>"></script>
+    <script src="<c:url value="/js/libs/foundation/modernizr.js"/>"></script>
 </head>
 <body>
 
-<div id="container">
-    <header>
-        <tiles:insertAttribute name="header"/>
-    </header>
-    <div id="main" role="main">
-        <tiles:insertAttribute name="body"/>
-    </div>
-    <footer>
-        <tiles:insertAttribute name="footer"/>
-    </footer>
+<tiles:insertAttribute name="header"/>
+<div class="row" id="main" role="main">
+    <tiles:insertAttribute name="body"/>
 </div>
+<tiles:insertAttribute name="footer"/>
+
+<c:choose>
+    <c:when test="${environment.acceptsProfiles('prod')}">
+        <link rel="stylesheet" href="<c:url value="/resources/css/dox-all-min.js"/>"/>
+    </c:when>
+    <c:otherwise>
+        <script src="<c:url value="/js/libs/foundation/jquery.js"/>"></script>
+        <script src="<c:url value="/js/libs/foundation/foundation.js"/>"></script>
+    </c:otherwise>
+</c:choose>
+<script>
+    $(document).foundation();
+</script>
 </body>
 </html>

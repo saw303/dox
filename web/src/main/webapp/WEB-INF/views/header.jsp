@@ -17,22 +17,33 @@
   ~ limitations under the License.
   --%>
 
-<h1>-&nbsp;<spring:message code="application.header"/>&nbsp;-</h1>
+<div class="row">
+    <div class="large-12 columns">
+        <header>
+            <h1>-&nbsp;<spring:message code="application.header"/>&nbsp;-</h1>
 
-<h2><spring:message code="application.subheader"/></h2>
-<sec:authorize access="isAuthenticated()">
-    <div><spring:message code="user"/>: <sec:authentication property="principal.username"
-            /></div>
-    <nav>
-        <ul>
-            <li><a href="<%=request.getContextPath()%>/ui"><spring:message code="nav.home"/></a></li>
-            <li><a href="<%=request.getContextPath()%>/ui/import"><spring:message code="nav.add.new.document"/></a></li>
-            <sec:authorize access="hasRole('ROLE_ADMIN')">
-                <li><a href="<%=request.getContextPath()%>/admin/export"><spring:message code="nav.export"/></a>
-                </li>
+            <h2><spring:message code="application.subheader"/></h2>
+            <sec:authorize access="isAuthenticated()">
+                <div><spring:message code="user"/>: <sec:authentication property="principal.username"
+                        /></div>
+                <nav>
+                    <ul>
+                        <li><a href="<%=request.getContextPath()%>/ui"><spring:message code="nav.home"/></a></li>
+                        <li><a href="<%=request.getContextPath()%>/ui/import"><spring:message
+                                code="nav.add.new.document"/></a></li>
+                        <sec:authorize access="hasRole('ROLE_ADMIN')">
+                            <li><a href="<%=request.getContextPath()%>/admin/export"><spring:message
+                                    code="nav.export"/></a>
+                            </li>
+                        </sec:authorize>
+                        <li><a href="<%=request.getContextPath()%>/ui/settings"><spring:message
+                                code="nav.settings"/></a></li>
+                        <li ng-controller="LogoutController"><a ng-click="logout()"><spring:message
+                                code="nav.logout"/></a></li>
+                    </ul>
+                </nav>
             </sec:authorize>
-            <li><a href="<%=request.getContextPath()%>/ui/settings"><spring:message code="nav.settings"/></a></li>
-            <li ng-controller="LogoutController"><a ng-click="logout()"><spring:message code="nav.logout"/></a></li>
-        </ul>
-    </nav>
-</sec:authorize>
+        </header>
+    </div>
+</div>
+

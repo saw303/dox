@@ -33,9 +33,10 @@
     <meta name="author" content="Silvio Wangler">
 
     <meta name="viewport" content="width=device-width">
-    <meta name="fragment" content="!" />
+    <meta name="fragment" content="!"/>
 
-    <link href="//fonts.googleapis.com/css?family=Varela+Round|Playball|Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Varela+Round|Playball|Montserrat:400,700" rel="stylesheet"
+          type="text/css">
     <link id="apiRoot" href="<%=request.getContextPath()%>"/>
     <link type="text/plain" rel="author" href="humans.txt"/>
 
@@ -45,6 +46,8 @@
             <script src="<c:url value="/js/dox-all-min.js"/>"></script>
         </c:when>
         <c:otherwise>
+            <link rel="stylesheet" href="<c:url value="/resources/css/foundation.css"/>"/>
+            <link rel="stylesheet" href="<c:url value="/resources/css/normalize.css"/>"/>
             <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>"/>
             <script src="<c:url value="/js/libs/angular-1.2.26/angular.js"/>"></script>
             <script src="<c:url value="/js/libs/angular-1.2.26/angular-resource.js"/>"></script>
@@ -60,15 +63,23 @@
 <body>
 
 <div id="container">
-    <header>
-        <tiles:insertAttribute name="header"/>
-    </header>
-    <div id="main" role="main">
+    <tiles:insertAttribute name="header"/>
+    <div class="row" id="main" role="main">
         <ng-view></ng-view>
     </div>
-    <footer>
-        <tiles:insertAttribute name="footer"/>
-    </footer>
+    <tiles:insertAttribute name="footer"/>
 </div>
+<c:choose>
+    <c:when test="${environment.acceptsProfiles('prod')}">
+        <!-- Do nothing -->
+    </c:when>
+    <c:otherwise>
+        <script src="<c:url value="/js/libs/foundation/jquery.js"/>"></script>
+        <script src="<c:url value="/js/libs/foundation/foundation.js"/>"></script>
+    </c:otherwise>
+</c:choose>
+<script>
+    $(document).foundation();
+</script>
 </body>
 </html>
