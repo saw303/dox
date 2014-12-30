@@ -151,6 +151,12 @@ configure(subprojects) { subproject ->
     task sourcesJar(type: Jar, dependsOn: classes) {
         classifier = 'sources'
         from sourceSets.main.allJava
+
+        from("${rootProject.projectDir}") {
+            include "LICENSE.txt"
+            into "META-INF"
+            expand(dateOfYear: new Date().format('yyyy'))
+        }
     }
 
     artifacts {
