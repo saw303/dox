@@ -99,6 +99,10 @@ configure(allprojects) {
             ]
         }
     }
+
+    idea.module {
+        inheritOutputDirs = true
+    }
 }
 
 configure(subprojects) { subproject ->
