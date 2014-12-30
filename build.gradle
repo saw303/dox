@@ -26,7 +26,7 @@ buildscript {
     }
 }
 
-allprojects {
+configure(allprojects) {
 
     apply plugin: 'idea'
     apply plugin: 'project-report'
@@ -100,10 +100,13 @@ allprojects {
     }
 }
 
-subprojects {
+configure(subprojects) { subproject ->
+
     apply plugin: 'java'
     apply plugin: 'jacoco'
     apply plugin: 'groovy'
+    apply plugin: 'maven'
+    apply plugin: 'maven-publish'
 
     compileJava.options.compilerArgs = ['-Xlint:unchecked', '-Xlint:deprecation']
     compileTestJava.options.compilerArgs = ['-Xlint:unchecked', '-Xlint:deprecation']
@@ -112,25 +115,25 @@ subprojects {
     targetCompatibility = 7
 
     dependencies {
-        testCompile "org.codehaus.groovy:groovy-all:${project.ext.groovyVersion}"
-        testCompile "org.spockframework:spock-core:${project.ext.spockVersion}"
-        compile "org.slf4j:slf4j-api:${project.ext.slf4jVersion}"
-        testCompile "junit:junit:${project.ext.junitVersion}",
-                "org.mockito:mockito-core:${project.ext.mockitoVersion}",
-                "org.hamcrest:hamcrest-core:${project.ext.hamcrestVersion}",
-                "org.hamcrest:hamcrest-library:${project.ext.hamcrestVersion}"
+        testCompile "org.codehaus.groovy:groovy-all:${subproject.ext.groovyVersion}"
+        testCompile "org.spockframework:spock-core:${subproject.ext.spockVersion}"
+        compile "org.slf4j:slf4j-api:${subproject.ext.slf4jVersion}"
+        testCompile "junit:junit:${subproject.ext.junitVersion}",
+                "org.mockito:mockito-core:${subproject.ext.mockitoVersion}",
+                "org.hamcrest:hamcrest-core:${subproject.ext.hamcrestVersion}",
+                "org.hamcrest:hamcrest-library:${subproject.ext.hamcrestVersion}"
     }
 
     jar {
         manifest {
             attributes(
                     'Built-By': "Gradle ${gradle.gradleVersion}",
-                    'Implementation-Title': "DOX-${project.name}",
-                    'Implementation-Version': project.version,
+                    'Implementation-Title': "DOX-${subproject.name}",
+                    'Implementation-Version': subproject.version,
                     'Implementation-Vendor': 'Silvio Wangler',
                     'Specification-Vendor': 'Silvio Wangler',
-                    'Specification-Title': "DOX-${project.name}",
-                    'Specification-Version': project.version
+                    'Specification-Title': "DOX-${subproject.name}",
+                    'Specification-Version': subproject.version
             )
         }
 
@@ -143,14 +146,42 @@ subprojects {
         baseName = "dox-${baseName}"
     }
 
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allJava
+    }
+
+    artifacts {
+        archives sourcesJar
+    }
+
     processResources {
         from(sourceSets.main.resources.srcDirs) {
-            include '**/*.properties' filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
+            include '**/*.properties'
+            filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
                     'dox.app.version': "${version}-${new Date().format("yyyyMMddHHmmss")}".toString(),
-                    'gradleVersion'  : project.gradle.gradleVersion
+                    'gradleVersion': gradle.gradleVersion
             ])
         }
         from(sourceSets.main.resources.srcDirs) { exclude '**/*.properties' }
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+
+                artifact sourcesJar {
+                    classifier "sources"
+                }
+            }
+        }
+    }
+
+    install {
+        repositories.mavenInstaller {
+            customizePom(pom, subproject)
+        }
     }
 }
 
@@ -386,4 +417,48 @@ idea.project {
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.2.1'
+}
+
+def customizePom(pom, gradleProject) {
+    pom.whenConfigured { generatedPom ->
+
+        // eliminate test-scoped dependencies (no need in maven central poms)
+        generatedPom.dependencies.removeAll { dep ->
+            dep.scope == 'test'
+        }
+
+        // add all items necessary for maven central publication
+        generatedPom.project {
+            name = gradleProject.description
+            description = gradleProject.description
+            url = 'https://github.com/saw303/dox'
+            organization {
+                name = 'Wangler Software Development'
+                url = 'http://saw303.github.io/dox/'
+            }
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+            scm {
+                url = 'https://github.com/saw303/dox'
+                connection = 'scm:git:git://github.com/saw303/dox'
+                developerConnection = 'scm:git:git://github.com/saw303/dox'
+            }
+            developers {
+                developer {
+                    id = 'saw303'
+                    name = 'Silvio Wangler'
+                    email = 'silvio.wangler@gmail.com'
+                }
+            }
+            issueManagement {
+                system = 'Youtrack'
+                url = 'http://saw303.myjetbrains.com/youtrack/issues/dox'
+            }
+        }
+    }
 }
