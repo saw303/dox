@@ -17,5 +17,13 @@
     </ul>
     <button ng-click="save()"><spring:message code="settings.button.label"/></button>
 </section>
+
+<h1><spring:message code="document.import.label.document.class"/></h1>
+
+<section ng-controller="DocumentClassController">
+    <ul id="documentClassList">
+        <li ng-repeat="documentClass in documentClasses">{{documentClass.translation}}</li>
+    </ul>
+</section>
 </body>
 </html>

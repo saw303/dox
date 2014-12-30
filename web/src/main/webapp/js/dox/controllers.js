@@ -1,9 +1,17 @@
 angular.module('dox.controllers', ['dox.services'])
 
+    .controller('DocumentClassController', ['$scope', '$log', 'DocumentClasses', function ($scope, $log, DocumentClasses) {
+
+        DocumentClasses.query(function (docClasses) {
+            $log.debug('Found %s document classes', docClasses.length)
+            $scope.documentClasses = docClasses;
+        });
+    }])
+
     .controller('SettingsController', ['$scope', '$log', 'Settings', function ($scope, $log, Settings) {
         Settings.query(function (settings) {
             $scope.settings = settings;
-            $log.debug('Retrieved ' + $scope.settings.length + ' settings for current user');
+            $log.debug('Retrieved %s settings for current user', settings.length);
         });
 
         $scope.save = function () {
