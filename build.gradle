@@ -23,6 +23,7 @@ buildscript {
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.5'
         classpath "com.eriwen:gradle-js-plugin:1.12.1"
         classpath 'com.eriwen:gradle-css-plugin:1.11.1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
     }
 }
 
@@ -107,6 +108,7 @@ configure(subprojects) { subproject ->
     apply plugin: 'groovy'
     apply plugin: 'maven'
     apply plugin: 'maven-publish'
+    apply plugin: 'com.jfrog.bintray'
 
     compileJava.options.compilerArgs = ['-Xlint:unchecked', '-Xlint:deprecation']
     compileTestJava.options.compilerArgs = ['-Xlint:unchecked', '-Xlint:deprecation']
@@ -181,6 +183,19 @@ configure(subprojects) { subproject ->
     install {
         repositories.mavenInstaller {
             customizePom(pom, subproject)
+        }
+    }
+
+    bintray {
+        user = bintrayUser //this usually comes form gradle.properties file in ~/.gradle
+        key = bintrayKey //this usually comes form gradle.properties file in ~/.gradle
+        publications = ['mavenJava'] // see publications closure
+        pkg { //package will be created if does not exist
+            repo = 'releases'
+            name = 'dox'
+            desc = 'Package created from dox'
+            licenses = ['Apache-2.0']
+            labels = ['spring', 'dms', 'rest', 'angularjs', 'documentmanagement']
         }
     }
 }
