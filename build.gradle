@@ -134,6 +134,12 @@ subprojects {
             )
         }
 
+        from("${rootProject.projectDir}") {
+            include "LICENSE.txt"
+            into "META-INF"
+            expand(dateOfYear: new Date().format('yyyy'))
+        }
+
         baseName = "dox-${baseName}"
     }
 
