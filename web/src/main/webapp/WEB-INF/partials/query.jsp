@@ -12,8 +12,8 @@
             <spring:message code="query.placeholder" var="placeholderText"/>
             <img src="images/spinner.gif" ng-show="showSpinner"/>
             <input id="q" name="q" ng-model="query" tabindex="1" placeholder="${placeholderText}" type="search"/>
-            <button class="tiny radius" ng-click="doQuery()" tabindex="2" accesskey="S"><spring:message
-                    code="query.start.button"/></button>
+            <a href="#" class="tiny radius button" ng-click="doQuery()" tabindex="2"><spring:message
+                    code="query.start.button"/></a>
         </p>
         <p>
             <input type="checkbox" ng-model="useWildcard" tabindex="3"/> <spring:message code="document.research.wildcard.label"/> | <input type="checkbox"
