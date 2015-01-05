@@ -72,7 +72,7 @@ configure(allprojects) {
         groovyVersion = '2.3.0'
         xstreamVersion = '1.4.7'
         bouncycastleVersion = '1.51'
-        jacksonVersion = '2.4.4'
+        jacksonVersion = '2.5.0'
         poiVersion = '3.10.1'
         groovyVersion = '2.3.7'
         spockVersion = '0.7-groovy-2.0'
