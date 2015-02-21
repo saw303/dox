@@ -31,6 +31,7 @@
                 <li><a href="<%=request.getContextPath()%>/admin/export"><spring:message code="nav.export"/></a>
                 </li>
             </sec:authorize>
+            <li><a href="<%=request.getContextPath()%>/ui/partners"><spring:message code="nav.partners"/></a></li>
             <li><a href="<%=request.getContextPath()%>/ui/settings"><spring:message code="nav.settings"/></a></li>
             <li ng-controller="LogoutController"><a ng-click="logout()"><spring:message code="nav.logout"/></a></li>
         </ul>

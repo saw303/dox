@@ -35,6 +35,10 @@ angular.module('dox', ['dox.controllers', 'ngRoute'])
             templateUrl: basePath + '/partials/settings.html'
         });
 
+        $routeProvider.when(basePath + '/ui/partners', {
+            templateUrl: basePath + '/partials/partnerList.html'
+        });
+
         /*$routeProvider.otherwise({
             redirectTo: basePath + '/ui/'
         });*/

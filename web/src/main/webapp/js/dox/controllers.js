@@ -118,6 +118,15 @@ angular.module('dox.controllers', ['dox.services'])
         }
     }])
 
+    .controller('PartnerController', ['$scope', '$log', function ($scope, $log) {
+
+        $scope.partners = [
+            {name: 'Silvio Wangler'},
+            {name: 'Angela Wangler'},
+            {name: 'Daniela Dolder'}
+        ];
+    }])
+
     .controller('QueryController', ['$scope', '$log', '$http', 'Settings', 'apiRoot', '$window', function ($scope, $log, $http, Settings, apiRoot, $window) {
 
         $scope.query = '';
