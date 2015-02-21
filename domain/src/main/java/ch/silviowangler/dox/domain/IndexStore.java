@@ -83,34 +83,34 @@ public class IndexStore extends AbstractPersistable<Long> {
     private String S_20;
 
     @Column
-    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime D_01;
     @Column
-    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime D_02;
     @Column
-    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime D_03;
     @Column
-    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime D_04;
     @Column
-    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime D_05;
     @Column
-    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime D_06;
     @Column
-    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime D_07;
     @Column
-    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime D_08;
     @Column
-    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime D_09;
     @Column
-    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime D_10;
 
     @Column
@@ -186,19 +186,19 @@ public class IndexStore extends AbstractPersistable<Long> {
     @Column
     private BigDecimal F_10;
     @Column
-    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDate")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate LD_01;
     @Column
-    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDate")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate LD_02;
     @Column
-    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDate")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate LD_03;
     @Column
-    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDate")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate LD_04;
     @Column
-    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDate")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate LD_05;
 
     public String getS_01() {

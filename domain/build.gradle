@@ -15,11 +15,6 @@
  */
 
 
-
-
-
-
-
 import org.hibernate.cfg.Environment
 import org.hibernate.tool.hbm2ddl.SchemaExport
 
@@ -35,7 +30,8 @@ buildscript {
         classpath "org.hibernate:hibernate-core:${project.ext.hibernateVersion}",
                 "org.hibernate:hibernate-entitymanager:${project.ext.hibernateVersion}",
                 "com.h2database:h2:${project.ext.h2Version}",
-                "joda-time:joda-time:${project.ext.jodaTimeVersion}"
+                "joda-time:joda-time:${project.ext.jodaTimeVersion}",
+                "org.jadira.usertype:usertype.core:3.2.0.GA"
         classpath("org.springframework.data:spring-data-jpa:${project.ext.springDataVersion}") {
             exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
         }
@@ -46,6 +42,7 @@ dependencies {
     compile "org.hibernate:hibernate-core:${project.ext.hibernateVersion}",
             "org.hibernate:hibernate-entitymanager:${project.ext.hibernateVersion}",
             "joda-time:joda-time:${project.ext.jodaTimeVersion}",
+            "org.jadira.usertype:usertype.core:3.2.0.GA",
             "com.google.guava:guava:${project.ext.guavaVersion}"
     compile("org.springframework.data:spring-data-jpa:${project.ext.springDataVersion}") {
         exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
@@ -77,12 +74,12 @@ clean.dependsOn << cleanGenerated
 class HibernateJpaSchemaGenerationTask extends DefaultTask {
 
     private Map<String, String> dialects = [
-            'ORACLE': "org.hibernate.dialect.Oracle10gDialect",
-            'MYSQL': "org.hibernate.dialect.MySQLDialect",
-            'MYSQL5': "org.hibernate.dialect.MySQL5Dialect",
+            'ORACLE'    : "org.hibernate.dialect.Oracle10gDialect",
+            'MYSQL'     : "org.hibernate.dialect.MySQLDialect",
+            'MYSQL5'    : "org.hibernate.dialect.MySQL5Dialect",
             'MYSQL5INNODB': "org.hibernate.dialect.MySQL5InnoDBDialect",
-            'HSQL': "org.hibernate.dialect.HSQLDialect",
-            'H2': "org.hibernate.dialect.H2Dialect",
+            'HSQL'      : "org.hibernate.dialect.HSQLDialect",
+            'H2'        : "org.hibernate.dialect.H2Dialect",
             'PostgreSQL': 'org.hibernate.dialect.PostgreSQLDialect'
     ]
 

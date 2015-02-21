@@ -45,7 +45,7 @@ public class Document extends AbstractPersistable<Long> {
     @OneToOne(optional = true, orphanRemoval = true)
     private IndexStore indexStore;
     @Column(nullable = false)
-    @Type(type = "ch.silviowangler.dox.hibernate.PersistentDateTime")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime creationDate = DateTime.now();
     @OneToMany(mappedBy = "document", orphanRemoval = true)
     private Set<IndexMapEntry> indexMapEntries;
