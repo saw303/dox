@@ -49,12 +49,12 @@ configure(allprojects) {
     version = '0.4.1-SNAPSHOT'
 
     project.ext {
-        springVersion = '4.1.4.RELEASE'
+        springVersion = '4.1.5.RELEASE'
         springMobileVersion = '1.1.3.RELEASE'
         springDataVersion = '1.7.0.RELEASE'
         springSecurityVersion = '4.0.0.M2'
-        hibernateVersion = '4.3.6.Final'
-        slf4jVersion = '1.7.9'
+        hibernateVersion = '4.3.8.Final'
+        slf4jVersion = '1.7.10'
         logbackVersion = '1.1.2'
         junitVersion = '4.12'
         tilesVersion = '3.0.5'
@@ -62,22 +62,21 @@ configure(allprojects) {
         commonsCodecVersion = '1.10'
         commonsBeanUtilsVersion = '1.9.2'
         commonsExec = '1.3'
-        jodaTimeVersion = '2.6'
-        h2Version = '1.4.184'
+        jodaTimeVersion = '2.7'
+        h2Version = '1.4.185'
         mysqlVersion = '5.1.34'
-        iTextVersion = '5.5.4'
+        iTextVersion = '5.5.5'
         guavaVersion = '18.0'
-        mockitoVersion = '1.10.19'
+        mockitoVersion = '2.0.4-beta'
         flywayVersion = '2.3.1'
-        groovyVersion = '2.3.0'
-        xstreamVersion = '1.4.7'
+        groovyVersion = '2.4.1'
+        xstreamVersion = '1.4.8'
         bouncycastleVersion = '1.51'
-        jacksonVersion = '2.5.0'
+        jacksonVersion = '2.5.1'
         poiVersion = '3.10.1'
-        groovyVersion = '2.3.7'
         spockVersion = '0.7-groovy-2.0'
         hamcrestVersion = '1.3'
-        aspectjWeaverVersion = '1.8.4'
+        aspectjWeaverVersion = '1.8.5'
     }
 
     configurations.all {
@@ -121,7 +120,7 @@ configure(subprojects) { subproject ->
     targetCompatibility = 7
 
     dependencies {
-        testCompile "org.codehaus.groovy:groovy-all:${subproject.ext.groovyVersion}"
+        testCompile "org.codehaus.groovy:groovy:${subproject.ext.groovyVersion}"
         testCompile "org.spockframework:spock-core:${subproject.ext.spockVersion}"
         compile "org.slf4j:slf4j-api:${subproject.ext.slf4jVersion}"
         testCompile "junit:junit:${subproject.ext.junitVersion}",
