@@ -1,11 +1,11 @@
 package ch.silviowangler.dox.web.rest;
 
 import ch.silviowangler.dox.api.rest.PartnerModel;
-import com.google.common.collect.Lists;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -27,6 +27,12 @@ public class PartnerController {
 
     @RequestMapping(method = GET)
     public List<PartnerModel> getPartners() {
-        return Lists.asList(new PartnerModel(), new PartnerModel(), null);
+        ArrayList<PartnerModel> partnerModels = new ArrayList<>();
+
+        partnerModels.add(new PartnerModel("Hans Brauer"));
+        partnerModels.add(new PartnerModel("Peter Ritzli"));
+        partnerModels.add(new PartnerModel("Karl Koss"));
+
+        return partnerModels;
     }
 }

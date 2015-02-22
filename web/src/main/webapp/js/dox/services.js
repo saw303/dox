@@ -8,19 +8,23 @@ angular.module('dox.services', ['ngResource'])
         return $resource(apiRoot + '/api/v1/documentClass/:documentClassId', {documentClassId: '@id'})
     }])
 
-        .factory('Document', ['$resource', 'apiRoot', function ($resource, apiRoot) {
+    .factory('Document', ['$resource', 'apiRoot', function ($resource, apiRoot) {
         return $resource(apiRoot + '/api/v1/document/:documentId', {documentId: '@id'})
+    }])
+
+    .factory('Partner', ['$resource', 'apiRoot', function ($resource, apiRoot) {
+        return $resource(apiRoot + '/api/v1/partner/:partnerId', {partnerId: '@id'})
     }])
 
     .factory('UploadService', ['$log', 'apiRoot', function ($log, apiRoot) {
 
         return {
-            upload: function(formData, success, error) {
+            upload: function (formData, success, error) {
 
                 var xhr = new XMLHttpRequest();
                 xhr.open('POST', apiRoot + '/performImport.html', true);
 
-                xhr.onload = function() {
+                xhr.onload = function () {
 
                     $log.debug("Upload returns status %s", this.status);
 

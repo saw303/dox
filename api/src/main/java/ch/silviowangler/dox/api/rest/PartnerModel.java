@@ -12,6 +12,13 @@ public class PartnerModel implements Serializable {
 
     private String name;
 
+    public PartnerModel() {
+    }
+
+    public PartnerModel(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }

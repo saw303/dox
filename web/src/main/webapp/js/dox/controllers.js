@@ -118,13 +118,15 @@ angular.module('dox.controllers', ['dox.services'])
         }
     }])
 
-    .controller('PartnerController', ['$scope', '$log', function ($scope, $log) {
+    .controller('PartnerController', ['$scope', '$log', 'Partner', function ($scope, $log, Partner) {
 
-        $scope.partners = [
-            {name: 'Silvio Wangler'},
-            {name: 'Angela Wangler'},
-            {name: 'Daniela Dolder'}
-        ];
+        $scope.partners;
+        $scope.lol = 'Was genau lauft da?'
+
+        Partner.query(function (partners) {
+            $log.debug('Retrieved %s partners', partners.length);
+            $scope.partners = partners;
+        })
     }])
 
     .controller('QueryController', ['$scope', '$log', '$http', 'Settings', 'apiRoot', '$window', function ($scope, $log, $http, Settings, apiRoot, $window) {
