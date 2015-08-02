@@ -19,6 +19,7 @@ package ch.silviowangler.dox;
 import ch.silviowangler.dox.api.*;
 import ch.silviowangler.dox.api.Domain;
 import ch.silviowangler.dox.api.rest.DocumentClass;
+import ch.silviowangler.dox.document.DocumentInspector;
 import ch.silviowangler.dox.document.DocumentInspectorFactory;
 import ch.silviowangler.dox.domain.*;
 import ch.silviowangler.dox.domain.Attribute;
@@ -404,7 +405,10 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             final long size = Files.size(target.toPath());
             document.setFileSize(size);
 
-            final int numberOfPages = documentInspectorFactory.findDocumentInspector(mimeType).retrievePageCount(target);
+            final DocumentInspector documentInspector = documentInspectorFactory.findDocumentInspector(mimeType);
+            final int numberOfPages = documentInspector.retrievePageCount(target);
+
+            logger.debug("File '{}' contains {} pages (detected by document inspector '{}')", target.getName(), numberOfPages, documentInspector.getClass().getName());
             document.setPageCount(numberOfPages);
 
             document = documentRepository.save(document);
