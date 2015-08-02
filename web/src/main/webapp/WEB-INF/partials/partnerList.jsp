@@ -13,13 +13,13 @@
 </head>
 <body>
 
-<div ng-controller="PartnerController"></div>
+<div ng-controller="PartnerController">
 
-<h4>Partner List</h4>
-L&auml;nge: {{partners.length}}
+    <h4>Partner List</h4>
+    L&auml;nge: {{partners.length}}
 
-<ul>
-    <li ng-repeat="partner in partners">A Partner is life is nice: {{partner.name}}</li>
-</ul>
+    <ul>
+        <li ng-repeat="partner in partners">A Partner is life is nice: {{partner.name}}</li>
+    </ul>
 </body>
 </html>

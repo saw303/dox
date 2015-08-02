@@ -121,7 +121,6 @@ angular.module('dox.controllers', ['dox.services'])
     .controller('PartnerController', ['$scope', '$log', 'Partner', function ($scope, $log, Partner) {
 
         $scope.partners;
-        $scope.lol = 'Was genau lauft da?'
 
         Partner.query(function (partners) {
             $log.debug('Retrieved %s partners', partners.length);
