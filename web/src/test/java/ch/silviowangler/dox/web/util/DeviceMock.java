@@ -2,6 +2,9 @@ package ch.silviowangler.dox.web.util;
 
 
 import org.springframework.mobile.device.Device;
+import org.springframework.mobile.device.DevicePlatform;
+
+import static org.springframework.mobile.device.DevicePlatform.UNKNOWN;
 
 public class DeviceMock implements Device {
 
@@ -32,5 +35,10 @@ public class DeviceMock implements Device {
     @Override
     public boolean isTablet() {
         return tablet;
+    }
+
+    @Override
+    public DevicePlatform getDevicePlatform() {
+        return UNKNOWN;
     }
 }
