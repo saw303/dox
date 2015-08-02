@@ -12,6 +12,12 @@ before_install:
 # Install LibreOffice
 - sudo apt-get update
 - sudo apt-get install libreoffice-writer
+
+# Install elasticsearch
+- wget https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.1.zip
+- unzip elasticsearch-1.7.1.zip
+- elasticsearch-1.7.1/bin/elasticsearch -d
+
 # Gradle
 - wget http://services.gradle.org/distributions/gradle-2.5-bin.zip
 - unzip gradle-2.5-bin.zip

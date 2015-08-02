@@ -26,6 +26,7 @@ import ch.silviowangler.dox.domain.Attribute;
 import ch.silviowangler.dox.domain.AttributeDataType;
 import ch.silviowangler.dox.domain.Range;
 import ch.silviowangler.dox.domain.security.DoxUser;
+import ch.silviowangler.dox.index.ElasticDocumentStoreService;
 import ch.silviowangler.dox.repository.*;
 import ch.silviowangler.dox.repository.security.DoxUserRepository;
 import com.google.common.collect.Lists;
@@ -106,6 +107,8 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     private ClientRepository clientRepository;
     @Autowired
     private DoxUserRepository doxUserRepository;
+    @Autowired
+    private ElasticDocumentStoreService elasticDocumentStoreService;
 
 
     @Override
@@ -416,6 +419,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             logger.error("Unable to calculate file size of file {}", target.getAbsolutePath(), e);
         }
         DocumentReference docRef = toDocumentReference(document, null);
+        elasticDocumentStoreService.store(docRef);
         return docRef;
     }
 
