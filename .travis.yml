@@ -11,7 +11,7 @@ before_install:
 
 # Install LibreOffice
 - sudo apt-get update
-- sudo apt-get install libreoffice-writer
+- sudo apt-get install -y libreoffice-writer
 
 # Install elasticsearch
 - wget https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.1.zip
@@ -27,3 +27,7 @@ before_install:
 - touch gradle.properties
 - echo "bintrayUser=''" >> gradle.properties
 - echo "bintrayKey=''" >> gradle.properties
+
+after_script:
+# Shutdown elasticsearch daemon
+- curl -i -XPOST 'http://localhost:9200/_shutdown'
