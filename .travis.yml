@@ -13,9 +13,9 @@ before_install:
 - sudo apt-get update
 - sudo apt-get install libreoffice-writer
 # Gradle
-- wget http://services.gradle.org/distributions/gradle-2.5.0-bin.zip
-- unzip gradle-2.5.0-bin.zip
-- export GRADLE_HOME=$PWD/gradle-2.5.0
+- wget http://services.gradle.org/distributions/gradle-2.5-bin.zip
+- unzip gradle-2.5-bin.zip
+- export GRADLE_HOME=$PWD/gradle-2.5
 - export PATH=$GRADLE_HOME/bin:$PATH
 - gradle -version
 - touch gradle.properties
