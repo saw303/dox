@@ -17,9 +17,9 @@ before_install:
 - elasticsearch-1.7.1/bin/elasticsearch -d
 
 # Gradle
-- wget http://services.gradle.org/distributions/gradle-2.5-bin.zip
-- unzip gradle-2.5-bin.zip
-- export GRADLE_HOME=$PWD/gradle-2.5
+- wget http://services.gradle.org/distributions/gradle-2.7-bin.zip
+- unzip gradle-2.7-bin.zip
+- export GRADLE_HOME=$PWD/gradle-2.7
 - export PATH=$GRADLE_HOME/bin:$PATH
 - gradle -version
 - touch gradle.properties
