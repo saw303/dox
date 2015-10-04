@@ -53,7 +53,7 @@ configure(allprojects) {
         springMobileVersion = '1.1.5.RELEASE'
         springDataVersion = '1.7.2.RELEASE'
         springSecurityVersion = '4.0.2.RELEASE'
-        hibernateVersion = '4.3.8.Final'
+        hibernateVersion = '4.3.11.Final'
         slf4jVersion = '1.7.12'
         logbackVersion = '1.1.3'
         junitVersion = '4.12'
