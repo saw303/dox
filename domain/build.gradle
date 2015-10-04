@@ -113,7 +113,7 @@ class HibernateJpaSchemaGenerationTask extends DefaultTask {
     def getDdlFiles() {
         def outputFiles = dialects.collect { new File(target, "ddl_${it.key.toLowerCase()}_create.sql") }
         outputFiles.addAll dialects.collect { new File(target, "ddl_${it.key.toLowerCase()}_drop.sql") }
-        logger.debug("Expected output files for this task are ${inputFiles.dump()}")
+        logger.debug("Expected output files for this task are ${outputFiles.dump()}")
         return outputFiles
     }
 
