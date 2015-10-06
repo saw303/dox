@@ -294,8 +294,7 @@ project(':web') {
     war.archiveName = "dox-${version}.war"
 
     dependencies {
-        compile project(':api'), project(':inexport')
-        runtime project(':core')
+        compile project(':api'), project(':inexport'), project(':core')
         compile "commons-io:commons-io:${project.ext.commonsIOVersion}"
         compile "org.codehaus.groovy:groovy-templates:${project.ext.groovyVersion}"
         compile "org.springframework:spring-webmvc:${project.ext.springVersion}"
@@ -321,7 +320,7 @@ project(':web') {
         runtime "com.fasterxml.jackson.core:jackson-core:${project.ext.jacksonVersion}"
         compile "com.fasterxml.jackson.core:jackson-databind:${project.ext.jacksonVersion}"
         compile "com.fasterxml.jackson.datatype:jackson-datatype-joda:${project.ext.jacksonVersion}"
-        runtime "org.springframework:spring-oxm:${project.ext.springVersion}"
+        compile "org.springframework:spring-oxm:${project.ext.springVersion}"
         runtime "com.thoughtworks.xstream:xstream:${project.ext.xstreamVersion}"
         runtime 'joda-time:joda-time-jsptags:1.1.1'
         providedRuntime "com.h2database:h2:${project.ext.h2Version}"

@@ -12,6 +12,8 @@ import org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean;
 import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.*;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jndi.JndiObjectFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -26,6 +28,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import static ch.silviowangler.dox.DocumentServiceImpl.CACHE_DOCUMENT_COUNT;
+import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.H2;
 
 /**
  * Created on 02.08.15.
@@ -46,6 +49,28 @@ public class CoreConfiguration {
         return node.client();
     }*/
 
+    @Bean(name = "dataSource")
+    @Profile("prod")
+    public JndiObjectFactoryBean dataSourceProd() {
+        JndiObjectFactoryBean bean = new JndiObjectFactoryBean();
+        bean.setJndiName("java:comp/env/jdbc/dox");
+        return bean;
+    }
+
+    @Bean(name = "dataSource")
+    @Profile("local")
+    public DataSource dataSourceLocal() {
+
+        return new EmbeddedDatabaseBuilder()
+                .generateUniqueName(true)
+                .setType(H2)
+                .setScriptEncoding("UTF-8")
+                .ignoreFailedDrops(false)
+                .addScript("ddl_h2_create.sql")
+                .addScripts("install.sql")
+                .build();
+    }
+
     @Bean(name = "entityManagerFactory")
     @Profile("dev")
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryTest(DataSource dataSource) {
@@ -62,7 +87,7 @@ public class CoreConfiguration {
 
         Map<String, Object> jpaProperties = new HashMap<>();
         jpaProperties.put("HibernateJpaVendorAdapter", "validate");
-        jpaProperties.put("hibernate.dialect", Mysql5InnoDBBitBooleanDialect.class);
+        jpaProperties.put("hibernate.dialect", Mysql5InnoDBBitBooleanDialect.class.getName());
 
         return createEntityManager(jpaProperties, dataSource);
     }

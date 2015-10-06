@@ -68,6 +68,7 @@ public class MicrosoftWordDocumentInspector implements DocumentInspector {
 
             if (exitValue != 0) {
                 logger.error("Unable to convert Microsoft Word file {} to PDF. Exit code = {}", source.getAbsolutePath(), exitValue);
+                return -1;
             }
             final int pageCount = pdfDocumentInspector.retrievePageCount(target);
             deleteFileIfNeeded(target);
