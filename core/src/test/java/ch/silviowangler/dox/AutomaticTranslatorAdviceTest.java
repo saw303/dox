@@ -17,6 +17,7 @@
 package ch.silviowangler.dox;
 
 import ch.silviowangler.dox.api.*;
+import ch.silviowangler.dox.aspect.AutomaticTranslatorAdvice;
 import com.google.common.collect.Sets;
 import org.junit.Test;
 import org.junit.runner.RunWith;

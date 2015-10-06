@@ -47,7 +47,7 @@ import static org.junit.Assert.assertTrue;
  * @author Silvio Wangler
  * @since 0.1
  */
-@ContextConfiguration("classpath:applicationContext-test.xml")
+@ContextConfiguration(classes = {IntegrationTestConfiguration.class, CoreConfiguration.class, DomainConfiguration.class, CoreSecurityConfiguration.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("dev")
 public abstract class AbstractIntegrationTest extends AbstractTransactionalJUnit4SpringContextTests {

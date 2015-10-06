@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package ch.silviowangler.dox;
+package ch.silviowangler.dox.aspect;
 
 import ch.silviowangler.dox.api.NoTranslationFoundException;
 import ch.silviowangler.dox.api.Translatable;
 import ch.silviowangler.dox.api.TranslateProperties;
 import ch.silviowangler.dox.api.TranslationService;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,16 +42,22 @@ import java.util.Map;
  * @author Silvio Wangler
  * @since 0.1
  */
+@Aspect
 @Component
 public class AutomaticTranslatorAdvice {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final static Logger logger = LoggerFactory.getLogger(AutomaticTranslatorAdvice.class);
 
     @Autowired
     private TranslationService translationService;
     @Autowired
     private MessageSource messageSource;
 
+    public AutomaticTranslatorAdvice() {
+        logger.debug("");
+    }
+
+    @AfterReturning(pointcut = "execution(* ch.silviowangler.dox.*ServiceImpl.*(..))", returning = "retVal")
     public void addTranslationIfNeeded(Object retVal) throws Throwable {
 
         if (retVal == null) return;

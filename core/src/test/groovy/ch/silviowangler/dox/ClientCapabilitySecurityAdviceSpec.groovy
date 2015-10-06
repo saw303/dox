@@ -4,6 +4,7 @@ import ch.silviowangler.dox.api.DocumentClass
 import ch.silviowangler.dox.api.DocumentReference
 import ch.silviowangler.dox.api.PhysicalDocument
 import ch.silviowangler.dox.api.security.UserService
+import ch.silviowangler.dox.aspect.ClientCapabilitySecurityAdvice
 import ch.silviowangler.dox.domain.Client
 import ch.silviowangler.dox.domain.security.DoxUser
 import ch.silviowangler.dox.repository.security.DoxUserRepository

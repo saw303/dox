@@ -22,7 +22,7 @@ VALUES ((SELECT
          WHERE shortName = 'DUMMY_DOC'));
 
 INSERT INTO DOX_USER (email, password, username)
-VALUES ('root@local.localdomain', '6cf2a952c0a82909e038b6912e3fc3d06834fae0e8353487bf6248523f07fc7e', 'root_test');
+VALUES ('root@local.localdomain', '$2a$08$zrzPEOC3CCwTEdCV9tCfk.EB1VQHFCtB2VxCXRfK5sAuNu/zt1CPO', 'root_test');
 
 INSERT INTO DOX_USER_DOX_CLIENT (DOX_USER_id, clients_id) VALUES ((SELECT
                                                                      u.id

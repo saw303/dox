@@ -246,7 +246,7 @@ INSERT INTO DOX_DOC_CLASS_DOX_ATTR (attributes_id, documentClasses_id) VALUES ((
                                                                                                                'DIPLOMA'));
 
 INSERT INTO DOX_USER (email, password, username)
-VALUES ('root@local.localdomain', '118b1695b6f328ef2c403078c213e9c98b94da55edb6a7f84905cca1352718e5', 'root');
+VALUES ('root@local.localdomain', '$2a$08$zrzPEOC3CCwTEdCV9tCfk.EB1VQHFCtB2VxCXRfK5sAuNu/zt1CPO', 'root');
 INSERT INTO DOX_USER_DOX_CLIENT (DOX_USER_id, clients_id) VALUES ((SELECT
                                                                      u.id
                                                                    FROM DOX_USER u
@@ -256,7 +256,7 @@ INSERT INTO DOX_USER_DOX_CLIENT (DOX_USER_id, clients_id) VALUES ((SELECT
                                                                                                 WHERE c.shortName =
                                                                                                       'wangler'));
 INSERT INTO DOX_USER (email, password, username)
-VALUES ('a.faehndrich@hotmail.com', '0b9574900e694db245bfeb747031e60f38dece540d258367ae7320cefd9fb540', 'angela');
+VALUES ('a.faehndrich@hotmail.com', '$2a$08$XZJZKipnDVJ9apDYpqSlJOZMxMcsg3eJlsYnYI40V0hXVYrf9F6Ru', 'angela');
 INSERT INTO DOX_USER_DOX_CLIENT (DOX_USER_id, clients_id) VALUES ((SELECT
                                                                      u.id
                                                                    FROM DOX_USER u
@@ -266,7 +266,7 @@ INSERT INTO DOX_USER_DOX_CLIENT (DOX_USER_id, clients_id) VALUES ((SELECT
                                                                                                   WHERE c.shortName =
                                                                                                         'wangler'));
 INSERT INTO DOX_USER (email, password, username)
-VALUES ('silvio.wangler@gmail.com', 'c329d2d5e38866dea452a016409a1b554290a2c2990e8604d57222cf06b481d1', 'saw303');
+VALUES ('silvio.wangler@gmail.com', '$2a$08$OGYo6G66Tu2qGfT820xhG.9be026.ayZp0nomgPeWcCkx4WyiA7nG', 'saw303');
 INSERT INTO DOX_USER_DOX_CLIENT (DOX_USER_id, clients_id) VALUES ((SELECT
                                                                      u.id
                                                                    FROM DOX_USER u

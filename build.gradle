@@ -49,9 +49,9 @@ configure(allprojects) {
     version = '0.5.0-SNAPSHOT'
 
     project.ext {
-        springVersion = '4.2.0.RELEASE'
+        springVersion = '4.2.1.RELEASE'
         springMobileVersion = '1.1.5.RELEASE'
-        springDataVersion = '1.7.2.RELEASE'
+        springDataVersion = '1.9.0.RELEASE'
         springSecurityVersion = '4.0.2.RELEASE'
         hibernateVersion = '4.3.11.Final'
         slf4jVersion = '1.7.12'
@@ -95,7 +95,9 @@ configure(allprojects) {
                     "org.springframework:spring-tx:${project.ext.springVersion}",
                     "org.springframework:spring-web:${project.ext.springVersion}",
                     "org.springframework:spring-webmvc:${project.ext.springVersion}",
-                    "org.springframework:spring-oxm:${project.ext.springVersion}"
+                    "org.springframework:spring-oxm:${project.ext.springVersion}",
+                    "org.aspectj:aspectjrt:${project.ext.aspectjWeaverVersion}",
+                    "org.aspectj:aspectjweaver:${project.ext.aspectjWeaverVersion}"
             ]
         }
     }
@@ -234,6 +236,7 @@ project(':core') {
         compile("org.springframework.security:spring-security-core:${project.ext.springSecurityVersion}") {
             exclude group: 'org.springframework', module: 'spring-beans'
         }
+        compile "org.springframework.security:spring-security-config:${project.ext.springSecurityVersion}"
         runtime "org.slf4j:jcl-over-slf4j:${project.ext.slf4jVersion}",
                 "ch.qos.logback:logback-classic:${project.ext.logbackVersion}",
                 "org.springframework.security:spring-security-config:${project.ext.springSecurityVersion}",

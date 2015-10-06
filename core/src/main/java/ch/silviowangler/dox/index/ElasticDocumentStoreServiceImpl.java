@@ -9,7 +9,6 @@ import org.elasticsearch.common.xcontent.XContentFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
@@ -19,7 +18,7 @@ import java.io.IOException;
  * @author Silvio Wangler
  * @since 0.5
  */
-@Component("elasticDocumentStoreService")
+//@Component("elasticDocumentStoreService")
 public class ElasticDocumentStoreServiceImpl implements ElasticDocumentStoreService {
 
     @Autowired

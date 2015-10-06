@@ -1,10 +1,12 @@
-package ch.silviowangler.dox;
+package ch.silviowangler.dox.aspect;
 
 import ch.silviowangler.dox.api.security.UserService;
 import ch.silviowangler.dox.domain.Client;
 import ch.silviowangler.dox.domain.security.DoxUser;
 import ch.silviowangler.dox.repository.security.DoxUserRepository;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +30,7 @@ import static com.google.common.collect.Lists.newArrayList;
  * @author Silvio Wangler
  * @since 0.4
  */
+@Aspect
 @Component
 public class ClientCapabilitySecurityAdvice {
 
@@ -42,6 +45,7 @@ public class ClientCapabilitySecurityAdvice {
         this.userService = userService;
     }
 
+    @Around("execution(* ch.silviowangler.dox.*ServiceImpl.*(..))")
     public Object verifyUserCanPerformActionOnCurrentClient(ProceedingJoinPoint joinPoint) throws Throwable {
 
         boolean isAuth = userService.isLoggedIn();

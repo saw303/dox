@@ -1,3 +1,4 @@
+sudo: false
 language: java
 jdk:
     - oraclejdk8
@@ -5,23 +6,20 @@ jdk:
 env:
     - DOX_STORE=~
 
+addons:
+  apt:
+    packages:
+    - libreoffice-writer
+    - imagemagick
+    - webp
+
 before_install:
-
-# Install LibreOffice
-- sudo apt-get update
-- sudo apt-get install -y libreoffice-writer
-
 # Install elasticsearch
 - wget https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.1.zip
 - unzip elasticsearch-1.7.1.zip
 - elasticsearch-1.7.1/bin/elasticsearch -d
 
 # Gradle
-- wget http://services.gradle.org/distributions/gradle-2.7-bin.zip
-- unzip gradle-2.7-bin.zip
-- export GRADLE_HOME=$PWD/gradle-2.7
-- export PATH=$GRADLE_HOME/bin:$PATH
-- gradle -version
 - touch gradle.properties
 - echo "bintrayUser=''" >> gradle.properties
 - echo "bintrayKey=''" >> gradle.properties
