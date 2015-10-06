@@ -3,11 +3,6 @@ target
 build
 out
 
-# Package Files #
-*.jar
-*.war
-*.ear
-
 .gradle
 .idea
 *.ipr
