@@ -16,12 +16,14 @@
 
 package ch.silviowangler.dox.domain;
 
+import ch.silviowangler.dox.domain.stats.Tag;
 import com.google.common.base.MoreObjects;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -55,6 +57,8 @@ public class Document extends AbstractPersistable<Long> {
     private long fileSize = -1L;
     @ManyToOne(optional = false)
     private Client client;
+    @ManyToMany
+    private Set<Tag> tags = new HashSet<>();
 
     public Document() {
         super();
@@ -149,6 +153,14 @@ public class Document extends AbstractPersistable<Long> {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
     }
 
     @Override

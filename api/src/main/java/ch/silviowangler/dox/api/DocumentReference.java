@@ -18,10 +18,12 @@ package ch.silviowangler.dox.api;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import org.joda.time.DateTime;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Set;
 
 import static ch.silviowangler.dox.util.FileUtils.humanReadableByteCount;
 
@@ -43,6 +45,7 @@ public class DocumentReference implements Serializable {
     private long fileSize;
     private DateTime creationDate;
     private String client;
+    private Set<String> tags = Sets.newHashSet();
 
     public DocumentReference() {
         super();
@@ -164,6 +167,14 @@ public class DocumentReference implements Serializable {
         this.client = client;
     }
 
+    public Set<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<String> tags) {
+        this.tags = tags;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
@@ -178,6 +189,7 @@ public class DocumentReference implements Serializable {
                 .add("fileSize", fileSize)
                 .add("creationDate", creationDate)
                 .add("client", client)
+                .add("tags", tags)
                 .toString();
     }
 

@@ -121,3 +121,7 @@ INSERT INTO DOX_CLICK_STATS (reference, referenceType, timestamp, username)
 VALUES ('4', 'DOCUMENT_REFERENCE', '2011-04-01', 'a user');
 INSERT INTO DOX_CLICK_STATS (reference, referenceType, timestamp, username)
 VALUES ('5', 'DOCUMENT_REFERENCE', '2011-04-01', 'a user');
+
+INSERT INTO DOX_TAG(name) VALUES ('Business');
+INSERT INTO DOX_TAG(name) VALUES ('Important');
+INSERT INTO DOX_TAG(name) VALUES ('Useless');

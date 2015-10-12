@@ -571,6 +571,18 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
         assertThat(money, is(not(nullValue())));
         assertThat(money.getCurrency().getCurrencyCode(), is("CHF"));
         assertThat(money.getAmount().toPlainString(), is("1235.50"));
+    }
 
+    @Test
+    public void assignDocumentToTag() throws IOException, DocumentClassNotFoundException, DocumentDuplicationException, ValidationException, DocumentNotFoundException {
+
+        final DocumentReference doc = importFile("someFilename.txt", "Ich bin auch eine Datei", "DUMMY_DOC", new HashMap<TranslatableKey, DescriptiveIndex>());
+
+        documentService.assignTag(doc, "Business");
+
+        final DocumentReference documentReference = documentService.findDocumentReference(doc.getId());
+
+        assertThat(documentReference.getTags().size(), is(1));
+        assertThat(documentReference.getTags().contains("Business"), is(true));
     }
 }

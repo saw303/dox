@@ -150,4 +150,22 @@ public interface DocumentService {
      * @return all document classes with their corresponding attributes
      */
     List<ch.silviowangler.dox.api.rest.DocumentClass> findAllDocumentClasses();
+
+    /**
+     * Assign document reference to tag
+     *
+     * @param documentReference the document reference
+     * @param tag               the unique tag name
+     * @throws NoSuchElementException if there is no such tag
+     */
+    void assignTag(DocumentReference documentReference, String tag) throws NoSuchElementException;
+
+    /**
+     * According to @link{#assignTag}
+     *
+     * @param documentReference the document reference
+     * @param tags              a collection of unique tag names
+     * @throws NoSuchElementException if one or more of the specified tag names are missing
+     */
+    void assignTags(DocumentReference documentReference, String... tags) throws NoSuchElementException;
 }

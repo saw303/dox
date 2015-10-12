@@ -26,6 +26,7 @@ import ch.silviowangler.dox.domain.Attribute;
 import ch.silviowangler.dox.domain.AttributeDataType;
 import ch.silviowangler.dox.domain.Range;
 import ch.silviowangler.dox.domain.security.DoxUser;
+import ch.silviowangler.dox.domain.stats.Tag;
 import ch.silviowangler.dox.repository.*;
 import ch.silviowangler.dox.repository.security.DoxUserRepository;
 import com.google.common.collect.Lists;
@@ -106,9 +107,10 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     private ClientRepository clientRepository;
     @Autowired
     private DoxUserRepository doxUserRepository;
+    @Autowired
+    private TagRepository tagRepository;
    /* @Autowired
     private ElasticDocumentStoreService elasticDocumentStoreService;*/
-
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -117,6 +119,33 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         isTrue(archiveDirectory.canRead(), "Archive store must be readable ['" + this.archiveDirectory + "']");
         isTrue(archiveDirectory.canWrite(), "Archive store must be writable ['" + this.archiveDirectory + "']");
         notEmpty(mimeTypes, "No mime types have been set");
+    }
+
+    @Override
+    @Transactional
+    public void assignTag(DocumentReference documentReference, String tag) throws NoSuchElementException {
+        assignTags(documentReference, tag);
+    }
+
+    @Override
+    @Transactional
+    public void assignTags(DocumentReference documentReference, String... tags) throws NoSuchElementException {
+
+        Document document = documentRepository.findOne(documentReference.getId());
+
+        for (String tagName : tags) {
+
+            Tag tag = tagRepository.findByName(tagName);
+
+            if (tag == null) {
+                tag = new Tag(tagName);
+                tagRepository.save(tag);
+            }
+            if (!document.getTags().contains(tag)) {
+                document.getTags().add(tag);
+            }
+        }
+        documentRepository.save(document);
     }
 
     @Override
@@ -682,6 +711,10 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
         documentReference.setCreationDate(document.getCreationDate());
         documentReference.setClient(document.getClient().getShortName());
+
+        for (Tag tag : document.getTags()) {
+            documentReference.getTags().add(tag.getName());
+        }
 
         return documentReference;
     }
