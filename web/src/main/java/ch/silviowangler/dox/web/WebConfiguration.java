@@ -3,28 +3,32 @@ package ch.silviowangler.dox.web;
 import ch.silviowangler.dox.api.DocumentService;
 import ch.silviowangler.dox.api.VersionService;
 import ch.silviowangler.dox.web.filters.DoxInterceptor;
-import com.fasterxml.jackson.databind.Module;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean;
-import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.mobile.device.DeviceResolverHandlerInterceptor;
-import org.springframework.oxm.xstream.XStreamMarshaller;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
 
-import java.util.Arrays;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import static org.springframework.http.MediaType.*;
 
 /**
  * Created by Silvio Wangler on 06/10/15.
@@ -57,15 +61,20 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 
         Map<String, MediaType> mediaTypes = new HashMap<>();
 
-        mediaTypes.put("html", MediaType.TEXT_HTML);
-        mediaTypes.put("json", MediaType.APPLICATION_JSON);
-        mediaTypes.put("xml", MediaType.APPLICATION_XML);
+        mediaTypes.put("html", TEXT_HTML);
+        mediaTypes.put("json", APPLICATION_JSON);
+        mediaTypes.put("xml", APPLICATION_XML);
 
         configurer.favorParameter(true)
                 .ignoreAcceptHeader(true)
-                .defaultContentType(MediaType.TEXT_HTML)
+                .defaultContentType(APPLICATION_JSON)
                 .useJaf(false)
                 .mediaTypes(mediaTypes);
+    }
+
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.add(mappingJackson2HttpMessageConverter());
     }
 
     @Override
@@ -73,30 +82,23 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         registry.addViewController("/login").setViewName("login.definition");
     }
 
-    @Bean
-    public MarshallingHttpMessageConverter marshallingHttpMessageConverter(XStreamMarshaller marshaller) {
-        MarshallingHttpMessageConverter messageConverter = new MarshallingHttpMessageConverter();
-        messageConverter.setMarshaller(marshaller);
-        messageConverter.setUnmarshaller(marshaller);
-        return messageConverter;
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/").setCacheControl(CacheControl.noCache());
     }
 
     @Bean
-    public XStreamMarshaller xstreamMarshaller() {
-        return new XStreamMarshaller();
-    }
+    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
+        MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
 
-    @Bean
-    public Jackson2ObjectMapperFactoryBean objectMapper() {
-        Jackson2ObjectMapperFactoryBean bean = new Jackson2ObjectMapperFactoryBean();
-
-        bean.setSimpleDateFormat("yyyy-MM-dd");
-        bean.setIndentOutput(true);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+        objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+        objectMapper.registerModule(new JodaModule());
 
         // http://stackoverflow.com/questions/13700853/jackson2-json-iso-8601-date-from-jodatime-in-spring-3-2rc1
-        bean.setModules(Arrays.<Module>asList(new JodaModule()));
-
-        return bean;
+        messageConverter.setObjectMapper(objectMapper);
+        return messageConverter;
     }
 
     @Bean
@@ -117,9 +119,6 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
-
-        //registry.enableContentNegotiation(new TilesView()/*, new JstlView()*/);
-
         registry.tiles().cache(false);
         registry.jsp("/WEB-INF/partials/", ".jsp");
     }

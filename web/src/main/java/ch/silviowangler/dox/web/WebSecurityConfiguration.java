@@ -24,6 +24,17 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username")
                 .passwordParameter("pwd");
 
+        http.csrf().disable();
+
+        http.authorizeRequests()
+                .antMatchers("/login*").anonymous()
+                .antMatchers("/favicon.ico").permitAll()
+                .antMatchers("/resources/**").permitAll()
+                .antMatchers("/human.txt").permitAll()
+                .antMatchers("/**").hasRole("USER")
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated();
+
         http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
     }
 

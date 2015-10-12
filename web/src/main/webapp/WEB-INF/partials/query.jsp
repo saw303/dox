@@ -9,7 +9,7 @@
     <form>
         <p>
             <spring:message code="query.placeholder" var="placeholderText"/>
-            <img src="images/spinner.gif" ng-show="showSpinner"/>
+            <img src="/resources/images/spinner.gif" ng-show="showSpinner"/>
             <input id="q" name="q" ng-model="query" tabindex="1" placeholder="${placeholderText}" type="search"/>
             <button ng-click="doQuery()" tabindex="2" accesskey="S"><spring:message code="query.start.button"/></button>
         </p>

@@ -42,16 +42,16 @@
     <c:choose>
         <c:when test="${environment.acceptsProfiles('prod')}">
             <link rel="stylesheet" href="<c:url value="/resources/css/all-min.css"/>"/>
-            <script src="<c:url value="/js/dox-all-min.js"/>"></script>
+            <script src="<c:url value="/resources/js/dox-all-min.js"/>"></script>
         </c:when>
         <c:otherwise>
             <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>"/>
-            <script src="<c:url value="/js/libs/angular-1.2.26/angular.js"/>"></script>
-            <script src="<c:url value="/js/libs/angular-1.2.26/angular-resource.js"/>"></script>
-            <script src="<c:url value="/js/libs/angular-1.2.26/angular-route.js"/>"></script>
-            <script src="<c:url value="/js/dox/dox.js"/>"></script>
-            <script src="<c:url value="/js/dox/controllers.js"/>"></script>
-            <script src="<c:url value="/js/dox/services.js"/>"></script>
+            <script src="<c:url value="/resources/js/libs/angular-1.2.26/angular.js"/>"></script>
+            <script src="<c:url value="/resources/js/libs/angular-1.2.26/angular-resource.js"/>"></script>
+            <script src="<c:url value="/resources/js/libs/angular-1.2.26/angular-route.js"/>"></script>
+            <script src="<c:url value="/resources/js/dox/dox.js"/>"></script>
+            <script src="<c:url value="/resources/js/dox/controllers.js"/>"></script>
+            <script src="<c:url value="/resources/js/dox/services.js"/>"></script>
         </c:otherwise>
     </c:choose>
 

@@ -47,7 +47,7 @@
         </c:otherwise>
     </c:choose>
     <link type="text/plain" rel="author" href="humans.txt"/>
-    <script src="<c:url value="/js/libs/boilerplate/modernizr-2.6.2.min.js"/>"></script>
+    <script src="<c:url value="/resources/js/libs/boilerplate/modernizr-2.6.2.min.js"/>"></script>
 </head>
 <body>
 
