@@ -85,6 +85,10 @@ public abstract class AbstractIntegrationTest extends AbstractTransactionalJUnit
         return temp;
     }
 
+    protected boolean isMacOsX() {
+        return System.getProperty("os.name").equals("Mac OS X");
+    }
+
     public static void assertByteArrayEquals(String message, byte[] expected, byte[] actual) {
 
         assertEquals(message, expected.length, actual.length);

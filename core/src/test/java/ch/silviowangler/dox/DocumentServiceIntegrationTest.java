@@ -19,7 +19,9 @@ package ch.silviowangler.dox;
 import ch.silviowangler.dox.api.*;
 import com.google.common.base.Predicate;
 import org.joda.time.LocalDate;
+import org.junit.Assume;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -170,7 +172,11 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    @Ignore
     public void importSinglePageWordDocument() throws DocumentClassNotFoundException, DocumentDuplicationException, ValidationException, IOException {
+
+        Assume.assumeFalse(isMacOsX());
+
         File singlePageWordDocument = loadFile("word-1-page.doc");
 
         Map<TranslatableKey, DescriptiveIndex> indexes = newHashMapWithExpectedSize(3);
@@ -189,6 +195,9 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void importSinglePageOpenWordDocument() throws DocumentClassNotFoundException, DocumentDuplicationException, ValidationException, IOException {
+
+        Assume.assumeFalse(isMacOsX());
+
         File singlePageWordDocument = loadFile("word-1-page.docx");
 
         Map<TranslatableKey, DescriptiveIndex> indexes = newHashMapWithExpectedSize(3);

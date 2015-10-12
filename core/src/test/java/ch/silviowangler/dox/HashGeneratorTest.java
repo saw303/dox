@@ -50,14 +50,15 @@ public class HashGeneratorTest {
     public static Collection<Object[]> data() {
 
         return Arrays.asList(
-                new Object[]{(isLinux() ? "c2c9274416c853a6a5b2f77abc4377f4db0c830936c723b56e88aaccc2589707" : "1f726f5ebbd97a8879f6f4fa8e2f63bd199609d8af4ae022ec42037c2e87d528"), loadFile("hello.txt")},
-                new Object[]{(isLinux() ? "3646d48fbd1dfb5aa76f0d26ec709319a9892407a7bf0aa7c31e75d779b7e6cc" : "51dabdb8d7e347706260691e3c3447f51c7e747f6b15ddcffd5b9c2ed15ddef7"), loadFile("hello2.txt")}
+                new Object[]{(isUnixBased() ? "c2c9274416c853a6a5b2f77abc4377f4db0c830936c723b56e88aaccc2589707" : "1f726f5ebbd97a8879f6f4fa8e2f63bd199609d8af4ae022ec42037c2e87d528"), loadFile("hello.txt")},
+                new Object[]{(isUnixBased() ? "3646d48fbd1dfb5aa76f0d26ec709319a9892407a7bf0aa7c31e75d779b7e6cc" : "51dabdb8d7e347706260691e3c3447f51c7e747f6b15ddcffd5b9c2ed15ddef7"), loadFile("hello2.txt")}
         );
 
     }
 
-    private static boolean isLinux() {
-        return System.getProperty("os.name").contains("Linux");
+    private static boolean isUnixBased() {
+        final String osName = System.getProperty("os.name");
+        return osName.contains("Linux") || osName.equals("Mac OS X");
     }
 
     private static File loadFile(String fileName) {
