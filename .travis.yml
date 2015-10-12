@@ -17,7 +17,6 @@ before_install:
 - elasticsearch-1.7.1/bin/elasticsearch -d
 
 # Gradle
-- touch gradle.properties
 - echo "bintrayUser=''" >> gradle.properties
 - echo "bintrayKey=''" >> gradle.properties
 

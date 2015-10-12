@@ -48,56 +48,24 @@ configure(allprojects) {
     group = 'ch.silviowangler.dox'
     version = '0.5.0-SNAPSHOT'
 
-    project.ext {
-        springVersion = '4.2.1.RELEASE'
-        springMobileVersion = '1.1.5.RELEASE'
-        springDataVersion = '1.9.0.RELEASE'
-        springSecurityVersion = '4.0.2.RELEASE'
-        hibernateVersion = '4.3.11.Final'
-        slf4jVersion = '1.7.12'
-        logbackVersion = '1.1.3'
-        junitVersion = '4.12'
-        tilesVersion = '3.0.5'
-        commonsIOVersion = '2.4'
-        commonsCodecVersion = '1.10'
-        commonsBeanUtilsVersion = '1.9.2'
-        commonsExec = '1.3'
-        jodaTimeVersion = '2.8.2'
-        h2Version = '1.4.189'
-        mysqlVersion = '5.1.36'
-        iTextVersion = '5.5.7'
-        guavaVersion = '18.0'
-        mockitoVersion = '2.0.4-beta'
-        flywayVersion = '2.3.1'
-        groovyVersion = '2.4.5'
-        xstreamVersion = '1.4.8'
-        bouncycastleVersion = '1.52'
-        jacksonVersion = '2.6.2'
-        poiVersion = '3.10.1'
-        spockVersion = '1.0-groovy-2.4'
-        hamcrestVersion = '1.3'
-        aspectjWeaverVersion = '1.8.7'
-        elasticSearchVersion = '1.7.1'
-    }
-
     configurations.all {
         resolutionStrategy {
             forcedModules = [
-                    "org.springframework:spring-aop:${project.ext.springVersion}",
-                    "org.springframework:spring-asm:${project.ext.springVersion}",
-                    "org.springframework:spring-beans:${project.ext.springVersion}",
-                    "org.springframework:spring-context:${project.ext.springVersion}",
-                    "org.springframework:spring-core:${project.ext.springVersion}",
-                    "org.springframework:spring-expression:${project.ext.springVersion}",
-                    "org.springframework:spring-jdbc:${project.ext.springVersion}",
-                    "org.springframework:spring-orm:${project.ext.springVersion}",
-                    "org.springframework:spring-test:${project.ext.springVersion}",
-                    "org.springframework:spring-tx:${project.ext.springVersion}",
-                    "org.springframework:spring-web:${project.ext.springVersion}",
-                    "org.springframework:spring-webmvc:${project.ext.springVersion}",
-                    "org.springframework:spring-oxm:${project.ext.springVersion}",
-                    "org.aspectj:aspectjrt:${project.ext.aspectjWeaverVersion}",
-                    "org.aspectj:aspectjweaver:${project.ext.aspectjWeaverVersion}"
+                    "org.springframework:spring-aop:${springVersion}",
+                    "org.springframework:spring-asm:${springVersion}",
+                    "org.springframework:spring-beans:${springVersion}",
+                    "org.springframework:spring-context:${springVersion}",
+                    "org.springframework:spring-core:${springVersion}",
+                    "org.springframework:spring-expression:${springVersion}",
+                    "org.springframework:spring-jdbc:${springVersion}",
+                    "org.springframework:spring-orm:${springVersion}",
+                    "org.springframework:spring-test:${springVersion}",
+                    "org.springframework:spring-tx:${springVersion}",
+                    "org.springframework:spring-web:${springVersion}",
+                    "org.springframework:spring-webmvc:${springVersion}",
+                    "org.springframework:spring-oxm:${springVersion}",
+                    "org.aspectj:aspectjrt:${aspectjWeaverVersion}",
+                    "org.aspectj:aspectjweaver:${aspectjWeaverVersion}"
             ]
         }
     }
@@ -123,13 +91,13 @@ configure(subprojects) { subproject ->
     targetCompatibility = 7
 
     dependencies {
-        testCompile "org.codehaus.groovy:groovy:${subproject.ext.groovyVersion}"
-        testCompile "org.spockframework:spock-core:${subproject.ext.spockVersion}"
-        compile "org.slf4j:slf4j-api:${subproject.ext.slf4jVersion}"
-        testCompile "junit:junit:${subproject.ext.junitVersion}",
-                "org.mockito:mockito-core:${subproject.ext.mockitoVersion}",
-                "org.hamcrest:hamcrest-core:${subproject.ext.hamcrestVersion}",
-                "org.hamcrest:hamcrest-library:${subproject.ext.hamcrestVersion}"
+        testCompile "org.codehaus.groovy:groovy:${groovyVersion}"
+        testCompile "org.spockframework:spock-core:${spockVersion}"
+        compile "org.slf4j:slf4j-api:${slf4jVersion}"
+        testCompile "junit:junit:${junitVersion}",
+                "org.mockito:mockito-core:${mockitoVersion}",
+                "org.hamcrest:hamcrest-core:${hamcrestVersion}",
+                "org.hamcrest:hamcrest-library:${hamcrestVersion}"
     }
 
     jar {
@@ -199,8 +167,8 @@ configure(subprojects) { subproject ->
     }
 
     bintray {
-        user = bintrayUser //this usually comes form gradle.properties file in ~/.gradle
-        key = bintrayKey //this usually comes form gradle.properties file in ~/.gradle
+        user = bintrayUser // this usually comes form gradle.properties file in ~/.gradle
+        key = bintrayKey // this usually comes form gradle.properties file in ~/.gradle
         publications = ['mavenJava'] // see publications closure
         pkg { //package will be created if does not exist
             repo = 'releases'
@@ -214,38 +182,38 @@ configure(subprojects) { subproject ->
 
 project(':api') {
     dependencies {
-        compile "com.google.guava:guava:${project.ext.guavaVersion}",
-                "joda-time:joda-time:${project.ext.jodaTimeVersion}"
+        compile "com.google.guava:guava:${guavaVersion}",
+                "joda-time:joda-time:${jodaTimeVersion}"
     }
 }
 
 project(':core') {
     dependencies {
         compile project(':api'), project(':domain'), project(':inexport'),
-                "org.springframework:spring-context:${project.ext.springVersion}",
-                "org.springframework:spring-aop:${project.ext.springVersion}",
-                "commons-codec:commons-codec:${project.ext.commonsCodecVersion}",
-                "com.itextpdf:itextpdf:${project.ext.iTextVersion}",
-                "commons-beanutils:commons-beanutils:${project.ext.commonsBeanUtilsVersion}",
-                "commons-io:commons-io:${project.ext.commonsIOVersion}",
-                "org.apache.commons:commons-exec:${project.ext.commonsExec}",
-                "joda-time:joda-time:${project.ext.jodaTimeVersion}",
-                "com.google.guava:guava:${project.ext.guavaVersion}",
-                "com.googlecode.flyway:flyway-core:${project.ext.flywayVersion}",
-                "org.elasticsearch:elasticsearch:${project.ext.elasticSearchVersion}"
-        compile("org.springframework.security:spring-security-core:${project.ext.springSecurityVersion}") {
+                "org.springframework:spring-context:${springVersion}",
+                "org.springframework:spring-aop:${springVersion}",
+                "commons-codec:commons-codec:${commonsCodecVersion}",
+                "com.itextpdf:itextpdf:${iTextVersion}",
+                "commons-beanutils:commons-beanutils:${commonsBeanUtilsVersion}",
+                "commons-io:commons-io:${commonsIOVersion}",
+                "org.apache.commons:commons-exec:${commonsExec}",
+                "joda-time:joda-time:${jodaTimeVersion}",
+                "com.google.guava:guava:${guavaVersion}",
+                "com.googlecode.flyway:flyway-core:${flywayVersion}",
+                "org.elasticsearch:elasticsearch:${elasticSearchVersion}"
+        compile("org.springframework.security:spring-security-core:${springSecurityVersion}") {
             exclude group: 'org.springframework', module: 'spring-beans'
         }
-        compile "org.springframework.security:spring-security-config:${project.ext.springSecurityVersion}"
-        runtime "org.slf4j:jcl-over-slf4j:${project.ext.slf4jVersion}",
-                "ch.qos.logback:logback-classic:${project.ext.logbackVersion}",
-                "org.springframework.security:spring-security-config:${project.ext.springSecurityVersion}",
-                "org.aspectj:aspectjweaver:${project.ext.aspectjWeaverVersion}", // need this version because 1.6.x is buggy with Spring 3.x (http://goo.gl/73Pwi)
-                "org.bouncycastle:bcprov-jdk15on:${project.ext.bouncycastleVersion}", "org.bouncycastle:bcpkix-jdk15on:${project.ext.bouncycastleVersion}"
-        testCompile "org.springframework:spring-test:${project.ext.springVersion}",
-                "commons-io:commons-io:${project.ext.commonsIOVersion}",
-                "com.google.guava:guava:${project.ext.guavaVersion}"
-        testRuntime "com.h2database:h2:${project.ext.h2Version}"
+        compile "org.springframework.security:spring-security-config:${springSecurityVersion}"
+        runtime "org.slf4j:jcl-over-slf4j:${slf4jVersion}",
+                "ch.qos.logback:logback-classic:${logbackVersion}",
+                "org.springframework.security:spring-security-config:${springSecurityVersion}",
+                "org.aspectj:aspectjweaver:${aspectjWeaverVersion}", // need this version because 1.6.x is buggy with Spring 3.x (http://goo.gl/73Pwi)
+                "org.bouncycastle:bcprov-jdk15on:${bouncycastleVersion}", "org.bouncycastle:bcpkix-jdk15on:${bouncycastleVersion}"
+        testCompile "org.springframework:spring-test:${springVersion}",
+                "commons-io:commons-io:${commonsIOVersion}",
+                "com.google.guava:guava:${guavaVersion}"
+        testRuntime "com.h2database:h2:${h2Version}"
     }
 
     test {
@@ -295,36 +263,36 @@ project(':web') {
 
     dependencies {
         compile project(':api'), project(':inexport'), project(':core')
-        compile "commons-io:commons-io:${project.ext.commonsIOVersion}"
-        compile "org.codehaus.groovy:groovy-templates:${project.ext.groovyVersion}"
-        compile "org.springframework:spring-webmvc:${project.ext.springVersion}"
-        compile("org.springframework.security:spring-security-web:${project.ext.springSecurityVersion}") {
+        compile "commons-io:commons-io:${commonsIOVersion}"
+        compile "org.codehaus.groovy:groovy-templates:${groovyVersion}"
+        compile "org.springframework:spring-webmvc:${springVersion}"
+        compile("org.springframework.security:spring-security-web:${springSecurityVersion}") {
             exclude group: 'org.springframework', module: 'spring-tx'
             exclude group: 'org.springframework', module: 'spring-jdbc'
         }
-        compile("org.springframework.security:spring-security-taglibs:${project.ext.springSecurityVersion}") {
+        compile("org.springframework.security:spring-security-taglibs:${springSecurityVersion}") {
             exclude group: 'org.springframework', module: 'spring-tx'
             exclude group: 'org.springframework', module: 'spring-jdbc'
         }
-        testCompile "org.springframework:spring-test:${project.ext.springVersion}"
-        compile "org.springframework.mobile:spring-mobile-device:${project.ext.springMobileVersion}"
-        compile "com.google.guava:guava:${project.ext.guavaVersion}"
-        compile "joda-time:joda-time:${project.ext.jodaTimeVersion}"
+        testCompile "org.springframework:spring-test:${springVersion}"
+        compile "org.springframework.mobile:spring-mobile-device:${springMobileVersion}"
+        compile "com.google.guava:guava:${guavaVersion}"
+        compile "joda-time:joda-time:${jodaTimeVersion}"
         compile "bitwalker:UserAgentUtils:1.12"
-        runtime "org.apache.tiles:tiles-core:${project.ext.tilesVersion}"
-        runtime "org.apache.tiles:tiles-servlet:${project.ext.tilesVersion}"
-        runtime "org.apache.tiles:tiles-jsp:${project.ext.tilesVersion}"
-        runtime "org.apache.tiles:tiles-template:${project.ext.tilesVersion}"
-        runtime "ch.qos.logback:logback-access:${project.ext.logbackVersion}"
+        runtime "org.apache.tiles:tiles-core:${tilesVersion}"
+        runtime "org.apache.tiles:tiles-servlet:${tilesVersion}"
+        runtime "org.apache.tiles:tiles-jsp:${tilesVersion}"
+        runtime "org.apache.tiles:tiles-template:${tilesVersion}"
+        runtime "ch.qos.logback:logback-access:${logbackVersion}"
         runtime 'javax.servlet:jstl:1.2'
-        runtime "com.fasterxml.jackson.core:jackson-core:${project.ext.jacksonVersion}"
-        compile "com.fasterxml.jackson.core:jackson-databind:${project.ext.jacksonVersion}"
-        compile "com.fasterxml.jackson.datatype:jackson-datatype-joda:${project.ext.jacksonVersion}"
-        compile "org.springframework:spring-oxm:${project.ext.springVersion}"
-        runtime "com.thoughtworks.xstream:xstream:${project.ext.xstreamVersion}"
+        runtime "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+        compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+        compile "com.fasterxml.jackson.datatype:jackson-datatype-joda:${jacksonVersion}"
+        compile "org.springframework:spring-oxm:${springVersion}"
+        runtime "com.thoughtworks.xstream:xstream:${xstreamVersion}"
         runtime 'joda-time:joda-time-jsptags:1.1.1'
-        providedRuntime "com.h2database:h2:${project.ext.h2Version}"
-        providedRuntime "mysql:mysql-connector-java:${project.ext.mysqlVersion}"
+        providedRuntime "com.h2database:h2:${h2Version}"
+        providedRuntime "mysql:mysql-connector-java:${mysqlVersion}"
         providedCompile 'javax.servlet.jsp:jsp-api:2.1'
         providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
     }
@@ -417,8 +385,8 @@ project(':web') {
 project(':inexport') {
     dependencies {
         compile project(':api'),
-                "org.springframework:spring-context:${project.ext.springVersion}"
-        compile "com.thoughtworks.xstream:xstream:${project.ext.xstreamVersion}", { transitive = false }
+                "org.springframework:spring-context:${springVersion}"
+        compile "com.thoughtworks.xstream:xstream:${xstreamVersion}", { transitive = false }
     }
 }
 
