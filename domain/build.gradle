@@ -22,9 +22,7 @@ import javax.persistence.Entity
 
 buildscript {
     repositories {
-        maven {
-            url 'http://repo.wangler.io/repo'
-        }
+        jcenter()
     }
     dependencies {
         classpath gradleApi()
