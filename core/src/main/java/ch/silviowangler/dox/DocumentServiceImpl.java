@@ -447,7 +447,6 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             logger.error("Unable to calculate file size of file {}", target.getAbsolutePath(), e);
         }
         DocumentReference docRef = toDocumentReference(document, null);
-        //elasticDocumentStoreService.store(docRef);
         return docRef;
     }
 

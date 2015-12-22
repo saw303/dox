@@ -18,6 +18,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.mobile.device.DeviceResolverHandlerInterceptor;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
+import org.springframework.web.servlet.LocaleContextResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
@@ -112,9 +113,12 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public CookieLocaleResolver localeResolver() {
+    public LocaleContextResolver localeResolver() {
         CookieLocaleResolver localeResolver = new CookieLocaleResolver();
+        localeResolver.setCookieName("dox.language");
         localeResolver.setDefaultLocale(Locale.ENGLISH);
+        // in seconds. If set to -1, the cookie is not persisted (deleted when browser shuts down)
+        localeResolver.setCookieMaxAge(Integer.MAX_VALUE);
         return localeResolver;
     }
 
