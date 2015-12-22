@@ -38,7 +38,7 @@ configure(allprojects) {
     }
 
     repositories {
-	jcenter()
+        jcenter()
     }
 
     group = 'ch.silviowangler.dox'
@@ -46,6 +46,16 @@ configure(allprojects) {
 
     configurations.all {
         resolutionStrategy {
+
+            failOnVersionConflict()
+
+            eachDependency { DependencyResolveDetails details ->
+                //changing 'groovy-all' into 'groovy':
+                if (details.requested.name == 'groovy-all') {
+                    details.useTarget group: details.requested.group, name: 'groovy', version: groovyVersion
+                }
+            }
+
             forcedModules = [
                     "org.springframework:spring-aop:${springVersion}",
                     "org.springframework:spring-asm:${springVersion}",
@@ -60,6 +70,13 @@ configure(allprojects) {
                     "org.springframework:spring-web:${springVersion}",
                     "org.springframework:spring-webmvc:${springVersion}",
                     "org.springframework:spring-oxm:${springVersion}",
+                    "org.hamcrest:hamcrest-core:${hamcrestVersion}",
+                    "org.hibernate:hibernate-entitymanager:${hibernateVersion}",
+                    "commons-beanutils:commons-beanutils:${commonsBeanUtilsVersion}",
+                    "commons-lang:commons-lang:2.4",
+                    "org.slf4j:slf4j-api:${slf4jVersion}",
+                    "org.slf4j:jcl-over-slf4j:${slf4jVersion}",
+                    "joda-time:joda-time:${jodaTimeVersion}",
                     "org.aspectj:aspectjrt:${aspectjWeaverVersion}",
                     "org.aspectj:aspectjweaver:${aspectjWeaverVersion}"
             ]
@@ -190,15 +207,16 @@ project(':core') {
                 "org.springframework:spring-aop:${springVersion}",
                 "commons-codec:commons-codec:${commonsCodecVersion}",
                 "com.itextpdf:itextpdf:${iTextVersion}",
-                "commons-beanutils:commons-beanutils:${commonsBeanUtilsVersion}",
                 "commons-io:commons-io:${commonsIOVersion}",
                 "org.apache.commons:commons-exec:${commonsExec}",
                 "joda-time:joda-time:${jodaTimeVersion}",
                 "com.google.guava:guava:${guavaVersion}",
-                "com.googlecode.flyway:flyway-core:${flywayVersion}",
-                "org.elasticsearch:elasticsearch:${elasticSearchVersion}"
+                "com.googlecode.flyway:flyway-core:${flywayVersion}"
         compile("org.springframework.security:spring-security-core:${springSecurityVersion}") {
             exclude group: 'org.springframework', module: 'spring-beans'
+        }
+        compile("commons-beanutils:commons-beanutils:${commonsBeanUtilsVersion}") {
+            exclude group: 'commons-logging', module: 'commons-logging'
         }
         compile "org.springframework.security:spring-security-config:${springSecurityVersion}"
         runtime "org.slf4j:jcl-over-slf4j:${slf4jVersion}",
@@ -408,7 +426,7 @@ idea.project {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.2.1'
+    gradleVersion = '2.9'
 }
 
 def customizePom(pom, gradleProject) {
