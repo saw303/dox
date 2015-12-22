@@ -18,3 +18,4 @@ web/src/main/webapp/js/libs/angular*/docs
 *Guide.pdf
 
 dox*.sql
+.DS_Store
