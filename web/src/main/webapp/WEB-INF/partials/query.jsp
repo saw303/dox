@@ -50,6 +50,8 @@
                     <li><strong><spring:message code="document.filesize"/>:</strong> {{document.fileSize | number}} Bytes</li>
                     <li><strong><spring:message code="document.creationDate"/>:</strong> {{document.creationDate | date:'short'}}</li>
                     <li><strong><spring:message code="document.mimeType"/>:</strong> {{document.mimeType}}</li>
+                    <li ng-if="document.tags.length > 0"><strong><spring:message code="document.tags"/>:</strong>{{document.tags}}
+                    </li>
                 </ul>
                 <div class="attributeListing"><strong><spring:message code="document.indices"/>:</strong>
                     <span ng-repeat="(label, index) in document.indices">

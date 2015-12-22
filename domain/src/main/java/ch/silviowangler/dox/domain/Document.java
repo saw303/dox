@@ -57,7 +57,7 @@ public class Document extends AbstractPersistable<Long> {
     private long fileSize = -1L;
     @ManyToOne(optional = false)
     private Client client;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Tag> tags = new HashSet<>();
 
     public Document() {
