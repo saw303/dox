@@ -425,10 +425,6 @@ idea.project {
     }
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.9'
-}
-
 def customizePom(pom, gradleProject) {
     pom.whenConfigured { generatedPom ->
 
