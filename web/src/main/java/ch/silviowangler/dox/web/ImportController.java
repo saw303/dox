@@ -81,7 +81,7 @@ public class ImportController implements MessageSourceAware, InitializingBean {
             while (params.hasNext()) {
                 String param = params.next();
                 if (!DOCUMENT_CLASS_SHORT_NAME.endsWith(param) && !param.startsWith("x_")) {
-                    indices.put(new TranslatableKey(param), new DescriptiveIndex(new String(request.getParameter(param).getBytes("iso-8859-1"), "utf-8")));
+                    indices.put(new TranslatableKey(param), new DescriptiveIndex(request.getParameter(param)));
                 }
             }
 
