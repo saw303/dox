@@ -318,7 +318,7 @@ project(':web') {
     javascript.source {
         dev {
             js {
-                srcDirs file("${projectDir}/src/main/webapp/resources/js/libs/angular-1.2.26"), file("${projectDir}/src/main/webapp/resources/js/dox")
+                srcDirs file("${projectDir}/src/main/webapp/resources/js/libs/angular-1.4.8"), file("${projectDir}/src/main/webapp/resources/js/dox")
                 include "*.js"
                 exclude "*.min.js*"
             }
