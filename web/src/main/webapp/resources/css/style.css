@@ -66,27 +66,6 @@ body {
     text-shadow: none;
 }
 
-a {
-    color: #00e;
-    text-decoration: none;
-}
-
-a:visited {
-    color: #551a8b;
-}
-
-a:hover {
-    color: #06e;
-}
-
-a:focus {
-    outline: thin dotted;
-}
-
-a:hover, a:active {
-    outline: 0;
-}
-
 abbr[title] {
     border-bottom: 1px dotted;
 }
@@ -333,11 +312,6 @@ header h2 {
     margin: 0 0 20px 0;
 }
 
-header a:hover {
-    background: #ccc;
-    border: 0;
-}
-
 footer {
     text-align: center;
     margin: 2em 0 1em 0;
@@ -353,28 +327,6 @@ footer p {
 
 #q {
     width: 30em;
-}
-
-nav {
-    display: block;
-    overflow: hidden;
-}
-
-nav ul {
-    margin-top: 0.5em;
-}
-
-nav li {
-    display: inline;
-}
-
-nav a {
-    font-size: 1em;
-    color: #609;
-}
-
-nav a:hover {
-    background-color: #ffff00;
 }
 
 .attributeListing {
@@ -522,13 +474,6 @@ Form upload
 /* =============================================================================
 AngularJS styles
 ========================================================================== */
-input.ng-invalid {
-    border: 2px solid red;
-}
-
-input.ng-valid {
-    border: 1px solid green;
-}
 
 .messageBox {
     border: 1px solid #000000;
@@ -536,6 +481,10 @@ input.ng-valid {
     font-size: small;
     margin: 0 auto;
     margin-top: 10px;
+}
+
+md-content {
+    background: inherit;
 }
 /* =============================================================================
 Media Queries

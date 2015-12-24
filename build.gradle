@@ -42,7 +42,7 @@ configure(allprojects) {
     }
 
     group = 'ch.silviowangler.dox'
-    version = '0.5.1'
+    version = '0.5.2'
 
     configurations.all {
         resolutionStrategy {

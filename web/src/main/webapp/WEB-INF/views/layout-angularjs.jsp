@@ -23,7 +23,7 @@
 <!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8" lang="de"> <![endif]-->
 <!--[if IE 8]> <html class="no-js lt-ie9" lang="de"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html ng-app="dox"> <!--<![endif]-->
+<html ng-app="dox" ng-cloak> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -35,7 +35,10 @@
     <meta name="viewport" content="width=device-width">
     <meta name="fragment" content="!" />
 
-    <link href="//fonts.googleapis.com/css?family=Varela+Round|Playball|Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round|Playball|Montserrat:400,700" rel="stylesheet"
+          type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <link id="apiRoot" href="<%=request.getContextPath()%>"/>
     <link type="text/plain" rel="author" href="humans.txt"/>
 
@@ -45,10 +48,15 @@
             <script src="<c:url value="/resources/js/dox-all-min.js"/>"></script>
         </c:when>
         <c:otherwise>
+            <link rel="stylesheet" href="<c:url value="/resources/css/angular-material.css"/>"/>
             <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>"/>
-            <script src="<c:url value="/resources/js/libs/angular-1.2.26/angular.js"/>"></script>
-            <script src="<c:url value="/resources/js/libs/angular-1.2.26/angular-resource.js"/>"></script>
-            <script src="<c:url value="/resources/js/libs/angular-1.2.26/angular-route.js"/>"></script>
+            <script src="<c:url value="/resources/js/libs/angular-1.4.8/angular.js"/>"></script>
+            <script src="<c:url value="/resources/js/libs/angular-1.4.8/angular-resource.js"/>"></script>
+            <script src="<c:url value="/resources/js/libs/angular-1.4.8/angular-route.js"/>"></script>
+            <script src="<c:url value="/resources/js/libs/angular-1.4.8/angular-animate.js"/>"></script>
+            <script src="<c:url value="/resources/js/libs/angular-1.4.8/angular-aria.js"/>"></script>
+            <script src="<c:url value="/resources/js/libs/angular-1.4.8/angular-messages.js"/>"></script>
+            <script src="<c:url value="/resources/js/libs/material/angular-material.js"/>"></script>
             <script src="<c:url value="/resources/js/dox/dox.js"/>"></script>
             <script src="<c:url value="/resources/js/dox/controllers.js"/>"></script>
             <script src="<c:url value="/resources/js/dox/services.js"/>"></script>

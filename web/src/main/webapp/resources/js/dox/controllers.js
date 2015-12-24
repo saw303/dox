@@ -147,6 +147,12 @@ angular.module('dox.controllers', ['dox.services'])
             });
         });
 
+        $scope.clearResult = function () {
+            $log.debug('Clearing result list...');
+            $scope.documents = [];
+            executed = false;
+        }
+
         $scope.doQuery = function () {
 
             $scope.showSpinner = true;
