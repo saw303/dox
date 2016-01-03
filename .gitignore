@@ -19,3 +19,5 @@ web/src/main/webapp/js/libs/angular*/docs
 
 dox*.sql
 .DS_Store
+
+client
