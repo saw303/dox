@@ -11,6 +11,8 @@ import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import javax.servlet.Filter;
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletRegistration;
 
 /**
  * Created by Silvio Wangler on 06/10/15.
@@ -45,5 +47,15 @@ public class DoxWebApplicationInitializer extends AbstractAnnotationConfigDispat
     @Override
     protected ApplicationContextInitializer<?>[] getRootApplicationContextInitializers() {
         return new ApplicationContextInitializer<?>[]{new ContextProfileInitializer()};
+    }
+
+    @Override
+    protected void customizeRegistration(ServletRegistration.Dynamic dispatcherServlet) {
+        super.customizeRegistration(dispatcherServlet);
+
+        final int maxFileSize = 25 * 1024 * 1024;
+        final int maxRequestSize = 125 * 1024 * 1024;
+        final int fileSizeThreshold = 1 * 1024 * 1024;
+        dispatcherServlet.setMultipartConfig(new MultipartConfigElement(System.getProperty("java.io.tmpdir"), maxFileSize, maxRequestSize, fileSizeThreshold));
     }
 }
