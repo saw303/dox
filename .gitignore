@@ -22,4 +22,4 @@ dox*.sql
 
 client/node_modules
 client/bower_components
-client/distFi
+client/dist

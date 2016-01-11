@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+    <!-- Angular Material style sheet -->
+    <link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
+    <link rel="stylesheet" href="src/styles/style.css">
+</head>
+<body ng-app="BlankApp" ng-cloak ng-controller="DocumentController as dc">
+<!--
+  Your HTML content here
+-->
+<div layout="row">
+    <md-content flex>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <span>- DOX - Your Document Management System</span>
+            </div>
+        </md-toolbar>
+    </md-content>
+</div>
+
+<div layout="row">
+
+    <md-sidenav md-component-id="left" class="md-sidenav-left">
+        Left Nav
+    </md-sidenav>
+
+    <section flex="100" class="dox-content">
+        <md-content layout-padding>
+            <md-input-container><input type="search" name="search" value="" placeholder="Enter your query">
+            </md-input-container>
+            <md-button ng-click="dc.performSearch()" class="md-icon-button md-primary">
+                <md-icon
+                        md-svg-icon="bower_components/material-design-icons/action/svg/production/ic_search_24px.svg"></md-icon>
+                <md-tooltip md-direction="top">
+                    Submit your query
+                </md-tooltip>
+            </md-button>
+            <md-button ng-click="dc.clearResults()" class="md-icon-button">
+                <md-icon
+                        md-svg-icon="bower_components/material-design-icons/communication/svg/production/ic_clear_all_24px.svg"></md-icon>
+                <md-tooltip md-direction="top">
+                    Clear result
+                </md-tooltip>
+            </md-button>
+            <md-button class="md-icon-button">
+                <md-icon
+                        md-svg-icon="bower_components/material-design-icons/content/svg/production/ic_add_24px.svg"></md-icon>
+                <md-tooltip md-direction="top">
+                    Add new document
+                </md-tooltip>
+            </md-button>
+        </md-content>
+        <!--md-content ng-controller="MyController as myc">
+          Center Content
+          <md-button ng-click="myc.openLeftMenu()">
+            Open Left Menu
+          </md-button>
+        </md-content-->
+    </section>
+</div>
+
+<div class="dox-content" layout="row" layout-padding layout-wrap layout-fill ng-cloak>
+    <md-card ng-repeat="d in dc.results">
+        <md-card-header>
+            <md-card-avatar>
+                <img ng-src="bower_components/material-design-icons/image/svg/production/ic_picture_as_pdf_24px.svg">
+            </md-card-avatar>
+            <md-card-header-text>
+                <span class="md-title">{{d.fileName}}</span>
+                <span class="md-subhead">User: {{d.userReference}}, {{d.fileSize}} bytes</span>
+            </md-card-header-text>
+            <md-card-actions layout="row" layout-align="end center">
+                <md-button>Action 1</md-button>
+                <md-button>Action 2</md-button>
+            </md-card-actions>
+        </md-card-header>
+        <!--md-card-title>
+          <md-card-title-text>
+            <div class="dox-headline dox-truncate md-headline">
+              <md-tooltip md-direction="right">
+                {{d.indices.title.value}}
+              </md-tooltip>
+              {{d.indices.title.value}}
+            </div>
+          </md-card-title-text>
+        </md-card-title-->
+        <md-card-content>
+            <div class="md-caption dox-truncate dox-index-value" ng-repeat="index in d.indices"><label>{{
+                index.attribute.translation }}</label>: {{index.value}}
+            </div>
+        </md-card-content>
+    </md-card>
+</div>
+
+<!-- Angular Material requires Angular.js Libraries -->
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/angular-aria/angular-aria.js"></script>
+<script src="bower_components/angular-messages/angular-messages.js"></script>
+
+<!-- Angular Material Library -->
+<script src="bower_components/angular-material/angular-material.js"></script>
+
+<!-- Your application bootstrap  -->
+<script src="src/js/app.js"></script>
+
+</body>
+</html>

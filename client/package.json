@@ -1,0 +1,38 @@
+{
+  "name": "dox",
+  "version": "0.6.0",
+  "description": "DOX client",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prestart": "npm update",
+    "postinstall": "bower update"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saw303/dox.git"
+  },
+  "keywords": [
+    "dms",
+    "dox",
+    "documents"
+  ],
+  "author": "Silvio Wangler",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/saw303/dox/issues"
+  },
+  "homepage": "https://github.com/saw303/dox#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "bower": "^1.7.1",
+    "grunt": "^0.4.5",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-connect": "^0.11.2",
+    "grunt-contrib-cssmin": "^0.14.0",
+    "grunt-contrib-jshint": "^0.11.3",
+    "grunt-contrib-qunit": "^0.7.0",
+    "grunt-contrib-uglify": "^0.11.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-dom-munger": "^3.4.0"
+  }
+}
