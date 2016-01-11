@@ -57,7 +57,7 @@ public class AutomaticTranslatorAdvice {
         logger.debug("");
     }
 
-    @AfterReturning(pointcut = "execution(* ch.silviowangler.dox.*.*ServiceImpl.*(..))", returning = "retVal")
+    @AfterReturning(pointcut = "execution(* ch.silviowangler.dox.*ServiceImpl.*(..)) || execution(* ch.silviowangler.dox.*.*ServiceImpl.*(..))", returning = "retVal")
     public void addTranslationIfNeeded(Object retVal) throws Throwable {
 
         if (retVal == null) return;
