@@ -51,7 +51,7 @@ public class TranslationServiceImplIntegrationTest extends AbstractIntegrationTe
     public void readAll() {
         Set<Translation> translations = translationService.findAll();
 
-        assertThat(translations.size(), is(44));
+        assertThat(translations.size(), is(46));
 
         for (Translation translation : translations) {
             assertNotNull("Key must not be null", translation.getKey());

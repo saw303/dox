@@ -26,27 +26,27 @@ buildscript {
     }
     dependencies {
         classpath gradleApi()
-        classpath "org.hibernate:hibernate-core:${project.ext.hibernateVersion}",
-                "org.hibernate:hibernate-entitymanager:${project.ext.hibernateVersion}",
-                "com.h2database:h2:${project.ext.h2Version}",
-                "joda-time:joda-time:${project.ext.jodaTimeVersion}",
+        classpath "org.hibernate:hibernate-core:${hibernateVersion}",
+                "org.hibernate:hibernate-entitymanager:${hibernateVersion}",
+                "com.h2database:h2:${h2Version}",
+                "joda-time:joda-time:${jodaTimeVersion}",
                 "org.jadira.usertype:usertype.core:3.2.0.GA"
-        classpath("org.springframework.data:spring-data-jpa:${project.ext.springDataVersion}") {
+        classpath("org.springframework.data:spring-data-jpa:${springDataVersion}") {
             exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
         }
     }
 }
 
 dependencies {
-    compile "org.hibernate:hibernate-core:${project.ext.hibernateVersion}",
-            "org.hibernate:hibernate-entitymanager:${project.ext.hibernateVersion}",
-            "joda-time:joda-time:${project.ext.jodaTimeVersion}",
+    compile "org.hibernate:hibernate-core:${hibernateVersion}",
+            "org.hibernate:hibernate-entitymanager:${hibernateVersion}",
+            "joda-time:joda-time:${jodaTimeVersion}",
             "org.jadira.usertype:usertype.core:3.2.0.GA",
-            "com.google.guava:guava:${project.ext.guavaVersion}"
-    compile("org.springframework.data:spring-data-jpa:${project.ext.springDataVersion}") {
+            "com.google.guava:guava:${guavaVersion}"
+    compile("org.springframework.data:spring-data-jpa:${springDataVersion}") {
         exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
     }
-    testRuntime "ch.qos.logback:logback-classic:${project.ext.logbackVersion}"
+    testRuntime "ch.qos.logback:logback-classic:${logbackVersion}"
 }
 
 sourceSets {
@@ -73,13 +73,13 @@ clean.dependsOn << cleanGenerated
 class HibernateJpaSchemaGenerationTask extends DefaultTask {
 
     private Map<String, String> dialects = [
-            'ORACLE'    : "org.hibernate.dialect.Oracle10gDialect",
-            'MYSQL'     : "org.hibernate.dialect.MySQLDialect",
-            'MYSQL5'    : "org.hibernate.dialect.MySQL5Dialect",
-            'MYSQL5INNODB': "org.hibernate.dialect.MySQL5InnoDBDialect",
-            'HSQL'      : "org.hibernate.dialect.HSQLDialect",
-            'H2'        : "org.hibernate.dialect.H2Dialect",
-            'PostgreSQL': 'org.hibernate.dialect.PostgreSQLDialect'
+            'ORACLE'      : "org.hibernate.dialect.Oracle10gDialect",
+            'MYSQL'       : "org.hibernate.dialect.MySQLDialect",
+            'MYSQL5'      : "org.hibernate.dialect.MySQL5Dialect",
+            'MYSQL5INNODB': "ch.silviowangler.dox.hibernate.Mysql5InnoDBBitBooleanDialect",
+            'HSQL'        : "org.hibernate.dialect.HSQLDialect",
+            'H2'          : "org.hibernate.dialect.H2Dialect",
+            'PostgreSQL'  : 'org.hibernate.dialect.PostgreSQLDialect'
     ]
 
     private URLClassLoader loader

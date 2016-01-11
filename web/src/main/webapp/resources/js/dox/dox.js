@@ -39,6 +39,10 @@ angular.module('dox', ['dox.controllers', 'ngRoute', 'ngMaterial'])
             templateUrl: basePath + '/partials/partnerList.html'
         });
 
+        $routeProvider.when(basePath + '/ui/postboxes', {
+            templateUrl: basePath + '/partials/postboxes.html'
+        });
+
         /*$routeProvider.otherwise({
             redirectTo: basePath + '/ui/'
         });*/

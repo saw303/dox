@@ -8,6 +8,22 @@ angular.module('dox.controllers', ['dox.services'])
         });
     }])
 
+    .controller('PostBoxController', ['$scope', '$log', 'PostBox', function ($scope, $log, PostBox) {
+
+        var ctrl = this;
+
+        ctrl.selectedPostBox;
+
+        PostBox.query(function (postBoxes) {
+            $log.debug('Found %s post boxes', postBoxes.length)
+            ctrl.postboxes = postBoxes;
+        });
+
+        ctrl.loadContent = function () {
+            $log.debug('Selected post box is %s', ctrl.selectedPostBox);
+        };
+    }])
+
     .controller('SettingsController', ['$scope', '$log', 'Settings', function ($scope, $log, Settings) {
         Settings.query(function (settings) {
             $scope.settings = settings;

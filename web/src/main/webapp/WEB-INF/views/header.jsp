@@ -47,6 +47,7 @@
 
                     <spring:message code="nav.home" var="homeLabel"/>
                     <spring:message code="nav.add.new.document" var="addNewDocLabel"/>
+                    <spring:message code="nav.postboxes" var="postboxes"/>
                     <spring:message code="nav.export" var="exportLabel"/>
                     <spring:message code="nav.partners" var="partnerLabel"/>
                     <spring:message code="nav.settings" var="settingsLabel"/>
@@ -61,6 +62,8 @@
                         <a class="md-fab" href="<%=request.getContextPath()%>/admin/export" aria-label="${exportLabel}"
                            title="${exportLabel}"><i class="material-icons">import_export</i></a>
                     </sec:authorize>
+                    <a class="md-fab" href="<%=request.getContextPath()%>/ui/postboxes" aria-label="${postboxes}"
+                       title="${postboxes}"><i class="material-icons">inbox</i></a>
                     <a class="md-fab" href="<%=request.getContextPath()%>/ui/partners" aria-label="${partnerLabel}"
                        title="${partnerLabel}"><i class="material-icons">people</i></a>
                     <a class="md-fab" href="<%=request.getContextPath()%>/ui/settings" aria-label="${settingsLabel}"

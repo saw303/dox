@@ -23,14 +23,19 @@ import java.sql.Types;
 /**
  * @author Silvio Wangler
  * @since 0.1
- *        <p/>
- *        Workaround due to an issue https://hibernate.onjira.com/browse/HHH-6935
- *        Can possibly removed using Hibernate 4.3.x    
+ * <p/>
+ * Workaround due to an issue https://hibernate.onjira.com/browse/HHH-6935
+ * Can possibly removed using Hibernate 4.3.x
  */
 public class Mysql5InnoDBBitBooleanDialect extends MySQL5InnoDBDialect {
 
     public Mysql5InnoDBBitBooleanDialect() {
         super();
         registerColumnType(Types.BOOLEAN, "bit");
+    }
+
+    @Override
+    public String getTableTypeString() {
+        return super.getTableTypeString() + " DEFAULT CHARSET=utf8";
     }
 }

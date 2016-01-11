@@ -315,12 +315,9 @@ INSERT INTO DOX_TRANSLATIONS (TRS_KEY, TRS_TXT, TRS_LOC) VALUES ('DocumentClass:
 INSERT INTO DOX_TRANSLATIONS (TRS_KEY, TRS_TXT, TRS_LOC) VALUES ('DocumentClass:CONTRACTS', 'Verträge', 'de');
 INSERT INTO DOX_TRANSLATIONS (TRS_KEY, TRS_TXT, TRS_LOC) VALUES ('DocumentClass:CONTRACTS', 'Contracts', 'en');
 INSERT INTO DOX_TRANSLATIONS (TRS_KEY, TRS_TXT, TRS_LOC) VALUES ('DocumentClass:BANK_DOCUMENTS', 'Bankdokumente', 'de');
-INSERT INTO DOX_TRANSLATIONS (TRS_KEY, TRS_TXT, TRS_LOC)
-VALUES ('DocumentClass:BANK_DOCUMENTS', 'Banking documents', 'en');
-INSERT INTO DOX_TRANSLATIONS (TRS_KEY, TRS_TXT, TRS_LOC)
-VALUES ('DocumentClass:SALARY_REPORTS', 'Lohnabrechnungen', 'de');
-INSERT INTO DOX_TRANSLATIONS (TRS_KEY, TRS_TXT, TRS_LOC)
-VALUES ('DocumentClass:SALARY_REPORTS', 'Salary reports', 'en');
+INSERT INTO DOX_TRANSLATIONS (TRS_KEY, TRS_TXT, TRS_LOC) VALUES ('DocumentClass:BANK_DOCUMENTS', 'Banking documents', 'en');
+INSERT INTO DOX_TRANSLATIONS (TRS_KEY, TRS_TXT, TRS_LOC) VALUES ('DocumentClass:SALARY_REPORTS', 'Lohnabrechnungen', 'de');
+INSERT INTO DOX_TRANSLATIONS (TRS_KEY, TRS_TXT, TRS_LOC) VALUES ('DocumentClass:SALARY_REPORTS', 'Salary reports', 'en');
 INSERT INTO DOX_TRANSLATIONS (TRS_KEY, TRS_TXT, TRS_LOC) VALUES ('DocumentClass:VARIA', 'Varia', 'de');
 INSERT INTO DOX_TRANSLATIONS (TRS_KEY, TRS_TXT, TRS_LOC) VALUES ('DocumentClass:VARIA', 'Varia', 'en');
 INSERT INTO DOX_TRANSLATIONS (TRS_KEY, TRS_TXT, TRS_LOC) VALUES ('DocumentClass:DIPLOMA', 'Diplome / Zeugnisse', 'de');
@@ -347,3 +344,14 @@ INSERT INTO DOX_TRANSLATIONS (TRS_KEY, TRS_TXT, TRS_LOC) VALUES ('Attribute:inst
 INSERT INTO DOX_TRANSLATIONS (TRS_KEY, TRS_TXT, TRS_LOC) VALUES ('Attribute:institute', 'Bank institute', 'en');
 INSERT INTO DOX_TRANSLATIONS (TRS_KEY, TRS_TXT, TRS_LOC) VALUES ('Attribute:accountNumber', 'Kontonummer', 'de');
 INSERT INTO DOX_TRANSLATIONS (TRS_KEY, TRS_TXT, TRS_LOC) VALUES ('Attribute:accountNumber', 'Account number', 'en');
+INSERT INTO DOX_TRANSLATIONS (TRS_KEY, TRS_TXT, TRS_LOC) VALUES ('PostBox:invoices', 'Invoices', 'en');
+INSERT INTO DOX_TRANSLATIONS (TRS_KEY, TRS_TXT, TRS_LOC) VALUES ('PostBox:invoices', 'Rechnungseingang', 'de');
+
+
+-- Inital Daten Postkorb
+INSERT INTO DOX_PBX(shortName, client_id) VALUES ('WANGLER', (SELECT c.id FROM DOX_CLIENT c WHERE c.shortName = 'wangler'));
+INSERT INTO DOX_PBX(shortName, client_id, FK_PARENT_PB) VALUES ('invoices', (SELECT c.id FROM DOX_CLIENT c WHERE c.shortName = 'wangler'), (SELECT p.id FROM DOX_PBX p where p.shortName = 'WANGLER'));
+INSERT INTO DOX_PBX(shortName, client_id, FK_PARENT_PB) VALUES ((SELECT u.username FROM DOX_USER u WHERE u.username = 'saw303'), (SELECT c.id FROM DOX_CLIENT c WHERE c.shortName = 'wangler'), (SELECT p.id FROM DOX_PBX p where p.shortName = 'WANGLER'));
+INSERT INTO DOX_UPBX(id, user_id) VALUES ((SELECT p.id FROM DOX_PBX p where p.shortName = 'saw303'), (SELECT u.id FROM DOX_USER u WHERE u.username = 'saw303'));
+INSERT INTO DOX_PBX(shortName, client_id, FK_PARENT_PB) VALUES ((SELECT u.username FROM DOX_USER u WHERE u.username = 'angela'), (SELECT c.id FROM DOX_CLIENT c WHERE c.shortName = 'wangler'), (SELECT p.id FROM DOX_PBX p where p.shortName = 'WANGLER'));
+INSERT INTO DOX_UPBX(id, user_id) VALUES ((SELECT p.id FROM DOX_PBX p where p.shortName = 'angela'), (SELECT u.id FROM DOX_USER u WHERE u.username = 'angela'));

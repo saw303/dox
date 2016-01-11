@@ -20,4 +20,6 @@ web/src/main/webapp/js/libs/angular*/docs
 dox*.sql
 .DS_Store
 
-client
+client/node_modules
+client/bower_components
+client/distFi

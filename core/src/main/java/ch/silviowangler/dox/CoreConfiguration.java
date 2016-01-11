@@ -10,7 +10,9 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean;
 import org.springframework.cache.support.SimpleCacheManager;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jndi.JndiObjectFactoryBean;
@@ -39,15 +41,9 @@ import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.
 @Configuration
 @EnableTransactionManagement
 @EnableCaching
-@ComponentScan({"ch.silviowangler.dox"/*, "ch.silviowangler.dox.security"*/})
+@ComponentScan({"ch.silviowangler.dox"})
 @EnableAspectJAutoProxy
 public class CoreConfiguration {
-
-    /*@Bean(destroyMethod = "close")
-    public Client elasticSearchClient() {
-        Node node = NodeBuilder.nodeBuilder().settings(ImmutableSettings.settingsBuilder().put("http.enabled", false)).client(true).node();
-        return node.client();
-    }*/
 
     @Bean(name = "dataSource")
     @Profile("prod")
@@ -187,5 +183,14 @@ public class CoreConfiguration {
     @Bean
     public DoxVersion doxVersion(@Value("${app.version}") String version) {
         return new DoxVersion(version);
+    }
+
+    @Bean
+    public MessageSource messageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasename("messages");
+        messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setFallbackToSystemLocale(false);
+        return messageSource;
     }
 }
