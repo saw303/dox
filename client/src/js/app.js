@@ -1,556 +1,141 @@
-var app = angular.module('BlankApp', ['ngMaterial']);
+var app = angular.module('StarterApp', ['ngMaterial', 'ngMdIcons']);
 
-app.controller('MyController', ['$scope', '$mdSidenav', function ($scope, $mdSidenav) {
+function DialogController($scope, $mdDialog) {
+  $scope.hide = function() {
+    $mdDialog.hide();
+  };
+  $scope.cancel = function() {
+    $mdDialog.cancel();
+  };
+  $scope.answer = function(answer) {
+    $mdDialog.hide(answer);
+  };
+}
 
-    var ctrl = this;
+app.controller('AppCtrl', ['$scope', '$mdBottomSheet', '$mdSidenav', '$mdDialog', function($scope, $mdBottomSheet, $mdSidenav, $mdDialog) {
 
-    ctrl.openLeftMenu = function () {
-        $mdSidenav('left').toggle();
-    };
+  var ctrl = this;
+
+  ctrl.toggleSidenav = function(menuId) {
+    $mdSidenav(menuId).toggle();
+  };
+
+  ctrl.menu = [{
+    link: '',
+    title: 'Dashboard',
+    icon: 'dashboard'
+  }, {
+    link: '',
+    title: 'Friends',
+    icon: 'group'
+  }, {
+    link: '',
+    title: 'Messages',
+    icon: 'message'
+  }];
+  $scope.admin = [{
+    link: '',
+    title: 'Logout',
+    icon: 'exit_to_app'
+  }, {
+    link: 'showListBottomSheet($event)',
+    title: 'Settings',
+    icon: 'settings'
+  }];
+
+  ctrl.activity = [{
+    what: 'Brunch this weekend?',
+    who: 'Ali Conners',
+    when: '3:08PM',
+    notes: " I'll be in your neighborhood doing errands"
+  }, {
+    what: 'Summer BBQ',
+    who: 'to Alex, Scott, Jennifer',
+    when: '3:08PM',
+    notes: "Wish I could come out but I'm out of town this weekend"
+  }, {
+    what: 'Oui Oui',
+    who: 'Sandra Adams',
+    when: '3:08PM',
+    notes: "Do you have Paris recommendations? Have you ever been?"
+  }, {
+    what: 'Birthday Gift',
+    who: 'Trevor Hansen',
+    when: '3:08PM',
+    notes: "Have any ideas of what we should get Heidi for her birthday?"
+  }, {
+    what: 'Recipe to try',
+    who: 'Brian Holt',
+    when: '3:08PM',
+    notes: "We should eat this: Grapefruit, Squash, Corn, and Tomatillo tacos"
+  }, ];
+  $scope.alert = '';
+  $scope.showListBottomSheet = function($event) {
+    $scope.alert = '';
+    $mdBottomSheet.show({
+      template: '<md-bottom-sheet class="md-list md-has-header"> <md-subheader>Settings</md-subheader> <md-list> <md-item ng-repeat="item in items"><md-item-content md-ink-ripple flex class="inset"> <a flex aria-label="{{item.name}}" ng-click="listItemClick($index)"> <span class="md-inline-list-icon-label">{{ item.name }}</span> </a></md-item-content> </md-item> </md-list></md-bottom-sheet>',
+      controller: 'ListBottomSheetCtrl',
+      targetEvent: $event
+    }).then(function(clickedItem) {
+      $scope.alert = clickedItem.name + ' clicked!';
+    });
+  };
+
+  $scope.showAdd = function(ev) {
+    $mdDialog.show({
+        controller: DialogController,
+        template: '<md-dialog aria-label="Mango (Fruit)"> <md-content class="md-padding"> <form name="userForm"> <div layout layout-sm="column"> <md-input-container flex> <label>First Name</label> <input ng-model="user.firstName" placeholder="Placeholder text"> </md-input-container> <md-input-container flex> <label>Last Name</label> <input ng-model="theMax"> </md-input-container> </div> <md-input-container flex> <label>Address</label> <input ng-model="user.address"> </md-input-container> <div layout layout-sm="column"> <md-input-container flex> <label>City</label> <input ng-model="user.city"> </md-input-container> <md-input-container flex> <label>State</label> <input ng-model="user.state"> </md-input-container> <md-input-container flex> <label>Postal Code</label> <input ng-model="user.postalCode"> </md-input-container> </div> <md-input-container flex> <label>Biography</label> <textarea ng-model="user.biography" columns="1" md-maxlength="150"></textarea> </md-input-container> </form> </md-content> <div class="md-actions" layout="row"> <span flex></span> <md-button ng-click="answer(\'not useful\')"> Cancel </md-button> <md-button ng-click="answer(\'useful\')" class="md-primary"> Save </md-button> </div></md-dialog>',
+        targetEvent: ev,
+      })
+      .then(function(answer) {
+        $scope.alert = 'You said the information was "' + answer + '".';
+      }, function() {
+        $scope.alert = 'You cancelled the dialog.';
+      });
+  };
 }]);
 
-app.controller('DocumentController', ['$scope', '$log', function ($scope, $log) {
+app.controller('ListBottomSheetCtrl', function($scope, $mdBottomSheet) {
+  $scope.items = [{
+    name: 'Share',
+    icon: 'share'
+  }, {
+    name: 'Upload',
+    icon: 'upload'
+  }, {
+    name: 'Copy',
+    icon: 'copy'
+  }, {
+    name: 'Print this page',
+    icon: 'print'
+  }, ];
 
-    var ctrl = this;
+  $scope.listItemClick = function($index) {
+    var clickedItem = $scope.items[$index];
+    $mdBottomSheet.hide(clickedItem);
+  };
+});
 
-    ctrl.results = [];
+app.directive('userAvatar', function() {
+  return {
+    replace: true,
+    template: '<svg class="user-avatar" viewBox="0 0 128 128" height="64" width="64" pointer-events="none" display="block" > <path fill="#FF8A80" d="M0 0h128v128H0z"/> <path fill="#FFE0B2" d="M36.3 94.8c6.4 7.3 16.2 12.1 27.3 12.4 10.7-.3 20.3-4.7 26.7-11.6l.2.1c-17-13.3-12.9-23.4-8.5-28.6 1.3-1.2 2.8-2.5 4.4-3.9l13.1-11c1.5-1.2 2.6-3 2.9-5.1.6-4.4-2.5-8.4-6.9-9.1-1.5-.2-3 0-4.3.6-.3-1.3-.4-2.7-1.6-3.5-1.4-.9-2.8-1.7-4.2-2.5-7.1-3.9-14.9-6.6-23-7.9-5.4-.9-11-1.2-16.1.7-3.3 1.2-6.1 3.2-8.7 5.6-1.3 1.2-2.5 2.4-3.7 3.7l-1.8 1.9c-.3.3-.5.6-.8.8-.1.1-.2 0-.4.2.1.2.1.5.1.6-1-.3-2.1-.4-3.2-.2-4.4.6-7.5 4.7-6.9 9.1.3 2.1 1.3 3.8 2.8 5.1l11 9.3c1.8 1.5 3.3 3.8 4.6 5.7 1.5 2.3 2.8 4.9 3.5 7.6 1.7 6.8-.8 13.4-5.4 18.4-.5.6-1.1 1-1.4 1.7-.2.6-.4 1.3-.6 2-.4 1.5-.5 3.1-.3 4.6.4 3.1 1.8 6.1 4.1 8.2 3.3 3 8 4 12.4 4.5 5.2.6 10.5.7 15.7.2 4.5-.4 9.1-1.2 13-3.4 5.6-3.1 9.6-8.9 10.5-15.2M76.4 46c.9 0 1.6.7 1.6 1.6 0 .9-.7 1.6-1.6 1.6-.9 0-1.6-.7-1.6-1.6-.1-.9.7-1.6 1.6-1.6zm-25.7 0c.9 0 1.6.7 1.6 1.6 0 .9-.7 1.6-1.6 1.6-.9 0-1.6-.7-1.6-1.6-.1-.9.7-1.6 1.6-1.6z"/> <path fill="#E0F7FA" d="M105.3 106.1c-.9-1.3-1.3-1.9-1.3-1.9l-.2-.3c-.6-.9-1.2-1.7-1.9-2.4-3.2-3.5-7.3-5.4-11.4-5.7 0 0 .1 0 .1.1l-.2-.1c-6.4 6.9-16 11.3-26.7 11.6-11.2-.3-21.1-5.1-27.5-12.6-.1.2-.2.4-.2.5-3.1.9-6 2.7-8.4 5.4l-.2.2s-.5.6-1.5 1.7c-.9 1.1-2.2 2.6-3.7 4.5-3.1 3.9-7.2 9.5-11.7 16.6-.9 1.4-1.7 2.8-2.6 4.3h109.6c-3.4-7.1-6.5-12.8-8.9-16.9-1.5-2.2-2.6-3.8-3.3-5z"/> <circle fill="#444" cx="76.3" cy="47.5" r="2"/> <circle fill="#444" cx="50.7" cy="47.6" r="2"/> <path fill="#444" d="M48.1 27.4c4.5 5.9 15.5 12.1 42.4 8.4-2.2-6.9-6.8-12.6-12.6-16.4C95.1 20.9 92 10 92 10c-1.4 5.5-11.1 4.4-11.1 4.4H62.1c-1.7-.1-3.4 0-5.2.3-12.8 1.8-22.6 11.1-25.7 22.9 10.6-1.9 15.3-7.6 16.9-10.2z"/> </svg>'
+  };
+});
 
-    ctrl.clearResults = function () {
-        ctrl.results = [];
-    };
-
-    ctrl.performSearch = function () {
-
-        $log.debug('Query executed');
-
-        ctrl.results = [{
-            "hash": "7c75201a1484608d259d2933009653074c04f1e7ac754f4884b8ea6506621e33",
-            "id": 564,
-            "pageCount": 2,
-            "mimeType": "application/pdf",
-            "documentClass": {
-                "shortName": "VARIA",
-                "client": "wangler",
-                "translation": "Varia"
-            },
-            "indices": {
-                "title": {
-                    "value": "Meldebestätigung Angela Wangler in Opfikon 2015 mit Selina",
-                    "attribute": {
-                        "shortName": "title",
-                        "optional": false,
-                        "domain": null,
-                        "dataType": "STRING",
-                        "modifiable": true,
-                        "translation": "Document title",
-                        "mappingColumn": "S_02"
-                    }
-                }
-            },
-            "fileName": "BRW008092881FD2_002982.pdf",
-            "userReference": "saw303",
-            "fileSize": 110331,
-            "creationDate": "2015-12-23T12:34:57.000Z",
-            "client": "wangler",
-            "tags": []
-        }, {
-            "hash": "8914721993fc030e5270e96136af4a89f0334d1bf1a5ce6f5403bd6fad165bb0",
-            "id": 563,
-            "pageCount": 2,
-            "mimeType": "application/pdf",
-            "documentClass": {
-                "shortName": "VARIA",
-                "client": "wangler",
-                "translation": "Varia"
-            },
-            "indices": {
-                "title": {
-                    "value": "Meldebestätigung Silvio Wangler in Opfikon 2015 mit Selina",
-                    "attribute": {
-                        "shortName": "title",
-                        "optional": false,
-                        "domain": null,
-                        "dataType": "STRING",
-                        "modifiable": true,
-                        "translation": "Document title",
-                        "mappingColumn": "S_02"
-                    }
-                }
-            },
-            "fileName": "BRW008092881FD2_002984.pdf",
-            "userReference": "saw303",
-            "fileSize": 108844,
-            "creationDate": "2015-12-23T12:34:00.000Z",
-            "client": "wangler",
-            "tags": []
-        }, {
-            "hash": "89da77c236842ba5b8157e8d3ec5bc85697992256fab24f0f6fc73962dad4207",
-            "id": 558,
-            "pageCount": 1,
-            "mimeType": "application/pdf",
-            "documentClass": {
-                "shortName": "INVOICE",
-                "client": "wangler",
-                "translation": "Invoice"
-            },
-            "indices": {
-                "company": {
-                    "value": "Dr. Simeon",
-                    "attribute": {
-                        "shortName": "company",
-                        "optional": false,
-                        "domain": {
-                            "shortName": "company",
-                            "values": ["Sunrise", "Swisscom", "Jemako", "Coop Supercard", "Silvaplana Tourismus Information", "GE Money Bank", "Betty Bossi", "Medplace AG Gesundheitszentrum Wallisellen", "Nestlé Nespresso S.A.", "Teleclub", "GitHub", "Silvio & Angela", "AXA Winterthur", "Cablecom", "Elektro Wehrli AG", "Buchhaus.ch - Lüthy Balmer Stocker", "Java User Group Switzerland", "Schubiger Möbel", "Lüthy Balmer Stocker", "Zalando", "KTV Albisrieden", "Energie Opfikon", "Zahnarztpraxis Glattbrugg", "Server4you", "Reinhard Zanin", "Adcubum AG", "Ochsner Hockey AG", "Treuhand Abt AG", "ZSC Supporter", "Brack.ch", "digitec AG", "Fotoschule Baur", "Medialinx AG", "Hockeystock.ch", "Schubi Weine", "Coop Rechtsschutz", "Fleurop", "QoQa Services SA", "Nettoshop.ch", "Hotel Tannhof", "Concordia", "Raiffeisen", "nic.io", "Post CH AG", "Radisson Hotel", "VZ Vermögenszentrum AG", "SWITCH", "Stadt Kloten - Zivilstandsamt", "Billag AG", "Liluca Pronuptia Suisse", "Schild AG", "Syndicom", "Kuoni", "Foto Studio Tre", "Stadt Opfikon", "Helsana", "VSAO", "Abredeversicherung Schlössli", "Acamed Binz", "Allianz", "ifolor", "Medica", "Nespresso", "PC Ostschweiz", "S + R Glattbrugg GmbH", "Garage Leu", "UGM Abo- und Bestellservice", "Herr Zanin ", "Galaxus (Schweiz) AG", "upc cablecom", "Tamedia AG", "Computec Media GmbH", "Gisler Sport Arosa", "Silhoutte Cruises", "saisonküche", "ToysRUs AG", "Buttinette", "Cembra Money Bank AG", "Migros Fitnesspark", "Hatze Lea", "4mybaby AG", "VBS Hobby Service GmbH", "Ackermann", "Nestl? Nespresso S.A.", "Delticom AG", "NOVATREND Services GmbH", "Leserservice Software & Support", "KSW", "FMH", "Kantonspolizei Graub?nden", "Mclinsen.ch GmbH", "Clienia Schl?ssli AG", "Supercard Visa ", "BuxbaumAG", "Prophylaxezentrum Z?rich Nord", "Dr. Maurer", "Dr. Simeon", "Universit?tsspital", "Officina Ford Cecina", "Happy Baby", "Psychcentral ", "Atlentis", "Digitec Galaxus AG", "W?ger", "La Cucina Gew?rze und Tee", "BabyJoe", "Holzpunkt - Woca Holzbodenprodukte", "Zahnmedizin Z?rich Nord Dentalhygiene", "Vertbaudet", "Windeln.ch", "Psychcentral", "Jetbrains", "Dr. Ren? Simeon", "Ursula Sp?rri", "Sendmoments", "Hirslanden", "Kantonales Steueramt Zuerich", "Strassenverkehrsamt Zuerich", "Hawk", "Europcar", "Steueramt der Stadt Opfikon", "Ernst Ruckstuhl AG"],
-                            "translation": "Company"
-                        },
-                        "dataType": "STRING",
-                        "modifiable": true,
-                        "translation": "Company",
-                        "mappingColumn": "S_01"
-                    }
-                },
-                "invoiceAmount": {
-                    "value": "CHF 4560",
-                    "attribute": {
-                        "shortName": "invoiceAmount",
-                        "optional": false,
-                        "domain": null,
-                        "dataType": "CURRENCY",
-                        "modifiable": true,
-                        "translation": "Invoice amount",
-                        "mappingColumn": "C_01"
-                    }
-                },
-                "invoiceDate": {
-                    "value": "2015-12-23",
-                    "attribute": {
-                        "shortName": "invoiceDate",
-                        "optional": false,
-                        "domain": null,
-                        "dataType": "DATE",
-                        "modifiable": true,
-                        "translation": "Invoice date",
-                        "mappingColumn": "LD_01"
-                    }
-                }
-            },
-            "fileName": "Simeon-Rechnung-Geburt-Selina-2015-Hirslanden.pdf",
-            "userReference": "saw303",
-            "fileSize": 87309,
-            "creationDate": "2015-12-23T12:29:13.000Z",
-            "client": "wangler",
-            "tags": []
-        }, {
-            "hash": "6858199448681df6e661e2a8c031c0295804d99f06c9ea629409a58552b3b00d",
-            "id": 557,
-            "pageCount": 2,
-            "mimeType": "application/pdf",
-            "documentClass": {
-                "shortName": "VARIA",
-                "client": "wangler",
-                "translation": "Varia"
-            },
-            "indices": {
-                "title": {
-                    "value": "Gesundheitsfragen Selina Concordia Tiku 2014",
-                    "attribute": {
-                        "shortName": "title",
-                        "optional": false,
-                        "domain": null,
-                        "dataType": "STRING",
-                        "modifiable": true,
-                        "translation": "Document title",
-                        "mappingColumn": "S_02"
-                    }
-                }
-            },
-            "fileName": "Gesundheitsfragen-Selina-Concordia-Tiku.pdf",
-            "userReference": "saw303",
-            "fileSize": 201850,
-            "creationDate": "2015-12-23T12:26:32.000Z",
-            "client": "wangler",
-            "tags": []
-        }, {
-            "hash": "e2c67c3ef76e46cca189a3fd3df11cb5bbed251b2fb201eac754a473bc771d81",
-            "id": 552,
-            "pageCount": 2,
-            "mimeType": "application/pdf",
-            "documentClass": {
-                "shortName": "CONTRACTS",
-                "client": "wangler",
-                "translation": "Contracts"
-            },
-            "indices": {
-                "title": {
-                    "value": "Versicherungspolice Concordia Selina Privat 2016",
-                    "attribute": {
-                        "shortName": "title",
-                        "optional": false,
-                        "domain": null,
-                        "dataType": "STRING",
-                        "modifiable": true,
-                        "translation": "Document title",
-                        "mappingColumn": "S_02"
-                    }
-                },
-                "company": {
-                    "value": "Concordia",
-                    "attribute": {
-                        "shortName": "company",
-                        "optional": false,
-                        "domain": {
-                            "shortName": "company",
-                            "values": ["Sunrise", "Swisscom", "Jemako", "Coop Supercard", "Silvaplana Tourismus Information", "GE Money Bank", "Betty Bossi", "Medplace AG Gesundheitszentrum Wallisellen", "Nestlé Nespresso S.A.", "Teleclub", "GitHub", "Silvio & Angela", "AXA Winterthur", "Cablecom", "Elektro Wehrli AG", "Buchhaus.ch - Lüthy Balmer Stocker", "Java User Group Switzerland", "Schubiger Möbel", "Lüthy Balmer Stocker", "Zalando", "KTV Albisrieden", "Energie Opfikon", "Zahnarztpraxis Glattbrugg", "Server4you", "Reinhard Zanin", "Adcubum AG", "Ochsner Hockey AG", "Treuhand Abt AG", "ZSC Supporter", "Brack.ch", "digitec AG", "Fotoschule Baur", "Medialinx AG", "Hockeystock.ch", "Schubi Weine", "Coop Rechtsschutz", "Fleurop", "QoQa Services SA", "Nettoshop.ch", "Hotel Tannhof", "Concordia", "Raiffeisen", "nic.io", "Post CH AG", "Radisson Hotel", "VZ Vermögenszentrum AG", "SWITCH", "Stadt Kloten - Zivilstandsamt", "Billag AG", "Liluca Pronuptia Suisse", "Schild AG", "Syndicom", "Kuoni", "Foto Studio Tre", "Stadt Opfikon", "Helsana", "VSAO", "Abredeversicherung Schlössli", "Acamed Binz", "Allianz", "ifolor", "Medica", "Nespresso", "PC Ostschweiz", "S + R Glattbrugg GmbH", "Garage Leu", "UGM Abo- und Bestellservice", "Herr Zanin ", "Galaxus (Schweiz) AG", "upc cablecom", "Tamedia AG", "Computec Media GmbH", "Gisler Sport Arosa", "Silhoutte Cruises", "saisonküche", "ToysRUs AG", "Buttinette", "Cembra Money Bank AG", "Migros Fitnesspark", "Hatze Lea", "4mybaby AG", "VBS Hobby Service GmbH", "Ackermann", "Nestl? Nespresso S.A.", "Delticom AG", "NOVATREND Services GmbH", "Leserservice Software & Support", "KSW", "FMH", "Kantonspolizei Graub?nden", "Mclinsen.ch GmbH", "Clienia Schl?ssli AG", "Supercard Visa ", "BuxbaumAG", "Prophylaxezentrum Z?rich Nord", "Dr. Maurer", "Dr. Simeon", "Universit?tsspital", "Officina Ford Cecina", "Happy Baby", "Psychcentral ", "Atlentis", "Digitec Galaxus AG", "W?ger", "La Cucina Gew?rze und Tee", "BabyJoe", "Holzpunkt - Woca Holzbodenprodukte", "Zahnmedizin Z?rich Nord Dentalhygiene", "Vertbaudet", "Windeln.ch", "Psychcentral", "Jetbrains", "Dr. Ren? Simeon", "Ursula Sp?rri", "Sendmoments", "Hirslanden", "Kantonales Steueramt Zuerich", "Strassenverkehrsamt Zuerich", "Hawk", "Europcar", "Steueramt der Stadt Opfikon", "Ernst Ruckstuhl AG"],
-                            "translation": "Company"
-                        },
-                        "dataType": "STRING",
-                        "modifiable": true,
-                        "translation": "Company",
-                        "mappingColumn": "S_01"
-                    }
-                }
-            },
-            "fileName": "Police-Concordia-Selina-Privat-2016.pdf",
-            "userReference": "saw303",
-            "fileSize": 154335,
-            "creationDate": "2015-12-23T12:18:29.000Z",
-            "client": "wangler",
-            "tags": []
-        }, {
-            "hash": "ca80b20017628f61ec5eef0e7a7904bcd924e0e706e2096952ad71d24a2ebf0f",
-            "id": 551,
-            "pageCount": 2,
-            "mimeType": "application/pdf",
-            "documentClass": {
-                "shortName": "CONTRACTS",
-                "client": "wangler",
-                "translation": "Contracts"
-            },
-            "indices": {
-                "title": {
-                    "value": "Versicherungspolice Selina 2015 Privat",
-                    "attribute": {
-                        "shortName": "title",
-                        "optional": false,
-                        "domain": null,
-                        "dataType": "STRING",
-                        "modifiable": true,
-                        "translation": "Document title",
-                        "mappingColumn": "S_02"
-                    }
-                },
-                "company": {
-                    "value": "Concordia",
-                    "attribute": {
-                        "shortName": "company",
-                        "optional": false,
-                        "domain": {
-                            "shortName": "company",
-                            "values": ["Sunrise", "Swisscom", "Jemako", "Coop Supercard", "Silvaplana Tourismus Information", "GE Money Bank", "Betty Bossi", "Medplace AG Gesundheitszentrum Wallisellen", "Nestlé Nespresso S.A.", "Teleclub", "GitHub", "Silvio & Angela", "AXA Winterthur", "Cablecom", "Elektro Wehrli AG", "Buchhaus.ch - Lüthy Balmer Stocker", "Java User Group Switzerland", "Schubiger Möbel", "Lüthy Balmer Stocker", "Zalando", "KTV Albisrieden", "Energie Opfikon", "Zahnarztpraxis Glattbrugg", "Server4you", "Reinhard Zanin", "Adcubum AG", "Ochsner Hockey AG", "Treuhand Abt AG", "ZSC Supporter", "Brack.ch", "digitec AG", "Fotoschule Baur", "Medialinx AG", "Hockeystock.ch", "Schubi Weine", "Coop Rechtsschutz", "Fleurop", "QoQa Services SA", "Nettoshop.ch", "Hotel Tannhof", "Concordia", "Raiffeisen", "nic.io", "Post CH AG", "Radisson Hotel", "VZ Vermögenszentrum AG", "SWITCH", "Stadt Kloten - Zivilstandsamt", "Billag AG", "Liluca Pronuptia Suisse", "Schild AG", "Syndicom", "Kuoni", "Foto Studio Tre", "Stadt Opfikon", "Helsana", "VSAO", "Abredeversicherung Schlössli", "Acamed Binz", "Allianz", "ifolor", "Medica", "Nespresso", "PC Ostschweiz", "S + R Glattbrugg GmbH", "Garage Leu", "UGM Abo- und Bestellservice", "Herr Zanin ", "Galaxus (Schweiz) AG", "upc cablecom", "Tamedia AG", "Computec Media GmbH", "Gisler Sport Arosa", "Silhoutte Cruises", "saisonküche", "ToysRUs AG", "Buttinette", "Cembra Money Bank AG", "Migros Fitnesspark", "Hatze Lea", "4mybaby AG", "VBS Hobby Service GmbH", "Ackermann", "Nestl? Nespresso S.A.", "Delticom AG", "NOVATREND Services GmbH", "Leserservice Software & Support", "KSW", "FMH", "Kantonspolizei Graub?nden", "Mclinsen.ch GmbH", "Clienia Schl?ssli AG", "Supercard Visa ", "BuxbaumAG", "Prophylaxezentrum Z?rich Nord", "Dr. Maurer", "Dr. Simeon", "Universit?tsspital", "Officina Ford Cecina", "Happy Baby", "Psychcentral ", "Atlentis", "Digitec Galaxus AG", "W?ger", "La Cucina Gew?rze und Tee", "BabyJoe", "Holzpunkt - Woca Holzbodenprodukte", "Zahnmedizin Z?rich Nord Dentalhygiene", "Vertbaudet", "Windeln.ch", "Psychcentral", "Jetbrains", "Dr. Ren? Simeon", "Ursula Sp?rri", "Sendmoments", "Hirslanden", "Kantonales Steueramt Zuerich", "Strassenverkehrsamt Zuerich", "Hawk", "Europcar", "Steueramt der Stadt Opfikon", "Ernst Ruckstuhl AG"],
-                            "translation": "Company"
-                        },
-                        "dataType": "STRING",
-                        "modifiable": true,
-                        "translation": "Company",
-                        "mappingColumn": "S_01"
-                    }
-                }
-            },
-            "fileName": "Police-Concordia-Selina-Privat-2015.pdf",
-            "userReference": "saw303",
-            "fileSize": 154055,
-            "creationDate": "2015-12-23T12:17:52.000Z",
-            "client": "wangler",
-            "tags": []
-        }, {
-            "hash": "23fdccf47fb6205bb721484ba47ee840944b9bcca76f069e8fe29071144a49a0",
-            "id": 545,
-            "pageCount": 2,
-            "mimeType": "application/pdf",
-            "documentClass": {
-                "shortName": "VARIA",
-                "client": "wangler",
-                "translation": "Varia"
-            },
-            "indices": {
-                "title": {
-                    "value": "Versicherungsdaten von Selina, Concordia",
-                    "attribute": {
-                        "shortName": "title",
-                        "optional": false,
-                        "domain": null,
-                        "dataType": "STRING",
-                        "modifiable": true,
-                        "translation": "Document title",
-                        "mappingColumn": "S_02"
-                    }
-                }
-            },
-            "fileName": "VersicherungsdatenSelina-Concordia.pdf",
-            "userReference": "angela",
-            "fileSize": 115707,
-            "creationDate": "2015-11-26T12:30:37.000Z",
-            "client": "wangler",
-            "tags": []
-        }, {
-            "hash": "79f9cff9d1417c98bbb9a298819d7885f73a77a393fd938d3e11a2f31e80d2fd",
-            "id": 541,
-            "pageCount": 2,
-            "mimeType": "application/pdf",
-            "documentClass": {
-                "shortName": "VARIA",
-                "client": "wangler",
-                "translation": "Varia"
-            },
-            "indices": {
-                "title": {
-                    "value": "Police Selina allgemein Concordia",
-                    "attribute": {
-                        "shortName": "title",
-                        "optional": false,
-                        "domain": null,
-                        "dataType": "STRING",
-                        "modifiable": true,
-                        "translation": "Document title",
-                        "mappingColumn": "S_02"
-                    }
-                }
-            },
-            "fileName": "PoliceAllgSelina-Concordia.pdf",
-            "userReference": "angela",
-            "fileSize": 150413,
-            "creationDate": "2015-11-24T11:40:53.000Z",
-            "client": "wangler",
-            "tags": []
-        }, {
-            "hash": "91a3f9b3c52c46e1170cc3600f3cb41649919f2dc6882b99856f2bc7eed314a8",
-            "id": 537,
-            "pageCount": 2,
-            "mimeType": "application/pdf",
-            "documentClass": {
-                "shortName": "VARIA",
-                "client": "wangler",
-                "translation": "Varia"
-            },
-            "indices": {
-                "title": {
-                    "value": "Verwaltungsbeh?rde Opfikon Police Selina 2015",
-                    "attribute": {
-                        "shortName": "title",
-                        "optional": false,
-                        "domain": null,
-                        "dataType": "STRING",
-                        "modifiable": true,
-                        "translation": "Document title",
-                        "mappingColumn": "S_02"
-                    }
-                }
-            },
-            "fileName": "BRW008092881FD2_003050.pdf",
-            "userReference": "saw303",
-            "fileSize": 120232,
-            "creationDate": "2015-11-23T19:27:42.000Z",
-            "client": "wangler",
-            "tags": []
-        }, {
-            "hash": "3dd56e2131d1549cbcf0e04355f09c2e1218a906c1e02d9052e0a3cf2e8cde9f",
-            "id": 533,
-            "pageCount": 2,
-            "mimeType": "application/pdf",
-            "documentClass": {
-                "shortName": "CONTRACTS",
-                "client": "wangler",
-                "translation": "Contracts"
-            },
-            "indices": {
-                "title": {
-                    "value": "Versicherungspolice Selina 2015",
-                    "attribute": {
-                        "shortName": "title",
-                        "optional": false,
-                        "domain": null,
-                        "dataType": "STRING",
-                        "modifiable": true,
-                        "translation": "Document title",
-                        "mappingColumn": "S_02"
-                    }
-                },
-                "company": {
-                    "value": "Concordia",
-                    "attribute": {
-                        "shortName": "company",
-                        "optional": false,
-                        "domain": {
-                            "shortName": "company",
-                            "values": ["Sunrise", "Swisscom", "Jemako", "Coop Supercard", "Silvaplana Tourismus Information", "GE Money Bank", "Betty Bossi", "Medplace AG Gesundheitszentrum Wallisellen", "Nestlé Nespresso S.A.", "Teleclub", "GitHub", "Silvio & Angela", "AXA Winterthur", "Cablecom", "Elektro Wehrli AG", "Buchhaus.ch - Lüthy Balmer Stocker", "Java User Group Switzerland", "Schubiger Möbel", "Lüthy Balmer Stocker", "Zalando", "KTV Albisrieden", "Energie Opfikon", "Zahnarztpraxis Glattbrugg", "Server4you", "Reinhard Zanin", "Adcubum AG", "Ochsner Hockey AG", "Treuhand Abt AG", "ZSC Supporter", "Brack.ch", "digitec AG", "Fotoschule Baur", "Medialinx AG", "Hockeystock.ch", "Schubi Weine", "Coop Rechtsschutz", "Fleurop", "QoQa Services SA", "Nettoshop.ch", "Hotel Tannhof", "Concordia", "Raiffeisen", "nic.io", "Post CH AG", "Radisson Hotel", "VZ Vermögenszentrum AG", "SWITCH", "Stadt Kloten - Zivilstandsamt", "Billag AG", "Liluca Pronuptia Suisse", "Schild AG", "Syndicom", "Kuoni", "Foto Studio Tre", "Stadt Opfikon", "Helsana", "VSAO", "Abredeversicherung Schlössli", "Acamed Binz", "Allianz", "ifolor", "Medica", "Nespresso", "PC Ostschweiz", "S + R Glattbrugg GmbH", "Garage Leu", "UGM Abo- und Bestellservice", "Herr Zanin ", "Galaxus (Schweiz) AG", "upc cablecom", "Tamedia AG", "Computec Media GmbH", "Gisler Sport Arosa", "Silhoutte Cruises", "saisonküche", "ToysRUs AG", "Buttinette", "Cembra Money Bank AG", "Migros Fitnesspark", "Hatze Lea", "4mybaby AG", "VBS Hobby Service GmbH", "Ackermann", "Nestl? Nespresso S.A.", "Delticom AG", "NOVATREND Services GmbH", "Leserservice Software & Support", "KSW", "FMH", "Kantonspolizei Graub?nden", "Mclinsen.ch GmbH", "Clienia Schl?ssli AG", "Supercard Visa ", "BuxbaumAG", "Prophylaxezentrum Z?rich Nord", "Dr. Maurer", "Dr. Simeon", "Universit?tsspital", "Officina Ford Cecina", "Happy Baby", "Psychcentral ", "Atlentis", "Digitec Galaxus AG", "W?ger", "La Cucina Gew?rze und Tee", "BabyJoe", "Holzpunkt - Woca Holzbodenprodukte", "Zahnmedizin Z?rich Nord Dentalhygiene", "Vertbaudet", "Windeln.ch", "Psychcentral", "Jetbrains", "Dr. Ren? Simeon", "Ursula Sp?rri", "Sendmoments", "Hirslanden", "Kantonales Steueramt Zuerich", "Strassenverkehrsamt Zuerich", "Hawk", "Europcar", "Steueramt der Stadt Opfikon", "Ernst Ruckstuhl AG"],
-                            "translation": "Company"
-                        },
-                        "dataType": "STRING",
-                        "modifiable": true,
-                        "translation": "Company",
-                        "mappingColumn": "S_01"
-                    }
-                }
-            },
-            "fileName": "Versicherungspolice-Selina-2015-Allgemein.pdf",
-            "userReference": "saw303",
-            "fileSize": 150457,
-            "creationDate": "2015-11-18T18:32:37.000Z",
-            "client": "wangler",
-            "tags": []
-        }, {
-            "hash": "04484db75616c30ee90527508709b9387a0f68f8924139b4c6a7d716809a90af",
-            "id": 532,
-            "pageCount": 4,
-            "mimeType": "application/pdf",
-            "documentClass": {
-                "shortName": "VARIA",
-                "client": "wangler",
-                "translation": "Varia"
-            },
-            "indices": {
-                "title": {
-                    "value": "Familienzulagen Selina 2015",
-                    "attribute": {
-                        "shortName": "title",
-                        "optional": false,
-                        "domain": null,
-                        "dataType": "STRING",
-                        "modifiable": true,
-                        "translation": "Document title",
-                        "mappingColumn": "S_02"
-                    }
-                }
-            },
-            "fileName": "Anmeldung-Kinderzulagen-Selina-2015.pdf",
-            "userReference": "saw303",
-            "fileSize": 355168,
-            "creationDate": "2015-11-18T18:31:19.000Z",
-            "client": "wangler",
-            "tags": []
-        }, {
-            "hash": "3a12e04dc9c53e3f83a03659e7351240ecf7631478a49f3a612991245991c812",
-            "id": 516,
-            "pageCount": 2,
-            "mimeType": "application/pdf",
-            "documentClass": {
-                "shortName": "VARIA",
-                "client": "wangler",
-                "translation": "Varia"
-            },
-            "indices": {
-                "title": {
-                    "value": "Geburtsurkunde Selina Wangler",
-                    "attribute": {
-                        "shortName": "title",
-                        "optional": false,
-                        "domain": null,
-                        "dataType": "STRING",
-                        "modifiable": true,
-                        "translation": "Document title",
-                        "mappingColumn": "S_02"
-                    }
-                }
-            },
-            "fileName": "Geburtsurkunde-Selina-Wangler.pdf",
-            "userReference": "saw303",
-            "fileSize": 224810,
-            "creationDate": "2015-10-28T09:20:17.000Z",
-            "client": "wangler",
-            "tags": []
-        }, {
-            "hash": "738e0119d71f536e50812ce6ed90710b3710a1219d209c3a900468dd36951b24",
-            "id": 442,
-            "pageCount": 5,
-            "mimeType": "application/pdf",
-            "documentClass": {
-                "shortName": "VARIA",
-                "client": "wangler",
-                "translation": "Varia"
-            },
-            "indices": {
-                "title": {
-                    "value": "Prämienofferte Concordia Selina Privat",
-                    "attribute": {
-                        "shortName": "title",
-                        "optional": false,
-                        "domain": null,
-                        "dataType": "STRING",
-                        "modifiable": true,
-                        "translation": "Document title",
-                        "mappingColumn": "S_02"
-                    }
-                }
-            },
-            "fileName": "PrämienofferteBaby-Concordia.pdf",
-            "userReference": "angela",
-            "fileSize": 310196,
-            "creationDate": "2015-08-20T12:53:24.000Z",
-            "client": "wangler",
-            "tags": []
-        }, {
-            "hash": "5f6a18a92c26be46fc88141b53ada47f30321a6e783056d9c691d48a7c315459",
-            "id": 427,
-            "pageCount": 2,
-            "mimeType": "application/pdf",
-            "documentClass": {
-                "shortName": "VARIA",
-                "client": "wangler",
-                "translation": "Varia"
-            },
-            "indices": {
-                "title": {
-                    "value": "Antrag Lebensversicherung Tiku Selina",
-                    "attribute": {
-                        "shortName": "title",
-                        "optional": false,
-                        "domain": null,
-                        "dataType": "STRING",
-                        "modifiable": true,
-                        "translation": "Document title",
-                        "mappingColumn": "S_02"
-                    }
-                }
-            },
-            "fileName": "AntragLebensversicherungBabyTiku-Concordia.pdf",
-            "userReference": "angela",
-            "fileSize": 165293,
-            "creationDate": "2015-08-20T10:54:39.000Z",
-            "client": "wangler",
-            "tags": []
-        }, {
-            "hash": "5b2fbc2fe493c971b2469dc934492dd3ec6cc69718e046bec33e214c2133d288",
-            "id": 425,
-            "pageCount": 5,
-            "mimeType": "application/pdf",
-            "documentClass": {
-                "shortName": "VARIA",
-                "client": "wangler",
-                "translation": "Varia"
-            },
-            "indices": {
-                "title": {
-                    "value": "Versicherungsantrag Selina Concordia Allgemein",
-                    "attribute": {
-                        "shortName": "title",
-                        "optional": false,
-                        "domain": null,
-                        "dataType": "STRING",
-                        "modifiable": true,
-                        "translation": "Document title",
-                        "mappingColumn": "S_02"
-                    }
-                }
-            },
-            "fileName": "VersicherungsantragBabyAllg-Concordia.pdf",
-            "userReference": "angela",
-            "fileSize": 422250,
-            "creationDate": "2015-08-20T10:53:43.000Z",
-            "client": "wangler",
-            "tags": []
-        }];
-    };
-
-
-}]);
+app.config(function($mdThemingProvider) {
+  var customBlueMap = $mdThemingProvider.extendPalette('light-blue', {
+    'contrastDefaultColor': 'light',
+    'contrastDarkColors': ['50'],
+    '50': 'ffffff'
+  });
+  $mdThemingProvider.definePalette('customBlue', customBlueMap);
+  $mdThemingProvider.theme('default')
+    .primaryPalette('customBlue', {
+      'default': '500',
+      'hue-1': '50'
+    })
+    .accentPalette('pink');
+  $mdThemingProvider.theme('input', 'default')
+    .primaryPalette('grey');
+});
