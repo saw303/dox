@@ -16,27 +16,31 @@
 
 package ch.silviowangler.dox.web;
 
-import ch.silviowangler.dox.api.*;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.CREATED;
+
 import com.google.common.collect.Lists;
-import org.junit.Before;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.context.request.WebRequest;
 
-import static java.util.Locale.GERMAN;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.http.HttpStatus.CONFLICT;
-import static org.springframework.http.HttpStatus.CREATED;
+import ch.silviowangler.dox.api.DocumentClassNotFoundException;
+import ch.silviowangler.dox.api.DocumentDuplicationException;
+import ch.silviowangler.dox.api.DocumentReference;
+import ch.silviowangler.dox.api.DocumentService;
+import ch.silviowangler.dox.api.PhysicalDocument;
+import ch.silviowangler.dox.api.ValidationException;
 
 /**
  * @author Silvio Wangler
@@ -50,16 +54,7 @@ public class ImportControllerTest {
     @Mock
     private DocumentService documentService;
     @Mock
-    private MessageSource messageSource;
-    @Mock
     private WebRequest request;
-
-    private static final String LINE_SEPARATOR = System.getProperty("line.separator");
-
-    @Before
-    public void setupMocks() {
-        when(messageSource.getMessage("button.import.document", null, GERMAN)).thenReturn("Senden");
-    }
 
 
     @Test
