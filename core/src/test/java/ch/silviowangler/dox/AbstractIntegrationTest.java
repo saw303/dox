@@ -35,6 +35,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -78,7 +79,7 @@ public abstract class AbstractIntegrationTest extends AbstractTransactionalJUnit
         File temp = new File(fileName);
 
         if (temp.exists()) FileUtils.forceDelete(temp);
-        FileUtils.write(temp, content);
+        FileUtils.write(temp, content, Charset.forName("UTF-8"));
         assertTrue("Should exist", temp.exists());
         temp.deleteOnExit();
 

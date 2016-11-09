@@ -223,7 +223,6 @@ public class DocumentControllerTest {
         final DocumentReference documentReference = newDocumentReference("hello.txt").withDocumentClass("test").withIndex("name", "Wangler").build();
 
         when(documentService.findDocumentReference(1L)).thenReturn(documentReference);
-        when(documentService.updateIndices(documentReference)).thenReturn(documentReference);
 
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setParameter("firstname", "Silvio");
