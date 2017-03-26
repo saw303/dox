@@ -1,4 +1,4 @@
-DOX [![Build Status](https://travis-ci.org/saw303/dox.png)](https://travis-ci.org/saw303/dox)
+DOX [![Build Status](https://travis-ci.org/saw303/dox.png)](https://travis-ci.org/saw303/dox) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0413d25995c44f4b86b45698425a77fd)](https://www.codacy.com/app/saw303/dox?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=saw303/dox&amp;utm_campaign=Badge_Grade)
 =
 
 DOX is a web based Document Management System (DMS) based on the Spring Framework and JPA 2.
