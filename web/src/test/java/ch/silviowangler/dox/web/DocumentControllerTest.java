@@ -16,8 +16,19 @@
 
 package ch.silviowangler.dox.web;
 
-import ch.silviowangler.dox.api.*;
-import ch.silviowangler.dox.api.stats.StatisticsService;
+import static ch.silviowangler.dox.DocumentReferenceBuilder.newDocumentReference;
+import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
+import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
+import static javax.servlet.http.HttpServletResponse.SC_OK;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
@@ -29,17 +40,23 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import static ch.silviowangler.dox.DocumentReferenceBuilder.newDocumentReference;
-import static javax.servlet.http.HttpServletResponse.*;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.*;
+import javax.servlet.http.HttpServletResponse;
+
+import ch.silviowangler.dox.api.Attribute;
+import ch.silviowangler.dox.api.AttributeDataType;
+import ch.silviowangler.dox.api.DocumentClass;
+import ch.silviowangler.dox.api.DocumentNotFoundException;
+import ch.silviowangler.dox.api.DocumentNotInStoreException;
+import ch.silviowangler.dox.api.DocumentReference;
+import ch.silviowangler.dox.api.DocumentService;
+import ch.silviowangler.dox.api.PhysicalDocument;
+import ch.silviowangler.dox.api.TranslatableKey;
+import ch.silviowangler.dox.api.stats.StatisticsService;
 
 /**
  * @author Silvio Wangler

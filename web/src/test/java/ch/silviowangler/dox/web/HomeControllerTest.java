@@ -16,17 +16,15 @@
 
 package ch.silviowangler.dox.web;
 
-import ch.silviowangler.dox.api.DocumentService;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
-
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author Silvio Wangler
@@ -37,9 +35,6 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class HomeControllerTest {
-
-    @Mock
-    private DocumentService documentService;
 
     @InjectMocks
     private HomeController controller = new HomeController();

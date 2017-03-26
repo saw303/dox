@@ -100,8 +100,8 @@ configure(subprojects) { subproject ->
     compileJava.options.compilerArgs = ['-Xlint:unchecked', '-Xlint:deprecation']
     compileTestJava.options.compilerArgs = ['-Xlint:unchecked', '-Xlint:deprecation']
 
-    sourceCompatibility = 7
-    targetCompatibility = 7
+    sourceCompatibility = 8
+    targetCompatibility = 8
 
     dependencies {
         testCompile "org.codehaus.groovy:groovy:${groovyVersion}"

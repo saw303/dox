@@ -16,9 +16,10 @@
 
 package ch.silviowangler.dox.web.filters;
 
-import ch.silviowangler.dox.DoxVersion;
-import ch.silviowangler.dox.api.DocumentService;
-import ch.silviowangler.dox.api.VersionService;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -27,9 +28,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.ModelAndView;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.when;
+import ch.silviowangler.dox.DoxVersion;
+import ch.silviowangler.dox.api.DocumentService;
+import ch.silviowangler.dox.api.VersionService;
 
 /**
  * @author Silvio Wangler

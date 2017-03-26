@@ -16,12 +16,14 @@
 
 package ch.silviowangler.dox.web;
 
-import ch.silviowangler.dox.api.security.UserService;
+import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+
 import com.google.common.collect.Maps;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,11 +31,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.HtmlUtils;
 
-import java.io.File;
 import java.util.Map;
 
-import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import ch.silviowangler.dox.api.security.UserService;
 
 /**
  * @author Silvio Wangler
@@ -45,8 +45,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @Controller
 public class HomeController {
 
-    @Value("#{systemEnvironment['DOX_STORE']}")
-    private File archiveDirectory;
     @Autowired
     private UserService userService;
 
