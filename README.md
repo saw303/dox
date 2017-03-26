@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0413d25995c44f4b86b45698425a77fd)](https://www.codacy.com/app/saw303/dox?utm_source=github.com&utm_medium=referral&utm_content=saw303/dox&utm_campaign=badger)
 DOX [![Build Status](https://travis-ci.org/saw303/dox.png)](https://travis-ci.org/saw303/dox)
 =
 
