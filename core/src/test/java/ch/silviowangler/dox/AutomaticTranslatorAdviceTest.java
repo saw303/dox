@@ -16,14 +16,21 @@
 
 package ch.silviowangler.dox;
 
-import ch.silviowangler.dox.api.*;
-import ch.silviowangler.dox.aspect.AutomaticTranslatorAdvice;
+import static ch.silviowangler.dox.api.AttributeDataType.STRING;
+import static java.util.Locale.ENGLISH;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
+
 import com.google.common.collect.Sets;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
@@ -31,11 +38,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import static ch.silviowangler.dox.api.AttributeDataType.STRING;
-import static java.util.Locale.ENGLISH;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
+import ch.silviowangler.dox.api.Attribute;
+import ch.silviowangler.dox.api.DescriptiveIndex;
+import ch.silviowangler.dox.api.DocumentReference;
+import ch.silviowangler.dox.api.Domain;
+import ch.silviowangler.dox.api.NoTranslationFoundException;
+import ch.silviowangler.dox.api.TranslatableKey;
+import ch.silviowangler.dox.api.TranslationService;
+import ch.silviowangler.dox.aspect.AutomaticTranslatorAdvice;
 
 /**
  * @author Silvio Wangler
