@@ -4,6 +4,7 @@ jdk:
 
 env:
     - DOX_STORE=~
+    - CODACY_PROJECT_TOKEN=e8b424f0eedb4a9885f6e6ed5c8fc125
 
 before_install:
 
@@ -16,6 +17,9 @@ before_install:
 - unzip elasticsearch-1.7.1.zip
 - elasticsearch-1.7.1/bin/elasticsearch -d
 
+# Install Codacy coverage reporter
+- curl https://www.jpm4j.org/install/script | sh
+
 # Gradle
 - echo "bintrayUser=''" >> gradle.properties
 - echo "bintrayKey=''" >> gradle.properties
@@ -23,3 +27,4 @@ before_install:
 after_script:
 # Shutdown elasticsearch daemon
 - curl -i -XPOST 'http://localhost:9200/_shutdown'
+- codacy-coverage-reporter -l Java -r coverage.xml
