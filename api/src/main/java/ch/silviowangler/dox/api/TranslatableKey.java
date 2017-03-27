@@ -72,9 +72,7 @@ public class TranslatableKey extends AbstractTranslatable implements Serializabl
 
         TranslatableKey that = (TranslatableKey) o;
 
-        if (key != null ? !key.equals(that.key) : that.key != null) return false;
-
-        return true;
+        return key != null && key.equals(that.getKey());
     }
 
     @Override

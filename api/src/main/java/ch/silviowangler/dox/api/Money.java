@@ -60,7 +60,7 @@ public class Money implements Serializable {
         if (amount != null ? !amount.equals(money.amount) : money.amount != null) return false;
         if (currency != null ? !currency.equals(money.currency) : money.currency != null) return false;
 
-        return true;
+        return amount != null && amount.equals(money.amount) && currency != null && currency.equals(money.currency);
     }
 
     @Override

@@ -64,9 +64,7 @@ public class Setting implements Serializable {
 
         Setting setting = (Setting) o;
 
-        if (key != null ? !key.equals(setting.key) : setting.key != null) return false;
-
-        return true;
+        return key != null && key.equals(setting.getKey());
     }
 
     @Override

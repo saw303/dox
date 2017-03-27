@@ -2,9 +2,10 @@ package ch.silviowangler.dox.domain;
 
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-import java.io.Serializable;
 
 /**
  * @author Silvio Wangler
@@ -13,6 +14,11 @@ import java.io.Serializable;
 @MappedSuperclass
 public abstract class Setting extends AbstractPersistable<Long> implements Serializable {
 
+    @Column(nullable = false, name = "SET_KEY")
+    private String key;
+    @Column(nullable = false, name = "SET_VAL")
+    private String value;
+
     protected Setting() {
     }
 
@@ -20,11 +26,6 @@ public abstract class Setting extends AbstractPersistable<Long> implements Seria
         this.key = key;
         this.value = value;
     }
-
-    @Column(nullable = false, name = "SET_KEY")
-    private String key;
-    @Column(nullable = false, name = "SET_VAL")
-    private String value;
 
     public String getKey() {
         return key;
@@ -50,10 +51,7 @@ public abstract class Setting extends AbstractPersistable<Long> implements Seria
 
         Setting setting = (Setting) o;
 
-        if (key != null ? !key.equals(setting.key) : setting.key != null) return false;
-        if (value != null ? !value.equals(setting.value) : setting.value != null) return false;
-
-        return true;
+        return key != null && key.equals(setting.getKey()) && value != null && value.equals(setting.getValue());
     }
 
     @Override

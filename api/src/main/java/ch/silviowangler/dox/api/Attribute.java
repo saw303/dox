@@ -138,9 +138,7 @@ public class Attribute extends AbstractTranslatable implements Serializable, Com
 
         Attribute attribute = (Attribute) o;
 
-        if (shortName != null ? !shortName.equals(attribute.shortName) : attribute.shortName != null) return false;
-
-        return true;
+        return shortName != null && shortName.equals(attribute.shortName);
     }
 
     @Override

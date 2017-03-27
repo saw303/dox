@@ -16,15 +16,18 @@
 
 package ch.silviowangler.dox.domain;
 
+import static org.springframework.util.Assert.hasText;
+import static org.springframework.util.Assert.isTrue;
+import static org.springframework.util.Assert.notNull;
+
 import com.google.common.base.MoreObjects;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Currency;
-
-import static org.springframework.util.Assert.*;
 
 /**
  * @author Silvio Wangler
@@ -95,10 +98,7 @@ public class AmountOfMoney implements Serializable {
 
         AmountOfMoney that = (AmountOfMoney) o;
 
-        if (amount != null ? !amount.equals(that.amount) : that.amount != null) return false;
-        if (currency != null ? !currency.equals(that.currency) : that.currency != null) return false;
-
-        return true;
+        return amount != null && amount.equals(that.getAmount()) && currency!=null && currency.equals(that.getCurrency());
     }
 
     @Override

@@ -24,9 +24,7 @@ public abstract class Index implements Serializable {
 
         Index index = (Index) o;
 
-        if (value != null ? !value.equals(index.value) : index.value != null) return false;
-
-        return true;
+        return (value == null && index.getValue() == null) || (value != null && value.equals(index.value));
     }
 
     @Override

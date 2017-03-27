@@ -1,12 +1,14 @@
 package ch.silviowangler.dox.settings;
 
-import ch.silviowangler.dox.api.settings.SettingsService;
-import ch.silviowangler.dox.domain.UserSetting;
-import ch.silviowangler.dox.domain.security.DoxUser;
-import ch.silviowangler.dox.repository.UserSettingRepository;
-import ch.silviowangler.dox.repository.security.DoxUserRepository;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.when;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,11 +24,11 @@ import org.springframework.security.core.userdetails.User;
 import java.util.Collection;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.when;
+import ch.silviowangler.dox.api.settings.SettingsService;
+import ch.silviowangler.dox.domain.UserSetting;
+import ch.silviowangler.dox.domain.security.DoxUser;
+import ch.silviowangler.dox.repository.UserSettingRepository;
+import ch.silviowangler.dox.repository.security.DoxUserRepository;
 
 /**
  * @author Silvio Wangler
@@ -44,7 +46,7 @@ public class SettingsServiceImplTest {
 
     private String username = "username";
 
-    final DoxUser user = new DoxUser("email", "password", username);
+    private final DoxUser user = new DoxUser("email", "password", username);
 
     @Before
     public void setUp() throws Exception {

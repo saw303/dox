@@ -16,9 +16,9 @@
 
 package ch.silviowangler.dox.api;
 
-import java.io.Serializable;
-
 import static com.google.common.base.MoreObjects.toStringHelper;
+
+import java.io.Serializable;
 
 /**
  * @author Silvio Wangler
@@ -85,11 +85,7 @@ public class DocumentClass extends AbstractTranslatable implements Serializable 
 
         DocumentClass that = (DocumentClass) o;
 
-        if (!shortName.equals(that.shortName)) {
-            return false;
-        }
-
-        return true;
+        return shortName.equals(that.shortName);
     }
 
     @Override

@@ -16,16 +16,17 @@
 
 package ch.silviowangler.dox.api;
 
+import static ch.silviowangler.dox.util.FileUtils.humanReadableByteCount;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+
 import org.joda.time.DateTime;
 
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
-
-import static ch.silviowangler.dox.util.FileUtils.humanReadableByteCount;
 
 /**
  * @author Silvio Wangler
@@ -200,10 +201,7 @@ public class DocumentReference implements Serializable {
 
         DocumentReference that = (DocumentReference) o;
 
-        if (hash != null ? !hash.equals(that.hash) : that.hash != null) return false;
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-
-        return true;
+        return hash != null && hash.equals(that.hash) && id != null && id.equals(that.id);
     }
 
     @Override
