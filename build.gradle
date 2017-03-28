@@ -26,7 +26,7 @@ plugins {
     id 'idea'
     id 'com.github.ben-manes.versions' version '0.14.0'
     id 'com.jfrog.bintray' version '1.7.3'
-    // id "com.github.hierynomus.license" version "0.13.1"
+    id 'com.github.hierynomus.license' version '0.13.1'
 }
 
 configure(allprojects) {
@@ -87,6 +87,16 @@ configure(allprojects) {
 
     idea.module {
         inheritOutputDirs = true
+    }
+
+    license {
+        header = file('LICENSE.txt')
+        ext.year = Calendar.getInstance().get(Calendar.YEAR)
+        ext.name = 'Silvio Wangler'
+        ext.email = 'silvio.wangler@gmail.com'
+
+        excludes(["**/*.properties", "**/*.sql"])
+        dryRun = true
     }
 }
 
