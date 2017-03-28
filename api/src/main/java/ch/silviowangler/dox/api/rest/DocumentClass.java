@@ -16,15 +16,15 @@
 
 package ch.silviowangler.dox.api.rest;
 
-import ch.silviowangler.dox.api.AbstractTranslatable;
-import ch.silviowangler.dox.api.Attribute;
-import ch.silviowangler.dox.api.TranslateProperties;
+import static com.google.common.base.MoreObjects.toStringHelper;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.base.MoreObjects.toStringHelper;
+import ch.silviowangler.dox.api.AbstractTranslatable;
+import ch.silviowangler.dox.api.Attribute;
+import ch.silviowangler.dox.api.TranslateProperties;
 
 /**
  * @author Silvio Wangler
@@ -38,6 +38,10 @@ public class DocumentClass extends AbstractTranslatable implements Serializable 
     private List<Attribute> attributes;
     private String client;
 
+
+    public DocumentClass() {
+    }
+
     public DocumentClass(String shortName, String translatedText, List<Attribute> attributes, String client) {
         this.shortName = shortName;
         this.translatedText = translatedText;
@@ -46,7 +50,7 @@ public class DocumentClass extends AbstractTranslatable implements Serializable 
     }
 
     public DocumentClass(String shortName, String client) {
-        this(shortName, null, new ArrayList<Attribute>(), client);
+        this(shortName, null, new ArrayList<>(), client);
     }
 
     public String getShortName() {

@@ -30,9 +30,9 @@ The following will most likely work with DOX but have not been tested.
 * Postgres
 
 | Java Environment
-| Java 7 (or above)
+| Java 8 (or above)
 | Servlet Engine
-| Tomcat 7 and 8, Jetty (not tested)
+| Tomcat 8, Jetty (not tested)
 | Image Processing
 | http://imagemagick.org/[ImageMagick] or http://www.graphicsmagick.org/[GraphicsMagick]
 | Office Suite
@@ -65,13 +65,13 @@ Then install the Nginx PPA repo.
 	sudo apt-get update
 	sudo apt-get install nginx
 
-===== Install Java 7
+===== Install Java 8
 
 	sudo add-apt-repository ppa:webupd8team/java
 	sudo apt-get update
-	sudo apt-get install oracle-java7-installer
+	sudo apt-get install oracle-java8-installer
 
-===== Install Apache Tomcat 7
+===== Install Apache Tomcat 8
 tbd
 
 ===== Install ImageMagick/GraphicsMagick & webp
@@ -103,7 +103,7 @@ The apply the DDL to the database `dox`
 
 	GRANT ALL PRIVILEGES ON dox.* TO '<your dox database username>'@'localhost' IDENTIFIED BY '<your dox database password>';
 
-===== Configure Apache Tomcat 7
+===== Configure Apache Tomcat 8
 
 ====== Install your JDBC driver in
 

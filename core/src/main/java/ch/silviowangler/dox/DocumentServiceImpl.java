@@ -16,22 +16,28 @@
 
 package ch.silviowangler.dox;
 
-import ch.silviowangler.dox.api.*;
-import ch.silviowangler.dox.api.Domain;
-import ch.silviowangler.dox.api.rest.DocumentClass;
-import ch.silviowangler.dox.document.DocumentInspector;
-import ch.silviowangler.dox.document.DocumentInspectorFactory;
-import ch.silviowangler.dox.domain.*;
-import ch.silviowangler.dox.domain.Attribute;
-import ch.silviowangler.dox.domain.AttributeDataType;
-import ch.silviowangler.dox.domain.Range;
-import ch.silviowangler.dox.domain.security.DoxUser;
-import ch.silviowangler.dox.domain.stats.Tag;
-import ch.silviowangler.dox.repository.*;
-import ch.silviowangler.dox.repository.security.DoxUserRepository;
+import static ch.silviowangler.dox.domain.AttributeDataType.CURRENCY;
+import static ch.silviowangler.dox.domain.AttributeDataType.DATE;
+import static ch.silviowangler.dox.domain.AttributeDataType.DOUBLE;
+import static ch.silviowangler.dox.domain.AttributeDataType.INTEGER;
+import static ch.silviowangler.dox.domain.AttributeDataType.LONG;
+import static ch.silviowangler.dox.domain.AttributeDataType.SHORT;
+import static ch.silviowangler.dox.domain.AttributeDataType.STRING;
+import static ch.silviowangler.dox.domain.DomainUtils.containsWildcardCharacters;
+import static ch.silviowangler.dox.domain.DomainUtils.replaceWildcardCharacters;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Lists.newArrayListWithCapacity;
+import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
+import static org.springframework.transaction.annotation.Propagation.REQUIRED;
+import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
+import static org.springframework.util.Assert.isTrue;
+import static org.springframework.util.Assert.notEmpty;
+import static org.springframework.util.Assert.notNull;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
@@ -58,19 +64,52 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.Currency;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Properties;
+import java.util.Set;
+import java.util.SortedSet;
 
-import static ch.silviowangler.dox.domain.AttributeDataType.*;
-import static ch.silviowangler.dox.domain.DomainUtils.containsWildcardCharacters;
-import static ch.silviowangler.dox.domain.DomainUtils.replaceWildcardCharacters;
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Lists.newArrayListWithCapacity;
-import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
-import static org.springframework.transaction.annotation.Propagation.REQUIRED;
-import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
-import static org.springframework.util.Assert.*;
-
+import ch.silviowangler.dox.api.DescriptiveIndex;
+import ch.silviowangler.dox.api.DocumentClassNotFoundException;
+import ch.silviowangler.dox.api.DocumentDuplicationException;
+import ch.silviowangler.dox.api.DocumentNotFoundException;
+import ch.silviowangler.dox.api.DocumentNotInStoreException;
+import ch.silviowangler.dox.api.DocumentReference;
+import ch.silviowangler.dox.api.DocumentService;
+import ch.silviowangler.dox.api.Money;
+import ch.silviowangler.dox.api.PhysicalDocument;
+import ch.silviowangler.dox.api.TranslatableKey;
+import ch.silviowangler.dox.api.ValidationException;
+import ch.silviowangler.dox.api.ValueNotInDomainException;
 import ch.silviowangler.dox.api.rest.DocumentClass;
+import ch.silviowangler.dox.document.DocumentInspector;
+import ch.silviowangler.dox.document.DocumentInspectorFactory;
+import ch.silviowangler.dox.domain.AmountOfMoney;
+import ch.silviowangler.dox.domain.Attribute;
+import ch.silviowangler.dox.domain.AttributeDataType;
+import ch.silviowangler.dox.domain.Client;
+import ch.silviowangler.dox.domain.Document;
+import ch.silviowangler.dox.domain.IndexMapEntry;
+import ch.silviowangler.dox.domain.IndexStore;
+import ch.silviowangler.dox.domain.Range;
+import ch.silviowangler.dox.domain.security.DoxUser;
+import ch.silviowangler.dox.domain.stats.Tag;
+import ch.silviowangler.dox.mappers.DocumentClassMapper;
+import ch.silviowangler.dox.repository.AttributeRepository;
+import ch.silviowangler.dox.repository.ClientRepository;
+import ch.silviowangler.dox.repository.DocumentClassRepository;
+import ch.silviowangler.dox.repository.DocumentRepository;
+import ch.silviowangler.dox.repository.DomainRepository;
+import ch.silviowangler.dox.repository.IndexMapEntryRepository;
+import ch.silviowangler.dox.repository.IndexStoreRepository;
+import ch.silviowangler.dox.repository.TagRepository;
+import ch.silviowangler.dox.repository.security.DoxUserRepository;
 
 /**
  * @author Silvio Wangler
@@ -109,6 +148,8 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     private DoxUserRepository doxUserRepository;
     @Autowired
     private TagRepository tagRepository;
+    @Autowired
+    private DocumentClassMapper documentClassMapper;
    /* @Autowired
     private ElasticDocumentStoreService elasticDocumentStoreService;*/
 
@@ -158,8 +199,9 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         Iterable<ch.silviowangler.dox.domain.DocumentClass> documentClassEntities = documentClassRepository.findAllByClients(clients);
 
         for (ch.silviowangler.dox.domain.DocumentClass documentClassEntity : documentClassEntities) {
-            DocumentClass documentClass = toDocumentClassWithAttributesApi(documentClassEntity);
-            documentClass.setAttributes(newArrayList(toAttributeApi(attributeRepository.findAttributesForDocumentClass(documentClassEntity))));
+
+            DocumentClass documentClass = documentClassMapper.toDocumentClassRestApi(documentClassEntity);
+            documentClass.setAttributes(newArrayList(documentClassMapper.toAttributeApi(attributeRepository.findAttributesForDocumentClass(documentClassEntity))));
             documentClasses.add(documentClass);
         }
         return documentClasses;
@@ -210,7 +252,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
         ch.silviowangler.dox.domain.DocumentClass docClass = findDocumentClass(documentClass.getShortName());
         List<Attribute> attributes = attributeRepository.findAttributesForDocumentClass(docClass);
-        return toAttributeApi(attributes);
+        return this.documentClassMapper.toAttributeApi(attributes);
     }
 
     @Override
@@ -223,7 +265,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
         for (ch.silviowangler.dox.domain.DocumentClass documentClass : documentClasses) {
             logger.debug("Processing document class '{}' with id {}", documentClass.getShortName(), documentClass.getId());
-            result.add(toDocumentClassApi(documentClass));
+            result.add(this.documentClassMapper.toDocumentClassApi(documentClass));
         }
         logger.info("Found {} document classes in DOX", result.size());
         return result;
@@ -704,7 +746,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
                 document.getId(),
                 document.getPageCount(),
                 document.getMimeType(),
-                toDocumentClassApi(document.getDocumentClass()),
+                this.documentClassMapper.toDocumentClassApi(document.getDocumentClass()),
                 toIndexMap(document.getIndexStore(), attributeRepository.findAttributesForDocumentClass(document.getDocumentClass()), locale),
                 document.getOriginalFilename(), document.getUserReference(), document.getFileSize());
 
@@ -725,7 +767,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         for (Attribute attribute : attributes) {
 
             DescriptiveIndex index = new DescriptiveIndex();
-            index.setAttribute(toAttributeApi(attribute));
+            index.setAttribute(documentClassMapper.toAttributeApi(attribute));
 
             try {
                 final String fieldName = attribute.getMappingColumn();
@@ -769,16 +811,6 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     }
 
-    private ch.silviowangler.dox.api.DocumentClass toDocumentClassApi(ch.silviowangler.dox.domain.DocumentClass documentClass) {
-        ch.silviowangler.dox.api.DocumentClass docClassApi = new ch.silviowangler.dox.api.DocumentClass(documentClass.getShortName());
-        docClassApi.setClient(documentClass.getClient().getShortName());
-        return docClassApi;
-    }
-
-    private DocumentClass toDocumentClassWithAttributesApi(ch.silviowangler.dox.domain.DocumentClass documentClass) {
-        return new DocumentClass(documentClass.getShortName(), documentClass.getClient().getShortName());
-    }
-
     private Map<String, Attribute> toAttributeMap(List<Attribute> attributes) {
         Map<String, Attribute> map = newHashMapWithExpectedSize(attributes.size());
 
@@ -787,36 +819,6 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         }
         return map;
     }
-
-    private SortedSet<ch.silviowangler.dox.api.Attribute> toAttributeApi(List<Attribute> attributes) {
-        SortedSet<ch.silviowangler.dox.api.Attribute> result = new TreeSet<>();
-
-        for (Attribute attribute : attributes) {
-            ch.silviowangler.dox.api.Attribute attr = toAttributeApi(attribute);
-            result.add(attr);
-        }
-        return result;
-    }
-
-    private ch.silviowangler.dox.api.Attribute toAttributeApi(Attribute attribute) {
-        return new ch.silviowangler.dox.api.Attribute(
-                attribute.getShortName(),
-                attribute.isOptional(),
-                attribute.getDomain() != null ? toDomainApi(attribute.getDomain()) : null,
-                ch.silviowangler.dox.api.AttributeDataType.valueOf(attribute.getDataType().toString()),
-                attribute.isUpdateable(), attribute.getMappingColumn());
-    }
-
-    private Domain toDomainApi(ch.silviowangler.dox.domain.Domain domain) {
-
-        Domain domainApi = new Domain();
-        domainApi.setShortName(domain.getShortName());
-        for (String domainValue : domain.getValues()) {
-            domainApi.getValues().add(domainValue);
-        }
-        return domainApi;
-    }
-
 
     private ch.silviowangler.dox.domain.DocumentClass findDocumentClass(String documentClassShortName) throws DocumentClassNotFoundException {
         ch.silviowangler.dox.domain.DocumentClass documentClassEntity = documentClassRepository.findByShortName(documentClassShortName);

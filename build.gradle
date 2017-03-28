@@ -17,9 +17,13 @@ buildscript {
     repositories {
         jcenter()
     }
+    dependencies {
+        classpath "net.ltgt.gradle:gradle-apt-plugin:0.9"
+    }
 }
 
 plugins {
+    id 'idea'
     id 'com.github.ben-manes.versions' version '0.14.0'
     id 'com.jfrog.bintray' version '1.7.3'
     // id "com.github.hierynomus.license" version "0.13.1"
@@ -27,7 +31,6 @@ plugins {
 
 configure(allprojects) {
 
-    apply plugin: 'idea'
     apply plugin: 'project-report'
     apply plugin: 'jacoco'
 
@@ -94,7 +97,7 @@ configure(subprojects) { subproject ->
     apply plugin: 'groovy'
     apply plugin: 'maven'
     apply plugin: 'maven-publish'
-    apply plugin: 'com.jfrog.bintray'
+    apply plugin: "net.ltgt.apt"
 
     compileJava.options.compilerArgs = ['-Xlint:unchecked', '-Xlint:deprecation']
     compileTestJava.options.compilerArgs = ['-Xlint:unchecked', '-Xlint:deprecation']
@@ -103,9 +106,12 @@ configure(subprojects) { subproject ->
     targetCompatibility = 8
 
     dependencies {
+        compile "org.slf4j:slf4j-api:${slf4jVersion}"
+        compile "org.mapstruct:mapstruct-jdk8:${mapstructVersion}"
+        apt "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
         testCompile "org.codehaus.groovy:groovy:${groovyVersion}"
         testCompile "org.spockframework:spock-core:${spockVersion}"
-        compile "org.slf4j:slf4j-api:${slf4jVersion}"
         testCompile "junit:junit:${junitVersion}",
                 "org.mockito:mockito-core:${mockitoVersion}",
                 "org.hamcrest:hamcrest-core:${hamcrestVersion}",
