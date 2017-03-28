@@ -1,15 +1,19 @@
 package ch.silviowangler.dox.mappers;
 
+import org.mapstruct.MapMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
 import java.util.List;
+import java.util.Map;
 import java.util.SortedSet;
 
 import ch.silviowangler.dox.api.Attribute;
 import ch.silviowangler.dox.api.AttributeDataType;
+import ch.silviowangler.dox.api.DescriptiveIndex;
 import ch.silviowangler.dox.api.Domain;
+import ch.silviowangler.dox.api.TranslatableKey;
 import ch.silviowangler.dox.api.rest.DocumentClass;
 
 
@@ -46,4 +50,13 @@ public interface DocumentClassMapper {
   Domain toDomainApi(ch.silviowangler.dox.domain.Domain domain);
 
   AttributeDataType toAttributeDataTypeApi(ch.silviowangler.dox.domain.AttributeDataType domain);
+
+  default String mapToString(TranslatableKey translatableKey) {
+    return translatableKey.getKey();
+  }
+
+  default Object mapToObject(DescriptiveIndex descriptiveIndex) { return descriptiveIndex.getValue(); }
+
+  @MapMapping(keyTargetType = String.class, valueTargetType = Object.class)
+  Map<String, Object> toEntityMap(Map<TranslatableKey, DescriptiveIndex> indices);
 }

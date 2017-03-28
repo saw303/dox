@@ -16,15 +16,17 @@
 
 package ch.silviowangler.dox.domain.security;
 
-import ch.silviowangler.dox.domain.Client;
 import org.springframework.data.jpa.domain.AbstractPersistable;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import java.util.HashSet;
-import java.util.Set;
+
+import ch.silviowangler.dox.domain.Client;
 
 /**
  * @author Silvio Wangler
@@ -36,16 +38,6 @@ import java.util.Set;
 @Entity
 @Table(name = "DOX_USER")
 public class DoxUser extends AbstractPersistable<Long> {
-
-    public DoxUser() {
-        super();
-    }
-
-    public DoxUser(String email, String password, String username) {
-        this.email = email;
-        this.password = password;
-        this.username = username;
-    }
 
     @Column(unique = true, nullable = false, length = 25)
     private String username;
@@ -59,6 +51,16 @@ public class DoxUser extends AbstractPersistable<Long> {
 
     @ManyToMany
     Set<Role> roles = new HashSet<>();
+
+    public DoxUser() {
+        super();
+    }
+
+    public DoxUser(String email, String password, String username) {
+        this.email = email;
+        this.password = password;
+        this.username = username;
+    }
 
     public String getEmail() {
         return email;

@@ -1,11 +1,11 @@
 package ch.silviowangler.dox.domain;
 
-import ch.silviowangler.dox.domain.security.DoxUser;
-
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
+import ch.silviowangler.dox.domain.security.DoxUser;
 
 /**
  * @author Silvio Wangler
@@ -17,6 +17,9 @@ import javax.persistence.UniqueConstraint;
 })
 public class UserSetting extends Setting {
 
+    @ManyToOne(optional = false)
+    private DoxUser user;
+
     public UserSetting() {
     }
 
@@ -24,9 +27,6 @@ public class UserSetting extends Setting {
         super(key, value);
         this.user = user;
     }
-
-    @ManyToOne(optional = false)
-    private DoxUser user;
 
     public DoxUser getUser() {
         return user;

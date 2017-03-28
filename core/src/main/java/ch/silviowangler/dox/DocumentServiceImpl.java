@@ -355,7 +355,8 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         ch.silviowangler.dox.domain.DocumentClass documentClass = findDocumentClass(documentClassShortName);
         List<Attribute> attributes = attributeRepository.findAttributesForDocumentClass(documentClass);
 
-        List<Document> documents = documentRepository.findDocuments(toEntityMap(fixDataTypesOfIndices(queryParams, attributes)), toAttributeMap(attributes), documentClass);
+        Map<String, Object> indices = this.documentClassMapper.toEntityMap(fixDataTypesOfIndices(queryParams, attributes));
+        List<Document> documents = documentRepository.findDocuments(indices, toAttributeMap(attributes), documentClass);
 
         HashSet<DocumentReference> documentReferences = new HashSet<>(documents.size());
         for (Document document : documents) {
@@ -465,7 +466,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         document = documentRepository.save(document);
         indexStoreRepository.save(indexStore);
 
-        updateIndexMapEntries(toEntityMap(physicalDocumentApi.getIndices()), document);
+        updateIndexMapEntries(this.documentClassMapper.toEntityMap(physicalDocumentApi.getIndices()), document);
 
         File target = new File(this.archiveDirectory, hash);
         try {
@@ -511,7 +512,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
         indexStoreRepository.save(document.getIndexStore());
 
-        updateIndexMapEntries(toEntityMap(documentReferenceApi.getIndices()), document);
+        updateIndexMapEntries(this.documentClassMapper.toEntityMap(documentReferenceApi.getIndices()), document);
 
         return findDocumentReference(reference.getId());
     }
@@ -595,15 +596,6 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             }
         }
         return resultMap;
-    }
-
-    private Map<String, Object> toEntityMap(final Map<TranslatableKey, DescriptiveIndex> indices) {
-        Map<String, Object> entityMap = Maps.newHashMapWithExpectedSize(indices.size());
-
-        for (TranslatableKey key : indices.keySet()) {
-            entityMap.put(key.getKey(), indices.get(key).getValue());
-        }
-        return entityMap;
     }
 
     @SuppressWarnings("unchecked")
