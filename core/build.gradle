@@ -1,0 +1,65 @@
+dependencies {
+    compile project(':api'), project(':domain'), project(':inexport'),
+            "org.springframework:spring-context:${springVersion}",
+            "org.springframework:spring-aop:${springVersion}",
+            "commons-codec:commons-codec:${commonsCodecVersion}",
+            "com.itextpdf:itextpdf:${iTextVersion}",
+            "commons-io:commons-io:${commonsIOVersion}",
+            "org.apache.commons:commons-exec:${commonsExec}",
+            "joda-time:joda-time:${jodaTimeVersion}",
+            "com.google.guava:guava:${guavaVersion}",
+            "com.googlecode.flyway:flyway-core:${flywayVersion}"
+    compile("org.springframework.security:spring-security-core:${springSecurityVersion}") {
+        exclude group: 'org.springframework', module: 'spring-beans'
+    }
+    compile("commons-beanutils:commons-beanutils:${commonsBeanUtilsVersion}") {
+        exclude group: 'commons-logging', module: 'commons-logging'
+    }
+    compile "org.springframework.security:spring-security-config:${springSecurityVersion}"
+    runtime "org.slf4j:jcl-over-slf4j:${slf4jVersion}",
+            "ch.qos.logback:logback-classic:${logbackVersion}",
+            "org.springframework.security:spring-security-config:${springSecurityVersion}",
+            "org.aspectj:aspectjweaver:${aspectjWeaverVersion}", // need this version because 1.6.x is buggy with Spring 3.x (http://goo.gl/73Pwi)
+            "org.bouncycastle:bcprov-jdk15on:${bouncycastleVersion}", "org.bouncycastle:bcpkix-jdk15on:${bouncycastleVersion}"
+    testCompile "org.springframework:spring-test:${springVersion}",
+            "commons-io:commons-io:${commonsIOVersion}",
+            "com.google.guava:guava:${guavaVersion}"
+    testRuntime "com.h2database:h2:${h2Version}"
+}
+
+test {
+    exclude '**/*IntegrationTest.class'
+    reports.html.destination = file("${reports.html.destination}/unit2")
+    reports.junitXml.destination = file("${reports.junitXml.destination}/unit2")
+}
+
+task integrationTest(type: Test) {
+    include '**/*IntegrationTest.class'
+    reports.html.destination = file("${reports.html.destination}/integration")
+    reports.junitXml.destination = file("${reports.junitXml.destination}/integration")
+
+    doFirst {
+        def doxStore = System.getenv('DOX_STORE')
+
+        if (!doxStore) doxStore = System.properties['java.io.tmpdir']
+
+        def thumbnailDir = new File(doxStore, 'thumbnails')
+
+        final thumbnailDirExists = thumbnailDir.exists()
+        logger.info("File ${thumbnailDir.absolutePath} exists? ${thumbnailDirExists}")
+
+        if (!thumbnailDirExists) {
+            assert thumbnailDir.mkdir()
+        }
+    }
+}
+
+jacocoTestReport {
+
+    if (file("${buildDir}/jacoco/integrationTest.exec").exists()) {
+        executionData = files("${buildDir}/jacoco/integrationTest.exec", "${buildDir}/jacoco/test.exec")
+    }
+    additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
+}
+
+check.dependsOn integrationTest

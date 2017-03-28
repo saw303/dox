@@ -1,0 +1,5 @@
+dependencies {
+    compile project(':api'),
+            "org.springframework:spring-context:${springVersion}"
+    compile "com.thoughtworks.xstream:xstream:${xstreamVersion}", { transitive = false }
+}

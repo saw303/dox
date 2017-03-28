@@ -1,0 +1,129 @@
+plugins {
+    id "war"
+    id "com.eriwen.gradle.js" version "2.14.1"
+    id "com.eriwen.gradle.css" version "2.14.0"
+}
+
+war.archiveName = "dox-${version}.war"
+
+dependencies {
+    compile project(':api'), project(':inexport'), project(':core')
+    compile "commons-io:commons-io:${commonsIOVersion}"
+    compile "org.codehaus.groovy:groovy-templates:${groovyVersion}"
+    compile "org.springframework:spring-webmvc:${springVersion}"
+    compile("org.springframework.security:spring-security-web:${springSecurityVersion}") {
+        exclude group: 'org.springframework', module: 'spring-tx'
+        exclude group: 'org.springframework', module: 'spring-jdbc'
+    }
+    compile("org.springframework.security:spring-security-taglibs:${springSecurityVersion}") {
+        exclude group: 'org.springframework', module: 'spring-tx'
+        exclude group: 'org.springframework', module: 'spring-jdbc'
+    }
+    testCompile "org.springframework:spring-test:${springVersion}"
+    compile "org.springframework.mobile:spring-mobile-device:${springMobileVersion}"
+    compile "com.google.guava:guava:${guavaVersion}"
+    compile "joda-time:joda-time:${jodaTimeVersion}"
+    compile "eu.bitwalker:UserAgentUtils:${userAgentVersion}"
+    runtime "org.apache.tiles:tiles-core:${tilesVersion}"
+    runtime "org.apache.tiles:tiles-servlet:${tilesVersion}"
+    runtime "org.apache.tiles:tiles-jsp:${tilesVersion}"
+    runtime "org.apache.tiles:tiles-template:${tilesVersion}"
+    runtime "ch.qos.logback:logback-access:${logbackVersion}"
+    runtime 'javax.servlet:jstl:1.2'
+    runtime "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+    compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-joda:${jacksonVersion}"
+    compile "org.springframework:spring-oxm:${springVersion}"
+    runtime "com.thoughtworks.xstream:xstream:${xstreamVersion}"
+    runtime 'joda-time:joda-time-jsptags:1.1.1'
+    providedRuntime "com.h2database:h2:${h2Version}"
+    providedRuntime "mysql:mysql-connector-java:${mysqlVersion}"
+    providedCompile 'javax.servlet.jsp:jsp-api:2.1'
+    providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+}
+
+jacocoTestReport {
+    additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
+}
+
+javascript {
+    source {
+        dev {
+            js {
+                srcDirs file("${projectDir}/src/main/webapp/resources/js/libs/angular-1.4.8"), file("${projectDir}/src/main/webapp/resources/js/dox")
+                include "*.js"
+                exclude "*.min.js*"
+            }
+        }
+        prod {
+            js {
+                srcDirs file("${projectDir}/src/main/webapp/resources/js/dox")
+                include "*.min.js*"
+            }
+        }
+    }
+}
+
+combineJs {
+    source = javascript.source.dev.js.files
+    dest = file("${buildDir}/dox-all.js")
+}
+
+def googleCompileOptions = new com.google.javascript.jscomp.CompilerOptions()
+googleCompileOptions.languageIn = 'ECMASCRIPT5'
+
+minifyJs {
+    source = combineJs
+    dest = file("${buildDir}/gen/js/dox-all-min.js")
+
+    closure {
+        warningLevel = 'QUIET'
+        compilerOptions = googleCompileOptions
+
+    }
+}
+
+gzipJs {
+    source = minifyJs
+    dest = file("${buildDir}/gen/js/dox-all-min-${version}.js")
+}
+
+css.source {
+    dev {
+        css {
+            srcDir file("${projectDir}/src/main/webapp/resources/css")
+            include "*.css"
+            exclude "*.min.css"
+        }
+    }
+}
+
+combineCss {
+    source = css.source.dev.css.files
+    dest = "${buildDir}/all.css"
+}
+
+minifyCss {
+    source = combineCss
+    dest = "${buildDir}/gen/css/all-min.css"
+    yuicompressor { // Optional
+        lineBreakPos = -1
+    }
+}
+
+gzipCss {
+    source = minifyCss
+    dest = "${buildDir}/gen/css/all.${version}.css"
+}
+
+war {
+    it.dependsOn minifyCss, minifyJs
+
+    from("${buildDir}/gen/js", {
+        into 'js'
+    })
+
+    from("${buildDir}/gen/css", {
+        into 'resources/css'
+    })
+}
