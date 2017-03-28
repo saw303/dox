@@ -105,15 +105,6 @@ configure(subprojects) { subproject ->
     sourceCompatibility = 8
     targetCompatibility = 8
 
-    project.sourceSets {
-        main {
-            java {
-                // Muss auch in IDEA Settings für Annotation Processors gesetzt sein
-                srcDir 'build/generated/source/apt/main'
-            }
-        }
-    }
-
     dependencies {
         compile "org.slf4j:slf4j-api:${slf4jVersion}"
         compile "org.mapstruct:mapstruct-jdk8:${mapstructVersion}"
