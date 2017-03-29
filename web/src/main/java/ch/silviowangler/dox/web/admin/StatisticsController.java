@@ -1,5 +1,5 @@
-/*
- * Copyright 2012 - 2013 Silvio Wangler (silvio.wangler@gmail.com)
+/**
+ * Copyright 2012 - 2017 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ch.silviowangler.dox.web.admin;
 
-import ch.silviowangler.dox.api.stats.DocumentReferenceClickStats;
-import ch.silviowangler.dox.api.stats.StatisticsService;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,8 +28,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import ch.silviowangler.dox.api.stats.DocumentReferenceClickStats;
+import ch.silviowangler.dox.api.stats.StatisticsService;
 
 /**
  * @author Silvio Wangler

@@ -1,5 +1,5 @@
-/*
- * Copyright 2012 - 2013 Silvio Wangler (silvio.wangler@gmail.com)
+/**
+ * Copyright 2012 - 2017 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ch.silviowangler.dox.repository;
 
-import ch.silviowangler.dox.domain.*;
+import static ch.silviowangler.dox.domain.DomainUtils.containsWildcardCharacters;
+import static ch.silviowangler.dox.domain.DomainUtils.replaceWildcardCharacters;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,13 +32,12 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
-import static ch.silviowangler.dox.domain.DomainUtils.containsWildcardCharacters;
-import static ch.silviowangler.dox.domain.DomainUtils.replaceWildcardCharacters;
+import ch.silviowangler.dox.domain.Attribute;
+import ch.silviowangler.dox.domain.AttributeDataType;
+import ch.silviowangler.dox.domain.Document;
+import ch.silviowangler.dox.domain.DocumentClass;
+import ch.silviowangler.dox.domain.Range;
 
 /**
  * @author Silvio Wangler

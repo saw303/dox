@@ -1,5 +1,5 @@
-/*
- * Copyright 2012 - 2013 Silvio Wangler (silvio.wangler@gmail.com)
+/**
+ * Copyright 2012 - 2017 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ch.silviowangler.dox.web;
 
-import ch.silviowangler.dox.api.*;
+import static ch.silviowangler.dox.web.WebConstants.DOCUMENT_CLASS_SHORT_NAME;
+import static com.google.common.collect.Maps.newHashMap;
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.util.Assert.notNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -35,11 +39,15 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 
-import static ch.silviowangler.dox.web.WebConstants.DOCUMENT_CLASS_SHORT_NAME;
-import static com.google.common.collect.Maps.newHashMap;
-import static org.springframework.http.HttpStatus.CONFLICT;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.util.Assert.notNull;
+import ch.silviowangler.dox.api.DescriptiveIndex;
+import ch.silviowangler.dox.api.DocumentClass;
+import ch.silviowangler.dox.api.DocumentClassNotFoundException;
+import ch.silviowangler.dox.api.DocumentDuplicationException;
+import ch.silviowangler.dox.api.DocumentReference;
+import ch.silviowangler.dox.api.DocumentService;
+import ch.silviowangler.dox.api.PhysicalDocument;
+import ch.silviowangler.dox.api.TranslatableKey;
+import ch.silviowangler.dox.api.ValidationException;
 
 /**
  * @author Silvio Wangler

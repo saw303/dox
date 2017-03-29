@@ -1,5 +1,5 @@
-/*
- * Copyright 2012 - 2013 Silvio Wangler (silvio.wangler@gmail.com)
+/**
+ * Copyright 2012 - 2017 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ch.silviowangler.dox.repository.stats;
 
-import ch.silviowangler.dox.domain.stats.ClickStats;
-import ch.silviowangler.dox.domain.stats.ReferenceType;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+
+import ch.silviowangler.dox.domain.stats.ClickStats;
+import ch.silviowangler.dox.domain.stats.ReferenceType;
 
 /**
  * @author Silvio Wangler

@@ -132,10 +132,10 @@ configure(subprojects) { subproject ->
             )
         }
 
-        from("${rootProject.projectDir}") {
+        from(rootProject.projectDir) {
             include "LICENSE.txt"
             into "META-INF"
-            expand(dateOfYear: new Date().format('yyyy'))
+            expand(year: new Date().format('yyyy'), name: licenseOwner, email: licenseOwnerEmail)
         }
 
         baseName = "dox-${baseName}"
@@ -145,10 +145,10 @@ configure(subprojects) { subproject ->
         classifier = 'sources'
         from sourceSets.main.allJava
 
-        from("${rootProject.projectDir}") {
+        from(rootProject.projectDir) {
             include "LICENSE.txt"
             into "META-INF"
-            expand(dateOfYear: new Date().format('yyyy'))
+            expand(year: new Date().format('yyyy'), name: licenseOwner, email: licenseOwnerEmail)
         }
     }
 
@@ -201,8 +201,8 @@ configure(subprojects) { subproject ->
     license {
         header = file("${rootDir}/LICENSE-SHORT.txt")
         ext.year = Calendar.getInstance().get(Calendar.YEAR)
-        ext.name = 'Silvio Wangler'
-        ext.email = 'silvio.wangler@gmail.com'
+        ext.name = licenseOwner
+        ext.email = licenseOwnerEmail
 
         excludes(["**/*.properties", "**/*.sql", "**/*.txt", "**/*.pdf", "**/*.doc", "**/*.docx"])
     }

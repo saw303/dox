@@ -1,5 +1,5 @@
-/*
- * Copyright 2012 - 2013 Silvio Wangler (silvio.wangler@gmail.com)
+/**
+ * Copyright 2012 - 2017 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ch.silviowangler.dox.hibernate;
 
-import ch.silviowangler.dox.domain.AmountOfMoney;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.type.StandardBasicTypes;
@@ -31,6 +29,8 @@ import java.sql.Types;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Currency;
+
+import ch.silviowangler.dox.domain.AmountOfMoney;
 
 /**
  * @author Silvio Wangler

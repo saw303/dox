@@ -1,5 +1,5 @@
-/*
- * Copyright 2012 - 2013 Silvio Wangler (silvio.wangler@gmail.com)
+/**
+ * Copyright 2012 - 2017 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ch.silviowangler.dox.repository;
 
-import ch.silviowangler.dox.domain.IndexStore;
 import org.springframework.data.repository.CrudRepository;
+
+import ch.silviowangler.dox.domain.IndexStore;
 
 /**
  * @author Silvio Wangler

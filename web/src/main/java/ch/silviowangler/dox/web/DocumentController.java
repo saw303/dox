@@ -1,5 +1,5 @@
-/*
- * Copyright 2012 - 2013 Silvio Wangler (silvio.wangler@gmail.com)
+/**
+ * Copyright 2012 - 2017 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ch.silviowangler.dox.web;
 
-import ch.silviowangler.dox.api.*;
-import ch.silviowangler.dox.api.stats.StatisticsService;
+import static eu.bitwalker.useragentutils.Browser.CHROME;
+import static eu.bitwalker.useragentutils.Browser.OPERA;
+import static eu.bitwalker.useragentutils.Browser.parseUserAgentString;
+import static java.lang.Integer.valueOf;
+import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
+import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
+import static javax.servlet.http.HttpServletResponse.SC_OK;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 import eu.bitwalker.useragentutils.Browser;
 import eu.bitwalker.useragentutils.Version;
+
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,8 +44,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -44,11 +51,19 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.SortedSet;
 
-import static eu.bitwalker.useragentutils.Browser.*;
-import static java.lang.Integer.valueOf;
-import static javax.servlet.http.HttpServletResponse.*;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import ch.silviowangler.dox.api.Attribute;
+import ch.silviowangler.dox.api.DescriptiveIndex;
+import ch.silviowangler.dox.api.DocumentClassNotFoundException;
+import ch.silviowangler.dox.api.DocumentNotFoundException;
+import ch.silviowangler.dox.api.DocumentNotInStoreException;
+import ch.silviowangler.dox.api.DocumentReference;
+import ch.silviowangler.dox.api.DocumentService;
+import ch.silviowangler.dox.api.PhysicalDocument;
+import ch.silviowangler.dox.api.TranslatableKey;
+import ch.silviowangler.dox.api.stats.StatisticsService;
 
 /**
  * @author Silvio Wangler
