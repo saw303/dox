@@ -8,7 +8,7 @@ dependencies {
             "org.apache.commons:commons-exec:${commonsExec}",
             "joda-time:joda-time:${jodaTimeVersion}",
             "com.google.guava:guava:${guavaVersion}",
-            "com.googlecode.flyway:flyway-core:${flywayVersion}"
+            "org.flywaydb:flyway-core:${flywayVersion}"
     compile("org.springframework.security:spring-security-core:${springSecurityVersion}") {
         exclude group: 'org.springframework', module: 'spring-beans'
     }

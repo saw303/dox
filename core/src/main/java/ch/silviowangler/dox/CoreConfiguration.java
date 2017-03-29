@@ -18,8 +18,7 @@ package ch.silviowangler.dox;
 import static ch.silviowangler.dox.DocumentServiceImpl.CACHE_DOCUMENT_COUNT;
 import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.H2;
 
-import com.googlecode.flyway.core.Flyway;
-
+import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.cache.Cache;
