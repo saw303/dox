@@ -1,5 +1,5 @@
-/*
- * Copyright 2012 - 2013 Silvio Wangler (silvio.wangler@gmail.com)
+/**
+ * Copyright 2012 - 2017 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ch.silviowangler.dox.api;
 
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.SortedSet;
 
 /**
  * This is the general service when it comes to working with documents in DOX.
