@@ -1,5 +1,5 @@
-/*
- * Copyright 2012 - 2013 Silvio Wangler (silvio.wangler@gmail.com)
+/**
+ * Copyright 2012 - 2017 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ch.silviowangler.dox.stats;
 
-import ch.silviowangler.dox.api.stats.DocumentReferenceClickStats;
-import ch.silviowangler.dox.api.stats.StatisticsService;
-import ch.silviowangler.dox.domain.stats.ClickStats;
-import ch.silviowangler.dox.domain.stats.ReferenceType;
-import ch.silviowangler.dox.repository.stats.ClickStatsRepository;
+import static ch.silviowangler.dox.domain.stats.ReferenceType.DOCUMENT_REFERENCE;
+import static ch.silviowangler.dox.domain.stats.ReferenceType.LINK;
+import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
+
 import com.google.common.collect.Lists;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -29,9 +28,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static ch.silviowangler.dox.domain.stats.ReferenceType.DOCUMENT_REFERENCE;
-import static ch.silviowangler.dox.domain.stats.ReferenceType.LINK;
-import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
+import ch.silviowangler.dox.api.stats.DocumentReferenceClickStats;
+import ch.silviowangler.dox.api.stats.StatisticsService;
+import ch.silviowangler.dox.domain.stats.ClickStats;
+import ch.silviowangler.dox.domain.stats.ReferenceType;
+import ch.silviowangler.dox.repository.stats.ClickStatsRepository;
 
 /**
  * @author Silvio Wangler

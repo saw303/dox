@@ -1,5 +1,5 @@
-/*
- * Copyright 2012 - 2013 Silvio Wangler (silvio.wangler@gmail.com)
+/**
+ * Copyright 2012 - 2017 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,23 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ch.silviowangler.dox;
 
-import ch.silviowangler.dox.domain.Translation;
-import ch.silviowangler.dox.repository.AttributeRepository;
-import ch.silviowangler.dox.repository.DocumentClassRepository;
-import ch.silviowangler.dox.repository.TranslationRepository;
+import static java.util.Locale.ENGLISH;
+import static java.util.Locale.GERMAN;
+import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static java.util.Locale.ENGLISH;
-import static java.util.Locale.GERMAN;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import ch.silviowangler.dox.domain.Translation;
+import ch.silviowangler.dox.repository.AttributeRepository;
+import ch.silviowangler.dox.repository.DocumentClassRepository;
+import ch.silviowangler.dox.repository.TranslationRepository;
 
 /**
  * @author Silvio Wangler

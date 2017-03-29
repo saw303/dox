@@ -1,8 +1,25 @@
+/**
+ * Copyright 2012 - 2017 Silvio Wangler (silvio.wangler@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ch.silviowangler.dox;
 
-import ch.silviowangler.dox.document.*;
-import ch.silviowangler.dox.hibernate.Mysql5InnoDBBitBooleanDialect;
+import static ch.silviowangler.dox.DocumentServiceImpl.CACHE_DOCUMENT_COUNT;
+import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.H2;
+
 import com.googlecode.flyway.core.Flyway;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.cache.Cache;
@@ -10,7 +27,11 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean;
 import org.springframework.cache.support.SimpleCacheManager;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jndi.JndiObjectFactoryBean;
@@ -19,16 +40,23 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 
-import static ch.silviowangler.dox.DocumentServiceImpl.CACHE_DOCUMENT_COUNT;
-import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.H2;
+import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
+
+import ch.silviowangler.dox.document.DocumentInspector;
+import ch.silviowangler.dox.document.DocumentInspectorFactory;
+import ch.silviowangler.dox.document.DocumentInspectorFactoryImpl;
+import ch.silviowangler.dox.document.DummyDocumentInspector;
+import ch.silviowangler.dox.document.MicrosoftWordDocumentInspector;
+import ch.silviowangler.dox.document.PdfDocumentInspector;
+import ch.silviowangler.dox.document.TiffDocumentInspector;
+import ch.silviowangler.dox.hibernate.Mysql5InnoDBBitBooleanDialect;
 
 /**
  * Created on 02.08.15.

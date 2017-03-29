@@ -1,5 +1,5 @@
-/*
- * Copyright 2012 - 2013 Silvio Wangler (silvio.wangler@gmail.com)
+/**
+ * Copyright 2012 - 2017 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ch.silviowangler.dox;
 
-import ch.silviowangler.dox.api.*;
+import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
+import static com.google.common.collect.Sets.filter;
+import static org.apache.commons.io.FileUtils.readFileToByteArray;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import com.google.common.base.Predicate;
+
 import org.joda.time.LocalDate;
 import org.junit.Assume;
 import org.junit.Before;
@@ -27,13 +38,29 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Currency;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
 
-import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
-import static com.google.common.collect.Sets.filter;
-import static org.apache.commons.io.FileUtils.readFileToByteArray;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import ch.silviowangler.dox.api.Attribute;
+import ch.silviowangler.dox.api.DescriptiveIndex;
+import ch.silviowangler.dox.api.DocumentClass;
+import ch.silviowangler.dox.api.DocumentClassNotFoundException;
+import ch.silviowangler.dox.api.DocumentDuplicationException;
+import ch.silviowangler.dox.api.DocumentNotFoundException;
+import ch.silviowangler.dox.api.DocumentNotInStoreException;
+import ch.silviowangler.dox.api.DocumentReference;
+import ch.silviowangler.dox.api.Domain;
+import ch.silviowangler.dox.api.Money;
+import ch.silviowangler.dox.api.PhysicalDocument;
+import ch.silviowangler.dox.api.Translatable;
+import ch.silviowangler.dox.api.TranslatableKey;
+import ch.silviowangler.dox.api.ValidationException;
+import ch.silviowangler.dox.api.ValueNotInDomainException;
 
 /**
  * @author Silvio Wangler

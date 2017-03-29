@@ -1,5 +1,5 @@
-/*
- * Copyright 2012 - 2013 Silvio Wangler (silvio.wangler@gmail.com)
+/**
+ * Copyright 2012 - 2017 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ch.silviowangler.dox.aspect;
 
-import ch.silviowangler.dox.api.NoTranslationFoundException;
-import ch.silviowangler.dox.api.Translatable;
-import ch.silviowangler.dox.api.TranslateProperties;
-import ch.silviowangler.dox.api.TranslationService;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
@@ -37,6 +32,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
+
+import ch.silviowangler.dox.api.NoTranslationFoundException;
+import ch.silviowangler.dox.api.Translatable;
+import ch.silviowangler.dox.api.TranslateProperties;
+import ch.silviowangler.dox.api.TranslationService;
 
 /**
  * @author Silvio Wangler

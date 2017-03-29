@@ -1,5 +1,5 @@
-/*
- * Copyright 2012 - 2013 Silvio Wangler (silvio.wangler@gmail.com)
+/**
+ * Copyright 2012 - 2017 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ch.silviowangler.dox;
 
-import ch.silviowangler.dox.api.*;
-import ch.silviowangler.dox.api.rest.DocumentClass;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
 import com.google.common.collect.Maps;
+
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,10 +39,15 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import ch.silviowangler.dox.api.DescriptiveIndex;
+import ch.silviowangler.dox.api.DocumentClassNotFoundException;
+import ch.silviowangler.dox.api.DocumentDuplicationException;
+import ch.silviowangler.dox.api.DocumentNotFoundException;
+import ch.silviowangler.dox.api.DocumentReference;
+import ch.silviowangler.dox.api.Range;
+import ch.silviowangler.dox.api.TranslatableKey;
+import ch.silviowangler.dox.api.ValidationException;
+import ch.silviowangler.dox.api.rest.DocumentClass;
 
 /**
  * @author Silvio Wangler

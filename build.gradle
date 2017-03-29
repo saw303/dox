@@ -141,7 +141,7 @@ configure(subprojects) { subproject ->
         baseName = "dox-${baseName}"
     }
 
-    task sourcesJar(type: Jar, dependsOn: classes) {
+    task sourcesJar(type: Jar, dependsOn: [classes, licenseFormat]) {
         classifier = 'sources'
         from sourceSets.main.allJava
 
@@ -204,7 +204,7 @@ configure(subprojects) { subproject ->
         ext.name = 'Silvio Wangler'
         ext.email = 'silvio.wangler@gmail.com'
 
-        excludes(["**/*.properties", "**/*.sql"])
+        excludes(["**/*.properties", "**/*.sql", "**/*.txt", "**/*.pdf", "**/*.doc", "**/*.docx"])
     }
 }
 

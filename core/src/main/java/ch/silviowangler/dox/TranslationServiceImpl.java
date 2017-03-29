@@ -1,5 +1,5 @@
-/*
- * Copyright 2012 - 2013 Silvio Wangler (silvio.wangler@gmail.com)
+/**
+ * Copyright 2012 - 2017 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ch.silviowangler.dox;
 
-import ch.silviowangler.dox.api.NoTranslationFoundException;
-import ch.silviowangler.dox.api.TranslationService;
-import ch.silviowangler.dox.domain.Translation;
-import ch.silviowangler.dox.repository.TranslationRepository;
+import static java.util.Locale.GERMAN;
+import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
+
 import com.google.common.collect.Sets;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +29,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Locale;
 import java.util.Set;
 
-import static java.util.Locale.GERMAN;
-import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
+import ch.silviowangler.dox.api.NoTranslationFoundException;
+import ch.silviowangler.dox.api.TranslationService;
+import ch.silviowangler.dox.domain.Translation;
+import ch.silviowangler.dox.repository.TranslationRepository;
 
 /**
  * @author Silvio Wangler
