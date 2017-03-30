@@ -57,7 +57,7 @@ public class HashGeneratorTest {
 
     private static boolean isUnixBased() {
         final String osName = System.getProperty("os.name");
-        return osName.contains("Linux") || osName.equals("Mac OS X");
+        return osName.contains("Linux") || "Mac OS X".equals(osName);
     }
 
     private static File loadFile(String fileName) {
