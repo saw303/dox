@@ -33,6 +33,12 @@ import javax.persistence.Table;
 @Table(name = "DOX_ROLE")
 public class Role extends AbstractPersistable<Long> {
 
+    @Column(unique = true, nullable = false)
+    private String name;
+
+    @OneToMany
+    private Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+
     public Role() {
         super();
     }
@@ -40,12 +46,6 @@ public class Role extends AbstractPersistable<Long> {
     public Role(String name) {
         this.name = name;
     }
-
-    @Column(unique = true, nullable = false)
-    private String name;
-
-    @OneToMany
-    private Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 
     public String getName() {
         return name;

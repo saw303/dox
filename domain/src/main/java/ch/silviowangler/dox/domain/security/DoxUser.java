@@ -49,7 +49,7 @@ public class DoxUser extends AbstractPersistable<Long> {
     private Set<Client> clients;
 
     @ManyToMany
-    Set<Role> roles = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
 
     public DoxUser() {
         super();
