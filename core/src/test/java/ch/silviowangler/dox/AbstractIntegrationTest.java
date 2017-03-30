@@ -121,7 +121,7 @@ public abstract class AbstractIntegrationTest extends AbstractTransactionalJUnit
 
     protected DocumentReference importDocument(String fileName, Map<TranslatableKey, DescriptiveIndex> indexes, String documentClassShortName) throws IOException, ValidationException, DocumentDuplicationException, DocumentClassNotFoundException {
         File singlePagePdf = loadFile(fileName);
-        PhysicalDocument doc = new PhysicalDocument(new DocumentClass(documentClassShortName), FileUtils.readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
+        PhysicalDocument doc = new PhysicalDocument(new DocumentClass(documentClassShortName), readFileToByteArray(singlePagePdf), indexes, singlePagePdf.getName());
         doc.setClient("wangler");
         return documentService.importDocument(doc);
     }

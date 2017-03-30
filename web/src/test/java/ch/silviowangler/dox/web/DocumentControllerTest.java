@@ -89,6 +89,8 @@ public class DocumentControllerTest {
         assertThat(response.getContentAsString(), is("hello"));
         assertThat(response.getContentType(), is("aaa/bbb"));
         assertThat(response.getHeader("Content-Disposition"), is("inline; filename=\"hello.txt\""));
+
+        verify(statisticsService).registerDocumentReferenceClick("1", "anonymous");
     }
 
     @Test
@@ -155,7 +157,7 @@ public class DocumentControllerTest {
         assertThat(modelAndView.getViewName(), is("edit.doc"));
         assertThat(modelAndView.getModel().size(), is(2));
         assertThat(modelAndView.getModel().containsKey("doc"), is(true));
-        assertThat((DocumentReference) modelAndView.getModel().get("doc"), is(documentReference));
+        assertThat(modelAndView.getModel().get("doc"), is(documentReference));
         assertThat(modelAndView.getModel().containsKey("attributes"), is(true));
         assertThat(((SortedSet<Attribute>) modelAndView.getModel().get("attributes")).size(), is(2));
 
@@ -199,7 +201,7 @@ public class DocumentControllerTest {
         assertThat(modelAndView.getViewName(), is("import.successful"));
         assertThat(modelAndView.getModel().size(), is(1));
         assertThat(modelAndView.getModel().containsKey("doc"), is(true));
-        assertThat((DocumentReference) modelAndView.getModel().get("doc"), is(documentReference));
+        assertThat(modelAndView.getModel().get("doc"), is(documentReference));
 
         InOrder order = inOrder(documentService);
 

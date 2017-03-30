@@ -41,7 +41,7 @@ import ch.silviowangler.dox.domain.AmountOfMoney;
  */
 public class AmountOfMoneyType implements UserType, Serializable {
 
-    private static final int[] SQL_TYPES = new int[]{Types.VARCHAR,};
+    private static final int[] SQL_TYPES = new int[]{Types.VARCHAR};
 
     @Override
     public int[] sqlTypes() {

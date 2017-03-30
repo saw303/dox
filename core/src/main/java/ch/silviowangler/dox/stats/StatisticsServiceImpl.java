@@ -31,7 +31,6 @@ import java.util.List;
 import ch.silviowangler.dox.api.stats.DocumentReferenceClickStats;
 import ch.silviowangler.dox.api.stats.StatisticsService;
 import ch.silviowangler.dox.domain.stats.ClickStats;
-import ch.silviowangler.dox.domain.stats.ReferenceType;
 import ch.silviowangler.dox.repository.stats.ClickStatsRepository;
 
 /**
@@ -41,50 +40,50 @@ import ch.silviowangler.dox.repository.stats.ClickStatsRepository;
 @Service("statisticsService")
 public class StatisticsServiceImpl implements StatisticsService {
 
-    @Autowired
-    private ClickStatsRepository clickStatsRepository;
+  @Autowired
+  private ClickStatsRepository clickStatsRepository;
 
-    @Override
-    @Transactional(readOnly = true, propagation = SUPPORTS)
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public Long fetchDocumentReferenceClicksCount() {
-        return clickStatsRepository.countDocumentReferenceClicks();
+  @Override
+  @Transactional(readOnly = true, propagation = SUPPORTS)
+  @PreAuthorize("hasRole('ROLE_USER')")
+  public Long fetchDocumentReferenceClicksCount() {
+    return clickStatsRepository.countDocumentReferenceClicks();
+  }
+
+  @Override
+  @Transactional(readOnly = true, propagation = SUPPORTS)
+  @PreAuthorize("hasRole('ROLE_USER')")
+  public Long fetchLinkClicksCount() {
+    return clickStatsRepository.countLinkClicks();
+  }
+
+  @Override
+  @Transactional
+  @PreAuthorize("hasRole('ROLE_USER')")
+  public void registerDocumentReferenceClick(String documentReferenceId, String username) {
+    ClickStats stats = new ClickStats(documentReferenceId, DOCUMENT_REFERENCE, username);
+    clickStatsRepository.save(stats);
+  }
+
+  @Override
+  @Transactional
+  @PreAuthorize("hasRole('ROLE_USER')")
+  public void registerLinkClick(String link, String username) {
+    ClickStats stats = new ClickStats(link, LINK, username);
+    clickStatsRepository.save(stats);
+  }
+
+  @Override
+  @Transactional(readOnly = true, propagation = SUPPORTS)
+  @PreAuthorize("hasRole('ROLE_USER')")
+  public List<DocumentReferenceClickStats> fetchDocumentReferenceClickStats() {
+
+    final List<Object[]> documentReferenceClickStats = clickStatsRepository.fetchDocumentReferenceClickStatistics(DOCUMENT_REFERENCE);
+    List<DocumentReferenceClickStats> result = Lists.newArrayListWithCapacity(documentReferenceClickStats.size());
+
+    for (Object[] stats : documentReferenceClickStats) {
+      result.add(new DocumentReferenceClickStats((String) stats[1], ((Number) stats[0]).longValue()));
     }
-
-    @Override
-    @Transactional(readOnly = true, propagation = SUPPORTS)
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public Long fetchLinkClicksCount() {
-        return clickStatsRepository.countLinkClicks();
-    }
-
-    @Override
-    @Transactional
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public void registerDocumentReferenceClick(String documentReferenceId, String username) {
-        ClickStats stats = new ClickStats(documentReferenceId, DOCUMENT_REFERENCE, username);
-        clickStatsRepository.save(stats);
-    }
-
-    @Override
-    @Transactional
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public void registerLinkClick(String link, String username) {
-        ClickStats stats = new ClickStats(link, LINK, username);
-        clickStatsRepository.save(stats);
-    }
-
-    @Override
-    @Transactional(readOnly = true, propagation = SUPPORTS)
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public List<DocumentReferenceClickStats> fetchDocumentReferenceClickStats() {
-
-        final List<Object[]> documentReferenceClickStats = clickStatsRepository.fetchDocumentReferenceClickStatistics(ReferenceType.DOCUMENT_REFERENCE);
-        List<DocumentReferenceClickStats> result = Lists.newArrayListWithCapacity(documentReferenceClickStats.size());
-
-        for (Object[] stats : documentReferenceClickStats) {
-            result.add(new DocumentReferenceClickStats((String) stats[1], ((Number) stats[0]).longValue()));
-        }
-        return result;
-    }
+    return result;
+  }
 }

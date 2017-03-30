@@ -33,7 +33,6 @@ import static org.springframework.util.Assert.isTrue;
 import static org.springframework.util.Assert.notEmpty;
 import static org.springframework.util.Assert.notNull;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -663,7 +662,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     private boolean isRangeCompatible(AttributeDataType desiredDataType) {
-        return Lists.newArrayList(DATE, DOUBLE, INTEGER, LONG, SHORT).contains(desiredDataType);
+        return newArrayList(DATE, DOUBLE, INTEGER, LONG, SHORT).contains(desiredDataType);
     }
 
     @SuppressWarnings("unchecked")
