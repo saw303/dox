@@ -29,14 +29,14 @@ dependencies {
 
 test {
     exclude '**/*IntegrationTest.class'
-    reports.html.destination = file("${reports.html.destination}/unit2")
-    reports.junitXml.destination = file("${reports.junitXml.destination}/unit2")
 }
 
 task integrationTest(type: Test) {
     include '**/*IntegrationTest.class'
     reports.html.destination = file("${reports.html.destination}/integration")
     reports.junitXml.destination = file("${reports.junitXml.destination}/integration")
+
+    environment 'DOX_STORE', System.properties['java.io.tmpdir']
 
     doFirst {
         def doxStore = System.getenv('DOX_STORE')

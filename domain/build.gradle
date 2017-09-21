@@ -73,18 +73,20 @@ clean.dependsOn << cleanGenerated
 class HibernateJpaSchemaGenerationTask extends DefaultTask {
 
     private Map<String, String> dialects = [
-            'ORACLE'    : "org.hibernate.dialect.Oracle10gDialect",
-            'MYSQL'     : "org.hibernate.dialect.MySQLDialect",
-            'MYSQL5'    : "org.hibernate.dialect.MySQL5Dialect",
-            'MYSQL5INNODB': "org.hibernate.dialect.MySQL5InnoDBDialect",
-            'HSQL'      : "org.hibernate.dialect.HSQLDialect",
-            'H2'        : "org.hibernate.dialect.H2Dialect",
-            'PostgreSQL': 'org.hibernate.dialect.PostgreSQLDialect'
+            'ORACLE'       : 'org.hibernate.dialect.Oracle10gDialect',
+            'MYSQL'        : 'org.hibernate.dialect.MySQLDialect',
+            'MYSQL5'       : 'org.hibernate.dialect.MySQL5Dialect',
+            'MYSQL5INNODB' : 'org.hibernate.dialect.MySQL5InnoDBDialect',
+            'MYSQL57INNODB': 'org.hibernate.dialect.MySQL57InnoDBDialect',
+            'HSQL'         : 'org.hibernate.dialect.HSQLDialect',
+            'H2'           : 'org.hibernate.dialect.H2Dialect',
+            'PostgreSQL'   : 'org.hibernate.dialect.PostgreSQLDialect',
+            'PostgreSQL9'  : 'org.hibernate.dialect.PostgreSQL9Dialect'
     ]
 
     private URLClassLoader loader
 
-    def source = project.sourceSets.main.output.classesDir
+    def source = project.sourceSets.main.output.classesDirs[0]
     def target = new File(project.projectDir, 'src/main/generated')
 
     @InputFiles
@@ -94,9 +96,9 @@ class HibernateJpaSchemaGenerationTask extends DefaultTask {
         def jpaEntities = findJpaEntities(this.loader)
         if (jpaEntities && !jpaEntities.isEmpty()) {
             def inputFiles = jpaEntities.collect { c ->
-                project.sourceSets.main.java.getFiles().find { f ->
-                    if (f.name.endsWith(c.simpleName + '.java')) {
-                        f
+                project.sourceSets.main.java.files.find { file ->
+                    if (file.name.endsWith(c.simpleName + '.java')) {
+                        file
                     }
                 }
             }
