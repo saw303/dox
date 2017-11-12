@@ -15,8 +15,6 @@
  */
 package ch.silviowangler.dox.repository;
 
-import com.google.common.base.MoreObjects;
-
 /**
  * @author Silvio Wangler
  * @since 0.3
@@ -69,9 +67,10 @@ public class DocumentKeyHash {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("id", id)
-                .add("hash", hash)
-                .toString();
+        final StringBuilder sb = new StringBuilder("DocumentKeyHash{");
+        sb.append("id=").append(id);
+        sb.append(", hash='").append(hash).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

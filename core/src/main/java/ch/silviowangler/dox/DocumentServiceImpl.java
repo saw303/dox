@@ -15,33 +15,22 @@
  */
 package ch.silviowangler.dox;
 
-import static ch.silviowangler.dox.domain.AttributeDataType.CURRENCY;
-import static ch.silviowangler.dox.domain.AttributeDataType.DATE;
-import static ch.silviowangler.dox.domain.AttributeDataType.DOUBLE;
-import static ch.silviowangler.dox.domain.AttributeDataType.INTEGER;
-import static ch.silviowangler.dox.domain.AttributeDataType.LONG;
-import static ch.silviowangler.dox.domain.AttributeDataType.SHORT;
-import static ch.silviowangler.dox.domain.AttributeDataType.STRING;
-import static ch.silviowangler.dox.domain.DomainUtils.containsWildcardCharacters;
-import static ch.silviowangler.dox.domain.DomainUtils.replaceWildcardCharacters;
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Lists.newArrayListWithCapacity;
-import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
-import static org.springframework.transaction.annotation.Propagation.REQUIRED;
-import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
-import static org.springframework.util.Assert.isTrue;
-import static org.springframework.util.Assert.notEmpty;
-import static org.springframework.util.Assert.notNull;
-
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-
+import ch.silviowangler.dox.api.*;
+import ch.silviowangler.dox.api.rest.DocumentClass;
+import ch.silviowangler.dox.document.DocumentInspector;
+import ch.silviowangler.dox.document.DocumentInspectorFactory;
+import ch.silviowangler.dox.domain.*;
+import ch.silviowangler.dox.domain.Attribute;
+import ch.silviowangler.dox.domain.AttributeDataType;
+import ch.silviowangler.dox.domain.Range;
+import ch.silviowangler.dox.domain.security.DoxUser;
+import ch.silviowangler.dox.domain.stats.Tag;
+import ch.silviowangler.dox.mappers.DocumentClassMapper;
+import ch.silviowangler.dox.repository.*;
+import ch.silviowangler.dox.repository.security.DoxUserRepository;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -62,52 +51,20 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
-import java.util.Currency;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Properties;
-import java.util.Set;
-import java.util.SortedSet;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
-import ch.silviowangler.dox.api.DescriptiveIndex;
-import ch.silviowangler.dox.api.DocumentClassNotFoundException;
-import ch.silviowangler.dox.api.DocumentDuplicationException;
-import ch.silviowangler.dox.api.DocumentNotFoundException;
-import ch.silviowangler.dox.api.DocumentNotInStoreException;
-import ch.silviowangler.dox.api.DocumentReference;
-import ch.silviowangler.dox.api.DocumentService;
-import ch.silviowangler.dox.api.Money;
-import ch.silviowangler.dox.api.PhysicalDocument;
-import ch.silviowangler.dox.api.TranslatableKey;
-import ch.silviowangler.dox.api.ValidationException;
-import ch.silviowangler.dox.api.ValueNotInDomainException;
+import static ch.silviowangler.dox.domain.AttributeDataType.*;
+import static ch.silviowangler.dox.domain.DomainUtils.containsWildcardCharacters;
+import static ch.silviowangler.dox.domain.DomainUtils.replaceWildcardCharacters;
+import static org.springframework.transaction.annotation.Propagation.REQUIRED;
+import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
+import static org.springframework.util.Assert.*;
+
 import ch.silviowangler.dox.api.rest.DocumentClass;
-import ch.silviowangler.dox.document.DocumentInspector;
-import ch.silviowangler.dox.document.DocumentInspectorFactory;
-import ch.silviowangler.dox.domain.AmountOfMoney;
-import ch.silviowangler.dox.domain.Attribute;
-import ch.silviowangler.dox.domain.AttributeDataType;
-import ch.silviowangler.dox.domain.Client;
-import ch.silviowangler.dox.domain.Document;
-import ch.silviowangler.dox.domain.IndexMapEntry;
-import ch.silviowangler.dox.domain.IndexStore;
-import ch.silviowangler.dox.domain.Range;
-import ch.silviowangler.dox.domain.security.DoxUser;
-import ch.silviowangler.dox.domain.stats.Tag;
-import ch.silviowangler.dox.mappers.DocumentClassMapper;
-import ch.silviowangler.dox.repository.AttributeRepository;
-import ch.silviowangler.dox.repository.ClientRepository;
-import ch.silviowangler.dox.repository.DocumentClassRepository;
-import ch.silviowangler.dox.repository.DocumentRepository;
-import ch.silviowangler.dox.repository.DomainRepository;
-import ch.silviowangler.dox.repository.IndexMapEntryRepository;
-import ch.silviowangler.dox.repository.IndexStoreRepository;
-import ch.silviowangler.dox.repository.TagRepository;
-import ch.silviowangler.dox.repository.security.DoxUserRepository;
+
 
 /**
  * @author Silvio Wangler
@@ -116,8 +73,9 @@ import ch.silviowangler.dox.repository.security.DoxUserRepository;
 @Service("documentService")
 public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
-    private static final String DD_MM_YYYY = "dd.MM.yyyy";
-    private static final String YYYY_MM_DD = "yyyy-MM-dd";
+    private static final DateTimeFormatter DD_MM_YYYY = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    private static final DateTimeFormatter YYYY_MM_DD = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
     public static final String CACHE_DOCUMENT_COUNT = "documentCount";
     public static final int PAGE_NUMBER_NOT_RETRIEVABLE = -1;
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -148,8 +106,6 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     private TagRepository tagRepository;
     @Autowired
     private DocumentClassMapper documentClassMapper;
-   /* @Autowired
-    private ElasticDocumentStoreService elasticDocumentStoreService;*/
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -170,7 +126,8 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     @Transactional
     public void assignTags(DocumentReference documentReference, String... tags) throws NoSuchElementException {
 
-        Document document = documentRepository.findOne(documentReference.getId());
+
+        Document document = documentRepository.findById(documentReference.getId()).get();
 
         for (String tagName : tags) {
 
@@ -191,7 +148,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     @Transactional(readOnly = true)
     public List<DocumentClass> findAllDocumentClasses() {
 
-        List<DocumentClass> documentClasses = newArrayList();
+        List<DocumentClass> documentClasses = new ArrayList<>();
         List<String> clients = getClients();
 
         Iterable<ch.silviowangler.dox.domain.DocumentClass> documentClassEntities = documentClassRepository.findAllByClients(clients);
@@ -199,7 +156,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         for (ch.silviowangler.dox.domain.DocumentClass documentClassEntity : documentClassEntities) {
 
             DocumentClass documentClass = documentClassMapper.toDocumentClassRestApi(documentClassEntity);
-            documentClass.setAttributes(newArrayList(documentClassMapper.toAttributeApi(attributeRepository.findAttributesForDocumentClass(documentClassEntity))));
+            documentClass.setAttributes(new ArrayList<>(documentClassMapper.toAttributeApi(attributeRepository.findAttributesForDocumentClass(documentClassEntity))));
             documentClasses.add(documentClass);
         }
         return documentClasses;
@@ -213,7 +170,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
         notNull(id, "id must not be null");
 
-        Document document = documentRepository.findOne(id);
+        Document document = documentRepository.findById(id).get();
 
         if (document != null) {
 
@@ -226,7 +183,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
             indexStoreRepository.delete(document.getIndexStore());
             document.setIndexStore(null);
-            documentRepository.delete(id);
+            documentRepository.delete(document);
 
             logger.info("Document reference {} successfully deleted", id);
         }
@@ -321,7 +278,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             }
         }
 
-        List<DocumentReference> documentReferences = newArrayListWithCapacity(documents.size());
+        List<DocumentReference> documentReferences = new ArrayList<>(documents.size());
 
         logger.info("Found {} documents for query string '{}'", documents.size(), queryString);
 
@@ -336,7 +293,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         User user = getPrincipal();
         DoxUser doxUser = doxUserRepository.findByUsername(user.getUsername());
 
-        List<String> clients = newArrayListWithCapacity(doxUser.getClients().size());
+        List<String> clients = new ArrayList<>(doxUser.getClients().size());
 
         for (Client client : doxUser.getClients()) {
             clients.add(client.getShortName());
@@ -401,7 +358,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
         if (documentReferenceExists(id)) {
             logger.info("Found document for id {}", id);
-            Document document = documentRepository.findOne(id);
+            Document document = documentRepository.findById(id).get();
 
             DocumentReference documentReference = toDocumentReference(document, null);
 
@@ -414,7 +371,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     @Override
     @CacheEvict(value = CACHE_DOCUMENT_COUNT, allEntries = true)
-    @Transactional(propagation = REQUIRED, readOnly = false)
+    @Transactional(propagation = REQUIRED)
     @PreAuthorize("hasRole('ROLE_USER')")
     public DocumentReference importDocument(PhysicalDocument physicalDocumentApi) throws ValidationException, DocumentDuplicationException, DocumentClassNotFoundException {
 
@@ -499,7 +456,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         DocumentReference documentReferenceApi = findDocumentReference(reference.getId());
         documentReferenceApi.getIndices().putAll(reference.getIndices());
 
-        Document document = documentRepository.findOne(reference.getId());
+        Document document = documentRepository.findById(reference.getId()).get();
         ch.silviowangler.dox.domain.DocumentClass documentClassEntity = document.getDocumentClass();
 
         List<Attribute> attributes = attributeRepository.findAttributesForDocumentClass(documentClassEntity);
@@ -521,7 +478,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     public Set<DocumentReference> retrieveAllDocumentReferences() {
         logger.info("Retrieving all document references from repository");
         Iterable<Document> documents = documentRepository.findAll();
-        Set<DocumentReference> documentReferences = Sets.newHashSet();
+        Set<DocumentReference> documentReferences = new HashSet<>();
 
         for (Document document : documents) {
             logger.debug("Processing document {}", document);
@@ -550,8 +507,8 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     private String getStringRepresentation(Object indexValue) {
         String indexValueToStore;
 
-        if (indexValue instanceof DateTime) {
-            indexValueToStore = ((DateTime) indexValue).toString(DD_MM_YYYY);
+        if (indexValue instanceof LocalDateTime) {
+            indexValueToStore = ((LocalDateTime) indexValue).format(DD_MM_YYYY);
         } else {
             indexValueToStore = String.valueOf(indexValue);
         }
@@ -579,7 +536,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     private Map<TranslatableKey, DescriptiveIndex> fixDataTypesOfIndices(final Map<TranslatableKey, DescriptiveIndex> indexes, List<Attribute> attributes) {
 
-        Map<TranslatableKey, DescriptiveIndex> resultMap = Maps.newHashMap(indexes); // copy elements
+        Map<TranslatableKey, DescriptiveIndex> resultMap = new HashMap<>(indexes); // copy elements
 
         for (Attribute attribute : attributes) {
 
@@ -603,7 +560,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             logger.debug("Found a range parameter. Skip this one");
 
             if (DATE.equals(desiredDataType)) {
-                ch.silviowangler.dox.api.Range<DateTime> original = (ch.silviowangler.dox.api.Range<DateTime>) valueToConvert;
+                ch.silviowangler.dox.api.Range<LocalDateTime> original = (ch.silviowangler.dox.api.Range<LocalDateTime>) valueToConvert;
                 return new Range<>(original.getFrom(), original.getTo());
             } else if (DOUBLE.equals(desiredDataType)) {
                 ch.silviowangler.dox.api.Range<BigDecimal> original = (ch.silviowangler.dox.api.Range<BigDecimal>) valueToConvert;
@@ -624,19 +581,19 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         if (DATE.equals(desiredDataType) && valueToConvert instanceof String) {
 
             final String stringValueToConvert = (String) valueToConvert;
-            String regexPattern;
+            DateTimeFormatter formatter;
 
             if (stringValueToConvert.matches("\\d{4}-\\d{2}-\\d{2}")) {
-                regexPattern = YYYY_MM_DD;
+                formatter = YYYY_MM_DD;
             } else if (stringValueToConvert.matches("\\d{2}\\.\\d{2}\\.\\d{4}")) {
-                regexPattern = DD_MM_YYYY;
+                formatter = DD_MM_YYYY;
             } else {
                 logger.error("Unsupported format of a date string '{}'", stringValueToConvert);
                 throw new UnsupportedOperationException("Unknown date format " + stringValueToConvert);
             }
-            return DateTimeFormat.forPattern(regexPattern).parseDateTime(stringValueToConvert);
-        } else if (DATE.equals(desiredDataType) && valueToConvert instanceof Date) {
-            return new DateTime(valueToConvert);
+            return LocalDate.parse(stringValueToConvert, formatter);
+        } else if (DATE.equals(desiredDataType) && valueToConvert instanceof LocalDateTime) {
+            return LocalDateTime.parse((CharSequence) valueToConvert, DateTimeFormatter.ISO_DATE_TIME);
         } else if (DOUBLE.equals(desiredDataType) && valueToConvert instanceof Double) {
             return BigDecimal.valueOf((Double) valueToConvert);
         } else if (DOUBLE.equals(desiredDataType) && valueToConvert instanceof String && ((String) valueToConvert).matches("(\\d.*|\\d.*\\.\\d{1,2})")) {
@@ -662,14 +619,14 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     private boolean isRangeCompatible(AttributeDataType desiredDataType) {
-        return newArrayList(DATE, DOUBLE, INTEGER, LONG, SHORT).contains(desiredDataType);
+        return Arrays.asList(DATE, DOUBLE, INTEGER, LONG, SHORT).contains(desiredDataType);
     }
 
     @SuppressWarnings("unchecked")
     private boolean isAssignableType(AttributeDataType desiredDataType, Class currentType) {
 
         if (desiredDataType == DATE) {
-            return currentType.isAssignableFrom(DateTime.class);
+            return currentType.isAssignableFrom(LocalDateTime.class);
         } else if (desiredDataType == STRING) {
             return currentType.isAssignableFrom(String.class);
         } else if (desiredDataType == DOUBLE) {
@@ -728,7 +685,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     private boolean documentReferenceExists(Long id) {
-        return documentRepository.exists(id);
+        return documentRepository.existsById(id);
     }
 
     private DocumentReference toDocumentReference(Document document, Locale locale) {
@@ -752,7 +709,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     private Map<TranslatableKey, DescriptiveIndex> toIndexMap(IndexStore indexStore, List<Attribute> attributes, Locale locale) {
 
-        Map<TranslatableKey, DescriptiveIndex> indices = newHashMapWithExpectedSize(attributes.size());
+        Map<TranslatableKey, DescriptiveIndex> indices = new HashMap<>(attributes.size());
 
         for (Attribute attribute : attributes) {
 
@@ -793,8 +750,8 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
         final Field field = indexStore.getClass().getDeclaredField(fieldName.toUpperCase());
         field.setAccessible(true);
 
-        if (field.getType() == LocalDate.class && value.getClass() == DateTime.class) {
-            field.set(indexStore, ((DateTime) value).toLocalDate());
+        if (field.getType() == LocalDate.class && value.getClass() == LocalDateTime.class) {
+            field.set(indexStore, ((LocalDateTime) value).toLocalDate());
         } else {
             field.set(indexStore, value);
         }
@@ -802,7 +759,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
     }
 
     private Map<String, Attribute> toAttributeMap(List<Attribute> attributes) {
-        Map<String, Attribute> map = newHashMapWithExpectedSize(attributes.size());
+        Map<String, Attribute> map = new HashMap<>(attributes.size());
 
         for (Attribute attribute : attributes) {
             map.put(attribute.getShortName(), attribute);
@@ -822,7 +779,7 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
     private void updateIndexMapEntries(final Map<String, Object> indices, Document document) {
         List<IndexMapEntry> indexMapEntries = indexMapEntryRepository.findByDocument(document);
-        indexMapEntryRepository.delete(indexMapEntries);
+        indexMapEntryRepository.deleteAll(indexMapEntries);
 
         for (String key : indices.keySet()) {
             final Object value = indices.get(key);

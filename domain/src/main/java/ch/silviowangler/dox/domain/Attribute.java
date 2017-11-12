@@ -15,21 +15,10 @@
  */
 package ch.silviowangler.dox.domain;
 
-import com.google.common.base.MoreObjects;
-
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
+import javax.persistence.*;
 import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 /**
  * @author Silvio Wangler
@@ -124,14 +113,16 @@ public class Attribute extends AbstractPersistable<Long> {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("shortName", shortName)
-                .add("optional", optional)
-                .add("dataType", dataType)
-                .add("domain", domain)
-                .add("mappingColumn", mappingColumn)
-                .add("updateable", updateable)
-                .add("client", client)
-                .toString();
+        final StringBuilder sb = new StringBuilder("Attribute{");
+        sb.append("shortName='").append(shortName).append('\'');
+        sb.append(", optional=").append(optional);
+        sb.append(", dataType=").append(dataType);
+        sb.append(", domain=").append(domain);
+        sb.append(", documentClasses=").append(documentClasses);
+        sb.append(", mappingColumn='").append(mappingColumn).append('\'');
+        sb.append(", updateable=").append(updateable);
+        sb.append(", client=").append(client);
+        sb.append('}');
+        return sb.toString();
     }
 }

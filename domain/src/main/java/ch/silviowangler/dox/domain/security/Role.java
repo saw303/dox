@@ -17,13 +17,12 @@ package ch.silviowangler.dox.domain.security;
 
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Silvio Wangler

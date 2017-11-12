@@ -15,16 +15,8 @@
  */
 package ch.silviowangler.dox;
 
-import static ch.silviowangler.dox.api.AttributeDataType.STRING;
-import static java.util.Locale.ENGLISH;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
-
-import com.google.common.collect.Sets;
-
+import ch.silviowangler.dox.api.*;
+import ch.silviowangler.dox.aspect.AutomaticTranslatorAdvice;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -34,17 +26,15 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ch.silviowangler.dox.api.Attribute;
-import ch.silviowangler.dox.api.DescriptiveIndex;
-import ch.silviowangler.dox.api.DocumentReference;
-import ch.silviowangler.dox.api.Domain;
-import ch.silviowangler.dox.api.NoTranslationFoundException;
-import ch.silviowangler.dox.api.TranslatableKey;
-import ch.silviowangler.dox.api.TranslationService;
-import ch.silviowangler.dox.aspect.AutomaticTranslatorAdvice;
+import static ch.silviowangler.dox.api.AttributeDataType.STRING;
+import static java.util.Locale.ENGLISH;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Silvio Wangler
@@ -174,7 +164,8 @@ public class AutomaticTranslatorAdviceTest {
         DocumentReference documentReference = new DocumentReference("hello.txt");
         documentReference.getIndices().put(new TranslatableKey("hello", null), new DescriptiveIndex("World"));
 
-        Set<DocumentReference> resultSet = Sets.newHashSet(documentReference);
+        Set<DocumentReference> resultSet = new HashSet<>();
+        resultSet.add(documentReference);
 
         when(translationService.findTranslation("Attribute:hello", ENGLISH)).thenReturn("I am translated text");
 

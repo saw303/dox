@@ -1,7 +1,0 @@
-== Appendix
-
-=== License
-[source,text]
-----
-include::../../../../LICENSE.txt[]
-----

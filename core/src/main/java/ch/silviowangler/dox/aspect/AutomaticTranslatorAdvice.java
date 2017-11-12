@@ -15,6 +15,10 @@
  */
 package ch.silviowangler.dox.aspect;
 
+import ch.silviowangler.dox.api.NoTranslationFoundException;
+import ch.silviowangler.dox.api.Translatable;
+import ch.silviowangler.dox.api.TranslateProperties;
+import ch.silviowangler.dox.api.TranslationService;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
@@ -32,11 +36,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
-
-import ch.silviowangler.dox.api.NoTranslationFoundException;
-import ch.silviowangler.dox.api.Translatable;
-import ch.silviowangler.dox.api.TranslateProperties;
-import ch.silviowangler.dox.api.TranslationService;
 
 /**
  * @author Silvio Wangler

@@ -15,10 +15,6 @@
  */
 package ch.silviowangler.dox.jobs;
 
-import static com.google.common.collect.Maps.newHashMap;
-import static org.springframework.util.Assert.isTrue;
-import static org.springframework.util.Assert.notNull;
-
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.Executor;
 import org.apache.commons.io.FilenameUtils;
@@ -33,7 +29,11 @@ import org.springframework.util.StopWatch;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
+
+import static org.springframework.util.Assert.isTrue;
+import static org.springframework.util.Assert.notNull;
 
 /**
  * @author Silvio Wangler
@@ -91,7 +91,7 @@ public class ThumbnailJobServiceImpl implements ThumbnailJobService, Initializin
             if (!jpg.exists()) {
                 logger.debug("No JPEG thumbnail exists. Trying to generate {}", jpg.getAbsolutePath());
 
-                Map<String, String> args = newHashMap();
+                Map<String, String> args = new HashMap<>();
                 args.put("source", doxDocument.getAbsolutePath());
                 args.put("target", jpg.getAbsolutePath());
                 CommandLine cmd = new CommandLine("convert");
@@ -118,7 +118,7 @@ public class ThumbnailJobServiceImpl implements ThumbnailJobService, Initializin
             if (!webp.exists() && jpg.exists()) {
                 logger.debug("No WebP thumbnail exists. Trying to generate {}", webp.getAbsolutePath());
 
-                Map<String, String> args = newHashMap();
+                Map<String, String> args = new HashMap<>();
                 args.put("source", jpg.getAbsolutePath());
                 args.put("target", webp.getAbsolutePath());
                 CommandLine cmd = new CommandLine("cwebp");

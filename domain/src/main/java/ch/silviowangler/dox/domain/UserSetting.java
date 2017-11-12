@@ -15,12 +15,12 @@
  */
 package ch.silviowangler.dox.domain;
 
+import ch.silviowangler.dox.domain.security.DoxUser;
+
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-
-import ch.silviowangler.dox.domain.security.DoxUser;
 
 /**
  * @author Silvio Wangler

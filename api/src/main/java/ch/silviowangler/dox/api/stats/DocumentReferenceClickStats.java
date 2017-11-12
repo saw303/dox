@@ -15,8 +15,6 @@
  */
 package ch.silviowangler.dox.api.stats;
 
-import com.google.common.base.MoreObjects;
-
 import java.io.Serializable;
 
 /**
@@ -51,9 +49,10 @@ public class DocumentReferenceClickStats implements Serializable {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("documentReference", documentReference)
-                .add("count", count)
-                .toString();
+        final StringBuilder sb = new StringBuilder("DocumentReferenceClickStats{");
+        sb.append("documentReference='").append(documentReference).append('\'');
+        sb.append(", count=").append(count);
+        sb.append('}');
+        return sb.toString();
     }
 }

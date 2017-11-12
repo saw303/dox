@@ -15,16 +15,9 @@
  */
 package ch.silviowangler.dox.repository;
 
-import static ch.silviowangler.dox.domain.DomainUtils.containsWildcardCharacters;
-import static ch.silviowangler.dox.domain.DomainUtils.replaceWildcardCharacters;
-
+import ch.silviowangler.dox.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -32,12 +25,13 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-import ch.silviowangler.dox.domain.Attribute;
-import ch.silviowangler.dox.domain.AttributeDataType;
-import ch.silviowangler.dox.domain.Document;
-import ch.silviowangler.dox.domain.DocumentClass;
-import ch.silviowangler.dox.domain.Range;
+import static ch.silviowangler.dox.domain.DomainUtils.containsWildcardCharacters;
+import static ch.silviowangler.dox.domain.DomainUtils.replaceWildcardCharacters;
 
 /**
  * @author Silvio Wangler

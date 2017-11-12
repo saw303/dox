@@ -15,11 +15,10 @@
  */
 package ch.silviowangler.dox;
 
-import static java.util.Locale.GERMAN;
-import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
-
-import com.google.common.collect.Sets;
-
+import ch.silviowangler.dox.api.NoTranslationFoundException;
+import ch.silviowangler.dox.api.TranslationService;
+import ch.silviowangler.dox.domain.Translation;
+import ch.silviowangler.dox.repository.TranslationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +27,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Locale;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-import ch.silviowangler.dox.api.NoTranslationFoundException;
-import ch.silviowangler.dox.api.TranslationService;
-import ch.silviowangler.dox.domain.Translation;
-import ch.silviowangler.dox.repository.TranslationRepository;
+import static java.util.Locale.GERMAN;
+import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
 
 /**
  * @author Silvio Wangler
@@ -50,12 +49,10 @@ public class TranslationServiceImpl implements TranslationService {
     public Set<ch.silviowangler.dox.api.Translation> findAll() {
 
         Iterable<Translation> translations = translationRepository.findAll();
-        Set<ch.silviowangler.dox.api.Translation> translationsApi = Sets.newHashSet();
+        Set<ch.silviowangler.dox.api.Translation> translationsApi = StreamSupport.stream(translations.spliterator(), false)
+                .map(t -> new ch.silviowangler.dox.api.Translation(t.getKey(), t.getLocale(), t.getLanguageSpecificTranslation()))
+                .collect(Collectors.toSet());
 
-        for (Translation translation : translations) {
-            ch.silviowangler.dox.api.Translation translationApi = new ch.silviowangler.dox.api.Translation(translation.getKey(), translation.getLocale(), translation.getLanguageSpecificTranslation());
-            translationsApi.add(translationApi);
-        }
         return translationsApi;
     }
 

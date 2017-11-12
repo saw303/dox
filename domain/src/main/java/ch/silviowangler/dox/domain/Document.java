@@ -15,25 +15,13 @@
  */
 package ch.silviowangler.dox.domain;
 
-import com.google.common.base.MoreObjects;
-
-import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
+import ch.silviowangler.dox.domain.stats.Tag;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
+import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
-import ch.silviowangler.dox.domain.stats.Tag;
 
 /**
  * @author Silvio Wangler
@@ -56,8 +44,7 @@ public class Document extends AbstractPersistable<Long> {
     @OneToOne(optional = true, orphanRemoval = true)
     private IndexStore indexStore;
     @Column(nullable = false)
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    private DateTime creationDate = DateTime.now();
+    private LocalDateTime creationDate = LocalDateTime.now();
     @OneToMany(mappedBy = "document", orphanRemoval = true)
     private Set<IndexMapEntry> indexMapEntries;
     @Column(nullable = false, length = 25)
@@ -132,11 +119,11 @@ public class Document extends AbstractPersistable<Long> {
         this.indexStore = indexStore;
     }
 
-    public DateTime getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(DateTime creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -174,18 +161,20 @@ public class Document extends AbstractPersistable<Long> {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("hash", hash)
-                .add("documentClass", documentClass)
-                .add("pageCount", pageCount)
-                .add("mimeType", mimeType)
-                .add("originalFilename", originalFilename)
-                .add("indexStore", indexStore)
-                .add("creationDate", creationDate)
-                .add("indexMapEntries", indexMapEntries)
-                .add("userReference", userReference)
-                .add("fileSize", fileSize)
-                .add("client", client)
-                .toString();
+        final StringBuilder sb = new StringBuilder("Document{");
+        sb.append("hash='").append(hash).append('\'');
+        sb.append(", documentClass=").append(documentClass);
+        sb.append(", pageCount=").append(pageCount);
+        sb.append(", mimeType='").append(mimeType).append('\'');
+        sb.append(", originalFilename='").append(originalFilename).append('\'');
+        sb.append(", indexStore=").append(indexStore);
+        sb.append(", creationDate=").append(creationDate);
+        sb.append(", indexMapEntries=").append(indexMapEntries);
+        sb.append(", userReference='").append(userReference).append('\'');
+        sb.append(", fileSize=").append(fileSize);
+        sb.append(", client=").append(client);
+        sb.append(", tags=").append(tags);
+        sb.append('}');
+        return sb.toString();
     }
 }

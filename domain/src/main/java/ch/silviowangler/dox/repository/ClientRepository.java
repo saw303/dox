@@ -15,9 +15,8 @@
  */
 package ch.silviowangler.dox.repository;
 
-import org.springframework.data.repository.CrudRepository;
-
 import ch.silviowangler.dox.domain.Client;
+import org.springframework.data.repository.CrudRepository;
 
 /**
  * Created by Silvio Wangler on 24.12.14.

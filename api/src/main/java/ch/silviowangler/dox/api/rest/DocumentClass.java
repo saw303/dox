@@ -15,15 +15,13 @@
  */
 package ch.silviowangler.dox.api.rest;
 
-import static com.google.common.base.MoreObjects.toStringHelper;
+import ch.silviowangler.dox.api.AbstractTranslatable;
+import ch.silviowangler.dox.api.Attribute;
+import ch.silviowangler.dox.api.TranslateProperties;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import ch.silviowangler.dox.api.AbstractTranslatable;
-import ch.silviowangler.dox.api.Attribute;
-import ch.silviowangler.dox.api.TranslateProperties;
 
 /**
  * @author Silvio Wangler
@@ -116,10 +114,12 @@ public class DocumentClass extends AbstractTranslatable implements Serializable 
 
     @Override
     public String toString() {
-        return toStringHelper(this)
-                .add("shortName", shortName)
-                .add("translatedText", translatedText)
-                .add("client", client)
-                .toString();
+        final StringBuilder sb = new StringBuilder("DocumentClass{");
+        sb.append("shortName='").append(shortName).append('\'');
+        sb.append(", translatedText='").append(translatedText).append('\'');
+        sb.append(", attributes=").append(attributes);
+        sb.append(", client='").append(client).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

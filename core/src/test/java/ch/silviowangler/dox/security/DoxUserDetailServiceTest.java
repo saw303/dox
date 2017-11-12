@@ -15,14 +15,10 @@
  */
 package ch.silviowangler.dox.security;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
+import ch.silviowangler.dox.domain.security.DoxUser;
+import ch.silviowangler.dox.domain.security.GrantedAuthority;
+import ch.silviowangler.dox.domain.security.Role;
+import ch.silviowangler.dox.repository.security.DoxUserRepository;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -34,10 +30,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import ch.silviowangler.dox.domain.security.DoxUser;
-import ch.silviowangler.dox.domain.security.GrantedAuthority;
-import ch.silviowangler.dox.domain.security.Role;
-import ch.silviowangler.dox.repository.security.DoxUserRepository;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Silvio Wangler
@@ -50,7 +46,7 @@ public class DoxUserDetailServiceTest {
     private DoxUserRepository repository;
 
     @InjectMocks
-    private DoxUserDetailService userDetailService = new DoxUserDetailService();
+    private DoxUserDetailService userDetailService = new DoxUserDetailService(repository);
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();

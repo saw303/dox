@@ -15,16 +15,15 @@
  */
 package ch.silviowangler.dox.domain.stats;
 
-import static javax.persistence.EnumType.STRING;
-
-import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
+
+import static javax.persistence.EnumType.STRING;
 
 /**
  * @author Silvio Wangler
@@ -40,8 +39,7 @@ public class ClickStats extends AbstractPersistable<Long> {
     @Enumerated(STRING)
     private ReferenceType referenceType;
     @Column(nullable = false)
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    private DateTime timestamp = DateTime.now();
+    private LocalDateTime timestamp = LocalDateTime.now();
     @Column(nullable = false)
     private String username;
 
@@ -70,11 +68,11 @@ public class ClickStats extends AbstractPersistable<Long> {
         this.referenceType = referenceType;
     }
 
-    public DateTime getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(DateTime timestamp) {
+    public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
 

@@ -15,12 +15,11 @@
  */
 package ch.silviowangler.dox.jobs;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.when;
-
-import com.google.common.collect.Lists;
-
+import ch.silviowangler.dox.api.MissingDocument;
+import ch.silviowangler.dox.api.Source;
+import ch.silviowangler.dox.domain.Document;
+import ch.silviowangler.dox.repository.DocumentKeyHash;
+import ch.silviowangler.dox.repository.DocumentRepository;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -30,13 +29,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import ch.silviowangler.dox.api.MissingDocument;
-import ch.silviowangler.dox.api.Source;
-import ch.silviowangler.dox.domain.Document;
-import ch.silviowangler.dox.repository.DocumentKeyHash;
-import ch.silviowangler.dox.repository.DocumentRepository;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Silvio Wangler
@@ -62,14 +61,14 @@ public class VerificationServiceImplTest {
 
     @Test
     public void testVerifyDocumentStore() throws Exception {
-        when(documentRepository.findAllKeys()).thenReturn(Lists.<DocumentKeyHash>newArrayList());
+        when(documentRepository.findAllKeys()).thenReturn(new ArrayList<>());
         final List<MissingDocument> missingDocuments = service.verifyDocumentStore();
         assertThat(missingDocuments.size(), is(0));
     }
 
     @Test
     public void testVerifyDocumentStore2() throws Exception {
-        when(documentRepository.findAllKeys()).thenReturn(Lists.<DocumentKeyHash>newArrayList(new DocumentKeyHash(1L, CHARS_64)));
+        when(documentRepository.findAllKeys()).thenReturn(Arrays.asList(new DocumentKeyHash(1L, CHARS_64)));
         final List<MissingDocument> missingDocuments = service.verifyDocumentStore();
         assertThat(missingDocuments.size(), is(1));
 
@@ -82,7 +81,7 @@ public class VerificationServiceImplTest {
 
         this.folder.newFile(CHARS_64);
 
-        when(documentRepository.findAllKeys()).thenReturn(Lists.<DocumentKeyHash>newArrayList(new DocumentKeyHash(1L, CHARS_64)));
+        when(documentRepository.findAllKeys()).thenReturn(Arrays.asList(new DocumentKeyHash(1L, CHARS_64)));
         when(documentRepository.findByHash(CHARS_64)).thenReturn(new Document());
         final List<MissingDocument> missingDocuments = service.verifyDocumentStore();
         assertThat(missingDocuments.size(), is(0));
@@ -93,7 +92,7 @@ public class VerificationServiceImplTest {
 
         this.folder.newFile(CHARS_64);
 
-        when(documentRepository.findAllKeys()).thenReturn(Lists.<DocumentKeyHash>newArrayList());
+        when(documentRepository.findAllKeys()).thenReturn(new ArrayList<>());
         when(documentRepository.findByHash(CHARS_64)).thenReturn(null);
         final List<MissingDocument> missingDocuments = service.verifyDocumentStore();
         assertThat(missingDocuments.size(), is(1));

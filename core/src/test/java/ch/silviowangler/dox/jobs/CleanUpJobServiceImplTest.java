@@ -15,15 +15,8 @@
  */
 package ch.silviowangler.dox.jobs;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.when;
-
-import com.google.common.collect.Lists;
-
+import ch.silviowangler.dox.domain.Document;
+import ch.silviowangler.dox.repository.DocumentRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,9 +28,14 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
-import ch.silviowangler.dox.domain.Document;
-import ch.silviowangler.dox.repository.DocumentRepository;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Silvio Wangler
@@ -87,7 +85,7 @@ public class CleanUpJobServiceImplTest {
         document.setHash(this.hash);
         document.setFileSize(-1L);
 
-        when(documentRepository.findByFileSize(-1L)).thenReturn(Lists.newArrayList(document));
+        when(documentRepository.findByFileSize(-1L)).thenReturn(Arrays.asList(document));
 
         service.collectFileSizeOnDocumentsThatHaveNotBeenAssignedYet();
 
@@ -107,7 +105,7 @@ public class CleanUpJobServiceImplTest {
         document.setHash("i/do/not/exist");
         document.setFileSize(-1L);
 
-        when(documentRepository.findByFileSize(-1L)).thenReturn(Lists.newArrayList(document));
+        when(documentRepository.findByFileSize(-1L)).thenReturn(Arrays.asList(document));
 
         service.collectFileSizeOnDocumentsThatHaveNotBeenAssignedYet();
 

@@ -15,8 +15,6 @@
  */
 package ch.silviowangler.dox.api;
 
-import com.google.common.base.MoreObjects;
-
 import java.io.Serializable;
 
 /**
@@ -50,9 +48,10 @@ public class MissingDocument implements Serializable {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("hash", hash)
-                .add("source", source)
-                .toString();
+        final StringBuilder sb = new StringBuilder("MissingDocument{");
+        sb.append("hash='").append(hash).append('\'');
+        sb.append(", source=").append(source);
+        sb.append('}');
+        return sb.toString();
     }
 }

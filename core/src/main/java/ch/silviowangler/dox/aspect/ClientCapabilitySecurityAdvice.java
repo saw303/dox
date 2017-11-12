@@ -15,8 +15,10 @@
  */
 package ch.silviowangler.dox.aspect;
 
-import static com.google.common.collect.Lists.newArrayList;
-
+import ch.silviowangler.dox.api.security.UserService;
+import ch.silviowangler.dox.domain.Client;
+import ch.silviowangler.dox.domain.security.DoxUser;
+import ch.silviowangler.dox.repository.security.DoxUserRepository;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -30,15 +32,7 @@ import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import ch.silviowangler.dox.api.security.UserService;
-import ch.silviowangler.dox.domain.Client;
-import ch.silviowangler.dox.domain.security.DoxUser;
-import ch.silviowangler.dox.repository.security.DoxUserRepository;
+import java.util.*;
 
 /**
  * Created by Silvio Wangler on 24.12.14.
@@ -66,7 +60,7 @@ public class ClientCapabilitySecurityAdvice {
 
         boolean isAuth = userService.isLoggedIn();
         DoxUser doxUser = null;
-        List<String> clientAccessDeniedList = newArrayList();
+        List<String> clientAccessDeniedList = new ArrayList<>();
 
         if (isAuth) {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -132,7 +126,7 @@ public class ClientCapabilitySecurityAdvice {
 
     private List<String> analyze(Object arg, DoxUser doxUser) throws IntrospectionException, InvocationTargetException, IllegalAccessException {
 
-        List<String> list = newArrayList();
+        List<String> list = new ArrayList<>();
 
         boolean hasClientAssigned = false;
 

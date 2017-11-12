@@ -15,9 +15,8 @@
  */
 package ch.silviowangler.dox.repository;
 
-import org.springframework.data.repository.CrudRepository;
-
 import ch.silviowangler.dox.domain.stats.Tag;
+import org.springframework.data.repository.CrudRepository;
 
 /**
  * Created by Silvio Wangler on 12/10/15.

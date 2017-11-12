@@ -15,8 +15,11 @@
  */
 package ch.silviowangler.dox.settings;
 
-import com.google.common.collect.Maps;
-
+import ch.silviowangler.dox.api.settings.SettingsService;
+import ch.silviowangler.dox.domain.UserSetting;
+import ch.silviowangler.dox.domain.security.DoxUser;
+import ch.silviowangler.dox.repository.UserSettingRepository;
+import ch.silviowangler.dox.repository.security.DoxUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,14 +27,9 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import ch.silviowangler.dox.api.settings.SettingsService;
-import ch.silviowangler.dox.domain.UserSetting;
-import ch.silviowangler.dox.domain.security.DoxUser;
-import ch.silviowangler.dox.repository.UserSettingRepository;
-import ch.silviowangler.dox.repository.security.DoxUserRepository;
 
 /**
  * @author Silvio Wangler
@@ -75,7 +73,7 @@ public class SettingsServiceImpl implements SettingsService {
     public Map<String, String> findUserSettings() {
 
         final List<UserSetting> userSettings = userSettingRepository.findByUser(getDoxUser());
-        Map<String, String> map = Maps.newHashMapWithExpectedSize(userSettings.size());
+        Map<String, String> map = new HashMap<>(userSettings.size());
 
         for (UserSetting userSetting : userSettings) {
             map.put(userSetting.getKey(), userSetting.getValue());

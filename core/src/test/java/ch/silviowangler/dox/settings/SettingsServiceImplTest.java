@@ -15,15 +15,11 @@
  */
 package ch.silviowangler.dox.settings;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.when;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-
+import ch.silviowangler.dox.api.settings.SettingsService;
+import ch.silviowangler.dox.domain.UserSetting;
+import ch.silviowangler.dox.domain.security.DoxUser;
+import ch.silviowangler.dox.repository.UserSettingRepository;
+import ch.silviowangler.dox.repository.security.DoxUserRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,14 +32,16 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 
-import ch.silviowangler.dox.api.settings.SettingsService;
-import ch.silviowangler.dox.domain.UserSetting;
-import ch.silviowangler.dox.domain.security.DoxUser;
-import ch.silviowangler.dox.repository.UserSettingRepository;
-import ch.silviowangler.dox.repository.security.DoxUserRepository;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Silvio Wangler
@@ -65,7 +63,7 @@ public class SettingsServiceImplTest {
 
     @Before
     public void setUp() throws Exception {
-        Collection<SimpleGrantedAuthority> authorities = Sets.newHashSet();
+        Collection<SimpleGrantedAuthority> authorities = new HashSet<>();
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(new User(this.username, "password", authorities), "bla"));
 
         when(doxUserRepository.findByUsername(this.username)).thenReturn(user);
@@ -113,7 +111,7 @@ public class SettingsServiceImplTest {
     @Test
     public void testFindUserSettings2() throws Exception {
 
-        when(userSettingRepository.findByUser(this.user)).thenReturn(Lists.newArrayList(new UserSetting("key", "value", this.user)));
+        when(userSettingRepository.findByUser(this.user)).thenReturn(Arrays.asList(new UserSetting("key", "value", this.user)));
 
         final Map<String, String> userSettings = service.findUserSettings();
         assertThat(userSettings.size(), is(1));

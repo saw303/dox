@@ -15,16 +15,10 @@
  */
 package ch.silviowangler.dox;
 
-import static java.util.Locale.GERMAN;
-import static java.util.Locale.GERMANY;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-
+import ch.silviowangler.dox.api.NoTranslationFoundException;
+import ch.silviowangler.dox.api.TranslationService;
+import ch.silviowangler.dox.domain.Translation;
+import ch.silviowangler.dox.repository.TranslationRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
@@ -32,10 +26,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import ch.silviowangler.dox.api.NoTranslationFoundException;
-import ch.silviowangler.dox.api.TranslationService;
-import ch.silviowangler.dox.domain.Translation;
-import ch.silviowangler.dox.repository.TranslationRepository;
+import static java.util.Locale.GERMAN;
+import static java.util.Locale.GERMANY;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Silvio Wangler

@@ -1,3 +1,5 @@
+import java.time.LocalDate
+
 /*
  * Copyright 2012 - 2014 Silvio Wangler (silvio.wangler@gmail.com)
  *
@@ -14,240 +16,101 @@
  * limitations under the License.
  */
 buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath "net.ltgt.gradle:gradle-apt-plugin:0.9"
-        classpath "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.13.1"
-    }
+	ext {
+		springBootVersion = '2.0.0.M7'
+	}
+	repositories {
+		jcenter()
+		maven { url "https://repo.spring.io/snapshot" }
+		maven { url "https://repo.spring.io/milestone" }
+		maven { url "https://plugins.gradle.org/m2/" }
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("io.spring.gradle:dependency-management-plugin:1.0.3.RELEASE")
+
+		classpath "net.ltgt.gradle:gradle-apt-plugin:0.13"
+		classpath "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.13.1"
+	}
 }
 
-plugins {
-    id 'idea'
-    id 'com.github.ben-manes.versions' version '0.14.0'
-    id 'com.jfrog.bintray' version '1.7.3'
+
+repositories {
+	jcenter()
+	maven { url "https://repo.spring.io/snapshot" }
+	maven { url "https://repo.spring.io/milestone" }
 }
 
-configure(allprojects) {
-
-    apply plugin: 'project-report'
-    apply plugin: 'jacoco'
-
-    configurations {
-        all*.exclude group: 'commons-logging', module: 'commons-logging'
-        all*.exclude group: 'log4j', module: 'log4j'
-    }
-
-    repositories {
-        jcenter()
-    }
-
-    group = 'ch.silviowangler.dox'
-    version = '0.5.4'
-
-    configurations.all {
-        resolutionStrategy {
-
-            failOnVersionConflict()
-
-            eachDependency { DependencyResolveDetails details ->
-                //changing 'groovy-all' into 'groovy':
-                if (details.requested.name == 'groovy-all') {
-                    details.useTarget group: details.requested.group, name: 'groovy', version: groovyVersion
-                }
-            }
-
-            forcedModules = [
-                    "org.springframework:spring-aop:${springVersion}",
-                    "org.springframework:spring-asm:${springVersion}",
-                    "org.springframework:spring-beans:${springVersion}",
-                    "org.springframework:spring-context:${springVersion}",
-                    "org.springframework:spring-core:${springVersion}",
-                    "org.springframework:spring-expression:${springVersion}",
-                    "org.springframework:spring-jdbc:${springVersion}",
-                    "org.springframework:spring-orm:${springVersion}",
-                    "org.springframework:spring-test:${springVersion}",
-                    "org.springframework:spring-tx:${springVersion}",
-                    "org.springframework:spring-web:${springVersion}",
-                    "org.springframework:spring-webmvc:${springVersion}",
-                    "org.springframework:spring-oxm:${springVersion}",
-                    "org.hamcrest:hamcrest-core:${hamcrestVersion}",
-                    "org.hibernate:hibernate-entitymanager:${hibernateVersion}",
-                    "commons-beanutils:commons-beanutils:${commonsBeanUtilsVersion}",
-                    "commons-lang:commons-lang:2.4",
-                    "org.slf4j:slf4j-api:${slf4jVersion}",
-                    "org.slf4j:jcl-over-slf4j:${slf4jVersion}",
-                    "joda-time:joda-time:${jodaTimeVersion}",
-                    "org.aspectj:aspectjrt:${aspectjWeaverVersion}",
-                    "org.aspectj:aspectjweaver:${aspectjWeaverVersion}"
-            ]
-        }
-    }
-
-    idea.module {
-        inheritOutputDirs = true
-    }
+configurations.all {
+	resolutionStrategy {
+		failOnVersionConflict()
+	}
 }
 
-configure(subprojects) { subproject ->
-
-    apply plugin: 'java'
-    apply plugin: 'jacoco'
-    apply plugin: 'groovy'
-    apply plugin: 'maven'
-    apply plugin: 'maven-publish'
-    apply plugin: "net.ltgt.apt"
-    apply plugin: "com.github.hierynomus.license"
-
-    compileJava.options.compilerArgs = ['-Xlint:unchecked', '-Xlint:deprecation']
-    compileTestJava.options.compilerArgs = ['-Xlint:unchecked', '-Xlint:deprecation']
-
-    sourceCompatibility = 8
-    targetCompatibility = 8
-
-    dependencies {
-        compile "org.slf4j:slf4j-api:${slf4jVersion}"
-        compile "org.mapstruct:mapstruct-jdk8:${mapstructVersion}"
-        apt "org.mapstruct:mapstruct-processor:${mapstructVersion}"
-
-        testCompile "org.codehaus.groovy:groovy:${groovyVersion}"
-        testCompile "org.spockframework:spock-core:${spockVersion}"
-        testCompile "junit:junit:${junitVersion}",
-                "org.mockito:mockito-core:${mockitoVersion}",
-                "org.hamcrest:hamcrest-core:${hamcrestVersion}",
-                "org.hamcrest:hamcrest-library:${hamcrestVersion}"
-    }
-
-    jar {
-        manifest {
-            attributes(
-                    'Built-By': "Gradle ${gradle.gradleVersion}",
-                    'Implementation-Title': "DOX-${subproject.name}",
-                    'Implementation-Version': subproject.version,
-                    'Implementation-Vendor': 'Silvio Wangler',
-                    'Specification-Vendor': 'Silvio Wangler',
-                    'Specification-Title': "DOX-${subproject.name}",
-                    'Specification-Version': subproject.version
-            )
-        }
-
-        from(rootProject.projectDir) {
-            include "LICENSE.txt"
-            into "META-INF"
-            expand(year: new Date().format('yyyy'), name: licenseOwner, email: licenseOwnerEmail)
-        }
-
-        baseName = "dox-${baseName}"
-    }
-
-    task sourcesJar(type: Jar, dependsOn: [classes, licenseFormat]) {
-        classifier = 'sources'
-        from sourceSets.main.allJava
-
-        from(rootProject.projectDir) {
-            include "LICENSE.txt"
-            into "META-INF"
-            expand(year: new Date().format('yyyy'), name: licenseOwner, email: licenseOwnerEmail)
-        }
-    }
-
-    artifacts {
-        archives sourcesJar
-    }
-
-    processResources {
-        from(sourceSets.main.resources.srcDirs) {
-            include '**/*.properties'
-            filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
-                    'dox.app.version': "${version}-${new Date().format("yyyyMMddHHmmss")}".toString(),
-                    'gradleVersion'  : gradle.gradleVersion
-            ])
-        }
-        from(sourceSets.main.resources.srcDirs) { exclude '**/*.properties' }
-    }
-
-    publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                from components.java
-
-                artifact sourcesJar {
-                    classifier "sources"
-                }
-            }
-        }
-    }
-
-    install {
-        repositories.mavenInstaller {
-            customizePom(pom, subproject)
-        }
-    }
-
-    bintray {
-        user = bintrayUser // this usually comes form gradle.properties file in ~/.gradle
-        key = bintrayKey // this usually comes form gradle.properties file in ~/.gradle
-        publications = ['mavenJava'] // see publications closure
-        pkg { //package will be created if does not exist
-            repo = 'releases'
-            name = 'dox'
-            desc = 'Package created from dox'
-            licenses = ['Apache-2.0']
-            labels = ['spring', 'dms', 'rest', 'angularjs', 'documentmanagement']
-        }
-    }
-
-    license {
-        header = file("${rootDir}/LICENSE-SHORT.txt")
-        ext.year = Calendar.getInstance().get(Calendar.YEAR)
-        ext.name = licenseOwner
-        ext.email = licenseOwnerEmail
-
-        excludes(["**/*.properties", "**/*.sql", "**/*.txt", "**/*.pdf", "**/*.doc", "**/*.docx"])
-    }
+allprojects {
+	apply plugin: "io.spring.dependency-management"
+	apply plugin: "idea"
 }
 
-def customizePom(pom, gradleProject) {
-    pom.whenConfigured { generatedPom ->
+subprojects { subproject ->
 
-        // eliminate test-scoped dependencies (no need in maven central poms)
-        generatedPom.dependencies.removeAll { dep ->
-            dep.scope == 'test'
-        }
+	apply from: "${rootProject.projectDir}/gradle/java.gradle"
+	apply from: "${rootProject.projectDir}/gradle/mapstruct.gradle"
 
-        // add all items necessary for maven central publication
-        generatedPom.project {
-            name = gradleProject.description
-            description = gradleProject.description
-            url = 'https://github.com/saw303/dox'
-            organization {
-                name = 'Wangler Software Development'
-                url = 'http://saw303.github.io/dox/'
-            }
-            licenses {
-                license {
-                    name 'The Apache Software License, Version 2.0'
-                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    distribution 'repo'
-                }
-            }
-            scm {
-                url = 'https://github.com/saw303/dox'
-                connection = 'scm:git:git://github.com/saw303/dox'
-                developerConnection = 'scm:git:git://github.com/saw303/dox'
-            }
-            developers {
-                developer {
-                    id = 'saw303'
-                    name = 'Silvio Wangler'
-                    email = 'silvio.wangler@gmail.com'
-                }
-            }
-            issueManagement {
-                system = 'Youtrack'
-                url = 'http://saw303.myjetbrains.com/youtrack/issues/dox'
-            }
-        }
-    }
+	apply plugin: "com.github.hierynomus.license"
+	apply plugin: "net.ltgt.apt-idea"
+
+	group = 'ch.silviowangler.dox'
+	version = '0.5.4'
+
+	repositories {
+		jcenter()
+		maven { url "https://repo.spring.io/snapshot" }
+		maven { url "https://repo.spring.io/milestone" }
+	}
+
+	dependencyManagement {
+		imports {
+			mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+		}
+	}
+
+	dependencies {
+		testCompile "org.codehaus.groovy:groovy:${groovyVersion}"
+		testCompile "org.spockframework:spock-core:${spockVersion}"
+	}
+
+	compileJava.options.compilerArgs = ['-Xlint:unchecked', '-Xlint:deprecation']
+	compileTestJava.options.compilerArgs = ['-Xlint:unchecked', '-Xlint:deprecation']
+
+	license {
+		header = file("${rootDir}/LICENSE-SHORT.txt")
+		ext.year = LocalDate.now().getYear()
+		ext.name = licenseOwner
+		ext.email = licenseOwnerEmail
+
+		excludes(["**/*.properties", "**/*.sql", "**/*.txt", "**/*.pdf", "**/*.doc", "**/*.docx", "**/*.tif"])
+	}
+
+	jar {
+		manifest {
+			attributes(
+					'Built-By': "Gradle ${gradle.gradleVersion}",
+					'Implementation-Title': "DOX-${subproject.name}",
+					'Implementation-Version': subproject.version,
+					'Implementation-Vendor': 'Silvio Wangler',
+					'Specification-Vendor': 'Silvio Wangler',
+					'Specification-Title': "DOX-${subproject.name}",
+					'Specification-Version': subproject.version
+			)
+		}
+
+		from(rootProject.projectDir) {
+			include "LICENSE.txt"
+			into "META-INF"
+			expand(year: new Date().format('yyyy'), name: licenseOwner, email: licenseOwnerEmail)
+		}
+
+		baseName = "dox-${baseName}"
+	}
 }

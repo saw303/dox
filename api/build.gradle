@@ -1,4 +1,6 @@
+apply from: "${rootProject.projectDir}/gradle/java.gradle"
+
 dependencies {
-    compile "com.google.guava:guava:${guavaVersion}",
-            "joda-time:joda-time:${jodaTimeVersion}"
+    testCompile('junit:junit:4.12')
+    testCompile('org.hamcrest:hamcrest-core:1.3')
 }

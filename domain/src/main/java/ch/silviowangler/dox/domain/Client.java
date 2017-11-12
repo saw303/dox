@@ -15,8 +15,6 @@
  */
 package ch.silviowangler.dox.domain;
 
-import static com.google.common.base.MoreObjects.toStringHelper;
-
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Column;
@@ -46,8 +44,9 @@ public class Client extends AbstractPersistable<Long> {
 
     @Override
     public String toString() {
-        return toStringHelper(this)
-                .add("shortName", shortName)
-                .toString();
+        final StringBuilder sb = new StringBuilder("Client{");
+        sb.append("shortName='").append(shortName).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

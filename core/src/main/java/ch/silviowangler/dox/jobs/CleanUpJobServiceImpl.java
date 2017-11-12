@@ -15,6 +15,9 @@
  */
 package ch.silviowangler.dox.jobs;
 
+import ch.silviowangler.dox.domain.Document;
+import ch.silviowangler.dox.repository.DocumentRepository;
+import ch.silviowangler.dox.util.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +30,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
-
-import ch.silviowangler.dox.domain.Document;
-import ch.silviowangler.dox.repository.DocumentRepository;
-import ch.silviowangler.dox.util.FileUtils;
 
 /**
  * @author Silvio Wangler

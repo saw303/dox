@@ -15,14 +15,13 @@
  */
 package ch.silviowangler.dox.repository;
 
+import ch.silviowangler.dox.domain.Document;
+import ch.silviowangler.dox.domain.IndexMapEntry;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-
-import ch.silviowangler.dox.domain.Document;
-import ch.silviowangler.dox.domain.IndexMapEntry;
 
 /**
  * @author Silvio Wangler

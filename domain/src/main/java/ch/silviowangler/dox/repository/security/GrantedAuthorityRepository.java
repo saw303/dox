@@ -15,9 +15,8 @@
  */
 package ch.silviowangler.dox.repository.security;
 
-import org.springframework.data.repository.CrudRepository;
-
 import ch.silviowangler.dox.domain.security.GrantedAuthority;
+import org.springframework.data.repository.CrudRepository;
 
 /**
  * @author Silvio Wangler

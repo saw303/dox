@@ -15,8 +15,9 @@
  */
 package ch.silviowangler.dox.hibernate;
 
+import ch.silviowangler.dox.domain.AmountOfMoney;
 import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.usertype.UserType;
 
@@ -29,8 +30,6 @@ import java.sql.Types;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Currency;
-
-import ch.silviowangler.dox.domain.AmountOfMoney;
 
 /**
  * @author Silvio Wangler
@@ -73,7 +72,7 @@ public class AmountOfMoneyType implements UserType, Serializable {
     }
 
     @Override
-    public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
+    public Object nullSafeGet(ResultSet rs, String[] names, SharedSessionContractImplementor session, Object owner) throws HibernateException, SQLException {
         String value = (String) StandardBasicTypes.STRING.nullSafeGet(rs, names, session, owner);
 
         if (value == null) {
@@ -95,7 +94,7 @@ public class AmountOfMoneyType implements UserType, Serializable {
     }
 
     @Override
-    public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
+    public void nullSafeSet(PreparedStatement st, Object value, int index, SharedSessionContractImplementor session) throws HibernateException, SQLException {
         if (value == null) {
             StandardBasicTypes.STRING.nullSafeSet(st, null, index, session);
         } else {

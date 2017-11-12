@@ -15,12 +15,11 @@
  */
 package ch.silviowangler.dox.repository;
 
+import ch.silviowangler.dox.domain.UserSetting;
+import ch.silviowangler.dox.domain.security.DoxUser;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
-
-import ch.silviowangler.dox.domain.UserSetting;
-import ch.silviowangler.dox.domain.security.DoxUser;
 
 /**
  * @author Silvio Wangler

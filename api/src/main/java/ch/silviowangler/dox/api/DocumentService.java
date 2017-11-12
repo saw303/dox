@@ -15,12 +15,7 @@
  */
 package ch.silviowangler.dox.api;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.SortedSet;
+import java.util.*;
 
 /**
  * This is the general service when it comes to working with documents in DOX.

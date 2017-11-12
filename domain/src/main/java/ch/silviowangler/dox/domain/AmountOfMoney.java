@@ -15,18 +15,14 @@
  */
 package ch.silviowangler.dox.domain;
 
-import static org.springframework.util.Assert.hasText;
-import static org.springframework.util.Assert.isTrue;
-import static org.springframework.util.Assert.notNull;
-
-import com.google.common.base.MoreObjects;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Currency;
+
+import static org.springframework.util.Assert.*;
 
 /**
  * @author Silvio Wangler
@@ -84,10 +80,11 @@ public class AmountOfMoney implements Serializable {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("currency", currency)
-                .add("amount", amount)
-                .toString();
+        final StringBuilder sb = new StringBuilder("AmountOfMoney{");
+        sb.append("currency=").append(currency);
+        sb.append(", amount=").append(amount);
+        sb.append('}');
+        return sb.toString();
     }
 
     @Override
@@ -97,7 +94,7 @@ public class AmountOfMoney implements Serializable {
 
         AmountOfMoney that = (AmountOfMoney) o;
 
-        return amount != null && amount.equals(that.getAmount()) && currency!=null && currency.equals(that.getCurrency());
+        return amount != null && amount.equals(that.getAmount()) && currency != null && currency.equals(that.getCurrency());
     }
 
     @Override

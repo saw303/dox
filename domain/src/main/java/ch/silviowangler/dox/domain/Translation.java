@@ -15,16 +15,14 @@
  */
 package ch.silviowangler.dox.domain;
 
-import com.google.common.base.MoreObjects;
 
 import org.springframework.data.jpa.domain.AbstractPersistable;
-
-import java.util.Locale;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import java.util.Locale;
 
 /**
  * @author Silvio Wangler
@@ -78,10 +76,11 @@ public class Translation extends AbstractPersistable<Long> {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("key", key)
-                .add("locale", locale)
-                .add("languageSpecificTranslation", languageSpecificTranslation)
-                .toString();
+        final StringBuilder sb = new StringBuilder("Translation{");
+        sb.append("key='").append(key).append('\'');
+        sb.append(", locale=").append(locale);
+        sb.append(", languageSpecificTranslation='").append(languageSpecificTranslation).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

@@ -17,10 +17,9 @@ package ch.silviowangler.dox.domain;
 
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import java.io.Serializable;
 
 /**
  * @author Silvio Wangler

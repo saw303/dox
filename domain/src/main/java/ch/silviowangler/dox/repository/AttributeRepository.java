@@ -15,13 +15,12 @@
  */
 package ch.silviowangler.dox.repository;
 
+import ch.silviowangler.dox.domain.Attribute;
+import ch.silviowangler.dox.domain.DocumentClass;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
-
-import ch.silviowangler.dox.domain.Attribute;
-import ch.silviowangler.dox.domain.DocumentClass;
 
 /**
  * @author Silvio Wangler

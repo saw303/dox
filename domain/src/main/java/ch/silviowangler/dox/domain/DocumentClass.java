@@ -15,17 +15,10 @@
  */
 package ch.silviowangler.dox.domain;
 
-import static com.google.common.base.MoreObjects.toStringHelper;
-
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
+import javax.persistence.*;
 import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
 /**
  * @author Silvio Wangler
@@ -68,10 +61,11 @@ public class DocumentClass extends AbstractPersistable<Long> {
 
     @Override
     public String toString() {
-        return toStringHelper(this)
-                .add("shortName", shortName)
-                .add("attributes", attributes)
-                .add("client", client)
-                .toString();
+        final StringBuilder sb = new StringBuilder("DocumentClass{");
+        sb.append("shortName='").append(shortName).append('\'');
+        sb.append(", attributes=").append(attributes);
+        sb.append(", client=").append(client);
+        sb.append('}');
+        return sb.toString();
     }
 }

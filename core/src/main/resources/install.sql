@@ -1,306 +1,306 @@
-INSERT INTO DOX_CLIENT (shortName) VALUES ('wangler');
+INSERT INTO DOX_CLIENT (short_name) VALUES ('wangler');
 
-INSERT INTO DOX_DOC_CLASS (shortName, client_id) VALUES ('INVOICE', (SELECT
+INSERT INTO DOX_DOC_CLASS (short_name, client_id) VALUES ('INVOICE', (SELECT
                                                                        id
                                                                      FROM DOX_CLIENT
-                                                                     WHERE shortName = 'wangler'));
-INSERT INTO DOX_DOC_CLASS (shortName, client_id) VALUES ('TAXES', (SELECT
+                                                                     WHERE short_name = 'wangler'));
+INSERT INTO DOX_DOC_CLASS (short_name, client_id) VALUES ('TAXES', (SELECT
                                                                      id
                                                                    FROM DOX_CLIENT
-                                                                   WHERE shortName = 'wangler'));
-INSERT INTO DOX_DOC_CLASS (shortName, client_id) VALUES ('SALARY_REPORTS', (SELECT
+                                                                   WHERE short_name = 'wangler'));
+INSERT INTO DOX_DOC_CLASS (short_name, client_id) VALUES ('SALARY_REPORTS', (SELECT
                                                                               id
                                                                             FROM DOX_CLIENT
-                                                                            WHERE shortName = 'wangler'));
-INSERT INTO DOX_DOC_CLASS (shortName, client_id) VALUES ('CONTRACTS', (SELECT
+                                                                            WHERE short_name = 'wangler'));
+INSERT INTO DOX_DOC_CLASS (short_name, client_id) VALUES ('CONTRACTS', (SELECT
                                                                          id
                                                                        FROM DOX_CLIENT
-                                                                       WHERE shortName = 'wangler'));
-INSERT INTO DOX_DOC_CLASS (shortName, client_id) VALUES ('BANK_DOCUMENTS', (SELECT
+                                                                       WHERE short_name = 'wangler'));
+INSERT INTO DOX_DOC_CLASS (short_name, client_id) VALUES ('BANK_DOCUMENTS', (SELECT
                                                                               id
                                                                             FROM DOX_CLIENT
-                                                                            WHERE shortName = 'wangler'));
-INSERT INTO DOX_DOC_CLASS (shortName, client_id) VALUES ('VARIA', (SELECT
+                                                                            WHERE short_name = 'wangler'));
+INSERT INTO DOX_DOC_CLASS (short_name, client_id) VALUES ('VARIA', (SELECT
                                                                      id
                                                                    FROM DOX_CLIENT
-                                                                   WHERE shortName = 'wangler'));
-INSERT INTO DOX_DOC_CLASS (shortName, client_id) VALUES ('DIPLOMA', (SELECT
+                                                                   WHERE short_name = 'wangler'));
+INSERT INTO DOX_DOC_CLASS (short_name, client_id) VALUES ('DIPLOMA', (SELECT
                                                                        id
                                                                      FROM DOX_CLIENT
-                                                                     WHERE shortName = 'wangler'));
+                                                                     WHERE short_name = 'wangler'));
 
-INSERT INTO DOX_DOMAIN (shortName, strict) VALUES ('company', 0);
-INSERT INTO DOX_DOMAIN (shortName, strict) VALUES ('banks', 0);
+INSERT INTO DOX_DOMAIN (short_name, strict) VALUES ('company', 0);
+INSERT INTO DOX_DOMAIN (short_name, strict) VALUES ('banks', 0);
 
-INSERT INTO DOX_DOMAIN_VALUES (Domain_id, VAL) VALUES ((SELECT
+INSERT INTO DOX_DOMAIN_VALUES (domain_id, VAL) VALUES ((SELECT
                                                           id
                                                         FROM DOX_DOMAIN
-                                                        WHERE shortName = 'company'), 'Sunrise');
-INSERT INTO DOX_DOMAIN_VALUES (Domain_id, VAL) VALUES ((SELECT
+                                                        WHERE short_name = 'company'), 'Sunrise');
+INSERT INTO DOX_DOMAIN_VALUES (domain_id, VAL) VALUES ((SELECT
                                                           id
                                                         FROM DOX_DOMAIN
-                                                        WHERE shortName = 'company'), 'Swisscom');
-INSERT INTO DOX_DOMAIN_VALUES (Domain_id, VAL) VALUES ((SELECT
+                                                        WHERE short_name = 'company'), 'Swisscom');
+INSERT INTO DOX_DOMAIN_VALUES (domain_id, VAL) VALUES ((SELECT
                                                           id
                                                         FROM DOX_DOMAIN
-                                                        WHERE shortName = 'company'), 'Jemako');
-INSERT INTO DOX_DOMAIN_VALUES (Domain_id, VAL) VALUES ((SELECT
+                                                        WHERE short_name = 'company'), 'Jemako');
+INSERT INTO DOX_DOMAIN_VALUES (domain_id, VAL) VALUES ((SELECT
                                                           id
                                                         FROM DOX_DOMAIN
-                                                        WHERE shortName = 'company'), 'Coop Supercard');
-INSERT INTO DOX_DOMAIN_VALUES (Domain_id, VAL) VALUES ((SELECT
+                                                        WHERE short_name = 'company'), 'Coop Supercard');
+INSERT INTO DOX_DOMAIN_VALUES (domain_id, VAL) VALUES ((SELECT
                                                           id
                                                         FROM DOX_DOMAIN
-                                                        WHERE shortName = 'banks'), 'Credit Suisse');
-INSERT INTO DOX_DOMAIN_VALUES (Domain_id, VAL) VALUES ((SELECT
+                                                        WHERE short_name = 'banks'), 'Credit Suisse');
+INSERT INTO DOX_DOMAIN_VALUES (domain_id, VAL) VALUES ((SELECT
                                                           id
                                                         FROM DOX_DOMAIN
-                                                        WHERE shortName = 'banks'), 'Raiffeisen');
-INSERT INTO DOX_DOMAIN_VALUES (Domain_id, VAL) VALUES ((SELECT
+                                                        WHERE short_name = 'banks'), 'Raiffeisen');
+INSERT INTO DOX_DOMAIN_VALUES (domain_id, VAL) VALUES ((SELECT
                                                           id
                                                         FROM DOX_DOMAIN
-                                                        WHERE shortName = 'banks'), 'PostFinance');
+                                                        WHERE short_name = 'banks'), 'PostFinance');
 
-INSERT INTO DOX_ATTR (dataType, optional, shortName, domain_id, mappingColumn, updateable, client_id)
+INSERT INTO DOX_ATTR (data_type, optional, short_name, domain_id, mapping_column, updateable, client_id)
 VALUES ('STRING', 0, 'company', (SELECT
                                    id
                                  FROM DOX_DOMAIN
-                                 WHERE shortName = 'company'), 'S_01', 1, (SELECT
+                                 WHERE short_name = 'company'), 'S_01', 1, (SELECT
                                                                              id
                                                                            FROM DOX_CLIENT
-                                                                           WHERE shortName = 'wangler'));
-INSERT INTO DOX_ATTR (dataType, optional, shortName, domain_id, mappingColumn, updateable, client_id)
+                                                                           WHERE short_name = 'wangler'));
+INSERT INTO DOX_ATTR (data_type, optional, short_name, domain_id, mapping_column, updateable, client_id)
 VALUES ('DATE', 0, 'invoiceDate', NULL, 'LD_01', 1, (SELECT
                                                        id
                                                      FROM DOX_CLIENT
-                                                     WHERE shortName = 'wangler'));
-INSERT INTO DOX_ATTR (dataType, optional, shortName, domain_id, mappingColumn, updateable, client_id)
+                                                     WHERE short_name = 'wangler'));
+INSERT INTO DOX_ATTR (data_type, optional, short_name, domain_id, mapping_column, updateable, client_id)
 VALUES ('DATE', 0, 'taxDate', NULL, 'LD_02', 1, (SELECT
                                                    id
                                                  FROM DOX_CLIENT
-                                                 WHERE shortName = 'wangler'));
-INSERT INTO DOX_ATTR (dataType, optional, shortName, domain_id, mappingColumn, updateable, client_id)
+                                                 WHERE short_name = 'wangler'));
+INSERT INTO DOX_ATTR (data_type, optional, short_name, domain_id, mapping_column, updateable, client_id)
 VALUES ('DOUBLE', 0, 'invoiceAmount', NULL, 'F_01', 1, (SELECT
                                                           id
                                                         FROM DOX_CLIENT
-                                                        WHERE shortName = 'wangler'));
-INSERT INTO DOX_ATTR (dataType, optional, shortName, domain_id, mappingColumn, updateable, client_id)
+                                                        WHERE short_name = 'wangler'));
+INSERT INTO DOX_ATTR (data_type, optional, short_name, domain_id, mapping_column, updateable, client_id)
 VALUES ('DOUBLE', 0, 'salaryAmount', NULL, 'F_02', 1, (SELECT
                                                          id
                                                        FROM DOX_CLIENT
-                                                       WHERE shortName = 'wangler'));
-INSERT INTO DOX_ATTR (dataType, optional, shortName, domain_id, mappingColumn, updateable, client_id)
+                                                       WHERE short_name = 'wangler'));
+INSERT INTO DOX_ATTR (data_type, optional, short_name, domain_id, mapping_column, updateable, client_id)
 VALUES ('DATE', 0, 'salaryDate', NULL, 'LD_03', 1, (SELECT
                                                       id
                                                     FROM DOX_CLIENT
-                                                    WHERE shortName = 'wangler'));
-INSERT INTO DOX_ATTR (dataType, optional, shortName, domain_id, mappingColumn, updateable, client_id)
+                                                    WHERE short_name = 'wangler'));
+INSERT INTO DOX_ATTR (data_type, optional, short_name, domain_id, mapping_column, updateable, client_id)
 VALUES ('STRING', 0, 'title', NULL, 'S_02', 1, (SELECT
                                                   id
                                                 FROM DOX_CLIENT
-                                                WHERE shortName = 'wangler'));
-INSERT INTO DOX_ATTR (dataType, optional, shortName, domain_id, mappingColumn, updateable, client_id)
+                                                WHERE short_name = 'wangler'));
+INSERT INTO DOX_ATTR (data_type, optional, short_name, domain_id, mapping_column, updateable, client_id)
 VALUES ('STRING', 0, 'institute', (SELECT
                                      id
                                    FROM DOX_DOMAIN
-                                   WHERE shortName = 'banks'), 'S_03', 1, (SELECT
+                                   WHERE short_name = 'banks'), 'S_03', 1, (SELECT
                                                                              id
                                                                            FROM DOX_CLIENT
-                                                                           WHERE shortName = 'wangler'));
-INSERT INTO DOX_ATTR (dataType, optional, shortName, domain_id, mappingColumn, updateable, client_id)
+                                                                           WHERE short_name = 'wangler'));
+INSERT INTO DOX_ATTR (data_type, optional, short_name, domain_id, mapping_column, updateable, client_id)
 VALUES ('STRING', 0, 'accountNumber', NULL, 'S_04', 1, (SELECT
                                                           id
                                                         FROM DOX_CLIENT
-                                                        WHERE shortName = 'wangler'));
+                                                        WHERE short_name = 'wangler'));
 
-INSERT INTO DOX_DOC_CLASS_DOX_ATTR (attributes_id, documentClasses_id) VALUES ((SELECT
+INSERT INTO dox_doc_class_attributes (attributes_id, document_classes_id) VALUES ((SELECT
                                                                                   id
                                                                                 FROM DOX_ATTR
-                                                                                WHERE shortName = 'company'), (SELECT
+                                                                                WHERE short_name = 'company'), (SELECT
                                                                                                                  id
                                                                                                                FROM
                                                                                                                  DOX_DOC_CLASS
                                                                                                                WHERE
-                                                                                                                 shortName
+                                                                                                                 short_name
                                                                                                                  =
                                                                                                                  'INVOICE'));
-INSERT INTO DOX_DOC_CLASS_DOX_ATTR (attributes_id, documentClasses_id) VALUES ((SELECT
+INSERT INTO dox_doc_class_attributes (attributes_id, document_classes_id) VALUES ((SELECT
                                                                                   id
                                                                                 FROM DOX_ATTR
-                                                                                WHERE shortName = 'company'), (SELECT
+                                                                                WHERE short_name = 'company'), (SELECT
                                                                                                                  id
                                                                                                                FROM
                                                                                                                  DOX_DOC_CLASS
                                                                                                                WHERE
-                                                                                                                 shortName
+                                                                                                                 short_name
                                                                                                                  =
                                                                                                                  'CONTRACTS'));
-INSERT INTO DOX_DOC_CLASS_DOX_ATTR (attributes_id, documentClasses_id) VALUES ((SELECT
+INSERT INTO dox_doc_class_attributes (attributes_id, document_classes_id) VALUES ((SELECT
                                                                                   id
                                                                                 FROM DOX_ATTR
-                                                                                WHERE shortName = 'invoiceDate'),
+                                                                                WHERE short_name = 'invoiceDate'),
                                                                                (SELECT
                                                                                   id
                                                                                 FROM DOX_DOC_CLASS
-                                                                                WHERE shortName = 'INVOICE'));
-INSERT INTO DOX_DOC_CLASS_DOX_ATTR (attributes_id, documentClasses_id) VALUES ((SELECT
+                                                                                WHERE short_name = 'INVOICE'));
+INSERT INTO dox_doc_class_attributes (attributes_id, document_classes_id) VALUES ((SELECT
                                                                                   id
                                                                                 FROM DOX_ATTR
-                                                                                WHERE shortName = 'invoiceAmount'),
+                                                                                WHERE short_name = 'invoiceAmount'),
                                                                                (SELECT
                                                                                   id
                                                                                 FROM DOX_DOC_CLASS
-                                                                                WHERE shortName = 'INVOICE'));
-INSERT INTO DOX_DOC_CLASS_DOX_ATTR (attributes_id, documentClasses_id) VALUES ((SELECT
+                                                                                WHERE short_name = 'INVOICE'));
+INSERT INTO dox_doc_class_attributes (attributes_id, document_classes_id) VALUES ((SELECT
                                                                                   id
                                                                                 FROM DOX_ATTR
-                                                                                WHERE shortName = 'taxDate'), (SELECT
+                                                                                WHERE short_name = 'taxDate'), (SELECT
                                                                                                                  id
                                                                                                                FROM
                                                                                                                  DOX_DOC_CLASS
                                                                                                                WHERE
-                                                                                                                 shortName
+                                                                                                                 short_name
                                                                                                                  =
                                                                                                                  'TAXES'));
-INSERT INTO DOX_DOC_CLASS_DOX_ATTR (attributes_id, documentClasses_id) VALUES ((SELECT
+INSERT INTO dox_doc_class_attributes (attributes_id, document_classes_id) VALUES ((SELECT
                                                                                   id
                                                                                 FROM DOX_ATTR
-                                                                                WHERE shortName = 'salaryAmount'),
+                                                                                WHERE short_name = 'salaryAmount'),
                                                                                (SELECT
                                                                                   id
                                                                                 FROM DOX_DOC_CLASS
-                                                                                WHERE shortName = 'SALARY_REPORTS'));
-INSERT INTO DOX_DOC_CLASS_DOX_ATTR (attributes_id, documentClasses_id) VALUES ((SELECT
+                                                                                WHERE short_name = 'SALARY_REPORTS'));
+INSERT INTO dox_doc_class_attributes (attributes_id, document_classes_id) VALUES ((SELECT
                                                                                   id
                                                                                 FROM DOX_ATTR
-                                                                                WHERE shortName = 'salaryDate'), (SELECT
+                                                                                WHERE short_name = 'salaryDate'), (SELECT
                                                                                                                     id
                                                                                                                   FROM
                                                                                                                     DOX_DOC_CLASS
                                                                                                                   WHERE
-                                                                                                                    shortName
+                                                                                                                    short_name
                                                                                                                     =
                                                                                                                     'SALARY_REPORTS'));
-INSERT INTO DOX_DOC_CLASS_DOX_ATTR (attributes_id, documentClasses_id) VALUES ((SELECT
+INSERT INTO dox_doc_class_attributes (attributes_id, document_classes_id) VALUES ((SELECT
                                                                                   id
                                                                                 FROM DOX_ATTR
-                                                                                WHERE shortName = 'title'), (SELECT
+                                                                                WHERE short_name = 'title'), (SELECT
                                                                                                                id
                                                                                                              FROM
                                                                                                                DOX_DOC_CLASS
                                                                                                              WHERE
-                                                                                                               shortName
+                                                                                                               short_name
                                                                                                                =
                                                                                                                'CONTRACTS'));
-INSERT INTO DOX_DOC_CLASS_DOX_ATTR (attributes_id, documentClasses_id) VALUES ((SELECT
+INSERT INTO dox_doc_class_attributes (attributes_id, document_classes_id) VALUES ((SELECT
                                                                                   id
                                                                                 FROM DOX_ATTR
-                                                                                WHERE shortName = 'institute'), (SELECT
+                                                                                WHERE short_name = 'institute'), (SELECT
                                                                                                                    id
                                                                                                                  FROM
                                                                                                                    DOX_DOC_CLASS
                                                                                                                  WHERE
-                                                                                                                   shortName
+                                                                                                                   short_name
                                                                                                                    =
                                                                                                                    'BANK_DOCUMENTS'));
-INSERT INTO DOX_DOC_CLASS_DOX_ATTR (attributes_id, documentClasses_id) VALUES ((SELECT
+INSERT INTO dox_doc_class_attributes (attributes_id, document_classes_id) VALUES ((SELECT
                                                                                   id
                                                                                 FROM DOX_ATTR
-                                                                                WHERE shortName = 'accountNumber'),
+                                                                                WHERE short_name = 'accountNumber'),
                                                                                (SELECT
                                                                                   id
                                                                                 FROM DOX_DOC_CLASS
-                                                                                WHERE shortName = 'BANK_DOCUMENTS'));
-INSERT INTO DOX_DOC_CLASS_DOX_ATTR (attributes_id, documentClasses_id) VALUES ((SELECT
+                                                                                WHERE short_name = 'BANK_DOCUMENTS'));
+INSERT INTO dox_doc_class_attributes (attributes_id, document_classes_id) VALUES ((SELECT
                                                                                   id
                                                                                 FROM DOX_ATTR
-                                                                                WHERE shortName = 'title'), (SELECT
+                                                                                WHERE short_name = 'title'), (SELECT
                                                                                                                id
                                                                                                              FROM
                                                                                                                DOX_DOC_CLASS
                                                                                                              WHERE
-                                                                                                               shortName
+                                                                                                               short_name
                                                                                                                =
                                                                                                                'BANK_DOCUMENTS'));
-INSERT INTO DOX_DOC_CLASS_DOX_ATTR (attributes_id, documentClasses_id) VALUES ((SELECT
+INSERT INTO dox_doc_class_attributes (attributes_id, document_classes_id) VALUES ((SELECT
                                                                                   id
                                                                                 FROM DOX_ATTR
-                                                                                WHERE shortName = 'title'), (SELECT
+                                                                                WHERE short_name = 'title'), (SELECT
                                                                                                                id
                                                                                                              FROM
                                                                                                                DOX_DOC_CLASS
                                                                                                              WHERE
-                                                                                                               shortName
+                                                                                                               short_name
                                                                                                                =
                                                                                                                'VARIA'));
-INSERT INTO DOX_DOC_CLASS_DOX_ATTR (attributes_id, documentClasses_id) VALUES ((SELECT
+INSERT INTO dox_doc_class_attributes (attributes_id, document_classes_id) VALUES ((SELECT
                                                                                   id
                                                                                 FROM DOX_ATTR
-                                                                                WHERE shortName = 'title'), (SELECT
+                                                                                WHERE short_name = 'title'), (SELECT
                                                                                                                id
                                                                                                              FROM
                                                                                                                DOX_DOC_CLASS
                                                                                                              WHERE
-                                                                                                               shortName
+                                                                                                               short_name
                                                                                                                =
                                                                                                                'DIPLOMA'));
 
 INSERT INTO DOX_USER (email, password, username)
 VALUES ('root@local.localdomain', '$2a$08$zrzPEOC3CCwTEdCV9tCfk.EB1VQHFCtB2VxCXRfK5sAuNu/zt1CPO', 'root');
-INSERT INTO DOX_USER_DOX_CLIENT (DOX_USER_id, clients_id) VALUES ((SELECT
+INSERT INTO dox_user_clients (DOX_USER_id, clients_id) VALUES ((SELECT
                                                                      u.id
                                                                    FROM DOX_USER u
                                                                    WHERE u.username = 'root'), (SELECT
                                                                                                   c.id
                                                                                                 FROM DOX_CLIENT c
-                                                                                                WHERE c.shortName =
+                                                                                                WHERE c.short_name =
                                                                                                       'wangler'));
 INSERT INTO DOX_USER (email, password, username)
 VALUES ('a.faehndrich@hotmail.com', '$2a$08$XZJZKipnDVJ9apDYpqSlJOZMxMcsg3eJlsYnYI40V0hXVYrf9F6Ru', 'angela');
-INSERT INTO DOX_USER_DOX_CLIENT (DOX_USER_id, clients_id) VALUES ((SELECT
+INSERT INTO dox_user_clients (DOX_USER_id, clients_id) VALUES ((SELECT
                                                                      u.id
                                                                    FROM DOX_USER u
                                                                    WHERE u.username = 'angela'), (SELECT
                                                                                                     c.id
                                                                                                   FROM DOX_CLIENT c
-                                                                                                  WHERE c.shortName =
+                                                                                                  WHERE c.short_name =
                                                                                                         'wangler'));
 INSERT INTO DOX_USER (email, password, username)
 VALUES ('silvio.wangler@gmail.com', '$2a$08$OGYo6G66Tu2qGfT820xhG.9be026.ayZp0nomgPeWcCkx4WyiA7nG', 'saw303');
-INSERT INTO DOX_USER_DOX_CLIENT (DOX_USER_id, clients_id) VALUES ((SELECT
+INSERT INTO dox_user_clients (DOX_USER_id, clients_id) VALUES ((SELECT
                                                                      u.id
                                                                    FROM DOX_USER u
                                                                    WHERE u.username = 'saw303'), (SELECT
                                                                                                     c.id
                                                                                                   FROM DOX_CLIENT c
-                                                                                                  WHERE c.shortName =
+                                                                                                  WHERE c.short_name =
                                                                                                         'wangler'));
 
 INSERT INTO DOX_ROLE (NAME) VALUES ('USER');
 INSERT INTO DOX_ROLE (NAME) VALUES ('ADMIN');
 
-INSERT INTO DOX_USER_DOX_ROLE (DOX_USER_id, roles_id) VALUES ((SELECT
+INSERT INTO DOX_USER_ROLES (DOX_USER_id, roles_id) VALUES ((SELECT
                                                                  id
                                                                FROM DOX_USER
                                                                WHERE username = 'root'), (SELECT
                                                                                             id
                                                                                           FROM DOX_ROLE
                                                                                           WHERE NAME = 'USER'));
-INSERT INTO DOX_USER_DOX_ROLE (DOX_USER_id, roles_id) VALUES ((SELECT
+INSERT INTO DOX_USER_ROLES (DOX_USER_id, roles_id) VALUES ((SELECT
                                                                  id
                                                                FROM DOX_USER
                                                                WHERE username = 'root'), (SELECT
                                                                                             id
                                                                                           FROM DOX_ROLE
                                                                                           WHERE NAME = 'ADMIN'));
-INSERT INTO DOX_USER_DOX_ROLE (DOX_USER_id, roles_id) VALUES ((SELECT
+INSERT INTO DOX_USER_ROLES (DOX_USER_id, roles_id) VALUES ((SELECT
                                                                  id
                                                                FROM DOX_USER
                                                                WHERE username = 'angela'), (SELECT
                                                                                               id
                                                                                             FROM DOX_ROLE
                                                                                             WHERE NAME = 'USER'));
-INSERT INTO DOX_USER_DOX_ROLE (DOX_USER_id, roles_id) VALUES ((SELECT
+INSERT INTO DOX_USER_ROLES (DOX_USER_id, roles_id) VALUES ((SELECT
                                                                  id
                                                                FROM DOX_USER
                                                                WHERE username = 'saw303'), (SELECT

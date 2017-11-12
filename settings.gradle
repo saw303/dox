@@ -16,8 +16,5 @@
 
 include 'api'
 include 'domain'
-include 'inexport'
 include 'core'
 include 'web'
-include 'docs'
-include 'boot'

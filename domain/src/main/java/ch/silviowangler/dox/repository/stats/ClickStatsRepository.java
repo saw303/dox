@@ -15,14 +15,13 @@
  */
 package ch.silviowangler.dox.repository.stats;
 
+import ch.silviowangler.dox.domain.stats.ClickStats;
+import ch.silviowangler.dox.domain.stats.ReferenceType;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-
-import ch.silviowangler.dox.domain.stats.ClickStats;
-import ch.silviowangler.dox.domain.stats.ReferenceType;
 
 /**
  * @author Silvio Wangler

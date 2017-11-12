@@ -15,12 +15,10 @@
  */
 package ch.silviowangler.dox.domain.partner;
 
-import org.hibernate.annotations.Type;
-import org.joda.time.LocalDate;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.time.LocalDate;
 
 /**
  * Created on 21.02.15.
@@ -33,7 +31,6 @@ import javax.persistence.Table;
 public class IndividualPartner extends Partner {
 
     @Column
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate dateOfBirth;
 
     public LocalDate getDateOfBirth() {

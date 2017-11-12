@@ -15,11 +15,10 @@
  */
 package ch.silviowangler.dox;
 
+import ch.silviowangler.dox.api.VersionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import ch.silviowangler.dox.api.VersionService;
 
 /**
  * @author Silvio Wangler

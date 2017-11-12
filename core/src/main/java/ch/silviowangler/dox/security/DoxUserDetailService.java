@@ -15,8 +15,9 @@
  */
 package ch.silviowangler.dox.security;
 
-import com.google.common.collect.Sets;
-
+import ch.silviowangler.dox.domain.security.DoxUser;
+import ch.silviowangler.dox.domain.security.Role;
+import ch.silviowangler.dox.repository.security.DoxUserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-
-import ch.silviowangler.dox.domain.security.DoxUser;
-import ch.silviowangler.dox.domain.security.Role;
-import ch.silviowangler.dox.repository.security.DoxUserRepository;
+import java.util.HashSet;
 
 /**
  * @author Silvio Wangler
@@ -46,8 +44,12 @@ public class DoxUserDetailService implements UserDetailsService {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Autowired
     private DoxUserRepository userRepository;
+
+    @Autowired
+    public DoxUserDetailService(DoxUserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -61,7 +63,7 @@ public class DoxUserDetailService implements UserDetailsService {
             logger.info("No such user with name '{}'", username);
             throw new UsernameNotFoundException("No such user " + username);
         }
-        Collection<SimpleGrantedAuthority> authorities = Sets.newHashSet();
+        Collection<SimpleGrantedAuthority> authorities = new HashSet<>();
 
         for (Role role : user.getRoles()) {
             final String roleName = "ROLE_" + role.getName();

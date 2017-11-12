@@ -15,12 +15,11 @@
  */
 package ch.silviowangler.dox.repository;
 
+import ch.silviowangler.dox.domain.Translation;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 import java.util.Locale;
-
-import ch.silviowangler.dox.domain.Translation;
 
 /**
  * @author Silvio Wangler

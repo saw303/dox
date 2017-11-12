@@ -15,12 +15,12 @@
  */
 package ch.silviowangler.dox.repository;
 
-import java.util.List;
-import java.util.Map;
-
 import ch.silviowangler.dox.domain.Attribute;
 import ch.silviowangler.dox.domain.Document;
 import ch.silviowangler.dox.domain.DocumentClass;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Silvio Wangler

@@ -15,16 +15,9 @@
  */
 package ch.silviowangler.dox.domain;
 
-import com.google.common.base.MoreObjects;
-
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @author Silvio Wangler
@@ -80,10 +73,11 @@ public class IndexMapEntry extends AbstractPersistable<Long> {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("attributeName", attributeName)
-                .add("stringRepresentation", stringRepresentation)
-                .add("document", document)
-                .toString();
+        final StringBuilder sb = new StringBuilder("IndexMapEntry{");
+        sb.append("attributeName='").append(attributeName).append('\'');
+        sb.append(", stringRepresentation='").append(stringRepresentation).append('\'');
+        sb.append(", document=").append(document);
+        sb.append('}');
+        return sb.toString();
     }
 }

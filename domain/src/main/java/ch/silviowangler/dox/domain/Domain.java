@@ -15,19 +15,11 @@
  */
 package ch.silviowangler.dox.domain;
 
-import com.google.common.base.MoreObjects;
-
 import org.hibernate.annotations.SortNatural;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
+import javax.persistence.*;
 import java.util.List;
-
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Table;
 
 /**
  * @author Silvio Wangler
@@ -75,10 +67,11 @@ public class Domain extends AbstractPersistable<Long> {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("shortName", shortName)
-                .add("values", values)
-                .add("strict", strict)
-                .toString();
+        final StringBuilder sb = new StringBuilder("Domain{");
+        sb.append("shortName='").append(shortName).append('\'');
+        sb.append(", values=").append(values);
+        sb.append(", strict=").append(strict);
+        sb.append('}');
+        return sb.toString();
     }
 }

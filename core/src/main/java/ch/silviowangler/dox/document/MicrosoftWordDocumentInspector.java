@@ -15,8 +15,6 @@
  */
 package ch.silviowangler.dox.document;
 
-import static com.google.common.collect.Maps.newHashMap;
-
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecuteResultHandler;
 import org.apache.commons.exec.ExecuteWatchdog;
@@ -29,7 +27,9 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Silvio Wangler
@@ -38,26 +38,22 @@ import java.util.Map;
 @Component
 public class MicrosoftWordDocumentInspector implements DocumentInspector {
 
-    protected static final Logger logger = LoggerFactory.getLogger(MicrosoftWordDocumentInspector.class);
+    private static final Logger logger = LoggerFactory.getLogger(MicrosoftWordDocumentInspector.class);
+
+    private final Executor executor;
+    private final PdfDocumentInspector pdfDocumentInspector;
 
     @Autowired
-    private Executor executor;
-    @Autowired
-    private PdfDocumentInspector pdfDocumentInspector;
-
-    public MicrosoftWordDocumentInspector() {
-    }
-
     public MicrosoftWordDocumentInspector(Executor executor, PdfDocumentInspector pdfDocumentInspector) {
-        this.executor = executor;
-        this.pdfDocumentInspector = pdfDocumentInspector;
+        this.executor = Objects.requireNonNull(executor);
+        this.pdfDocumentInspector = Objects.requireNonNull(pdfDocumentInspector);
     }
 
     public int retrievePageCount(File source) {
 
         File target = new File(System.getProperty("java.io.tmpdir"), FilenameUtils.removeExtension(source.getName()) + ".pdf");
 
-        Map<String, Object> args = newHashMap();
+        Map<String, Object> args = new HashMap<>();
         args.put("source", source);
         args.put("targetDir", target.getParentFile());
 
@@ -97,7 +93,7 @@ public class MicrosoftWordDocumentInspector implements DocumentInspector {
     }
 
     private void deleteFileIfNeeded(File target) {
-        if (target!= null && target.exists()) {
+        if (target != null && target.exists()) {
             logger.trace("Deleting temporary file {}", target.getAbsolutePath());
             target.delete();
         }

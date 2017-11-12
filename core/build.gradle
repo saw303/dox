@@ -1,65 +1,37 @@
+/*
+ * Copyright 2012 - 2013 Silvio Wangler (silvio.wangler@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 dependencies {
-    compile project(':api'), project(':domain'), project(':inexport'),
-            "org.springframework:spring-context:${springVersion}",
-            "org.springframework:spring-aop:${springVersion}",
-            "commons-codec:commons-codec:${commonsCodecVersion}",
-            "com.itextpdf:itextpdf:${iTextVersion}",
-            "commons-io:commons-io:${commonsIOVersion}",
-            "org.apache.commons:commons-exec:${commonsExec}",
-            "joda-time:joda-time:${jodaTimeVersion}",
-            "com.google.guava:guava:${guavaVersion}",
-            "org.flywaydb:flyway-core:${flywayVersion}"
-    compile("org.springframework.security:spring-security-core:${springSecurityVersion}") {
-        exclude group: 'org.springframework', module: 'spring-beans'
-    }
+    compile project(':api')
+    compile project(':domain')
+
+    compile 'org.springframework.security:spring-security-core'
+    compile 'org.springframework.security:spring-security-config'
+
+    compile "org.apache.commons:commons-exec:${commonsExec}"
+    compile "commons-io:commons-io:${commonsIOVersion}"
+    compile "com.itextpdf:itextpdf:${iTextVersion}"
+    compile "commons-codec:commons-codec:${commonsCodecVersion}"
     compile("commons-beanutils:commons-beanutils:${commonsBeanUtilsVersion}") {
         exclude group: 'commons-logging', module: 'commons-logging'
     }
-    compile "org.springframework.security:spring-security-config:${springSecurityVersion}"
-    runtime "org.slf4j:jcl-over-slf4j:${slf4jVersion}",
-            "ch.qos.logback:logback-classic:${logbackVersion}",
-            "org.springframework.security:spring-security-config:${springSecurityVersion}",
-            "org.aspectj:aspectjweaver:${aspectjWeaverVersion}", // need this version because 1.6.x is buggy with Spring 3.x (http://goo.gl/73Pwi)
-            "org.bouncycastle:bcprov-jdk15on:${bouncycastleVersion}", "org.bouncycastle:bcpkix-jdk15on:${bouncycastleVersion}"
-    testCompile "org.springframework:spring-test:${springVersion}",
-            "commons-io:commons-io:${commonsIOVersion}",
-            "com.google.guava:guava:${guavaVersion}"
-    testRuntime "com.h2database:h2:${h2Version}"
+
+    testCompile 'org.springframework:spring-test'
+    testCompile 'org.mockito:mockito-core'
+    testCompile 'org.hamcrest:hamcrest-library'
+
+    testRuntime('com.h2database:h2')
 }
-
-test {
-    exclude '**/*IntegrationTest.class'
-}
-
-task integrationTest(type: Test) {
-    include '**/*IntegrationTest.class'
-    reports.html.destination = file("${reports.html.destination}/integration")
-    reports.junitXml.destination = file("${reports.junitXml.destination}/integration")
-
-    environment 'DOX_STORE', System.properties['java.io.tmpdir']
-
-    doFirst {
-        def doxStore = System.getenv('DOX_STORE')
-
-        if (!doxStore) doxStore = System.properties['java.io.tmpdir']
-
-        def thumbnailDir = new File(doxStore, 'thumbnails')
-
-        final thumbnailDirExists = thumbnailDir.exists()
-        logger.info("File ${thumbnailDir.absolutePath} exists? ${thumbnailDirExists}")
-
-        if (!thumbnailDirExists) {
-            assert thumbnailDir.mkdir()
-        }
-    }
-}
-
-jacocoTestReport {
-
-    if (file("${buildDir}/jacoco/integrationTest.exec").exists()) {
-        executionData = files("${buildDir}/jacoco/integrationTest.exec", "${buildDir}/jacoco/test.exec")
-    }
-    additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
-}
-
-check.dependsOn integrationTest

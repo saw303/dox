@@ -15,38 +15,37 @@
  */
 
 
-import org.hibernate.cfg.Environment
+import org.hibernate.boot.Metadata
+import org.hibernate.boot.MetadataSources
+import org.hibernate.boot.internal.IdGeneratorInterpreterImpl
+import org.hibernate.boot.model.naming.ImplicitNamingStrategy
+import org.hibernate.boot.model.naming.PhysicalNamingStrategy
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder
+import org.hibernate.cfg.AvailableSettings
 import org.hibernate.tool.hbm2ddl.SchemaExport
+import org.hibernate.tool.schema.TargetType
+import org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+import org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
 
 import javax.persistence.Entity
 
 buildscript {
     repositories {
         jcenter()
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
     }
     dependencies {
         classpath gradleApi()
-        classpath "org.hibernate:hibernate-core:${project.ext.hibernateVersion}",
-                "org.hibernate:hibernate-entitymanager:${project.ext.hibernateVersion}",
-                "com.h2database:h2:${project.ext.h2Version}",
-                "joda-time:joda-time:${project.ext.jodaTimeVersion}",
-                "org.jadira.usertype:usertype.core:3.2.0.GA"
-        classpath("org.springframework.data:spring-data-jpa:${project.ext.springDataVersion}") {
-            exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
-        }
+        classpath 'org.hibernate:hibernate-core:5.2.12.Final'
+        classpath 'org.springframework.data:spring-data-jpa:2.0.1.RELEASE'
+        classpath "org.springframework.boot:spring-boot:${springBootVersion}"
     }
 }
 
 dependencies {
-    compile "org.hibernate:hibernate-core:${project.ext.hibernateVersion}",
-            "org.hibernate:hibernate-entitymanager:${project.ext.hibernateVersion}",
-            "joda-time:joda-time:${project.ext.jodaTimeVersion}",
-            "org.jadira.usertype:usertype.core:3.2.0.GA",
-            "com.google.guava:guava:${project.ext.guavaVersion}"
-    compile("org.springframework.data:spring-data-jpa:${project.ext.springDataVersion}") {
-        exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
-    }
-    testRuntime "ch.qos.logback:logback-classic:${project.ext.logbackVersion}"
+    compile 'org.hibernate:hibernate-core'
+    compile 'org.springframework.data:spring-data-jpa'
 }
 
 sourceSets {
@@ -65,6 +64,7 @@ task cleanGenerated(type: Delete) {
     }
 }
 
+
 task ddl(type: HibernateJpaSchemaGenerationTask, dependsOn: [compileJava])
 jar.dependsOn << ddl
 processResources.dependsOn << ddl
@@ -73,7 +73,9 @@ clean.dependsOn << cleanGenerated
 class HibernateJpaSchemaGenerationTask extends DefaultTask {
 
     private Map<String, String> dialects = [
-            'ORACLE'       : 'org.hibernate.dialect.Oracle10gDialect',
+            'ORACLE8I'     : 'org.hibernate.dialect.Oracle8iDialect',
+            'ORACLE10G'    : 'org.hibernate.dialect.Oracle10gDialect',
+            'ORACLE12C'    : 'org.hibernate.dialect.Oracle12cDialect',
             'MYSQL'        : 'org.hibernate.dialect.MySQLDialect',
             'MYSQL5'       : 'org.hibernate.dialect.MySQL5Dialect',
             'MYSQL5INNODB' : 'org.hibernate.dialect.MySQL5InnoDBDialect',
@@ -81,7 +83,8 @@ class HibernateJpaSchemaGenerationTask extends DefaultTask {
             'HSQL'         : 'org.hibernate.dialect.HSQLDialect',
             'H2'           : 'org.hibernate.dialect.H2Dialect',
             'PostgreSQL'   : 'org.hibernate.dialect.PostgreSQLDialect',
-            'PostgreSQL9'  : 'org.hibernate.dialect.PostgreSQL9Dialect'
+            'PostgreSQL9'  : 'org.hibernate.dialect.PostgreSQL9Dialect',
+            'PostgreSQL95' : 'org.hibernate.dialect.PostgreSQL95Dialect'
     ]
 
     private URLClassLoader loader
@@ -132,27 +135,51 @@ class HibernateJpaSchemaGenerationTask extends DefaultTask {
             // Need to set our class loader to the current thread
             this.loader = new URLClassLoader(source.toURI().toURL() as URL[], this.class.classLoader)
             Thread.currentThread().setContextClassLoader(this.loader)
-            dialects.each { key, value ->
-                final fileCreate = new File(target, "ddl_${key.toLowerCase()}_create.sql")
-                final fileDrop = new File(target, "ddl_${key.toLowerCase()}_drop.sql")
+
+            for (Map.Entry<String, String> entry : dialects.entrySet()) {
+
+                String key = entry.key
+                String value = entry.value
+
+                File fileCreate = new File(target, "ddl_${key.toLowerCase()}_create.sql")
+                File fileDrop = new File(target, "ddl_${key.toLowerCase()}_drop.sql")
 
                 logger.debug('Writing to dir {}', target.absolutePath)
 
-                org.hibernate.cfg.Configuration cfg = new org.hibernate.cfg.Configuration()
-                jpaEntities.each { jpaEntity ->
-                    cfg.addAnnotatedClass jpaEntity
+                StandardServiceRegistryBuilder regBuilder = new StandardServiceRegistryBuilder()
+                regBuilder.applySetting(AvailableSettings.DIALECT, value)
+
+
+                MetadataSources metadataSources = new MetadataSources(regBuilder.build())
+
+                jpaEntities.each { Class jpaEntity ->
+                    metadataSources.addAnnotatedClass(jpaEntity)
                 }
-                cfg.setProperty(Environment.DIALECT, value)
 
-                SchemaExport export = new org.hibernate.tool.hbm2ddl.SchemaExport(cfg)
-                export.delimiter = ';'
-                export.outputFile = fileCreate.absolutePath
-                export.execute true, false, false, true
-                export.outputFile = fileDrop.absolutePath
-                export.execute true, false, true, false
+                ImplicitNamingStrategy implicitNamingStrategy = new SpringImplicitNamingStrategy()
+                PhysicalNamingStrategy physicalNamingStrategy = new SpringPhysicalNamingStrategy()
 
-                export = null
-                cfg = null
+                Metadata metadata = metadataSources.getMetadataBuilder()
+                        .applyTempClassLoader(this.loader)
+                        .applyIdGenerationTypeInterpreter(new IdGeneratorInterpreterImpl.LegacyFallbackInterpreter())
+                        .applyImplicitNamingStrategy(implicitNamingStrategy)
+                        .applyPhysicalNamingStrategy(physicalNamingStrategy)
+                        .build()
+
+                SchemaExport export = new SchemaExport()
+                export.setDelimiter(";")
+                export.setFormat(true)
+                export.setOutputFile(fileCreate.path)
+
+                EnumSet targetTypes = EnumSet.of(TargetType.SCRIPT)
+                export.createOnly(targetTypes, metadata)
+
+                export.setOutputFile(fileDrop.path)
+                export.execute(targetTypes, org.hibernate.tool.hbm2ddl.SchemaExport.Action.DROP, metadata)
+            }
+
+            dialects.each { key, value ->
+
             }
         }
         catch (Exception e) {
@@ -164,7 +191,7 @@ class HibernateJpaSchemaGenerationTask extends DefaultTask {
         }
     }
 
-    private List findJpaEntities(loader) {
+    private List<Class> findJpaEntities(loader) {
 
         if (!source.exists()) return []
 
@@ -177,7 +204,7 @@ class HibernateJpaSchemaGenerationTask extends DefaultTask {
             }
         }
 
-        def jpaEntities = []
+        List<Class> jpaEntities = []
 
         for (String clazz : clazzez) {
             try {

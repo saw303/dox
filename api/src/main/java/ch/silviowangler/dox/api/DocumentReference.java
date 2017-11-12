@@ -15,17 +15,14 @@
  */
 package ch.silviowangler.dox.api;
 
-import static ch.silviowangler.dox.util.FileUtils.humanReadableByteCount;
-
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-
-import org.joda.time.DateTime;
-
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import static ch.silviowangler.dox.util.FileUtils.humanReadableByteCount;
 
 /**
  * @author Silvio Wangler
@@ -39,13 +36,13 @@ public class DocumentReference implements Serializable {
     private int pageCount;
     private String mimeType;
     private DocumentClass documentClass;
-    private Map<TranslatableKey, DescriptiveIndex> indices = Maps.newHashMap();
+    private Map<TranslatableKey, DescriptiveIndex> indices = new HashMap<>();
     private String fileName;
     private String userReference;
     private long fileSize;
-    private DateTime creationDate;
+    private LocalDateTime creationDate;
     private String client;
-    private Set<String> tags = Sets.newHashSet();
+    private Set<String> tags = new HashSet<>();
 
     public DocumentReference() {
         super();
@@ -151,11 +148,11 @@ public class DocumentReference implements Serializable {
         return humanReadableByteCount(this.fileSize, true);
     }
 
-    public DateTime getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(DateTime creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -177,20 +174,21 @@ public class DocumentReference implements Serializable {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("hash", hash)
-                .add("id", id)
-                .add("pageCount", pageCount)
-                .add("mimeType", mimeType)
-                .add("documentClass", documentClass)
-                .add("indices", indices)
-                .add("fileName", fileName)
-                .add("userReference", userReference)
-                .add("fileSize", fileSize)
-                .add("creationDate", creationDate)
-                .add("client", client)
-                .add("tags", tags)
-                .toString();
+        final StringBuilder sb = new StringBuilder("DocumentReference{");
+        sb.append("hash='").append(hash).append('\'');
+        sb.append(", id=").append(id);
+        sb.append(", pageCount=").append(pageCount);
+        sb.append(", mimeType='").append(mimeType).append('\'');
+        sb.append(", documentClass=").append(documentClass);
+        sb.append(", indices=").append(indices);
+        sb.append(", fileName='").append(fileName).append('\'');
+        sb.append(", userReference='").append(userReference).append('\'');
+        sb.append(", fileSize=").append(fileSize);
+        sb.append(", creationDate=").append(creationDate);
+        sb.append(", client='").append(client).append('\'');
+        sb.append(", tags=").append(tags);
+        sb.append('}');
+        return sb.toString();
     }
 
     @Override

@@ -15,10 +15,10 @@
  */
 package ch.silviowangler.dox.jobs;
 
-import static ch.silviowangler.dox.api.Source.DATABASE;
-import static ch.silviowangler.dox.api.Source.STORE;
-import static com.google.common.collect.Lists.newArrayList;
-
+import ch.silviowangler.dox.api.MissingDocument;
+import ch.silviowangler.dox.api.VerificationService;
+import ch.silviowangler.dox.repository.DocumentKeyHash;
+import ch.silviowangler.dox.repository.DocumentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +27,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
-import ch.silviowangler.dox.api.MissingDocument;
-import ch.silviowangler.dox.api.VerificationService;
-import ch.silviowangler.dox.repository.DocumentKeyHash;
-import ch.silviowangler.dox.repository.DocumentRepository;
+import static ch.silviowangler.dox.api.Source.DATABASE;
+import static ch.silviowangler.dox.api.Source.STORE;
 
 /**
  * @author Silvio Wangler
@@ -58,7 +57,7 @@ public class VerificationServiceImpl implements VerificationService {
 
         logger.info("Starting to verify document store and database");
 
-        List<MissingDocument> missingDocuments = newArrayList();
+        List<MissingDocument> missingDocuments = new ArrayList<>();
 
         final List<DocumentKeyHash> documentKeyHashes = documentRepository.findAllKeys();
         logger.debug("Found {} document within the database", documentKeyHashes.size());
