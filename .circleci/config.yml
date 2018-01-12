@@ -3,9 +3,6 @@
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
 version: 2
-dependencies:
-  pre:
-    - sudo apt-get update; sudo apt-get install libreoffice-writer webp imagemagick
 jobs:
   build:
     docker:
@@ -18,6 +15,10 @@ jobs:
       # - image: circleci/postgres:9.4
 
     working_directory: ~/repo
+
+    dependencies:
+      pre:
+        - sudo apt-get update; sudo apt-get install libreoffice-writer webp imagemagick
 
     environment:
       # Customize the JVM maximum heap limit
