@@ -2,7 +2,6 @@ language: java
 jdk:
     - oraclejdk8
 
-
 before_install:
 
 # Install LibreOffice
@@ -21,3 +20,7 @@ before_install:
 after_script:
 # Shutdown elasticsearch daemon
 - curl -i -XPOST 'http://localhost:9200/_shutdown'
+
+cache:
+  directories:
+  - $HOME/.gradle
