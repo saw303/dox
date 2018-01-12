@@ -113,4 +113,11 @@ subprojects { subproject ->
 
 		baseName = "dox-${baseName}"
 	}
+
+	test {
+		testLogging {
+			events "passed", "skipped", "failed"
+			exceptionFormat "full"
+		}
+	}
 }
