@@ -20,7 +20,7 @@ before_install:
 after_script:
 # Shutdown elasticsearch daemon
 - curl -i -XPOST 'http://localhost:9200/_shutdown'
-- cat /home/travis/build/saw303/dox/web/build/reports/tests/integrationTest/integration/index.html
+- cat /home/travis/build/saw303/dox/web/build/reports/tests/integrationTest/integration/classes/ch.silviowangler.dox.DocumentServiceIntegrationTest.html
 
 cache:
   directories:
