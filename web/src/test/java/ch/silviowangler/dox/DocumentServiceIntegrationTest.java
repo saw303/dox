@@ -486,7 +486,10 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
 
         Set<DocumentReference> documentReferences = documentService.retrieveAllDocumentReferences();
 
-        documentReferences.forEach(System.out::println);
+        for (DocumentReference documentReference : documentReferences) {
+            System.out.println(String.format("YOLO ---> %s", documentReference));
+        }
+
 
         assertThat(documentReferences.size(), is(3));
         assertTrue(documentReferences.contains(tiff1));
