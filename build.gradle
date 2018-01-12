@@ -98,8 +98,8 @@ subprojects { subproject ->
 					'Built-By': "Gradle ${gradle.gradleVersion}",
 					'Implementation-Title': "DOX-${subproject.name}",
 					'Implementation-Version': subproject.version,
-					'Implementation-Vendor': 'Silvio Wangler',
-					'Specification-Vendor': 'Silvio Wangler',
+					'Implementation-Vendor': 'Silvio Wangler <silvio.wangler@gmail.com>',
+					'Specification-Vendor': 'Silvio Wangler <silvio.wangler@gmail.com>',
 					'Specification-Title': "DOX-${subproject.name}",
 					'Specification-Version': subproject.version
 			)
