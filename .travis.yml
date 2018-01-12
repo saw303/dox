@@ -24,4 +24,4 @@ after_script:
 
 cache:
   directories:
-  - $HOME/.gradle
+  - $HOME/.gradle/caches
