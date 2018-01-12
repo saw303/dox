@@ -118,7 +118,6 @@ public class Attribute extends AbstractPersistable<Long> {
         sb.append(", optional=").append(optional);
         sb.append(", dataType=").append(dataType);
         sb.append(", domain=").append(domain);
-        sb.append(", documentClasses=").append(documentClasses);
         sb.append(", mappingColumn='").append(mappingColumn).append('\'');
         sb.append(", updateable=").append(updateable);
         sb.append(", client=").append(client);
