@@ -22,6 +22,3 @@ after_script:
 - curl -i -XPOST 'http://localhost:9200/_shutdown'
 - cat /home/travis/build/saw303/dox/web/build/reports/tests/integrationTest/integration/classes/ch.silviowangler.dox.DocumentServiceIntegrationTest.html
 
-cache:
-  directories:
-  - $HOME/.gradle/caches
