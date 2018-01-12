@@ -29,9 +29,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "build.gradle" }}
+          - dox-dependencies-{{ checksum "build.gradle" }}
           # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+          - dox-dependencies-
 
       - run: echo "bintrayUser=''" >> gradle.properties; echo "bintrayKey=''" >> gradle.properties
 
@@ -40,7 +40,7 @@ jobs:
       - save_cache:
           paths:
             - ~/.gradle/caches
-          key: v1-dependencies-{{ checksum "build.gradle" }}
+          key: dox-dependencies-{{ checksum "build.gradle" }}
 
       # run tests!
       - run: gradle check
