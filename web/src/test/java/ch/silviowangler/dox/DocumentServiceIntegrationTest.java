@@ -1,5 +1,5 @@
 /**
- * Copyright 2012 - 2017 Silvio Wangler (silvio.wangler@gmail.com)
+ * Copyright 2012 - 2018 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +37,7 @@ import static org.junit.Assert.*;
  * @author Silvio Wangler
  * @since 0.1
  */
+@Transactional
 public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
 
     public static final TranslatableKey INVOICE_DATE = new TranslatableKey("invoiceDate");
@@ -438,7 +440,7 @@ public class DocumentServiceIntegrationTest extends AbstractIntegrationTest {
 
         indexes.put(COMPANY, new DescriptiveIndex("Sunrise"));
         indexes.put(INVOICE_AMOUNT, new DescriptiveIndex(100L));
-        indexes.put(INVOICE_DATE, new DescriptiveIndex(new Date()));
+        indexes.put(INVOICE_DATE, new DescriptiveIndex(LocalDate.now()));
 
         PhysicalDocument doc = new PhysicalDocument(documentClass, readFileToByteArray(temp), indexes, temp.getName());
         doc.setClient(CLIENT_WANGLER);

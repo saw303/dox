@@ -1,5 +1,5 @@
 /**
- * Copyright 2012 - 2017 Silvio Wangler (silvio.wangler@gmail.com)
+ * Copyright 2012 - 2018 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ public interface AttributeRepository extends CrudRepository<Attribute, Long> {
     @Query("from Attribute a where a.documentClasses IS EMPTY")
     List<Attribute> findGlobalAttributes();
 
-    @Query("from Attribute a where a.documentClasses IS EMPTY OR ? in elements(a.documentClasses) order by a.shortName asc")
+    @Query("from Attribute a where a.documentClasses IS EMPTY OR ?1 in elements(a.documentClasses) order by a.shortName asc")
     List<Attribute> findAttributesForDocumentClass(DocumentClass documentClass);
 
     Attribute findByShortName(String shortName);

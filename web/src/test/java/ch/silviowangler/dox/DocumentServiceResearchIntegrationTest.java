@@ -1,5 +1,5 @@
 /**
- * Copyright 2012 - 2017 Silvio Wangler (silvio.wangler@gmail.com)
+ * Copyright 2012 - 2018 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -96,7 +96,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
         assertThat(docOne.getClient(), is("wangler"));
 
         final DescriptiveIndex index = documentReferences.iterator().next().getIndices().get(COMPANY);
-        assertThat((String) index.getValue(), is(companyName));
+        assertThat(index.getValue(), is(companyName));
         assertThat(index.getAttribute(), is(not(nullValue())));
 
     }
@@ -281,7 +281,7 @@ public class DocumentServiceResearchIntegrationTest extends AbstractIntegrationT
         final DocumentReference doc = documentReferences.iterator().next();
 
         assertEquals(SUNRISE, doc.getIndices().get(COMPANY).getValue());
-        assertEquals(BigDecimal.valueOf(100.5), doc.getIndices().get(INVOICE_AMOUNT).getValue());
+        assertEquals("100.50", doc.getIndices().get(INVOICE_AMOUNT).getValue().toString());
         assertThat(doc.getDocumentClass().getShortName(), is("INVOICE"));
         assertThat(doc.getDocumentClass().getTranslation(), is(notNullValue()));
     }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2012 - 2017 Silvio Wangler (silvio.wangler@gmail.com)
+ * Copyright 2012 - 2018 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,9 @@
  */
 package ch.silviowangler.dox;
 
+import ch.silviowangler.dox.security.DoxUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.security.EndpointRequest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,23 +30,16 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                .antMatchers("/", "/h2-console").permitAll()
-                .anyRequest().authenticated()
+
+        http.requestMatcher(EndpointRequest.toAnyEndpoint()).authorizeRequests()
+                .anyRequest().hasRole("USER")
                 .and()
-                .formLogin()
-                .loginPage("/login")
-                .permitAll()
-                .and()
-                .logout()
-                .permitAll();
+                .httpBasic();
     }
 
+
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .inMemoryAuthentication()
-                .withUser("user").password("password").roles("USER");
+    public void configureGlobal(AuthenticationManagerBuilder auth, DoxUserDetailService userDetailService) throws Exception {
+        auth.userDetailsService(userDetailService);
     }
 }

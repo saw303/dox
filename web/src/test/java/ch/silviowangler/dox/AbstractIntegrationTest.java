@@ -1,12 +1,12 @@
 /**
- * Copyright 2012 - 2017 Silvio Wangler (silvio.wangler@gmail.com)
- * <p>
+ * Copyright 2012 - 2018 Silvio Wangler (silvio.wangler@gmail.com)
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,6 +26,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
@@ -35,6 +36,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.apache.commons.io.FileUtils.readFileToByteArray;
 import static org.junit.Assert.assertEquals;
@@ -46,6 +48,7 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@ActiveProfiles("test")
 public abstract class AbstractIntegrationTest {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -64,9 +67,9 @@ public abstract class AbstractIntegrationTest {
 
 
     protected File loadFile(String fileName) {
-        URL resource = getClass().getClassLoader().getResource(fileName);
+        URL resource = getClass().getClassLoader().getResource(Objects.requireNonNull(fileName));
         final File file = FileUtils.toFile(resource);
-        assert file != null && file.exists() : "File '" + fileName + "' does not exist. Resource " + resource.getFile();
+        assert file != null && file.exists() : String.format("File '%s' does not exist.", fileName);
         return file;
     }
 

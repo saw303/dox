@@ -1,5 +1,5 @@
 /**
- * Copyright 2012 - 2017 Silvio Wangler (silvio.wangler@gmail.com)
+ * Copyright 2012 - 2018 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+import org.springframework.core.io.ClassPathResource;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Created on 02.08.15.
@@ -60,5 +63,15 @@ public class CoreConfiguration {
     @Bean
     public DoxVersion doxVersion(@Value("${app.version}") String version) {
         return new DoxVersion(version);
+    }
+
+    @Bean
+    public Properties mimeTypes() throws IOException {
+        Properties properties = new Properties();
+
+        ClassPathResource classPathResource = new ClassPathResource("mimeTypes.properties");
+        properties.load(classPathResource.getInputStream());
+
+        return properties;
     }
 }

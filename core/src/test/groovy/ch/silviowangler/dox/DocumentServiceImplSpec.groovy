@@ -26,6 +26,7 @@ import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.User
 import spock.lang.Specification
+import spock.lang.Subject
 
 /**
  * @author Silvio Wangler
@@ -34,6 +35,7 @@ import spock.lang.Specification
 class DocumentServiceImplSpec extends Specification {
 
 
+    @Subject
     DocumentService documentService = new DocumentServiceImpl()
 
     def cleanup() throws Exception {
@@ -57,7 +59,7 @@ class DocumentServiceImplSpec extends Specification {
     }
 
 
-    void "Null values are inacceptable"() {
+    void "Null values are not acceptable"() {
         when:
         documentService.deleteDocument(null)
 
@@ -85,7 +87,7 @@ class DocumentServiceImplSpec extends Specification {
         documentService.deleteDocument(77L)
 
         then:
-        1 * authentication.getPrincipal() >> new User("saw303", "", Sets.newHashSet())
+        1 * authentication.getPrincipal() >> new User('saw303', '', Sets.newHashSet())
         1 * documentRepository.findOne(77L) >> document
         1 * indexStoreRepository.delete(_)
         1 * documentRepository.delete(77L)

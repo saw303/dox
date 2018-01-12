@@ -40,6 +40,7 @@ buildscript {
         classpath 'org.hibernate:hibernate-core:5.2.12.Final'
         classpath 'org.springframework.data:spring-data-jpa:2.0.1.RELEASE'
         classpath "org.springframework.boot:spring-boot:${springBootVersion}"
+        classpath 'javax.xml.bind:jaxb-api:2.3.0'
     }
 }
 

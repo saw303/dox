@@ -23,7 +23,12 @@ dependencies {
 
     compile "org.apache.commons:commons-exec:${commonsExec}"
     compile "commons-io:commons-io:${commonsIOVersion}"
+
     compile "com.itextpdf:itextpdf:${iTextVersion}"
+    // used by itextpdf
+    runtime "org.bouncycastle:bcprov-jdk15on:${bouncycastleVersion}"
+    runtime "org.bouncycastle:bcpkix-jdk15on:${bouncycastleVersion}"
+
     compile "commons-codec:commons-codec:${commonsCodecVersion}"
     compile("commons-beanutils:commons-beanutils:${commonsBeanUtilsVersion}") {
         exclude group: 'commons-logging', module: 'commons-logging'

@@ -1,5 +1,5 @@
 /**
- * Copyright 2012 - 2017 Silvio Wangler (silvio.wangler@gmail.com)
+ * Copyright 2012 - 2018 Silvio Wangler (silvio.wangler@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,6 +53,7 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -509,6 +510,8 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
 
         if (indexValue instanceof LocalDateTime) {
             indexValueToStore = ((LocalDateTime) indexValue).format(DD_MM_YYYY);
+        } else if (indexValue instanceof LocalDate) {
+            indexValueToStore = ((LocalDate) indexValue).format(DD_MM_YYYY);
         } else {
             indexValueToStore = String.valueOf(indexValue);
         }
@@ -578,6 +581,15 @@ public class DocumentServiceImpl implements DocumentService, InitializingBean {
             throw new IllegalArgumentException();
         }
 
+        if (DATE.equals(desiredDataType) && valueToConvert instanceof LocalDate) {
+            return valueToConvert;
+        }
+        if (DATE.equals(desiredDataType) && valueToConvert instanceof Date) {
+            return ((Date) valueToConvert).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        }
+        if (DATETIME.equals(desiredDataType) && valueToConvert instanceof LocalDateTime) {
+            return valueToConvert;
+        }
         if (DATE.equals(desiredDataType) && valueToConvert instanceof String) {
 
             final String stringValueToConvert = (String) valueToConvert;
